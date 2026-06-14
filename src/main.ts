@@ -49,7 +49,7 @@ async function bootstrap(): Promise<void> {
     // 2. Fetch and inject simulation view HTML in parallel
     await Promise.all(
         SIMULATIONS.map(async sim => {
-            const res  = await fetch(`src/views/${sim.id}.html`);
+            const res  = await fetch(`views/${sim.id}.html`);
             if (!res.ok) {
                 console.warn(`[main] Could not load view for sim "${sim.id}"`);
                 return;
