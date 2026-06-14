@@ -1,0 +1,67 @@
+<div class="layout-grid">
+  <div class="panel-left">
+    <div class="card card-info">
+      <h2>Genetic Algorithm</h2>
+      <p class="description">Evolutionary computing mimic. A population of agents starts with random DNA moves. The fittest (closest to target) breed next gen via crossover and mutation.</p>
+
+      <div class="theory-box">
+        <h3>Mechanism:</h3>
+        <div class="math-expr">
+          Fitness: <span class="math">f = 1 / (dist_to_target²)</span>
+        </div>
+        <div class="math-expr">
+          Crossover: <span class="math">DNA_child = Split(A, B)</span>
+        </div>
+      </div>
+
+      <div class="controls-group">
+        <h3>Parameters</h3>
+        <div class="control-row">
+          <label for="ga-mutate">Mutation Rate:</label>
+          <div class="slider-val-container">
+            <input type="range" id="ga-mutate" min="0" max="0.1" step="0.005" value="0.02">
+            <span id="ga-mutate-val" class="val-lbl">2%</span>
+          </div>
+        </div>
+        <div class="control-row">
+          <label for="ga-pop">Population Size:</label>
+          <div class="slider-val-container">
+            <input type="range" id="ga-pop" min="10" max="150" step="5" value="60">
+            <span id="ga-pop-val" class="val-lbl">60</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-panel">
+        <h3>Evolution Stats</h3>
+        <div class="stat-grid">
+          <div class="stat-item"><span class="lbl">Generation:</span><span id="ga-gen" class="val">1</span></div>
+          <div class="stat-item"><span class="lbl">Max Fitness:</span><span id="ga-fitness" class="val">0.00</span></div>
+          <div class="stat-item"><span class="lbl">Avg Fitness:</span><span id="ga-avg-fitness" class="val">0.00</span></div>
+          <div class="stat-item"><span class="lbl">Reached Target:</span><span id="ga-reached" class="val">0 / 60</span></div>
+        </div>
+      </div><!-- /.stats-panel -->
+
+
+
+    </div><!-- /.card-info -->
+  </div><!-- /.panel-left -->
+
+  <div class="panel-right">
+    <div class="card card-sim">
+      <div class="sim-header">
+        <div class="sim-title">
+          <h3>Evolutionary Pathfinder</h3>
+          <span class="sub">Dots try to reach orange target 🎯 by avoiding obstacle. Best path genes (orange 🟠) propagate.</span>
+        </div>
+        <div class="sim-actions">
+          <button id="ga-btn-play" class="btn primary">Play</button>
+          <button id="ga-btn-reset" class="btn danger">Reset</button>
+        </div>
+      </div>
+      <div class="canvas-container">
+        <canvas id="ga-canvas" width="600" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
