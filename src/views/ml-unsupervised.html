@@ -1,0 +1,67 @@
+<div class="layout-grid">
+  <div class="panel-left">
+    <div class="card card-info">
+      <h2>K-Means Clustering (Unsupervised)</h2>
+      <p class="description"><strong>Unsupervised Learning</strong> means we give the algorithm raw, unlabelled data (just grey points). We don't tell it what the points are. The algorithm must discover patterns and group the data into 'K' distinct clusters entirely on its own based on spatial similarity.</p>
+      
+      <div class="theory-box">
+        <h3>How it learns:</h3>
+        <ul style="padding-left: 1rem; color: var(--text-dim); font-size: 0.9rem; line-height: 1.5;">
+          <li><strong>Assign:</strong> Calculate the distance from each point to every centroid, assigning the point to the closest one.</li>
+          <li><strong>Update:</strong> Move each centroid exactly to the center (mean) of all points assigned to it.</li>
+          <li>Repeat until centroids stop moving.</li>
+        </ul>
+      </div>
+
+      <div class="controls-group">
+        <h3>Parameters</h3>
+        <div class="control-row">
+          <label for="ml-unsupervised-k">Number of Clusters (K):</label>
+          <div class="slider-val-container">
+            <input type="range" id="ml-unsupervised-k" min="2" max="5" step="1" value="3">
+            <span id="ml-unsupervised-k-val" class="val-lbl">3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-panel">
+        <h3>Instructions</h3>
+        <div class="stat-grid" style="display: block; color: var(--text-dim); font-size: 0.85rem; line-height: 1.5;">
+          Click the canvas to add unlabelled data points. Click <strong>Step</strong> to watch the algorithm alternately assign points to the nearest centroid, then move the centroid to the center of the newly formed cluster.
+        </div>
+      </div><!-- /.stats-panel -->
+
+      <div class="github-section">
+        <h3>Related Projects</h3>
+        <a href="https://github.com/Nexlein/Cvrie" target="_blank" rel="noopener" class="github-repo-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          <div class="repo-text">
+            <span class="repo-name">Cvrie</span>
+            <span class="repo-desc">Python · Machine Learning Laboratory (Supervised & Unsupervised)</span>
+          </div>
+          <span class="repo-arrow">→</span>
+        </a>
+      </div>
+
+    </div><!-- /.card-info -->
+  </div><!-- /.panel-left -->
+
+  <div class="panel-right">
+    <div class="card card-sim">
+      <div class="sim-header">
+        <div class="sim-title">
+          <h3>Clustering Simulator</h3>
+          <span class="sub">Click canvas to add raw, unlabelled data points.</span>
+        </div>
+        <div class="sim-actions">
+          <button id="ml-unsupervised-btn-train" class="btn primary">Auto Cluster</button>
+          <button id="ml-unsupervised-btn-step" class="btn secondary">Single Step</button>
+          <button id="ml-unsupervised-btn-reset" class="btn danger">Reset Points</button>
+        </div>
+      </div>
+      <div class="canvas-container">
+        <canvas id="ml-unsupervised-canvas" width="600" height="400"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
