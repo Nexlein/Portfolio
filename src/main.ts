@@ -1,0 +1,103 @@
+/**
+ * src/main.ts — Application entry point.
+ *
+ * To add a new simulation:
+ *   1. Add a SimConfig entry in src/data/simulations.ts
+ *   2. Import the class here and add it to SIM_CLASSES
+ *   3. Create src/views/<id>.html
+ *
+ * To add a new project:
+ *   1. Add a ProjectEntry in src/data/projects.ts  ← that's it.
+ */
+
+import { SIMULATIONS }     from './data/simulations.js';
+import { PROJECTS }        from './data/projects.js';
+import { MLSimulation }    from './simulations/MLSimulation.js';
+import { MLUnsupervisedSimulation } from './simulations/MLUnsupervisedSimulation.js';
+import { RLSimulation }    from './simulations/RLSimulation.js';
+import { FSMSimulation }   from './simulations/FSMSimulation.js';
+import { GASimulation }    from './simulations/GASimulation.js';
+import { UAISimulation }   from './simulations/UAISimulation.js';
+import { UIController, ManagedSim } from './core/UIController.js';
+import { renderProjects }  from './core/ProjectRenderer.js';
+import { renderSimPills, renderSimViews } from './core/SimRenderer.js';
+import { injectSimulationThemeVars } from './core/ThemeInjector.js';
+import { ProjectModal }    from './core/ProjectModal.js';
+import { SimBase }         from './core/SimBase.js';
+
+// ── Map simulation id → constructor ───────────────────────────────────────────
+// Add a new entry here when you add a simulation class.
+const SIM_CLASSES: Record<string, new () => SimBase> = {
+    ml:  MLSimulation,
+    'ml-unsupervised': MLUnsupervisedSimulation,
+    rl:  RLSimulation,
+    fsm: FSMSimulation,
+    ga:  GASimulation,
+    uai: UAISimulation,
+};
+
+// ── Boot ───────────────────────────────────────────────────────────────────────
+async function bootstrap(): Promise<void> {
+    // 0. Inject per-sim CSS vars from data (single source of truth)
+    injectSimulationThemeVars(SIMULATIONS);
+
+    // 1. Render dynamic DOM sections from data
+    renderProjects(PROJECTS);
+    new ProjectModal(PROJECTS);  // attach modal to rendered cards
+    renderSimPills(SIMULATIONS);
+    renderSimViews(SIMULATIONS);
+    // 2. Fetch and inject simulation view HTML in parallel
+    await Promise.all(
+        SIMULATIONS.map(async sim => {
+            const res  = await fetch(`src/views/${sim.id}.html`);
+            if (!res.ok) {
+                console.warn(`[main] Could not load view for sim "${sim.id}"`);
+                return;
+            }
+            const html = await res.text();
+            const el   = document.getElementById(`sim-${sim.id}`);
+            if (el) {
+                el.innerHTML = html;
+                if (sim.relatedProject) {
+                    const githubSection = el.querySelector('.github-section');
+                    if (githubSection) {
+                        const btn = document.createElement('button');
+                        btn.className = 'btn-hero-ghost';
+                        btn.style.marginTop = '1rem';
+                        btn.style.width = '100%';
+                        btn.style.textAlign = 'center';
+                        btn.style.justifyContent = 'center';
+                        btn.innerHTML = 'Related Project Details';
+                        btn.onclick = () => {
+                            const card = document.querySelector(`.project-card[data-project-id="${sim.relatedProject}"]`) as HTMLElement;
+                            if (card) {
+                                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+                                card.click();
+                            }
+                        };
+                        githubSection.appendChild(btn);
+                    }
+                }
+            }
+        })
+    );
+
+    // 3. Instantiate simulations and pair with their config
+    const simsMap = new Map<string, ManagedSim>();
+    for (const config of SIMULATIONS) {
+        const Ctor = SIM_CLASSES[config.id];
+        if (!Ctor) {
+            console.warn(`[main] No class registered for sim "${config.id}"`);
+            continue;
+        }
+        simsMap.set(config.id, { instance: new Ctor(), config });
+    }
+
+    // 4. Hand off to the UI controller
+    const ui = new UIController(simsMap);
+
+    // Expose for console debugging
+    (window as any).__portfolio = { ui, simsMap };
+}
+
+window.addEventListener('DOMContentLoaded', bootstrap);
