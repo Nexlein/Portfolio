@@ -27,7 +27,9 @@ export class UIController {
     constructor(sims: Map<string, ManagedSim>) {
         this.sims     = sims;
         this.simPanel = document.getElementById('sim-panel');
-        this.activeSim = sims.keys().next().value ?? '';
+        
+        const params = new URLSearchParams(window.location.search);
+        this.activeSim = params.get('sim') || (sims.keys().next().value ?? '');
 
         this.bindPills();
         this.bindProjectFilter();

@@ -143,11 +143,7 @@ export class ProjectModal {
                 `;
                 btn.onclick = () => {
                     this.close();
-                    const pill = document.querySelector(`.pill[data-sim="${simId}"]`) as HTMLElement;
-                    if (pill) {
-                        pill.click();
-                        document.getElementById('ailab')?.scrollIntoView({ behavior: 'smooth' });
-                    }
+                    window.location.href = `ailab.html?sim=${simId}`;
                 };
                 this.actionsContainerEl.appendChild(btn);
             });
