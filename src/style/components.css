@@ -40,9 +40,6 @@
 #sim-panel[data-sim='fsm'] .card h2 {
     color: var(--clr-fsm);
 }
-#sim-panel[data-sim='ga'] .card h2 {
-    color: var(--clr-ga);
-}
 #sim-panel[data-sim='uai'] .card h2 {
     color: var(--clr-uai);
 }
@@ -165,10 +162,6 @@
 #sim-panel[data-sim='fsm'] input[type='range']::-webkit-slider-thumb {
     background: var(--clr-fsm);
     box-shadow: 0 0 6px var(--clr-fsm-glow);
-}
-#sim-panel[data-sim='ga'] input[type='range']::-webkit-slider-thumb {
-    background: var(--clr-ga);
-    box-shadow: 0 0 6px var(--clr-ga-glow);
 }
 #sim-panel[data-sim='uai'] input[type='range']::-webkit-slider-thumb {
     background: var(--clr-uai);
@@ -317,17 +310,13 @@
 #sim-panel[data-sim='fsm'] .btn.primary {
     background: var(--clr-fsm);
 }
-#sim-panel[data-sim='ga'] .btn.primary {
-    background: var(--clr-ga);
-}
 #sim-panel[data-sim='uai'] .btn.primary {
     background: var(--clr-uai);
 }
 
 /* darken text for bright colors */
 #sim-panel[data-sim='ml'] .btn.primary,
-#sim-panel[data-sim='fsm'] .btn.primary,
-#sim-panel[data-sim='ga'] .btn.primary {
+#sim-panel[data-sim='fsm'] .btn.primary {
     color: #0a0e14;
 }
 

@@ -16,7 +16,6 @@ import { MLSimulation } from './simulations/MLSimulation.js';
 import { MLUnsupervisedSimulation } from './simulations/MLUnsupervisedSimulation.js';
 import { RLSimulation } from './simulations/RLSimulation.js';
 import { FSMSimulation } from './simulations/FSMSimulation.js';
-import { GASimulation } from './simulations/GASimulation.js';
 import { UAISimulation } from './simulations/UAISimulation.js';
 import { ManagedSim } from './core/SimSwitcher.js';
 import { SimSwitcher } from './core/SimSwitcher.js';
@@ -37,7 +36,6 @@ const SIM_CLASSES: Record<string, new () => SimBase> = {
     'ml-unsupervised': MLUnsupervisedSimulation,
     rl: RLSimulation,
     fsm: FSMSimulation,
-    ga: GASimulation,
     uai: UAISimulation
 };
 
