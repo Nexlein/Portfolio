@@ -37,7 +37,7 @@ export const SIMULATIONS: SimConfig[] = [
         color: '#22d3ee',
         glow: 'rgba(34,211,238,0.12)',
         autoStart: false,
-        relatedProject: 'cvrie',
+        relatedProject: 'cvrie'
     },
     {
         id: 'ml-unsupervised',
@@ -45,7 +45,7 @@ export const SIMULATIONS: SimConfig[] = [
         color: '#3b82f6',
         glow: 'rgba(59,130,246,0.12)',
         autoStart: false,
-        relatedProject: 'cvrie',
+        relatedProject: 'cvrie'
     },
     {
         id: 'rl',
@@ -53,7 +53,7 @@ export const SIMULATIONS: SimConfig[] = [
         color: '#a78bfa',
         glow: 'rgba(167,139,250,0.12)',
         autoStart: false,
-        relatedProject: 'starttrek',
+        relatedProject: 'starttrek'
     },
     {
         id: 'fsm',
@@ -61,21 +61,15 @@ export const SIMULATIONS: SimConfig[] = [
         color: '#34d399',
         glow: 'rgba(52,211,153,0.12)',
         autoStart: true,
-        relatedProject: 'zappy',
+        relatedProject: 'zappy'
     },
-    {
-        id: 'ga',
-        label: 'Genetic Algorithm',
-        color: '#fb923c',
-        glow: 'rgba(251,146,60,0.12)',
-        autoStart: true,
-    },
+
     {
         id: 'uai',
         label: 'Utility AI',
         color: '#f472b6',
         glow: 'rgba(244,114,182,0.12)',
         autoStart: true,
-        relatedProject: 'zappy',
-    },
+        relatedProject: 'zappy'
+    }
 ];
