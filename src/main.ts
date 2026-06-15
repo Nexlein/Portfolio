@@ -44,57 +44,74 @@ async function bootstrap(): Promise<void> {
     // 1. Render dynamic DOM sections from data
     renderProjects(PROJECTS);
     new ProjectModal(PROJECTS);  // attach modal to rendered cards
-    renderSimPills(SIMULATIONS);
-    renderSimViews(SIMULATIONS);
-    // 2. Fetch and inject simulation view HTML in parallel
-    await Promise.all(
-        SIMULATIONS.map(async sim => {
-            const res  = await fetch(`views/${sim.id}.html`);
-            if (!res.ok) {
-                console.warn(`[main] Could not load view for sim "${sim.id}"`);
-                return;
-            }
-            const html = await res.text();
-            const el   = document.getElementById(`sim-${sim.id}`);
-            if (el) {
-                el.innerHTML = html;
-                if (sim.relatedProject) {
-                    const githubSection = el.querySelector('.github-section');
-                    if (githubSection) {
-                        const btn = document.createElement('button');
-                        btn.className = 'btn-hero-ghost';
-                        btn.style.marginTop = '1rem';
-                        btn.style.width = '100%';
-                        btn.style.textAlign = 'center';
-                        btn.style.justifyContent = 'center';
-                        btn.innerHTML = 'Related Project Details';
-                        btn.onclick = () => {
-                            const card = document.querySelector(`.project-card[data-project-id="${sim.relatedProject}"]`) as HTMLElement;
-                            if (card) {
-                                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-                                card.click();
-                            }
-                        };
-                        githubSection.appendChild(btn);
+
+    const isAiLab = document.getElementById('sim-panel') !== null;
+
+    if (isAiLab) {
+        renderSimPills(SIMULATIONS);
+        renderSimViews(SIMULATIONS);
+        // 2. Fetch and inject simulation view HTML in parallel
+        await Promise.all(
+            SIMULATIONS.map(async sim => {
+                const res  = await fetch(`views/${sim.id}.html`);
+                if (!res.ok) {
+                    console.warn(`[main] Could not load view for sim "${sim.id}"`);
+                    return;
+                }
+                const html = await res.text();
+                const el   = document.getElementById(`sim-${sim.id}`);
+                if (el) {
+                    el.innerHTML = html;
+                    if (sim.relatedProject) {
+                        const githubSection = el.querySelector('.github-section');
+                        if (githubSection) {
+                            const btn = document.createElement('button');
+                            btn.className = 'btn-hero-ghost';
+                            btn.style.marginTop = '1rem';
+                            btn.style.width = '100%';
+                            btn.style.textAlign = 'center';
+                            btn.style.justifyContent = 'center';
+                            btn.innerHTML = 'Related Project Details';
+                            btn.onclick = () => {
+                                window.location.href = `index.html?project=${sim.relatedProject}#projects`;
+                            };
+                            githubSection.appendChild(btn);
+                        }
                     }
                 }
-            }
-        })
-    );
+            })
+        );
+    }
 
     // 3. Instantiate simulations and pair with their config
     const simsMap = new Map<string, ManagedSim>();
-    for (const config of SIMULATIONS) {
-        const Ctor = SIM_CLASSES[config.id];
-        if (!Ctor) {
-            console.warn(`[main] No class registered for sim "${config.id}"`);
-            continue;
+    if (isAiLab) {
+        for (const config of SIMULATIONS) {
+            const Ctor = SIM_CLASSES[config.id];
+            if (!Ctor) {
+                console.warn(`[main] No class registered for sim "${config.id}"`);
+                continue;
+            }
+            simsMap.set(config.id, { instance: new Ctor(), config });
         }
-        simsMap.set(config.id, { instance: new Ctor(), config });
     }
 
     // 4. Hand off to the UI controller
     const ui = new UIController(simsMap);
+
+    // 5. Handle ?project= auto-open
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = urlParams.get('project');
+    if (projectId) {
+        // Wait a tick for DOM to be fully ready
+        setTimeout(() => {
+            const card = document.querySelector(`.project-card[data-project-id="${projectId}"]`) as HTMLElement;
+            if (card) {
+                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+                card.click();
+            }
+        }, 100);
+    }
 
     // Expose for console debugging
     (window as any).__portfolio = { ui, simsMap };
