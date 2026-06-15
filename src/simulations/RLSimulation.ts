@@ -4,18 +4,28 @@ import { RLLocalEngine } from '../engines/RLLocalEngine.js';
 
 export class RLSimulation extends SimBase {
     ui: Record<string, HTMLElement | HTMLInputElement | null>;
-    
+
     engine: RLLocalEngine;
     cellSize: number;
-    currentState: { r: number, c: number };
-    startState: { r: number, c: number };
-    
-    get rows() { return this.engine.rows; }
-    get cols() { return this.engine.cols; }
-    get grid() { return this.engine.grid; }
-    get qTable() { return this.engine.qTable; }
-    get actions() { return this.engine.actions; }
-    
+    currentState: { r: number; c: number };
+    startState: { r: number; c: number };
+
+    get rows() {
+        return this.engine.rows;
+    }
+    get cols() {
+        return this.engine.cols;
+    }
+    get grid() {
+        return this.engine.grid;
+    }
+    get qTable() {
+        return this.engine.qTable;
+    }
+    get actions() {
+        return this.engine.actions;
+    }
+
     episodes: number;
     stepsInEpisode: number;
     lastReward: number;
@@ -44,7 +54,7 @@ export class RLSimulation extends SimBase {
             [0, 0, 1, 1, 0],
             [0, 0, 0, 0, 0]
         ];
-        
+
         this.engine = new RLLocalEngine(rows, cols, grid);
         this.cellSize = this.width / cols;
         this.startState = { r: 4, c: 0 };
@@ -100,7 +110,7 @@ export class RLSimulation extends SimBase {
         this.isPlaying = true;
         this.onPlayStateChange(true);
 
-        const stepDelay = parseInt((this.ui.speedSlider as HTMLInputElement)?.value || "100");
+        const stepDelay = parseInt((this.ui.speedSlider as HTMLInputElement)?.value || '100');
         this.stepInterval = setInterval(() => {
             this.step();
         }, stepDelay);
@@ -135,7 +145,7 @@ export class RLSimulation extends SimBase {
         }
 
         // Local Tabular Q-Learning fallback
-        const epsilon = parseFloat((this.ui.epsilonSlider as HTMLInputElement)?.value || "0.1");
+        const epsilon = parseFloat((this.ui.epsilonSlider as HTMLInputElement)?.value || '0.1');
         const action = this.engine.chooseAction(r, c, epsilon);
         this.executeLocalAction(r, c, action);
     }
@@ -148,8 +158,10 @@ export class RLSimulation extends SimBase {
         let reward = -1;
 
         if (
-            nextR < 0 || nextR >= this.engine.rows ||
-            nextC < 0 || nextC >= this.engine.cols ||
+            nextR < 0 ||
+            nextR >= this.engine.rows ||
+            nextC < 0 ||
+            nextC >= this.engine.cols ||
             this.engine.grid[nextR][nextC] === 1
         ) {
             nextR = r;
@@ -164,9 +176,9 @@ export class RLSimulation extends SimBase {
             }
         }
 
-        const alpha = parseFloat((this.ui.lrSlider as HTMLInputElement)?.value || "0.1");
-        const gamma = parseFloat((this.ui.discountSlider as HTMLInputElement)?.value || "0.9");
-        
+        const alpha = parseFloat((this.ui.lrSlider as HTMLInputElement)?.value || '0.1');
+        const gamma = parseFloat((this.ui.discountSlider as HTMLInputElement)?.value || '0.9');
+
         this.engine.updateQ(r, c, action, reward, nextR, nextC, alpha, gamma);
 
         this.currentState = { r: nextR, c: nextC };
@@ -182,9 +194,9 @@ export class RLSimulation extends SimBase {
         const wasPlaying = this.isPlaying;
         this.stop();
 
-        const alpha = parseFloat((this.ui.lrSlider as HTMLInputElement)?.value || "0.1");
-        const gamma = parseFloat((this.ui.discountSlider as HTMLInputElement)?.value || "0.9");
-        const epsilon = parseFloat((this.ui.epsilonSlider as HTMLInputElement)?.value || "0.1");
+        const alpha = parseFloat((this.ui.lrSlider as HTMLInputElement)?.value || '0.1');
+        const gamma = parseFloat((this.ui.discountSlider as HTMLInputElement)?.value || '0.9');
+        const epsilon = parseFloat((this.ui.epsilonSlider as HTMLInputElement)?.value || '0.1');
 
         for (let ep = 0; ep < numEpisodes; ep++) {
             let state = { ...this.startState };
@@ -223,8 +235,10 @@ export class RLSimulation extends SimBase {
                 let stepReward = -1;
 
                 if (
-                    nextR < 0 || nextR >= this.rows ||
-                    nextC < 0 || nextC >= this.cols ||
+                    nextR < 0 ||
+                    nextR >= this.rows ||
+                    nextC < 0 ||
+                    nextC >= this.cols ||
                     this.grid[nextR][nextC] === 1
                 ) {
                     nextR = r;
@@ -291,9 +305,127 @@ export class RLSimulation extends SimBase {
         this.ctx.fillRect(0, 0, this.width, this.height);
 
         // Draw Grid
-        CanvasHelper.drawRLGrid(this.ctx, this.engine.grid, this.engine.qTable, this.engine.rows, this.engine.cols, this.cellSize);
+        this.drawRLGrid(
+            this.ctx,
+            this.engine.grid,
+            this.engine.qTable,
+            this.engine.rows,
+            this.engine.cols,
+            this.cellSize
+        );
 
         // Draw Agent
-        CanvasHelper.drawRLAgent(this.ctx, this.currentState.r, this.currentState.c, this.cellSize);
+        this.drawRLAgent(this.ctx, this.currentState.r, this.currentState.c, this.cellSize);
+    }
+
+    private drawRLGrid(
+        ctx: CanvasRenderingContext2D,
+        grid: number[][],
+        qTable: number[][][],
+        rows: number,
+        cols: number,
+        cellSize: number
+    ) {
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const x = c * cellSize;
+                const y = r * cellSize;
+                const type = grid[r][c];
+
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x, y, cellSize, cellSize);
+
+                if (type === 1) {
+                    // Wall
+                    ctx.fillStyle = '#475569';
+                    ctx.fillRect(x + 2, y + 2, cellSize - 4, cellSize - 4);
+                    ctx.strokeStyle = '#64748b';
+                    ctx.beginPath();
+                    ctx.moveTo(x + 10, y + cellSize - 10);
+                    ctx.lineTo(x + cellSize - 10, y + cellSize - 10);
+                    ctx.lineTo(x + cellSize - 10, y + 10);
+                    ctx.stroke();
+                } else if (type === 2) {
+                    // Target
+                    ctx.fillStyle = 'rgba(16, 185, 129, 0.2)';
+                    ctx.fillRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
+                    ctx.strokeStyle = '#10b981';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
+                    CanvasHelper.drawText(ctx, '🏆', x + cellSize / 2, y + cellSize / 2, '28px Outfit');
+                } else if (type === 3) {
+                    // Trap
+                    ctx.fillStyle = 'rgba(239, 68, 68, 0.2)';
+                    ctx.fillRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x + 1, y + 1, cellSize - 2, cellSize - 2);
+                    CanvasHelper.drawText(ctx, '🔥', x + cellSize / 2, y + cellSize / 2, '28px Outfit');
+                } else {
+                    const qVals = qTable[r][c];
+                    const midX = x + cellSize / 2;
+                    const midY = y + cellSize / 2;
+                    const size = cellSize;
+
+                    const drawTriangle = (
+                        p1x: number,
+                        p1y: number,
+                        p2x: number,
+                        p2y: number,
+                        p3x: number,
+                        p3y: number,
+                        val: number
+                    ) => {
+                        ctx.beginPath();
+                        ctx.moveTo(p1x, p1y);
+                        ctx.lineTo(p2x, p2y);
+                        ctx.lineTo(p3x, p3y);
+                        ctx.closePath();
+
+                        const strength = Math.min(Math.abs(val) / 100, 1.0);
+                        if (val > 0.001) {
+                            ctx.fillStyle = `rgba(16, 185, 129, ${0.05 + strength * 0.75})`;
+                        } else if (val < -0.001) {
+                            ctx.fillStyle = `rgba(239, 68, 68, ${0.05 + strength * 0.75})`;
+                        } else {
+                            ctx.fillStyle = 'transparent';
+                        }
+                        ctx.fill();
+
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+                        ctx.stroke();
+
+                        if (Math.abs(val) > 0.1) {
+                            let tx = (p1x + p2x + p3x) / 3;
+                            let ty = (p1y + p2y + p3y) / 3;
+                            CanvasHelper.drawText(
+                                ctx,
+                                val.toFixed(1),
+                                tx,
+                                ty,
+                                '10px JetBrains Mono',
+                                'rgba(255, 255, 255, 0.7)'
+                            );
+                        }
+                    };
+
+                    drawTriangle(x, y, x + size, y, midX, midY, qVals[0]); // Up
+                    drawTriangle(x + size, y, x + size, y + size, midX, midY, qVals[1]); // Right
+                    drawTriangle(x, y + size, x + size, y + size, midX, midY, qVals[2]); // Down
+                    drawTriangle(x, y, x, y + size, midX, midY, qVals[3]); // Left
+                }
+            }
+        }
+    }
+
+    private drawRLAgent(ctx: CanvasRenderingContext2D, r: number, c: number, cellSize: number) {
+        const agentX = c * cellSize + cellSize / 2;
+        const agentY = r * cellSize + cellSize / 2;
+        CanvasHelper.drawGlowCircle(ctx, agentX, agentY, cellSize * 0.3, '#06b6d4');
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(agentX, agentY, cellSize * 0.15, 0, Math.PI * 2);
+        ctx.fill();
     }
 }
