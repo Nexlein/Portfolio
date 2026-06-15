@@ -10,56 +10,63 @@
  *   1. Add a ProjectEntry in src/data/projects.ts  ← that's it.
  */
 
-import { SIMULATIONS }     from './data/simulations.js';
-import { PROJECTS }        from './data/projects.js';
-import { MLSimulation }    from './simulations/MLSimulation.js';
+import { SIMULATIONS } from './data/simulations.js';
+import { PROJECTS } from './data/projects.js';
+import { MLSimulation } from './simulations/MLSimulation.js';
 import { MLUnsupervisedSimulation } from './simulations/MLUnsupervisedSimulation.js';
-import { RLSimulation }    from './simulations/RLSimulation.js';
-import { FSMSimulation }   from './simulations/FSMSimulation.js';
-import { GASimulation }    from './simulations/GASimulation.js';
-import { UAISimulation }   from './simulations/UAISimulation.js';
-import { UIController, ManagedSim } from './core/UIController.js';
-import { renderProjects }  from './core/ProjectRenderer.js';
+import { RLSimulation } from './simulations/RLSimulation.js';
+import { FSMSimulation } from './simulations/FSMSimulation.js';
+import { GASimulation } from './simulations/GASimulation.js';
+import { UAISimulation } from './simulations/UAISimulation.js';
+import { ManagedSim } from './core/SimSwitcher.js';
+import { SimSwitcher } from './core/SimSwitcher.js';
+import { ProjectFilter } from './core/ProjectFilter.js';
+import { ScrollObserver } from './core/ScrollObserver.js';
+import { NavShadow } from './core/NavShadow.js';
+import { renderProjects } from './core/ProjectRenderer.js';
 import { renderSimPills, renderSimViews } from './core/SimRenderer.js';
 import { injectSimulationThemeVars } from './core/ThemeInjector.js';
-import { ProjectModal }    from './core/ProjectModal.js';
-import { SimBase }         from './core/SimBase.js';
+import { ProjectModal } from './core/ProjectModal.js';
+import { SimBase } from './core/SimBase.js';
+import { injectNavbar, injectModal } from './core/Components.js';
 
 // ── Map simulation id → constructor ───────────────────────────────────────────
 // Add a new entry here when you add a simulation class.
 const SIM_CLASSES: Record<string, new () => SimBase> = {
-    ml:  MLSimulation,
+    ml: MLSimulation,
     'ml-unsupervised': MLUnsupervisedSimulation,
-    rl:  RLSimulation,
+    rl: RLSimulation,
     fsm: FSMSimulation,
-    ga:  GASimulation,
-    uai: UAISimulation,
+    ga: GASimulation,
+    uai: UAISimulation
 };
 
 // ── Boot ───────────────────────────────────────────────────────────────────────
 async function bootstrap(): Promise<void> {
+    const isAiLab = document.getElementById('sim-panel') !== null;
+    injectNavbar(isAiLab ? 'ailab' : 'home');
+    injectModal();
+
     // 0. Inject per-sim CSS vars from data (single source of truth)
     injectSimulationThemeVars(SIMULATIONS);
 
     // 1. Render dynamic DOM sections from data
     renderProjects(PROJECTS);
-    new ProjectModal(PROJECTS);  // attach modal to rendered cards
-
-    const isAiLab = document.getElementById('sim-panel') !== null;
+    new ProjectModal(PROJECTS); // attach modal to rendered cards
 
     if (isAiLab) {
         renderSimPills(SIMULATIONS);
         renderSimViews(SIMULATIONS);
         // 2. Fetch and inject simulation view HTML in parallel
         await Promise.all(
-            SIMULATIONS.map(async sim => {
-                const res  = await fetch(`views/${sim.id}.html`);
+            SIMULATIONS.map(async (sim) => {
+                const res = await fetch(`views/${sim.id}.html`);
                 if (!res.ok) {
                     console.warn(`[main] Could not load view for sim "${sim.id}"`);
                     return;
                 }
                 const html = await res.text();
-                const el   = document.getElementById(`sim-${sim.id}`);
+                const el = document.getElementById(`sim-${sim.id}`);
                 if (el) {
                     el.innerHTML = html;
                     if (sim.relatedProject) {
@@ -96,25 +103,42 @@ async function bootstrap(): Promise<void> {
         }
     }
 
-    // 4. Hand off to the UI controller
-    const ui = new UIController(simsMap);
+    // 4. Hand off to the UI controllers
+    let simSwitcher;
+    if (isAiLab) {
+        simSwitcher = new SimSwitcher(simsMap);
+    }
+    const projectFilter = new ProjectFilter();
+    const scrollObserver = new ScrollObserver();
+    const navShadow = new NavShadow();
 
     // 5. Handle ?project= auto-open
     const urlParams = new URLSearchParams(window.location.search);
     const projectId = urlParams.get('project');
     if (projectId) {
-        // Wait a tick for DOM to be fully ready
-        setTimeout(() => {
+        requestAnimationFrame(() => {
             const card = document.querySelector(`.project-card[data-project-id="${projectId}"]`) as HTMLElement;
             if (card) {
                 document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
                 card.click();
             }
-        }, 100);
+        });
     }
 
     // Expose for console debugging
-    (window as any).__portfolio = { ui, simsMap };
+    window.__portfolio = { simsMap, simSwitcher, projectFilter, scrollObserver, navShadow };
+}
+
+declare global {
+    interface Window {
+        __portfolio: {
+            simsMap: Map<string, ManagedSim>;
+            simSwitcher?: SimSwitcher;
+            projectFilter: ProjectFilter;
+            scrollObserver: ScrollObserver;
+            navShadow: NavShadow;
+        };
+    }
 }
 
 window.addEventListener('DOMContentLoaded', bootstrap);
