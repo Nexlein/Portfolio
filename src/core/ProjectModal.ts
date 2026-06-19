@@ -54,25 +54,15 @@ export class ProjectModal {
             this.actionsContainerEl = document.getElementById('modal-extra-actions') as HTMLElement;
         }
 
-        this.bindCardClicks(projects);
-        this.bindClose();
-    }
-
-    private bindCardClicks(projects: ProjectEntry[]): void {
-        const grid = document.getElementById('projects-grid');
-        if (!grid) return;
-
-        grid.addEventListener('click', (e) => {
-            const card = (e.target as HTMLElement).closest<HTMLElement>('.project-card');
-            if (!card) return;
-
-            // Don't open modal when clicking the GitHub link directly
-            if ((e.target as HTMLElement).closest('.project-link')) return;
-
-            const id = card.dataset.projectId;
+        // Global handler for native onclick attribute (bypass Safari event delegation issues)
+        (window as any).openProjectModal = (event: Event, id: string) => {
+            const target = event.target as HTMLElement;
+            if (target && target.closest('.project-link')) return;
             const project = projects.find((p) => p.id === id);
             if (project) this.open(project);
-        });
+        };
+
+        this.bindClose();
     }
 
     private bindClose(): void {

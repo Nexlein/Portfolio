@@ -1049,6 +1049,7 @@ canvas {
     padding: 0;
     overflow: hidden;
     outline: none;
+    z-index: 2147483647 !important; /* Force top layer fallback */
 
     /* Entry animation */
     opacity: 0;
