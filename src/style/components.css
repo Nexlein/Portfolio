@@ -291,8 +291,8 @@
     transform: translateY(-1px);
 }
 .btn:active {
-    transform: scale(0.97);
-    transition: transform 0.1s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: scale(var(--scale-press));
+    transition: transform 160ms var(--ease-out);
 }
 
 /* Primary — filled with tab accent */
@@ -778,9 +778,9 @@ canvas {
     font-size: 0.8rem;
     color: var(--text-muted);
     transition:
-        color 150ms ease,
-        background 150ms ease,
-        border-color 150ms ease;
+        color var(--t-fast),
+        background var(--t-fast),
+        border-color var(--t-fast);
 }
 .filter-btn:hover {
     background: var(--bg-hover);
@@ -979,7 +979,7 @@ canvas {
         color var(--t-fast),
         border-color var(--t-fast),
         background var(--t-fast),
-        transform 150ms ease-out;
+        transform var(--t-fast)-out;
 }
 .github-repo-card:hover {
     color: var(--text-primary);
@@ -1051,8 +1051,8 @@ canvas {
     opacity: 0;
     transform: scale(0.96) translateY(12px);
     transition:
-        opacity 220ms ease,
-        transform 220ms ease;
+        opacity var(--t-normal),
+        transform var(--t-normal);
 }
 
 #project-modal[open] {
@@ -1066,7 +1066,7 @@ canvas {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     opacity: 0;
-    transition: opacity 220ms ease;
+    transition: opacity var(--t-normal);
 }
 
 #project-modal[open]::backdrop {
@@ -1091,7 +1091,7 @@ canvas {
     transition:
         color var(--t-fast),
         border-color var(--t-fast),
-        transform 150ms ease;
+        transform var(--t-fast);
 }
 .modal-close:hover {
     color: var(--text-primary);
@@ -1099,7 +1099,7 @@ canvas {
     transform: scale(1.1);
 }
 .modal-close:active {
-    transform: scale(0.95);
+    transform: scale(var(--scale-press));
 }
 .modal-close svg {
     width: 16px;
@@ -1168,8 +1168,8 @@ canvas {
     justify-content: center;
     cursor: pointer;
     transition:
-        background 150ms ease,
-        transform 150ms ease;
+        background var(--t-fast),
+        transform var(--t-fast);
     z-index: 5;
 }
 .gallery-nav-btn:hover {
@@ -1177,7 +1177,7 @@ canvas {
     transform: translateY(-50%) scale(1.1);
 }
 .gallery-nav-btn:active {
-    transform: translateY(-50%) scale(0.95);
+    transform: translateY(-50%) scale(var(--scale-press));
 }
 .gallery-nav-btn.prev {
     left: 16px;
@@ -1210,8 +1210,8 @@ canvas {
     background: rgba(255, 255, 255, 0.3);
     cursor: pointer;
     transition:
-        background 150ms ease,
-        transform 150ms ease;
+        background var(--t-fast),
+        transform var(--t-fast);
 }
 .gallery-dot:hover {
     background: rgba(255, 255, 255, 0.6);
@@ -1266,8 +1266,8 @@ canvas {
     align-self: flex-start;
     margin-top: auto;
     transition:
-        opacity 150ms ease,
-        transform 150ms ease;
+        opacity var(--t-fast),
+        transform var(--t-fast);
     border: none;
     cursor: pointer;
     font-family: inherit;
@@ -1276,7 +1276,7 @@ canvas {
     opacity: 0.88;
 }
 .modal-github:active {
-    transform: scale(0.97);
+    transform: scale(var(--scale-press));
 }
 .modal-github svg {
     width: 15px;

@@ -158,7 +158,7 @@
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
                             <div class="timeline-date">2025 - 2026</div>
-                            <h3 class="timeline-title">Hackathons & Cybersecurity (Cycom)</h3>
+                            <h3 class="timeline-title">Hackathons & Cybersecurity</h3>
                             <p class="timeline-desc">
                                 Participated in 2 Generative AI Hackathons (building innovative solutions using AI
                                 tools) and 2 Cycom events (Cybersecurity talks and CTF hackathons).
@@ -240,8 +240,42 @@
                 <!-- Project cards are rendered from src/data/projects.ts at boot time -->
                 <div class="projects-grid" id="projects-grid"></div>
             </section>
+
+            <!-- ─── Contact / Footer ──────────────────────────── -->
+            <footer id="contact" style="padding: 100px 40px; text-align: center; border-top: 1px solid var(--border)">
+                <div style="max-width: 600px; margin: 0 auto">
+                    <h2 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 1rem">
+                        Let's Build Something.
+                    </h2>
+                    <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2.5rem">
+                        I am currently open to new opportunities. Check my availability to see if our timelines align,
+                        or reach out directly.
+                    </p>
+                    <div style="display: flex; justify-content: center">
+                        <a
+                            href="availability.html"
+                            class="btn-hero-primary"
+                            style="display: flex; align-items: center; gap: 8px"
+                        >
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                style="width: 18px; height: 18px"
+                            >
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                            Check Availability
+                        </a>
+                    </div>
+                </div>
+            </footer>
         </main>
 
-        <script type="module" src="src/main.ts"></script>
+        <script type="module" src="/src/main.ts"></script>
     </body>
 </html>
