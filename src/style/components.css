@@ -284,7 +284,8 @@
         color var(--t-fast),
         background var(--t-fast),
         border-color var(--t-fast),
-        box-shadow var(--t-fast);
+        box-shadow var(--t-fast),
+        transform var(--t-fast);
     white-space: nowrap;
 }
 
@@ -393,8 +394,8 @@ canvas {
     opacity: 0;
     pointer-events: none;
     transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
+        opacity var(--t-normal),
+        transform var(--t-normal);
     backdrop-filter: blur(8px);
 }
 
@@ -587,8 +588,8 @@ canvas {
     border-radius: 2px;
     transition:
         width 0.1s linear,
-        background 0.2s ease,
-        box-shadow 0.2s ease;
+        background var(--t-fast),
+        box-shadow var(--t-fast);
 }
 
 /* ─── Profile & Home Layout ───────────────────────── */
@@ -1162,7 +1163,7 @@ canvas {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 300ms ease;
+    transition: opacity 300ms var(--ease-in-out);
     pointer-events: none;
 }
 .modal-gallery img.active {

@@ -113,6 +113,7 @@ body {
 }
 .nav-lang-toggle:active {
     transform: scale(var(--scale-press));
+    transition: transform 160ms var(--ease-out);
 }
 .nav-lang-toggle .lang-en,
 .nav-lang-toggle .lang-fr {
@@ -144,6 +145,7 @@ html[lang='fr'] .nav-lang-toggle .lang-fr {
 }
 .nav-cta:active {
     transform: scale(var(--scale-press));
+    transition: transform 160ms var(--ease-out);
 }
 
 .contact-popup {
@@ -703,6 +705,7 @@ main {
 }
 .pill:active {
     transform: scale(var(--scale-press));
+    transition: transform 160ms var(--ease-out);
 }
 
 .pill.active {
@@ -725,7 +728,7 @@ main {
 }
 .sim-view.active {
     display: block;
-    animation: simFadeIn 0.2s ease-out forwards;
+    animation: simFadeIn 0.2s var(--ease-out) forwards;
 }
 
 @keyframes simFadeIn {
