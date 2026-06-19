@@ -102,7 +102,7 @@ export const en = {
     },
 
     sim_fsm: {
-        title: 'Finite State Machine',
+        title: 'Finite State Machine (FSM)',
         desc: 'Rule-based AI. The agent transitions between discrete states based on environmental triggers. Simple, predictable, but highly effective for NPC behavior.',
         graph: 'State Transition Graph',
         vars: 'FSM Variables',
@@ -113,7 +113,7 @@ export const en = {
         simSub: 'Click canvas to place intruder or lure the guard. Guard patrols points, chases intruder, rests when low battery.'
     },
     sim_uai: {
-        title: 'Utility AI',
+        title: 'Utility AI (UAI)',
         desc: 'Score-based decision making. Evaluates all possible actions and scores them based on current needs (hunger, thirst, rest, social). The highest score wins.',
         needs: 'Agent Needs',
         actions: 'Action Scores',
@@ -125,7 +125,7 @@ export const en = {
         simSub: 'Agent automatically decides whether to forage for food, seek water, rest, or socialize based on its dynamically changing internal needs.'
     },
     sim_rl: {
-        title: 'Reinforcement Learning (Q-Learning)',
+        title: 'Reinforcement Learning (RL)',
         desc: 'Learning by trial and error. The agent explores a grid, receives rewards or penalties, and updates its Q-Table to find the optimal path to the goal.',
         qtable: 'Q-Table (State-Action Values)',
         controls: 'Controls',
@@ -137,7 +137,7 @@ export const en = {
         simSub: 'Watch the agent learn to navigate the maze. Start, Goal (+1), Pit (-1). Toggle Train to run fast episodes.'
     },
     sim_ml: {
-        title: 'Supervised Learning (Neural Network)',
+        title: 'Machine Learning (ML) - Supervised',
         desc: 'Learning from labeled data. The network processes inputs through hidden layers to classify points into two categories (Red vs Blue).',
         network: 'Network Architecture',
         metrics: 'Training Metrics',
@@ -149,7 +149,7 @@ export const en = {
         simSub: 'Click canvas to add data points (Left click = Red, Right click = Blue). Train the network to find the decision boundary.'
     },
     sim_ml_unsupervised: {
-        title: 'Unsupervised Learning (K-Means)',
+        title: 'Machine Learning (ML) - Unsupervised',
         desc: 'Finding hidden patterns. The algorithm automatically groups unlabeled data points into K distinct clusters by iteratively moving centroids.',
         clusters: 'Cluster Centroids',
         metrics: 'Algorithm State',
