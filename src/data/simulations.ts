@@ -22,7 +22,7 @@ export interface SimConfig {
 export const SIMULATIONS: SimConfig[] = [
     {
         id: 'ml',
-        label: { en: 'ML (Supervised)', fr: 'ML (Supervisé)' },
+        label: { en: 'Machine Learning (ML) - Supervised', fr: 'Machine Learning (ML) - Supervisé' },
         color: '#22d3ee',
         glow: 'rgba(34,211,238,0.12)',
         autoStart: false,
@@ -30,7 +30,7 @@ export const SIMULATIONS: SimConfig[] = [
     },
     {
         id: 'ml-unsupervised',
-        label: { en: 'ML (Unsupervised)', fr: 'ML (Non Supervisé)' },
+        label: { en: 'Machine Learning (ML) - Unsupervised', fr: 'Machine Learning (ML) - Non Supervisé' },
         color: '#3b82f6',
         glow: 'rgba(59,130,246,0.12)',
         autoStart: false,
@@ -38,7 +38,7 @@ export const SIMULATIONS: SimConfig[] = [
     },
     {
         id: 'rl',
-        label: { en: 'Reinforcement Learning', fr: 'Apprentissage par Renforcement' },
+        label: { en: 'Reinforcement Learning (RL)', fr: 'Reinforcement Learning (RL)' },
         color: '#a78bfa',
         glow: 'rgba(167,139,250,0.12)',
         autoStart: false,
@@ -46,7 +46,7 @@ export const SIMULATIONS: SimConfig[] = [
     },
     {
         id: 'fsm',
-        label: { en: 'Finite State Machine', fr: 'Machine à États Finis' },
+        label: { en: 'Finite State Machine (FSM)', fr: 'Finite State Machine (FSM)' },
         color: '#34d399',
         glow: 'rgba(52,211,153,0.12)',
         autoStart: true,
@@ -54,7 +54,7 @@ export const SIMULATIONS: SimConfig[] = [
     },
     {
         id: 'uai',
-        label: { en: 'Utility AI', fr: 'IA Utilitaire' },
+        label: { en: 'Utility AI (UAI)', fr: 'Utility AI (UAI)' },
         color: '#f472b6',
         glow: 'rgba(244,114,182,0.12)',
         autoStart: true,

@@ -102,7 +102,7 @@ export const fr = {
     },
 
     sim_fsm: {
-        title: 'Machine à États Finis',
+        title: 'Finite State Machine (FSM)',
         desc: "IA basée sur des règles. L'agent passe d'un état à l'autre selon des déclencheurs environnementaux. Simple, prévisible, mais très efficace pour les PNJ.",
         graph: 'Graphe de Transition',
         vars: 'Variables FSM',
@@ -113,7 +113,7 @@ export const fr = {
         simSub: "Cliquez pour placer un intrus. Le garde patrouille, poursuit l'intrus et se repose quand sa batterie est faible."
     },
     sim_uai: {
-        title: 'IA Utilitaire',
+        title: 'Utility AI (UAI)',
         desc: "Prise de décision par scores. Évalue toutes les actions possibles et les note selon les besoins actuels (faim, soif, repos, social). Le meilleur score l'emporte.",
         needs: "Besoins de l'Agent",
         actions: 'Scores des Actions',
@@ -125,7 +125,7 @@ export const fr = {
         simSub: "L'agent décide automatiquement s'il doit chercher de la nourriture, boire l'eau, se reposer ou socialiser selon ses besoins dynamiques."
     },
     sim_rl: {
-        title: 'Apprentissage par Renforcement',
+        title: 'Reinforcement Learning (RL)',
         desc: "Apprentissage par essais et erreurs. L'agent explore une grille, reçoit des récompenses ou pénalités, et met à jour sa Q-Table pour trouver le chemin optimal.",
         qtable: 'Q-Table (Valeurs État-Action)',
         controls: 'Contrôles',
@@ -137,7 +137,7 @@ export const fr = {
         simSub: "Observez l'agent apprendre le labyrinthe. Départ, But (+1), Piège (-1). Utilisez Entraîner pour des épisodes rapides."
     },
     sim_ml: {
-        title: 'Apprentissage Supervisé',
+        title: 'Machine Learning (ML) - Supervisé',
         desc: 'Apprentissage sur données étiquetées. Le réseau traite les entrées via des couches cachées pour classer les points en deux catégories (Rouge/Bleu).',
         network: 'Architecture du Réseau',
         metrics: 'Métriques',
@@ -149,7 +149,7 @@ export const fr = {
         simSub: 'Cliquez pour ajouter des points (Clic G = Rouge, Clic D = Bleu). Entraînez le réseau pour trouver la frontière de décision.'
     },
     sim_ml_unsupervised: {
-        title: 'Apprentissage Non Supervisé',
+        title: 'Machine Learning (ML) - Non Supervisé',
         desc: "Découverte de motifs cachés. L'algorithme regroupe automatiquement les données non étiquetées en K clusters en déplaçant itérativement des centroïdes.",
         clusters: 'Centroïdes des Clusters',
         metrics: "État de l'Algorithme",
