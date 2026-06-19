@@ -5,8 +5,7 @@ export class ModalMediaRenderer {
     static buildHtml(media: ProjectMedia): string {
         switch (media.type) {
             case 'video':
-                const posterAttr = media.poster ? `poster="${media.poster}"` : '';
-                return `<video src="${media.src}" autoplay loop muted playsinline ${posterAttr}></video>`;
+                return `<video src="${media.src}" autoplay loop muted playsinline></video>`;
             case 'image':
                 return `<img src="${media.src}" alt="${media.alt}">`;
             case 'gallery':
