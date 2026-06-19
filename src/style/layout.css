@@ -745,6 +745,10 @@ main {
     align-items: start;
 }
 
+.layout-grid > div {
+    min-width: 0;
+}
+
 /* ─── Responsive ──────────────────────────────────── */
 @media (max-width: 1024px) {
     .section {
