@@ -6,6 +6,16 @@
         <title>Nexlein — Availability</title>
         <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
         <link rel="stylesheet" href="style.css" />
+
+        <script>
+            (function () {
+                var lang = localStorage.getItem('lang');
+                if (!lang) lang = navigator.language.startsWith('fr') ? 'fr' : 'en';
+                if (lang === 'fr') {
+                    document.write('<style>html:not(.i18n-ready) body { visibility: hidden; }</style>');
+                }
+            })();
+        </script>
     </head>
     <body>
         <main>
@@ -17,12 +27,14 @@
 
                 <div class="home-content" style="max-width: 800px; margin: 0 auto">
                     <div class="home-eyebrow">
-                        <span class="mono-tag available">Available Now</span>
+                        <span class="mono-tag available" data-i18n="availability.tag">Available Now</span>
                     </div>
 
-                    <h1 class="hero-name" style="font-size: 3rem; margin-bottom: 2rem">What I'm Looking For</h1>
+                    <h1 class="hero-name" style="font-size: 3rem; margin-bottom: 2rem" data-i18n="availability.title">
+                        What I'm Looking For
+                    </h1>
 
-                    <p class="hero-bio" style="margin-bottom: 3rem">
+                    <p class="hero-bio" style="margin-bottom: 3rem" data-i18n="availability.bio">
                         I am currently an Epitech Tek3 student actively looking for professional opportunities to apply
                         my skills in AI, backend architecture, and software development.
                     </p>
@@ -86,11 +98,16 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem">
+                                    <h2
+                                        style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem"
+                                        data-i18n="availability.partTime.title"
+                                    >
                                         Part-Time Job
                                     </h2>
                                     <p class="description" style="margin: 0; font-size: 0.85rem">
-                                        Mandatory Epitech Tek3 placement (2 days/week)
+                                        <span data-i18n="availability.partTime.desc"
+                                            >Mandatory Epitech Tek3 placement (2 days/week)</span
+                                        >
                                     </p>
                                 </div>
                             </div>
@@ -105,10 +122,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.partTime.l1Lbl"
                                     >
                                         Timeline & Rhythm
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.partTime.l1Val"
+                                    >
                                         Sept. 15 to end of January.<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >Thursday and Friday (14h/week).</span
@@ -125,10 +146,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.partTime.l2Lbl"
                                     >
                                         Contract Types
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.partTime.l2Val"
+                                    >
                                         Part-time Internship<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >Work-Study or Student Contract.</span
@@ -145,10 +170,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.partTime.l3Lbl"
                                     >
                                         Recruiter Info
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.partTime.l3Val"
+                                    >
                                         Internship: Legal minimum prorated.<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >Work-Study: ~43% to 53% SMIC.</span
@@ -210,10 +239,17 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem">
+                                    <h2
+                                        style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem"
+                                        data-i18n="availability.fullTime.title"
+                                    >
                                         Full-Time Internship
                                     </h2>
-                                    <p class="description" style="margin: 0; font-size: 0.85rem">
+                                    <p
+                                        class="description"
+                                        style="margin: 0; font-size: 0.85rem"
+                                        data-i18n="availability.fullTime.desc"
+                                    >
                                         Mandatory Epitech Tek3 placement (Full-time)
                                     </p>
                                 </div>
@@ -229,10 +265,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.fullTime.l1Lbl"
                                     >
                                         Timeline & Rhythm
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.fullTime.l1Val"
+                                    >
                                         Between March and August.<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >4 to 6 months (5 days/week).</span
@@ -249,10 +289,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.fullTime.l2Lbl"
                                     >
                                         Contract Type
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.fullTime.l2Val"
+                                    >
                                         Full-time Internship Agreement<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >Tripartite agreement via Epitech.</span
@@ -269,10 +313,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.fullTime.l3Lbl"
                                     >
                                         Recruiter Info
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.fullTime.l3Val"
+                                    >
                                         Legal minimum: ~4.35€/h.<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >Seeking competitive compensation.</span
@@ -333,10 +381,17 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem">
+                                    <h2
+                                        style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem"
+                                        data-i18n="availability.freelance.title"
+                                    >
                                         Freelance Missions
                                     </h2>
-                                    <p class="description" style="margin: 0; font-size: 0.85rem">
+                                    <p
+                                        class="description"
+                                        style="margin: 0; font-size: 0.85rem"
+                                        data-i18n="availability.freelance.desc"
+                                    >
                                         B2B project-based collaboration
                                     </p>
                                 </div>
@@ -352,10 +407,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.freelance.l1Lbl"
                                     >
                                         Scope & Availability
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.freelance.l1Val"
+                                    >
                                         Backend APIs, AI integration.<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >Flexible hours, async delivery.</span
@@ -372,10 +431,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.freelance.l2Lbl"
                                     >
                                         Status
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.freelance.l2Val"
+                                    >
                                         Freelancer (Auto-entrepreneur)<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >No payroll taxes for the client.</span
@@ -392,10 +455,14 @@
                                             letter-spacing: 0.05em;
                                             margin-bottom: 0.2rem;
                                         "
+                                        data-i18n="availability.freelance.l3Lbl"
                                     >
                                         Rates
                                     </div>
-                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                    <div
+                                        style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5"
+                                        data-i18n="availability.freelance.l3Val"
+                                    >
                                         Daily Rate or Fixed Price.<br /><span
                                             style="color: var(--text-muted); font-size: 0.9rem"
                                             >Quotation provided upon request.</span
@@ -406,17 +473,19 @@
                         </div>
                     </div>
 
-                    <div
+                    <footer
                         id="contact"
                         style="
                             margin-top: 5rem;
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
+                            padding: 3rem 0 2rem;
+                            border-top: 1px solid var(--border);
                             text-align: center;
                         "
                     >
-                        <h2 style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1.5rem">
+                        <h2
+                            style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1.5rem"
+                            data-i18n="availability.footer"
+                        >
                             Interested? Let's connect.
                         </h2>
                         <div class="contact-row" style="justify-content: center">
@@ -437,7 +506,7 @@
                                     ></path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
-                                Email Me
+                                <span data-i18n="availability.footerBtnEmail">Email Me</span>
                             </a>
                             <a
                                 href="https://www.linkedin.com/in/nielsen-combebracciale/"
@@ -459,10 +528,10 @@
                                     <rect x="2" y="9" width="4" height="12"></rect>
                                     <circle cx="4" cy="4" r="2"></circle>
                                 </svg>
-                                LinkedIn
+                                <span data-i18n="availability.footerBtnLinkedin">LinkedIn</span>
                             </a>
                         </div>
-                    </div>
+                    </footer>
                 </div>
             </section>
         </main>

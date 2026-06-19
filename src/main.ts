@@ -28,6 +28,7 @@ import { injectSimulationThemeVars } from './core/ThemeInjector.js';
 import { ProjectModal } from './core/ProjectModal.js';
 import { SimBase } from './core/SimBase.js';
 import { injectNavbar, injectModal } from './core/Components.js';
+import { i18n } from './core/i18n.js';
 
 // ── Map simulation id → constructor ───────────────────────────────────────────
 // Add a new entry here when you add a simulation class.
@@ -51,6 +52,17 @@ async function bootstrap(): Promise<void> {
     // 1. Render dynamic DOM sections from data
     renderProjects(PROJECTS);
     new ProjectModal(PROJECTS); // attach modal to rendered cards
+
+    i18n.translateDOM();
+    i18n.subscribe(() => {
+        renderProjects(PROJECTS);
+        if (isAiLab) {
+            renderSimPills(SIMULATIONS);
+            if (window.__portfolio && window.__portfolio.simSwitcher) {
+                window.__portfolio.simSwitcher.switchSim(window.__portfolio.simSwitcher.getActiveSim());
+            }
+        }
+    });
 
     if (isAiLab) {
         renderSimPills(SIMULATIONS);
@@ -77,12 +89,14 @@ async function bootstrap(): Promise<void> {
                             btn.style.textAlign = 'center';
                             btn.style.justifyContent = 'center';
                             btn.innerHTML = 'Related Project Details';
+                            btn.setAttribute('data-i18n', 'ailab.relatedDetails');
                             btn.onclick = () => {
                                 window.location.href = `index.html?project=${sim.relatedProject}#projects`;
                             };
                             githubSection.appendChild(btn);
                         }
                     }
+                    i18n.translateDOM(el);
                 }
             })
         );

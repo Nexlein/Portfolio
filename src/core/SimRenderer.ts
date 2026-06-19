@@ -6,12 +6,15 @@
  */
 
 import { SimConfig } from '../data/simulations.js';
+import { i18n } from './i18n.js';
 
 export function renderSimPills(simulations: SimConfig[]): void {
     const container = document.getElementById('sim-pills');
     if (!container) return;
 
-    container.innerHTML = simulations.map((sim, i) => /* html */ `
+    container.innerHTML = simulations
+        .map(
+            (sim, i) => /* html */ `
     <button
         class="pill${i === 0 ? ' active' : ''}"
         data-sim="${sim.id}"
@@ -21,21 +24,27 @@ export function renderSimPills(simulations: SimConfig[]): void {
         aria-controls="sim-${sim.id}"
     >
         <span class="pill-dot" style="background:${sim.color}"></span>
-        <span class="pill-label">${sim.label}</span>
-    </button>`).join('');
+        <span class="pill-label">${i18n.t_obj(sim.label as any)}</span>
+    </button>`
+        )
+        .join('');
 }
 
 export function renderSimViews(simulations: SimConfig[]): void {
     const panel = document.getElementById('sim-panel');
     if (!panel) return;
 
-    panel.innerHTML = simulations.map((sim, i) => /* html */ `
+    panel.innerHTML = simulations
+        .map(
+            (sim, i) => /* html */ `
     <div
         id="sim-${sim.id}"
         class="sim-view${i === 0 ? ' active' : ''}"
         role="tabpanel"
         aria-labelledby="pill-${sim.id}"
-    ></div>`).join('');
+    ></div>`
+        )
+        .join('');
 
     // Stamp the initial data-sim on the panel for CSS colour scoping
     panel.dataset.sim = simulations[0]?.id ?? '';

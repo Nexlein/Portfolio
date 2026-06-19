@@ -91,6 +91,41 @@ body {
     color: var(--text-primary);
 }
 
+.nav-lang-toggle {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-left: 8px;
+    transition:
+        color var(--t-fast),
+        background var(--t-fast),
+        transform var(--t-fast);
+}
+.nav-lang-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+.nav-lang-toggle:active {
+    transform: scale(var(--scale-press));
+}
+.nav-lang-toggle .lang-en,
+.nav-lang-toggle .lang-fr {
+    transition: color var(--t-fast);
+}
+html[lang='en'] .nav-lang-toggle .lang-en {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+html[lang='fr'] .nav-lang-toggle .lang-fr {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
 .nav-cta {
     text-decoration: none;
     background: var(--text-primary);
@@ -718,7 +753,19 @@ main {
 
 @media (max-width: 768px) {
     .topnav-inner {
-        padding: 0 20px;
+        padding: 0 16px;
+    }
+    .topnav-links {
+        gap: 2px;
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .topnav-links::-webkit-scrollbar {
+        display: none;
+    }
+    .nav-link {
+        padding: 6px 10px;
     }
     .section {
         padding: 60px 20px;

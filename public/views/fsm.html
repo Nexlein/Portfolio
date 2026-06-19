@@ -1,78 +1,100 @@
 <div class="layout-grid">
-  <div class="panel-left">
-    <div class="card card-info">
-      <h2>Finite State Machine</h2>
-      <p class="description">Rule-based AI. The agent transitions between discrete states based on environmental triggers. Simple, predictable, but highly effective for NPC behavior.</p>
+    <div class="panel-left">
+        <div class="card card-info">
+            <h2 data-i18n="sim_fsm.title">Finite State Machine</h2>
+            <p class="description" data-i18n="sim_fsm.desc">
+                Rule-based AI. The agent transitions between discrete states based on environmental triggers. Simple,
+                predictable, but highly effective for NPC behavior.
+            </p>
 
-      <div class="fsm-graph-container">
-        <h3>State Transition Graph</h3>
-        <div class="fsm-nodes">
-          <div class="fsm-node" id="fsm-node-patrol">
-            <span class="node-name">PATROL</span>
-            <span class="node-desc">Move along path</span>
-          </div>
-          <div class="fsm-arrow">➡️</div>
-          <div class="fsm-node" id="fsm-node-chase">
-            <span class="node-name">CHASE</span>
-            <span class="node-desc">Target in sight</span>
-          </div>
+            <div class="fsm-graph-container">
+                <h3 data-i18n="sim_fsm.graph">State Transition Graph</h3>
+                <div class="fsm-nodes">
+                    <div class="fsm-node" id="fsm-node-patrol">
+                        <span class="node-name">PATROL</span>
+                        <span class="node-desc">Move along path</span>
+                    </div>
+                    <div class="fsm-arrow">➡️</div>
+                    <div class="fsm-node" id="fsm-node-chase">
+                        <span class="node-name">CHASE</span>
+                        <span class="node-desc">Target in sight</span>
+                    </div>
+                </div>
+                <div class="fsm-nodes-row2">
+                    <div class="fsm-node" id="fsm-node-rest">
+                        <span class="node-name">REST</span>
+                        <span class="node-desc">Battery low</span>
+                    </div>
+                    <div class="fsm-node" id="fsm-node-search">
+                        <span class="node-name">SEARCH</span>
+                        <span class="node-desc">Target lost</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <h3 data-i18n="sim_fsm.vars">FSM Variables</h3>
+                <div class="var-list">
+                    <div class="var-item">
+                        <span class="var-lbl">Guard State:</span
+                        ><span id="fsm-var-state" class="var-val badge">PATROL</span>
+                    </div>
+                    <div class="var-item">
+                        <span class="var-lbl">Target Visual:</span><span id="fsm-var-spotted" class="var-val">NO</span>
+                    </div>
+                    <div class="var-item">
+                        <span class="var-lbl">Guard Battery:</span
+                        ><span id="fsm-var-battery" class="var-val">100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <h3 data-i18n="sim_fsm.controls">Controls</h3>
+                <button id="fsm-btn-spawn" class="btn secondary w-full">
+                    <span data-i18n="sim_fsm.spawn">Spawn Intruder (Mouse Click)</span>
+                </button>
+            </div>
+            <!-- /.controls-group -->
+
+            <div class="github-section">
+                <h3 data-i18n="sim_fsm.related">Related Projects</h3>
+                <a href="https://github.com/Nexlein/Zappy" target="_blank" rel="noopener" class="github-repo-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                        ></path>
+                    </svg>
+                    <div class="repo-text">
+                        <span class="repo-name">Zappy</span>
+                        <span class="repo-desc">C/C++ · Multiplayer game with autonomous AI clients (FSM/UAI)</span>
+                    </div>
+                    <span class="repo-arrow">→</span>
+                </a>
+            </div>
         </div>
-        <div class="fsm-nodes-row2">
-          <div class="fsm-node" id="fsm-node-rest">
-            <span class="node-name">REST</span>
-            <span class="node-desc">Battery low</span>
-          </div>
-          <div class="fsm-node" id="fsm-node-search">
-            <span class="node-name">SEARCH</span>
-            <span class="node-desc">Target lost</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="controls-group">
-        <h3>FSM Variables</h3>
-        <div class="var-list">
-          <div class="var-item"><span class="var-lbl">Guard State:</span><span id="fsm-var-state" class="var-val badge">PATROL</span></div>
-          <div class="var-item"><span class="var-lbl">Target Visual:</span><span id="fsm-var-spotted" class="var-val">NO</span></div>
-          <div class="var-item"><span class="var-lbl">Guard Battery:</span><span id="fsm-var-battery" class="var-val">100%</span></div>
-        </div>
-      </div>
-
-      <div class="controls-group">
-        <h3>Controls</h3>
-        <button id="fsm-btn-spawn" class="btn secondary w-full">Spawn Intruder (Mouse Click)</button>
-      </div><!-- /.controls-group -->
-
-      <div class="github-section">
-        <h3>Related Projects</h3>
-        <a href="https://github.com/Nexlein/Zappy" target="_blank" rel="noopener" class="github-repo-card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-          <div class="repo-text">
-            <span class="repo-name">Zappy</span>
-            <span class="repo-desc">C/C++ · Multiplayer game with autonomous AI clients (FSM/UAI)</span>
-          </div>
-          <span class="repo-arrow">→</span>
-        </a>
-      </div>
-
-    </div><!-- /.card-info -->
-  </div><!-- /.panel-left -->
-
-  <div class="panel-right">
-    <div class="card card-sim">
-      <div class="sim-header">
-        <div class="sim-title">
-          <h3>Patrol Security Guard Simulation</h3>
-          <span class="sub">Click canvas to place intruder 🔴 or lure the guard. Guard 👮 patrols points, chases intruder, rests when low battery ⚡.</span>
-        </div>
-        <div class="sim-actions">
-          <button id="fsm-btn-play" class="btn primary">Pause</button>
-          <button id="fsm-btn-reset" class="btn danger">Reset</button>
-        </div>
-      </div>
-      <div class="canvas-container">
-        <canvas id="fsm-canvas" width="600" height="400"></canvas>
-      </div>
+        <!-- /.card-info -->
     </div>
-  </div>
+    <!-- /.panel-left -->
+
+    <div class="panel-right">
+        <div class="card card-sim">
+            <div class="sim-header">
+                <div class="sim-title">
+                    <h3 data-i18n="sim_fsm.simTitle">Patrol Security Guard Simulation</h3>
+                    <span class="sub" data-i18n="sim_fsm.simSub"
+                        >Click canvas to place intruder or lure the guard. Guard patrols points, chases intruder, rests
+                        when low battery .</span
+                    >
+                </div>
+                <div class="sim-actions">
+                    <button id="fsm-btn-play" class="btn primary">Pause</button>
+                    <button id="fsm-btn-reset" class="btn danger">Reset</button>
+                </div>
+            </div>
+            <div class="canvas-container">
+                <canvas id="fsm-canvas" width="600" height="400"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
