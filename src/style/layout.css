@@ -2,6 +2,7 @@
 html {
     scroll-behavior: smooth;
     font-size: 15px;
+    overflow-x: hidden;
 }
 
 body {
@@ -668,13 +669,19 @@ main {
     border: 1px solid var(--border);
     border-radius: 14px;
     width: fit-content;
+    max-width: 100%;
+}
+
+.pill .pill-label {
+    display: none;
 }
 
 .pill {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
+    justify-content: center;
+    gap: 0;
+    padding: 8px 12px;
     border-radius: 10px;
     border: 1px solid transparent;
     background: transparent;
@@ -833,9 +840,6 @@ main {
     }
     .section-title {
         font-size: 1.75rem;
-    }
-    .pill .pill-label {
-        display: none;
     }
     .pill {
         padding: 8px 12px;

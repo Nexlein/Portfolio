@@ -227,6 +227,7 @@
 /* ─── Simulation canvas card ──────────────────────── */
 .sim-header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: flex-start;
     gap: 12px;
@@ -263,6 +264,7 @@
 
 .sim-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
     flex-shrink: 0;
 }
