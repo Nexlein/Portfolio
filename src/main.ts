@@ -150,6 +150,7 @@ declare global {
             scrollObserver: ScrollObserver;
             navShadow: NavShadow;
         };
+        openProjectModal: (event: Event, id: string) => void;
     }
 }
 

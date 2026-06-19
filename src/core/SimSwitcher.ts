@@ -65,7 +65,6 @@ export class SimSwitcher {
         document.documentElement.style.setProperty('--accent-glow', glow);
 
         // Start / stop simulations
-        const prev = this.activeSim;
         this.activeSim = id;
 
         this.sims.forEach(({ instance, config }, name) => {
@@ -76,7 +75,7 @@ export class SimSwitcher {
                     instance.clearCanvas();
                     instance.draw();
                 }
-            } else if (name === prev) {
+            } else {
                 instance.stop();
             }
         });
