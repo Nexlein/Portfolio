@@ -11,6 +11,7 @@ export type ProjectCategory = 'architecture' | 'systems' | 'ai' | 'devops' | 'gr
 export interface ProjectMediaVideo {
     type: 'video';
     src: string; // path relative to /public
+    poster?: string;
 }
 
 export interface ProjectMediaImage {
@@ -105,7 +106,11 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C++', 'Concurrency', 'IPC'],
         category: 'architecture',
         github: 'https://github.com/Nexlein/Plazza',
-        media: { type: 'video', src: '/projects/plazza/plazza.mp4' }
+        media: {
+            type: 'video',
+            src: '/projects/plazza/plazza-optimized.mp4',
+            poster: '/projects/plazza/plazza-poster.jpg'
+        }
     },
     {
         id: 'cvrie',
