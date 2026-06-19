@@ -812,10 +812,12 @@ canvas {
         border-color var(--t-fast),
         box-shadow 300ms cubic-bezier(0.19, 1, 0.22, 1);
 }
-.project-card:hover {
-    transform: translateY(-4px) scale(1.01);
-    border-color: var(--border-hover);
-    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.3);
+@media (hover: hover) {
+    .project-card:hover {
+        transform: translateY(-4px) scale(1.01);
+        border-color: var(--border-hover);
+        box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.3);
+    }
 }
 
 .project-media {
@@ -1056,7 +1058,7 @@ canvas {
         transform var(--t-normal);
 }
 
-#project-modal[open] {
+#project-modal.show {
     opacity: 1;
     transform: scale(1) translateY(0);
 }
@@ -1070,7 +1072,7 @@ canvas {
     transition: opacity var(--t-normal);
 }
 
-#project-modal[open]::backdrop {
+#project-modal.show::backdrop {
     opacity: 1;
 }
 
