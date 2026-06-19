@@ -5,6 +5,8 @@
     border-radius: 14px;
     padding: 20px;
     transition: border-color var(--t-fast);
+    max-width: 100%;
+    min-width: 0;
 }
 
 .card:hover {
@@ -363,12 +365,14 @@
     justify-content: center;
     align-items: center;
     min-height: 380px;
+    min-width: 0;
 }
 
 canvas {
     display: block;
     max-width: 100%;
-    max-height: 100%;
+    height: auto;
+    min-width: 0;
     cursor: crosshair;
 }
 
