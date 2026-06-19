@@ -1,4 +1,5 @@
 import { Icons } from '../utils/Icons.js';
+import { i18n } from './i18n.js';
 
 export function injectNavbar(activeSection: 'home' | 'ailab' | 'availability') {
     const isHome = activeSection === 'home';
@@ -11,21 +12,26 @@ export function injectNavbar(activeSection: 'home' | 'ailab' | 'availability') {
       </a>
 
       <nav class="topnav-links" aria-label="Main navigation">
-        <a href="${base}#home"     class="nav-link ${activeSection === 'home' ? 'active' : ''}" data-section="home">Home</a>
-        <a href="${base}#parcours" class="nav-link" data-section="parcours">Journey</a>
-        <a href="${base}#projects" class="nav-link" data-section="projects">Projects</a>
-        <a href="${activeSection === 'availability' ? '#' : 'availability.html'}" class="nav-link ${activeSection === 'availability' ? 'active' : ''}" data-section="availability">Availability</a>
-        <a href="${activeSection === 'ailab' ? '#' : 'ailab.html'}" class="nav-link ${activeSection === 'ailab' ? 'active' : ''}" data-section="ailab">AI Lab</a>
+        <a href="${base}#home"     class="nav-link ${activeSection === 'home' ? 'active' : ''}" data-section="home" data-i18n="navbar.home">Home</a>
+        <a href="${base}#parcours" class="nav-link" data-section="parcours" data-i18n="navbar.journey">Journey</a>
+        <a href="${base}#projects" class="nav-link" data-section="projects" data-i18n="navbar.projects">Projects</a>
+        <a href="${activeSection === 'availability' ? '#' : 'availability.html'}" class="nav-link ${activeSection === 'availability' ? 'active' : ''}" data-section="availability" data-i18n="navbar.availability">Availability</a>
+        <a href="${activeSection === 'ailab' ? '#' : 'ailab.html'}" class="nav-link ${activeSection === 'ailab' ? 'active' : ''}" data-section="ailab" data-i18n="navbar.ailab">AI Lab</a>
+        
+        <button id="nav-lang-btn" class="nav-lang-toggle" aria-label="Toggle language">
+            <span class="lang-en">EN</span> / <span class="lang-fr">FR</span>
+        </button>
+
         <div class="nav-cta-wrapper" style="position: relative; display: inline-block; margin-left: 8px;">
-            <button id="nav-contact-btn" class="nav-cta" aria-haspopup="true" aria-expanded="false" style="margin-left: 0; border: none; outline: none; cursor: pointer; font-family: inherit;">Contact</button>
+            <button id="nav-contact-btn" class="nav-cta" aria-haspopup="true" aria-expanded="false" style="margin-left: 0; border: none; outline: none; cursor: pointer; font-family: inherit;" data-i18n="navbar.contact">Contact</button>
             <div id="nav-contact-popup" class="contact-popup">
                 <a href="mailto:nielsen.combe-bracciale@epitech.eu" class="popup-link">
                     ${Icons.Email}
-                    Email Me
+                    <span data-i18n="navbar.email">Email Me</span>
                 </a>
                 <a href="https://www.linkedin.com/in/nielsen-combebracciale/" target="_blank" rel="noopener" class="popup-link">
                     ${Icons.LinkedIn}
-                    LinkedIn
+                    <span data-i18n="navbar.linkedin">LinkedIn</span>
                 </a>
             </div>
         </div>
@@ -37,6 +43,27 @@ export function injectNavbar(activeSection: 'home' | 'ailab' | 'availability') {
     header.id = 'topnav';
     header.innerHTML = html;
     document.body.prepend(header);
+
+    // Initial Lang Setup
+    const updateLangBtn = () => {
+        const langEn = document.querySelector('.lang-en') as HTMLElement;
+        const langFr = document.querySelector('.lang-fr') as HTMLElement;
+        if (langEn && langFr) {
+            const current = i18n.getLang();
+            langEn.style.color = current === 'en' ? 'var(--text-primary)' : 'var(--text-muted)';
+            langFr.style.color = current === 'fr' ? 'var(--text-primary)' : 'var(--text-muted)';
+        }
+    };
+    updateLangBtn();
+
+    const langBtn = document.getElementById('nav-lang-btn');
+    if (langBtn) {
+        langBtn.addEventListener('click', () => {
+            const next = i18n.getLang() === 'en' ? 'fr' : 'en';
+            i18n.setLang(next);
+            updateLangBtn();
+        });
+    }
 
     // Attach popup toggle logic
     const btn = document.getElementById('nav-contact-btn');

@@ -23,12 +23,21 @@ export class SimSwitcher {
     }
 
     private bindPills(): void {
-        document.querySelectorAll<HTMLElement>('.pill[data-sim]').forEach((pill) => {
-            pill.addEventListener('click', () => {
-                const id = pill.getAttribute('data-sim');
-                if (id) this.switchSim(id);
+        const container = document.getElementById('sim-pills');
+        if (container) {
+            container.addEventListener('click', (e) => {
+                const target = e.target as HTMLElement;
+                const pill = target.closest('.pill[data-sim]');
+                if (pill) {
+                    const id = pill.getAttribute('data-sim');
+                    if (id) this.switchSim(id);
+                }
             });
-        });
+        }
+    }
+
+    getActiveSim(): string {
+        return this.activeSim;
     }
 
     switchSim(id: string): void {

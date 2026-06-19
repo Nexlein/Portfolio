@@ -16,15 +16,25 @@
             rel="stylesheet"
         />
         <link rel="stylesheet" href="style.css" />
+
+        <script>
+            (function () {
+                var lang = localStorage.getItem('lang');
+                if (!lang) lang = navigator.language.startsWith('fr') ? 'fr' : 'en';
+                if (lang === 'fr') {
+                    document.write('<style>html:not(.i18n-ready) body { visibility: hidden; }</style>');
+                }
+            })();
+        </script>
     </head>
 
     <body>
         <main>
             <!-- ─── AI Lab ─────────────────────────────────────── -->
             <section id="ailab" class="section section-ailab">
-                <div class="section-eyebrow">Interactive · Browser-Native · No Backend</div>
-                <h2 class="section-title">AI Lab</h2>
-                <p class="section-sub">
+                <div class="section-eyebrow" data-i18n="ailab.tag">Interactive · Browser-Native · No Backend</div>
+                <h2 class="section-title" data-i18n="ailab.title">AI Lab</h2>
+                <p class="section-sub" data-i18n="ailab.bio">
                     Five AI decision systems running live in your browser. Select an engine below, adjust the
                     parameters, and observe the algorithm in real time.
                 </p>

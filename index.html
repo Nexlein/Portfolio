@@ -16,6 +16,16 @@
             rel="stylesheet"
         />
         <link rel="stylesheet" href="style.css" />
+
+        <script>
+            (function () {
+                var lang = localStorage.getItem('lang');
+                if (!lang) lang = navigator.language.startsWith('fr') ? 'fr' : 'en';
+                if (lang === 'fr') {
+                    document.write('<style>html:not(.i18n-ready) body { visibility: hidden; }</style>');
+                }
+            })();
+        </script>
     </head>
 
     <body>
@@ -31,21 +41,25 @@
                     <div class="home-eyebrow">
                         <span class="mono-tag">Epitech · AI Track</span>
                         <span class="eyebrow-sep"></span>
-                        <span class="mono-tag available">Open to opportunities</span>
+                        <span class="mono-tag available" data-i18n="home.tag">Open to opportunities</span>
                     </div>
 
                     <h1 class="hero-name">Nielsen<br />Combe-Bracciale</h1>
                     <p class="hero-alias">@Nexlein</p>
 
-                    <p class="hero-bio">
+                    <p class="hero-bio" data-i18n="home.bio">
                         I build AI systems that decide and learn. My work spans autonomous decision architectures,
                         real-time simulation engines, and high-performance C++. Currently studying at Epitech with a
                         focus on applied artificial intelligence.
                     </p>
 
                     <div class="home-actions">
-                        <a href="ailab.html" class="btn-hero-primary" id="hero-ailab-link">Explore AI Lab</a>
-                        <a href="#projects" class="btn-hero-ghost" id="hero-projects-link">View Projects</a>
+                        <a href="ailab.html" class="btn-hero-primary" id="hero-ailab-link" data-i18n="home.explore"
+                            >Explore AI Lab</a
+                        >
+                        <a href="#projects" class="btn-hero-ghost" id="hero-projects-link" data-i18n="home.projects"
+                            >View Projects</a
+                        >
                     </div>
 
                     <div class="contact-row">
@@ -121,9 +135,9 @@
 
             <!-- ─── Parcours ──────────────────────────────────────── -->
             <section id="parcours" class="section section-parcours">
-                <div class="section-eyebrow">My Journey</div>
-                <h2 class="section-title">Experience & Education</h2>
-                <p class="section-sub">
+                <div class="section-eyebrow" data-i18n="journey.eyebrow">My Journey</div>
+                <h2 class="section-title" data-i18n="journey.title">Experience & Education</h2>
+                <p class="section-sub" data-i18n="journey.sub">
                     A timeline of my academic background, professional experience, and continuous learning.
                 </p>
 
@@ -131,9 +145,11 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
-                            <div class="timeline-date">Expected 2029</div>
-                            <h3 class="timeline-title">Master's Degree in Information Technology</h3>
-                            <p class="timeline-desc">
+                            <div class="timeline-date" data-i18n="journey.degreeDate">Expected 2029</div>
+                            <h3 class="timeline-title" data-i18n="journey.degreeTitle">
+                                Master's Degree in Information Technology
+                            </h3>
+                            <p class="timeline-desc" data-i18n="journey.degreeDesc">
                                 Pursuing a 5-year expert-level degree in Information Technology at Epitech. Engaging in
                                 an intensive, project-based curriculum focused on advanced software engineering and
                                 system architecture.
@@ -144,9 +160,11 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
-                            <div class="timeline-date">2026</div>
-                            <h3 class="timeline-title">Google Cloud & Generative AI Certifications</h3>
-                            <p class="timeline-desc">
+                            <div class="timeline-date" data-i18n="journey.certDate">2026</div>
+                            <h3 class="timeline-title" data-i18n="journey.certTitle">
+                                Google Cloud & Generative AI Certifications
+                            </h3>
+                            <p class="timeline-desc" data-i18n="journey.certDesc">
                                 Obtained the <strong>Google Cloud Computing Foundations</strong> and the
                                 <strong>Generative AI Leader</strong> certificates, solidifying my expertise in modern
                                 cloud infrastructure and AI deployment.
@@ -157,9 +175,9 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
-                            <div class="timeline-date">2025 - 2026</div>
-                            <h3 class="timeline-title">Hackathons & Cybersecurity</h3>
-                            <p class="timeline-desc">
+                            <div class="timeline-date" data-i18n="journey.hackDate">2025 - 2026</div>
+                            <h3 class="timeline-title" data-i18n="journey.hackTitle">Hackathons & Cybersecurity</h3>
+                            <p class="timeline-desc" data-i18n="journey.hackDesc">
                                 Participated in 2 Generative AI Hackathons (building innovative solutions using AI
                                 tools) and 2 Cycom events (Cybersecurity talks and CTF hackathons).
                             </p>
@@ -169,12 +187,12 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
-                            <div class="timeline-date">Sept - Dec 2025</div>
-                            <h3 class="timeline-title">
+                            <div class="timeline-date" data-i18n="journey.internDate">Sept - Dec 2025</div>
+                            <h3 class="timeline-title" data-i18n="journey.internTitle">
                                 Full-Stack & AI Developer Intern
                                 <span class="highlight">@ Climb2C (Eliona Conseil)</span>
                             </h3>
-                            <p class="timeline-desc">
+                            <p class="timeline-desc" data-i18n="journey.internDesc">
                                 Developed robust Razor components and managed databases with Entity Framework.
                                 Engineered an internal AI Retrieval-Augmented Generation (RAG) system utilizing
                                 Microsoft Agent Framework and local LLMs (Ollama) to query enterprise data securely.
@@ -191,9 +209,11 @@
                     <div class="timeline-item">
                         <div class="timeline-marker"></div>
                         <div class="timeline-content">
-                            <div class="timeline-date">2024</div>
-                            <h3 class="timeline-title">High School Graduation & Epitech Admission</h3>
-                            <p class="timeline-desc">
+                            <div class="timeline-date" data-i18n="journey.highschoolDate">2024</div>
+                            <h3 class="timeline-title" data-i18n="journey.highschoolTitle">
+                                High School Graduation & Epitech Admission
+                            </h3>
+                            <p class="timeline-desc" data-i18n="journey.highschoolDesc">
                                 Graduated high school with a specialization in Mathematics and Computer Science.
                                 Successfully passed the intensive 5-week Epitech C Programming 'Piscine' bootcamp.
                             </p>
@@ -204,34 +224,72 @@
 
             <!-- ─── Software Projects ─────────────────────────── -->
             <section id="projects" class="section section-projects">
-                <div class="section-eyebrow">Software Engineering</div>
-                <h2 class="section-title">Projects</h2>
-                <p class="section-sub">
+                <div class="section-eyebrow" data-i18n="projects.eyebrow">Software Engineering</div>
+                <h2 class="section-title" data-i18n="projects.title">Projects</h2>
+                <p class="section-sub" data-i18n="projects.sub">
                     Showcasing high-performance applications, concurrent systems, and graphical engines developed during
                     my Epitech curriculum.
                 </p>
 
                 <div class="filter-controls">
                     <div class="filter-group" role="group" aria-label="Filter projects by year">
-                        <button class="filter-btn year-filter active" data-year="all">All Years</button>
+                        <button
+                            class="filter-btn year-filter active"
+                            data-year="all"
+                            data-i18n="projects.filterAllYears"
+                        >
+                            All Years
+                        </button>
                         <button class="filter-btn year-filter" data-year="Tek1">Tek1</button>
                         <button class="filter-btn year-filter" data-year="Tek2">Tek2</button>
                     </div>
                     <div class="filter-group" role="group" aria-label="Filter projects by category">
-                        <button class="filter-btn cat-filter active" data-filter="all" id="filter-all">
+                        <button
+                            class="filter-btn cat-filter active"
+                            data-filter="all"
+                            id="filter-all"
+                            data-i18n="projects.filterAllCats"
+                        >
                             All Categories
                         </button>
-                        <button class="filter-btn cat-filter" data-filter="ai" id="filter-ai">AI & Data Science</button>
-                        <button class="filter-btn cat-filter" data-filter="architecture" id="filter-architecture">
+                        <button
+                            class="filter-btn cat-filter"
+                            data-filter="ai"
+                            id="filter-ai"
+                            data-i18n="projects.filterAi"
+                        >
+                            AI & Data Science
+                        </button>
+                        <button
+                            class="filter-btn cat-filter"
+                            data-filter="architecture"
+                            id="filter-architecture"
+                            data-i18n="projects.filterArch"
+                        >
                             Software Architecture
                         </button>
-                        <button class="filter-btn cat-filter" data-filter="systems" id="filter-systems">
+                        <button
+                            class="filter-btn cat-filter"
+                            data-filter="systems"
+                            id="filter-systems"
+                            data-i18n="projects.filterSys"
+                        >
                             Systems & Unix
                         </button>
-                        <button class="filter-btn cat-filter" data-filter="devops" id="filter-devops">
+                        <button
+                            class="filter-btn cat-filter"
+                            data-filter="devops"
+                            id="filter-devops"
+                            data-i18n="projects.filterDevops"
+                        >
                             DevOps & Infrastructure
                         </button>
-                        <button class="filter-btn cat-filter" data-filter="graphical" id="filter-graphical">
+                        <button
+                            class="filter-btn cat-filter"
+                            data-filter="graphical"
+                            id="filter-graphical"
+                            data-i18n="projects.filterGraph"
+                        >
                             Graphical & Games
                         </button>
                     </div>
@@ -244,10 +302,16 @@
             <!-- ─── Contact / Footer ──────────────────────────── -->
             <footer id="contact" style="padding: 100px 40px; text-align: center; border-top: 1px solid var(--border)">
                 <div style="max-width: 600px; margin: 0 auto">
-                    <h2 style="font-size: 2rem; color: var(--text-primary); margin-bottom: 1rem">
+                    <h2
+                        style="font-size: 2rem; color: var(--text-primary); margin-bottom: 1rem"
+                        data-i18n="home.footerTitle"
+                    >
                         Let's Build Something.
                     </h2>
-                    <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2.5rem">
+                    <p
+                        style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2.5rem"
+                        data-i18n="home.footerDesc"
+                    >
                         I am currently open to new opportunities. Check my availability to see if our timelines align,
                         or reach out directly.
                     </p>
@@ -269,7 +333,7 @@
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
-                            Check Availability
+                            <span data-i18n="home.footerBtn">Check Availability</span>
                         </a>
                     </div>
                 </div>

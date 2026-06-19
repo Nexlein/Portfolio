@@ -1,158 +1,168 @@
 <div class="layout-grid">
-  <div class="panel-left">
-    <div class="card card-info">
-      <h2>Utility AI</h2>
-      <p class="description">The agent evaluates every possible action every frame using a utility score. No hard rules — whichever action scores highest wins. Needs deplete over time; urgency bends the score curve upward.</p>
+    <div class="panel-left">
+        <div class="card card-info">
+            <h2 data-i18n="sim_uai.title">Utility AI</h2>
+            <p class="description" data-i18n="sim_uai.desc">
+                The agent evaluates every possible action every frame using a utility score. No hard rules — whichever
+                action scores highest wins. Needs deplete over time; urgency bends the score curve upward.
+            </p>
 
-      <div class="theory-box">
-        <h3>Scoring formula</h3>
-        <div class="math-expr">
-          score(action) = <span class="math">need_value<sup>2.2</sup> × weight</span>
-        </div>
-        <div class="math-expr">
-          decision = <span class="math">argmax score(a) for a in actions</span>
-        </div>
-      </div>
-
-      <!-- Live utility table -->
-      <div class="controls-group">
-        <h3>Live Utility Scores</h3>
-        <div class="uai-score-table">
-
-          <div class="uai-score-row" id="uai-row-hunger">
-            <div class="uai-row-header">
-              <span class="uai-need-label" style="color:#fb923c">Hunger</span>
-              <span class="uai-score-val" id="uai-score-hunger">0.00</span>
+            <div class="theory-box">
+                <h3>Scoring formula</h3>
+                <div class="math-expr">
+                    score(action) = <span class="math">need_value<sup>2.2</sup> × weight</span>
+                </div>
+                <div class="math-expr">decision = <span class="math">argmax score(a) for a in actions</span></div>
             </div>
-            <div class="uai-bar-track">
-              <div class="uai-bar-fill" id="uai-bar-hunger"></div>
+
+            <!-- Live utility table -->
+            <div class="controls-group">
+                <h3>Live Utility Scores</h3>
+                <div class="uai-score-table">
+                    <div class="uai-score-row" id="uai-row-hunger">
+                        <div class="uai-row-header">
+                            <span class="uai-need-label" style="color: #fb923c">Hunger</span>
+                            <span class="uai-score-val" id="uai-score-hunger">0.00</span>
+                        </div>
+                        <div class="uai-bar-track">
+                            <div class="uai-bar-fill" id="uai-bar-hunger"></div>
+                        </div>
+                    </div>
+
+                    <div class="uai-score-row" id="uai-row-thirst">
+                        <div class="uai-row-header">
+                            <span class="uai-need-label" style="color: #22d3ee">Thirst</span>
+                            <span class="uai-score-val" id="uai-score-thirst">0.00</span>
+                        </div>
+                        <div class="uai-bar-track">
+                            <div class="uai-bar-fill" id="uai-bar-thirst"></div>
+                        </div>
+                    </div>
+
+                    <div class="uai-score-row" id="uai-row-rest">
+                        <div class="uai-row-header">
+                            <span class="uai-need-label" style="color: #a78bfa">Fatigue</span>
+                            <span class="uai-score-val" id="uai-score-rest">0.00</span>
+                        </div>
+                        <div class="uai-bar-track">
+                            <div class="uai-bar-fill" id="uai-bar-rest"></div>
+                        </div>
+                    </div>
+
+                    <div class="uai-score-row" id="uai-row-social">
+                        <div class="uai-row-header">
+                            <span class="uai-need-label" style="color: #34d399">Social</span>
+                            <span class="uai-score-val" id="uai-score-social">0.00</span>
+                        </div>
+                        <div class="uai-bar-track">
+                            <div class="uai-bar-fill" id="uai-bar-social"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="uai-score-row" id="uai-row-thirst">
-            <div class="uai-row-header">
-              <span class="uai-need-label" style="color:#22d3ee">Thirst</span>
-              <span class="uai-score-val" id="uai-score-thirst">0.00</span>
+            <!-- Weight tuning -->
+            <div class="controls-group">
+                <h3>Action Weights</h3>
+                <div class="control-row">
+                    <label for="uai-w-hunger">Hunger weight:</label>
+                    <div class="slider-val-container">
+                        <input type="range" id="uai-w-hunger" min="0" max="3" step="0.1" value="1" />
+                        <span id="uai-w-hunger-val" class="val-lbl">1</span>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <label for="uai-w-thirst">Thirst weight:</label>
+                    <div class="slider-val-container">
+                        <input type="range" id="uai-w-thirst" min="0" max="3" step="0.1" value="1" />
+                        <span id="uai-w-thirst-val" class="val-lbl">1</span>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <label for="uai-w-rest">Fatigue weight:</label>
+                    <div class="slider-val-container">
+                        <input type="range" id="uai-w-rest" min="0" max="3" step="0.1" value="1" />
+                        <span id="uai-w-rest-val" class="val-lbl">1</span>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <label for="uai-w-social">Social weight:</label>
+                    <div class="slider-val-container">
+                        <input type="range" id="uai-w-social" min="0" max="3" step="0.1" value="1" />
+                        <span id="uai-w-social-val" class="val-lbl">1</span>
+                    </div>
+                </div>
             </div>
-            <div class="uai-bar-track">
-              <div class="uai-bar-fill" id="uai-bar-thirst"></div>
+
+            <!-- Speed + stats -->
+            <div class="controls-group">
+                <h3>Simulation</h3>
+                <div class="control-row">
+                    <label for="uai-speed">Speed multiplier:</label>
+                    <div class="slider-val-container">
+                        <input type="range" id="uai-speed" min="0.25" max="4" step="0.25" value="1" />
+                        <span id="uai-speed-val" class="val-lbl">1x</span>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div class="uai-score-row" id="uai-row-rest">
-            <div class="uai-row-header">
-              <span class="uai-need-label" style="color:#a78bfa">Fatigue</span>
-              <span class="uai-score-val" id="uai-score-rest">0.00</span>
+            <div class="stats-panel">
+                <h3>Stats</h3>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <span class="lbl">Active decision:</span>
+                        <span id="uai-current-action" class="val">—</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="lbl">Ticks elapsed:</span>
+                        <span id="uai-ticks" class="val">0</span>
+                    </div>
+                </div>
             </div>
-            <div class="uai-bar-track">
-              <div class="uai-bar-fill" id="uai-bar-rest"></div>
+            <!-- /.stats-panel -->
+
+            <div class="github-section">
+                <h3 data-i18n="sim_uai.related">Related Projects</h3>
+                <a href="https://github.com/Nexlein/Zappy" target="_blank" rel="noopener" class="github-repo-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                        ></path>
+                    </svg>
+                    <div class="repo-text">
+                        <span class="repo-name">Zappy</span>
+                        <span class="repo-desc">C/C++ · Multiplayer game with autonomous AI clients (FSM/UAI)</span>
+                    </div>
+                    <span class="repo-arrow">→</span>
+                </a>
             </div>
-          </div>
+        </div>
+        <!-- /.card-info -->
+    </div>
+    <!-- /.panel-left -->
 
-          <div class="uai-score-row" id="uai-row-social">
-            <div class="uai-row-header">
-              <span class="uai-need-label" style="color:#34d399">Social</span>
-              <span class="uai-score-val" id="uai-score-social">0.00</span>
+    <div class="panel-right">
+        <div class="card card-sim">
+            <div class="sim-header">
+                <div class="sim-title">
+                    <h3 data-i18n="sim_uai.simTitle">Utility Agent Simulation</h3>
+                    <span class="sub" data-i18n="sim_uai.simSub"
+                        >Agent picks the highest-scoring need each frame. Arc rings show urgency. Score badges update
+                        live.</span
+                    >
+                </div>
+                <div class="sim-actions">
+                    <button id="uai-btn-play" class="btn primary">Play</button>
+                    <button id="uai-btn-reset" class="btn danger">Reset</button>
+                </div>
             </div>
-            <div class="uai-bar-track">
-              <div class="uai-bar-fill" id="uai-bar-social"></div>
+            <div class="canvas-container">
+                <canvas id="uai-canvas" width="600" height="440"></canvas>
             </div>
-          </div>
-
+            <!-- /.canvas-container -->
         </div>
-      </div>
-
-      <!-- Weight tuning -->
-      <div class="controls-group">
-        <h3>Action Weights</h3>
-        <div class="control-row">
-          <label for="uai-w-hunger">Hunger weight:</label>
-          <div class="slider-val-container">
-            <input type="range" id="uai-w-hunger" min="0" max="3" step="0.1" value="1">
-            <span id="uai-w-hunger-val" class="val-lbl">1</span>
-          </div>
-        </div>
-        <div class="control-row">
-          <label for="uai-w-thirst">Thirst weight:</label>
-          <div class="slider-val-container">
-            <input type="range" id="uai-w-thirst" min="0" max="3" step="0.1" value="1">
-            <span id="uai-w-thirst-val" class="val-lbl">1</span>
-          </div>
-        </div>
-        <div class="control-row">
-          <label for="uai-w-rest">Fatigue weight:</label>
-          <div class="slider-val-container">
-            <input type="range" id="uai-w-rest" min="0" max="3" step="0.1" value="1">
-            <span id="uai-w-rest-val" class="val-lbl">1</span>
-          </div>
-        </div>
-        <div class="control-row">
-          <label for="uai-w-social">Social weight:</label>
-          <div class="slider-val-container">
-            <input type="range" id="uai-w-social" min="0" max="3" step="0.1" value="1">
-            <span id="uai-w-social-val" class="val-lbl">1</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Speed + stats -->
-      <div class="controls-group">
-        <h3>Simulation</h3>
-        <div class="control-row">
-          <label for="uai-speed">Speed multiplier:</label>
-          <div class="slider-val-container">
-            <input type="range" id="uai-speed" min="0.25" max="4" step="0.25" value="1">
-            <span id="uai-speed-val" class="val-lbl">1x</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="stats-panel">
-        <h3>Stats</h3>
-        <div class="stat-grid">
-          <div class="stat-item">
-            <span class="lbl">Active decision:</span>
-            <span id="uai-current-action" class="val">—</span>
-          </div>
-          <div class="stat-item">
-            <span class="lbl">Ticks elapsed:</span>
-            <span id="uai-ticks" class="val">0</span>
-          </div>
-        </div>
-      </div><!-- /.stats-panel -->
-
-      <div class="github-section">
-        <h3>Related Projects</h3>
-        <a href="https://github.com/Nexlein/Zappy" target="_blank" rel="noopener" class="github-repo-card">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-          <div class="repo-text">
-            <span class="repo-name">Zappy</span>
-            <span class="repo-desc">C/C++ · Multiplayer game with autonomous AI clients (FSM/UAI)</span>
-          </div>
-          <span class="repo-arrow">→</span>
-        </a>
-      </div>
-
-
-
-    </div><!-- /.card-info -->
-  </div><!-- /.panel-left -->
-
-  <div class="panel-right">
-    <div class="card card-sim">
-      <div class="sim-header">
-        <div class="sim-title">
-          <h3>Utility Agent Simulation</h3>
-          <span class="sub">Agent picks the highest-scoring need each frame. Arc rings show urgency. Score badges update live.</span>
-        </div>
-        <div class="sim-actions">
-          <button id="uai-btn-play" class="btn primary">Play</button>
-          <button id="uai-btn-reset" class="btn danger">Reset</button>
-        </div>
-      </div>
-      <div class="canvas-container">
-        <canvas id="uai-canvas" width="600" height="440"></canvas>
-      </div><!-- /.canvas-container -->
-    </div><!-- /.card-sim -->
-  </div><!-- /.panel-right -->
-</div><!-- /.layout-grid -->
+        <!-- /.card-sim -->
+    </div>
+    <!-- /.panel-right -->
+</div>
+<!-- /.layout-grid -->

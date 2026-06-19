@@ -6,6 +6,7 @@
  */
 
 import { ProjectEntry, ProjectMedia } from '../data/projects.js';
+import { i18n } from './i18n.js';
 
 function renderMedia(media: ProjectMedia): string {
     switch (media.type) {
@@ -40,7 +41,7 @@ function renderMedia(media: ProjectMedia): string {
             </div>`;
 
         case 'terminal':
-            const lines = media.lines.map(l => `<code>${l}</code>`).join('<br>');
+            const lines = media.lines.map((l) => `<code>${l}</code>`).join('<br>');
             return /* html */ `
             <div class="project-media terminal-style" aria-label="Terminal output preview">
                 <div class="term-header" aria-hidden="true">
@@ -70,7 +71,7 @@ function renderGithubLink(github: string, id: string): string {
     return /* html */ `
     <a href="${github}" target="_blank" rel="noopener" class="project-link" id="project-${id}-link">
         ${githubIcon}
-        View on GitHub
+        ${i18n.t('modal.github')}
     </a>`;
 }
 
@@ -78,16 +79,20 @@ export function renderProjects(projects: ProjectEntry[]): void {
     const grid = document.getElementById('projects-grid');
     if (!grid) return;
 
-    grid.innerHTML = projects.map(p => /* html */ `
+    grid.innerHTML = projects
+        .map(
+            (p) => /* html */ `
     <article class="project-card" data-category="${p.category}" data-project-id="${p.id}" data-year="${p.year ?? 'Tek2'}">
         ${renderMedia(p.media)}
         <div class="project-info">
             <div class="project-tags">
-                ${p.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                ${p.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('')}
             </div>
             <h3>${p.title}</h3>
-            <p>${p.description}</p>
+            <p>${i18n.t_obj(p.description)}</p>
             ${renderGithubLink(p.github, p.id)}
         </div>
-    </article>`).join('');
+    </article>`
+        )
+        .join('');
 }
