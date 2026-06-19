@@ -142,18 +142,26 @@ export class ProjectModal {
             this.dialog.style.position = 'fixed';
             this.dialog.style.zIndex = '9999';
         }
+        // Force reflow and add .show to bypass Safari [open] bug
+        void this.dialog.offsetWidth;
+        this.dialog.classList.add('show');
         document.body.style.overflow = 'hidden';
     }
 
     close(): void {
         // Stop any playing video before closing
         this.mediaEl.querySelector('video')?.pause();
-        if (typeof this.dialog.close === 'function') {
-            this.dialog.close();
-        } else {
-            this.dialog.removeAttribute('open');
-            this.dialog.style.display = 'none';
-        }
-        document.body.style.overflow = '';
+        this.dialog.classList.remove('show');
+
+        // Wait for CSS transition to finish before actually closing
+        setTimeout(() => {
+            if (typeof this.dialog.close === 'function') {
+                this.dialog.close();
+            } else {
+                this.dialog.removeAttribute('open');
+                this.dialog.style.display = 'none';
+            }
+            document.body.style.overflow = '';
+        }, 300); // 300ms matches --t-normal
     }
 }
