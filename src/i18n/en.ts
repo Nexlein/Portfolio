@@ -146,7 +146,7 @@ export const en = {
         reset: 'Reset Weights',
         related: 'Related Projects',
         simTitle: 'Binary Classification',
-        simSub: 'Click canvas to add data points (Left click = Red, Right click = Blue). Train the network to find the decision boundary.'
+        simSub: 'Click canvas to add data points (Left click = Selected Class, Right click = Opposite Class). Train the network to find the decision boundary.'
     },
     sim_ml_unsupervised: {
         title: 'Machine Learning (ML) - Unsupervised',
