@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nexlein — Availability</title>
+        <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <main>
+            <section id="availability" class="section section-home" style="min-height: 100vh">
+                <div class="home-ambient" aria-hidden="true">
+                    <div class="ambient-orb orb-1"></div>
+                    <div class="ambient-orb orb-2"></div>
+                </div>
+
+                <div class="home-content" style="max-width: 800px; margin: 0 auto">
+                    <div class="home-eyebrow">
+                        <span class="mono-tag available">Available Now</span>
+                    </div>
+
+                    <h1 class="hero-name" style="font-size: 3rem; margin-bottom: 2rem">What I'm Looking For</h1>
+
+                    <p class="hero-bio" style="margin-bottom: 3rem">
+                        I am currently an Epitech Tek3 student actively looking for professional opportunities to apply
+                        my skills in AI, backend architecture, and software development.
+                    </p>
+
+                    <div
+                        style="
+                            display: grid;
+                            gap: 2rem;
+                            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                            text-align: left;
+                        "
+                    >
+                        <!-- Part-Time Card -->
+                        <div
+                            class="card"
+                            style="
+                                display: flex;
+                                flex-direction: column;
+                                gap: 1.5rem;
+                                background: rgba(30, 41, 59, 0.4);
+                                backdrop-filter: blur(12px);
+                                border: 1px solid var(--border);
+                                transition:
+                                    transform 0.2s ease,
+                                    border-color 0.2s ease,
+                                    box-shadow 0.2s ease;
+                            "
+                            onmouseover="
+                                this.style.transform = 'translateY(-4px)';
+                                this.style.borderColor = 'var(--clr-fsm)';
+                                this.style.boxShadow = '0 8px 30px var(--clr-fsm-soft)';
+                            "
+                            onmouseout="
+                                this.style.transform = 'translateY(0)';
+                                this.style.borderColor = 'var(--border)';
+                                this.style.boxShadow = 'none';
+                            "
+                        >
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem">
+                                <div
+                                    style="
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        width: 48px;
+                                        height: 48px;
+                                        border-radius: 12px;
+                                        background: var(--clr-fsm-soft);
+                                        color: var(--clr-fsm);
+                                        flex-shrink: 0;
+                                    "
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        style="width: 24px; height: 24px"
+                                    >
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem">
+                                        Part-Time Job
+                                    </h2>
+                                    <p class="description" style="margin: 0; font-size: 0.85rem">
+                                        Mandatory Epitech Tek3 placement (2 days/week)
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1.2rem">
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-fsm);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Timeline & Rhythm
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Sept. 15 to end of January.<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >Thursday and Friday (14h/week).</span
+                                        >
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-fsm);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Contract Types
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Part-time Internship<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >Work-Study or Student Contract.</span
+                                        >
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-fsm);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Recruiter Info
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Internship: Legal minimum prorated.<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >Work-Study: ~43% to 53% SMIC.</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Full-Time Internship Card -->
+                        <div
+                            class="card"
+                            style="
+                                display: flex;
+                                flex-direction: column;
+                                gap: 1.5rem;
+                                background: rgba(30, 41, 59, 0.4);
+                                backdrop-filter: blur(12px);
+                                border: 1px solid var(--border);
+                                transition:
+                                    transform 0.2s ease,
+                                    border-color 0.2s ease,
+                                    box-shadow 0.2s ease;
+                            "
+                            onmouseover="
+                                this.style.transform = 'translateY(-4px)';
+                                this.style.borderColor = 'var(--clr-ml)';
+                                this.style.boxShadow = '0 8px 30px var(--clr-ml-soft)';
+                            "
+                            onmouseout="
+                                this.style.transform = 'translateY(0)';
+                                this.style.borderColor = 'var(--border)';
+                                this.style.boxShadow = 'none';
+                            "
+                        >
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem">
+                                <div
+                                    style="
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        width: 48px;
+                                        height: 48px;
+                                        border-radius: 12px;
+                                        background: var(--clr-ml-soft);
+                                        color: var(--clr-ml);
+                                        flex-shrink: 0;
+                                    "
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        style="width: 24px; height: 24px"
+                                    >
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem">
+                                        Full-Time Internship
+                                    </h2>
+                                    <p class="description" style="margin: 0; font-size: 0.85rem">
+                                        Mandatory Epitech Tek3 placement (Full-time)
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1.2rem">
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-ml);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Timeline & Rhythm
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Between March and August.<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >4 to 6 months (5 days/week).</span
+                                        >
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-ml);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Contract Type
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Full-time Internship Agreement<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >Tripartite agreement via Epitech.</span
+                                        >
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-ml);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Recruiter Info
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Legal minimum: ~4.35€/h.<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >Seeking competitive compensation.</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Freelance Card -->
+                        <div
+                            class="card"
+                            style="
+                                display: flex;
+                                flex-direction: column;
+                                gap: 1.5rem;
+                                background: rgba(30, 41, 59, 0.4);
+                                backdrop-filter: blur(12px);
+                                border: 1px solid var(--border);
+                                transition:
+                                    transform 0.2s ease,
+                                    border-color 0.2s ease,
+                                    box-shadow 0.2s ease;
+                            "
+                            onmouseover="
+                                this.style.transform = 'translateY(-4px)';
+                                this.style.borderColor = 'var(--clr-uai)';
+                                this.style.boxShadow = '0 8px 30px var(--clr-uai-soft)';
+                            "
+                            onmouseout="
+                                this.style.transform = 'translateY(0)';
+                                this.style.borderColor = 'var(--border)';
+                                this.style.boxShadow = 'none';
+                            "
+                        >
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem">
+                                <div
+                                    style="
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        width: 48px;
+                                        height: 48px;
+                                        border-radius: 12px;
+                                        background: var(--clr-uai-soft);
+                                        color: var(--clr-uai);
+                                        flex-shrink: 0;
+                                    "
+                                >
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        style="width: 24px; height: 24px"
+                                    >
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2 style="color: var(--text-primary); font-size: 1.3rem; margin-bottom: 0.2rem">
+                                        Freelance Missions
+                                    </h2>
+                                    <p class="description" style="margin: 0; font-size: 0.85rem">
+                                        B2B project-based collaboration
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1.2rem">
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-uai);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Scope & Availability
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Backend APIs, AI integration.<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >Flexible hours, async delivery.</span
+                                        >
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-uai);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Status
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Freelancer (Auto-entrepreneur)<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >No payroll taxes for the client.</span
+                                        >
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        style="
+                                            color: var(--clr-uai);
+                                            font-family: var(--font-mono);
+                                            font-size: 0.75rem;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.05em;
+                                            margin-bottom: 0.2rem;
+                                        "
+                                    >
+                                        Rates
+                                    </div>
+                                    <div style="color: var(--text-primary); font-size: 0.95rem; line-height: 1.5">
+                                        Daily Rate or Fixed Price.<br /><span
+                                            style="color: var(--text-muted); font-size: 0.9rem"
+                                            >Quotation provided upon request.</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        style="
+                            margin-top: 5rem;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            text-align: center;
+                        "
+                    >
+                        <h2 style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: 1.5rem">
+                            Interested? Let's connect.
+                        </h2>
+                        <div class="contact-row" style="justify-content: center">
+                            <a
+                                href="mailto:nielsen.combe-bracciale@epitech.eu"
+                                class="btn-hero-primary"
+                                style="display: flex; align-items: center; gap: 8px"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    style="width: 18px; height: 18px"
+                                >
+                                    <path
+                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                                    ></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                Email Me
+                            </a>
+                            <a
+                                href="https://www.linkedin.com/in/nielsen-combebracciale/"
+                                target="_blank"
+                                rel="noopener"
+                                class="btn-hero-ghost"
+                                style="display: flex; align-items: center; gap: 8px"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    style="width: 18px; height: 18px"
+                                >
+                                    <path
+                                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                                    ></path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                                LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <script type="module" src="/src/availability.ts"></script>
+    </body>
+</html>

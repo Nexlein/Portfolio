@@ -3,9 +3,9 @@
  * Inject shared components to avoid HTML duplication.
  */
 
-export function injectNavbar(activeSection: 'home' | 'ailab') {
-    const isAiLab = activeSection === 'ailab';
-    const base = isAiLab ? 'index.html' : '';
+export function injectNavbar(activeSection: 'home' | 'ailab' | 'availability') {
+    const isHome = activeSection === 'home';
+    const base = isHome ? '' : 'index.html';
     const html = `
     <div class="topnav-inner">
       <a href="${base}#home" class="topnav-brand" aria-label="Back to top">
@@ -14,10 +14,11 @@ export function injectNavbar(activeSection: 'home' | 'ailab') {
       </a>
 
       <nav class="topnav-links" aria-label="Main navigation">
-        <a href="${base}#home"     class="nav-link ${!isAiLab ? 'active' : ''}" data-section="home">Home</a>
+        <a href="${base}#home"     class="nav-link ${activeSection === 'home' ? 'active' : ''}" data-section="home">Home</a>
         <a href="${base}#parcours" class="nav-link" data-section="parcours">Journey</a>
         <a href="${base}#projects" class="nav-link" data-section="projects">Projects</a>
-        <a href="${isAiLab ? '#' : 'ailab.html'}"    class="nav-link ${isAiLab ? 'active' : ''}" data-section="ailab">AI Lab</a>
+        <a href="${activeSection === 'availability' ? '#' : 'availability.html'}" class="nav-link ${activeSection === 'availability' ? 'active' : ''}" data-section="availability">Availability</a>
+        <a href="${activeSection === 'ailab' ? '#' : 'ailab.html'}" class="nav-link ${activeSection === 'ailab' ? 'active' : ''}" data-section="ailab">AI Lab</a>
       </nav>
     </div>
     `;
