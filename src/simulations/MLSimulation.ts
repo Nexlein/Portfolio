@@ -107,7 +107,7 @@ export class MLSimulation extends SimBase {
         const scaleY = this.canvas.height / rect.height;
         const px_x = (e.clientX - rect.left) * scaleX;
         const px_y = (e.clientY - rect.top) * scaleY;
-        const label = isRightClick || e.shiftKey ? -1 : this.activeClass;
+        const label = isRightClick || e.shiftKey ? -this.activeClass : this.activeClass;
 
         this.points.push(this.createPointObject(px_x, px_y, label));
         this.updateStats();

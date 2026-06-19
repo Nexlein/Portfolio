@@ -146,7 +146,7 @@ export const fr = {
         reset: 'Réinitialiser Poids',
         related: 'Projets Liés',
         simTitle: 'Classification Binaire',
-        simSub: 'Cliquez pour ajouter des points (Clic G = Rouge, Clic D = Bleu). Entraînez le réseau pour trouver la frontière de décision.'
+        simSub: 'Cliquez pour ajouter des points (Clic G = Classe sélectionnée, Clic D = Autre classe). Entraînez le réseau pour trouver la frontière de décision.'
     },
     sim_ml_unsupervised: {
         title: 'Machine Learning (ML) - Non Supervisé',
