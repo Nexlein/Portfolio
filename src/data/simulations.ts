@@ -1,21 +1,10 @@
-/**
- * src/data/simulations.ts
- *
- * Single source of truth for every AI simulation.
- * To add a new simulation:
- *   1. Add a SimConfig entry here.
- *   2. Create the simulation class in src/simulations/.
- *   3. Create the view partial in src/views/<id>.html.
- *
- * The pill switcher, sim-view containers, and accent colours
- * are all generated automatically from this array at boot time.
- */
+import { LocaleString } from '../core/i18n.js';
 
 export interface SimConfig {
     /** Short identifier — used as DOM id suffix, CSS hook, and fetch path. */
     id: string;
     /** Full display label shown in the pill switcher. */
-    label: string;
+    label: LocaleString;
     /** Accent colour hex for the dot and CSS scoping. */
     color: string;
     /** Rgba glow for the CSS --accent-glow variable. */
@@ -33,7 +22,7 @@ export interface SimConfig {
 export const SIMULATIONS: SimConfig[] = [
     {
         id: 'ml',
-        label: 'ML (Supervised)',
+        label: { en: 'ML (Supervised)', fr: 'ML (Supervisé)' },
         color: '#22d3ee',
         glow: 'rgba(34,211,238,0.12)',
         autoStart: false,
@@ -41,7 +30,7 @@ export const SIMULATIONS: SimConfig[] = [
     },
     {
         id: 'ml-unsupervised',
-        label: 'ML (Unsupervised)',
+        label: { en: 'ML (Unsupervised)', fr: 'ML (Non Supervisé)' },
         color: '#3b82f6',
         glow: 'rgba(59,130,246,0.12)',
         autoStart: false,
@@ -49,7 +38,7 @@ export const SIMULATIONS: SimConfig[] = [
     },
     {
         id: 'rl',
-        label: 'Reinforcement Learning',
+        label: { en: 'Reinforcement Learning', fr: 'Apprentissage par Renforcement' },
         color: '#a78bfa',
         glow: 'rgba(167,139,250,0.12)',
         autoStart: false,
@@ -57,16 +46,15 @@ export const SIMULATIONS: SimConfig[] = [
     },
     {
         id: 'fsm',
-        label: 'Finite State Machine',
+        label: { en: 'Finite State Machine', fr: 'Machine à États Finis' },
         color: '#34d399',
         glow: 'rgba(52,211,153,0.12)',
         autoStart: true,
         relatedProject: 'zappy'
     },
-
     {
         id: 'uai',
-        label: 'Utility AI',
+        label: { en: 'Utility AI', fr: 'IA Utilitaire' },
         color: '#f472b6',
         glow: 'rgba(244,114,182,0.12)',
         autoStart: true,
