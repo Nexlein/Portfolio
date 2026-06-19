@@ -59,8 +59,10 @@ export class ProjectModal {
     }
 
     private bindCardClicks(projects: ProjectEntry[]): void {
-        // Use event delegation on the grid — works even after cards are re-rendered
-        document.addEventListener('click', (e) => {
+        const grid = document.getElementById('projects-grid');
+        if (!grid) return;
+
+        grid.addEventListener('click', (e) => {
             const card = (e.target as HTMLElement).closest<HTMLElement>('.project-card');
             if (!card) return;
 
@@ -131,14 +133,27 @@ export class ProjectModal {
             });
         }
 
-        this.dialog.showModal();
+        if (typeof this.dialog.showModal === 'function') {
+            this.dialog.showModal();
+        } else {
+            this.dialog.setAttribute('open', 'true');
+            // rudimentary fallback for backdrop
+            this.dialog.style.display = 'block';
+            this.dialog.style.position = 'fixed';
+            this.dialog.style.zIndex = '9999';
+        }
         document.body.style.overflow = 'hidden';
     }
 
     close(): void {
         // Stop any playing video before closing
         this.mediaEl.querySelector('video')?.pause();
-        this.dialog.close();
+        if (typeof this.dialog.close === 'function') {
+            this.dialog.close();
+        } else {
+            this.dialog.removeAttribute('open');
+            this.dialog.style.display = 'none';
+        }
         document.body.style.overflow = '';
     }
 }
