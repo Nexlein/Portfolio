@@ -82,7 +82,7 @@ export function renderProjects(projects: ProjectEntry[]): void {
     grid.innerHTML = projects
         .map(
             (p) => /* html */ `
-    <article class="project-card" data-category="${p.category}" data-project-id="${p.id}" data-year="${p.year ?? 'Tek2'}">
+    <article class="project-card" data-category="${p.category}" data-project-id="${p.id}" data-year="${p.year ?? 'Tek2'}" onclick="">
         ${renderMedia(p.media)}
         <div class="project-info">
             <div class="project-tags">
