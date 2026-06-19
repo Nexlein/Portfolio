@@ -111,26 +111,27 @@ export function injectNavbar(activeSection: 'home' | 'ailab' | 'availability') {
 
 export function injectModal() {
     const html = `
-    <button class="modal-close" id="modal-close" aria-label="Close project">
-      ${Icons.Close}
-    </button>
-    <div class="modal-inner">
-      <div class="modal-media" id="modal-media"></div>
-      <div class="modal-info">
-        <div class="modal-tags" id="modal-tags"></div>
-        <h2 class="modal-title" id="modal-title"></h2>
-        <p class="modal-desc" id="modal-desc"></p>
-        <a class="modal-github" id="modal-github" target="_blank" rel="noopener">
-          ${Icons.GitHub}
-          View on GitHub
-        </a>
-      </div>
+    <div class="modal-window" id="project-modal-window" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" id="modal-close" aria-label="Close project">
+          ${Icons.Close}
+        </button>
+        <div class="modal-inner">
+          <div class="modal-media" id="modal-media"></div>
+          <div class="modal-info">
+            <div class="modal-tags" id="modal-tags"></div>
+            <h2 class="modal-title" id="modal-title"></h2>
+            <p class="modal-desc" id="modal-desc"></p>
+            <a class="modal-github" id="modal-github" target="_blank" rel="noopener">
+              ${Icons.GitHub}
+              View on GitHub
+            </a>
+          </div>
+        </div>
     </div>
     `;
-    const dialog = document.createElement('dialog');
-    dialog.id = 'project-modal';
-    dialog.setAttribute('aria-modal', 'true');
-    dialog.setAttribute('aria-labelledby', 'modal-title');
-    dialog.innerHTML = html;
-    document.body.appendChild(dialog);
+    const backdrop = document.createElement('div');
+    backdrop.id = 'project-modal-backdrop';
+    backdrop.className = 'modal-backdrop';
+    backdrop.innerHTML = html;
+    document.body.appendChild(backdrop);
 }

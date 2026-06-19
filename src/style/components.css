@@ -820,6 +820,14 @@ canvas {
     }
 }
 
+/* Fix iOS Safari tap bug: force taps to hit the card itself, not the unclickable children */
+.project-card > * {
+    pointer-events: none;
+}
+.project-card .project-link {
+    pointer-events: auto;
+}
+
 .project-media {
     height: 180px;
     width: 100%;
@@ -1037,10 +1045,28 @@ canvas {
 }
 
 /* ─── Project Detail Modal ───────────────────────── */
-#project-modal {
+.modal-backdrop {
     position: fixed;
     inset: 0;
-    margin: auto;
+    z-index: 2147483647; /* Absolute top layer */
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--t-normal);
+}
+
+.modal-backdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-window {
+    position: relative;
     width: min(92vw, 960px);
     max-height: min(90vh, 640px);
     background: var(--bg-surface);
@@ -1049,32 +1075,14 @@ canvas {
     padding: 0;
     overflow: hidden;
     outline: none;
-    z-index: 2147483647 !important; /* Force top layer fallback */
 
     /* Entry animation */
-    opacity: 0;
     transform: scale(0.96) translateY(12px);
-    transition:
-        opacity var(--t-normal),
-        transform var(--t-normal);
+    transition: transform var(--t-normal);
 }
 
-#project-modal.show {
-    opacity: 1;
+.modal-backdrop.show .modal-window {
     transform: scale(1) translateY(0);
-}
-
-/* Native <dialog> backdrop */
-#project-modal::backdrop {
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    opacity: 0;
-    transition: opacity var(--t-normal);
-}
-
-#project-modal.show::backdrop {
-    opacity: 1;
 }
 
 /* Close button */

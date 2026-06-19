@@ -13,7 +13,7 @@ import { ModalGallery } from './ModalGallery.js';
 import { i18n } from './i18n.js';
 
 export class ProjectModal {
-    private readonly dialog: HTMLDialogElement;
+    private readonly backdrop: HTMLElement;
     private readonly mediaEl: HTMLElement;
     private readonly tagsEl: HTMLElement;
     private readonly titleEl: HTMLElement;
@@ -22,7 +22,7 @@ export class ProjectModal {
     private readonly actionsContainerEl: HTMLElement;
 
     constructor(projects: ProjectEntry[]) {
-        this.dialog = document.getElementById('project-modal') as HTMLDialogElement;
+        this.backdrop = document.getElementById('project-modal-backdrop') as HTMLElement;
         this.mediaEl = document.getElementById('modal-media') as HTMLElement;
         this.tagsEl = document.getElementById('modal-tags') as HTMLElement;
         this.titleEl = document.getElementById('modal-title') as HTMLElement;
@@ -69,20 +69,28 @@ export class ProjectModal {
         // Close button
         document.getElementById('modal-close')?.addEventListener('click', () => this.close());
 
-        // Click on backdrop (outside dialog box)
-        this.dialog.addEventListener('click', (e) => {
-            if (e.target === this.dialog) this.close();
+        // Click on backdrop (outside dialog window)
+        this.backdrop.addEventListener('click', (e) => {
+            if (e.target === this.backdrop) {
+                this.close();
+            }
         });
 
-        // Escape key (native <dialog> behaviour, but we also pause video)
-        this.dialog.addEventListener('cancel', () => this.close());
+        // ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.backdrop.classList.contains('show')) {
+                this.close();
+            }
+        });
     }
 
     open(project: ProjectEntry): void {
-        this.mediaEl.innerHTML = ModalMediaRenderer.buildHtml(project.media);
-        this.tagsEl.innerHTML = project.tags.map((t) => `<span class="project-tag">${t}</span>`).join('');
         this.titleEl.textContent = project.title as string;
         this.descEl.innerHTML = i18n.t_obj(project.description);
+
+        this.tagsEl.innerHTML = project.tags.map((t) => `<span class="project-tag">${t}</span>`).join('');
+
+        this.mediaEl.innerHTML = ModalMediaRenderer.buildHtml(project.media);
 
         if (project.media.type === 'gallery') {
             ModalGallery.bind(this.mediaEl, project.media.images.length);
@@ -96,7 +104,7 @@ export class ProjectModal {
                 </svg>
                 ${i18n.t('modal.github')}
             `;
-            this.githubEl.style.display = '';
+            this.githubEl.style.display = 'inline-flex';
         } else {
             this.githubEl.style.display = 'none';
         }
@@ -123,34 +131,19 @@ export class ProjectModal {
             });
         }
 
-        if (typeof this.dialog.showModal === 'function') {
-            this.dialog.showModal();
-        } else {
-            this.dialog.setAttribute('open', 'true');
-            // rudimentary fallback for backdrop
-            this.dialog.style.display = 'block';
-            this.dialog.style.position = 'fixed';
-            this.dialog.style.zIndex = '9999';
-        }
-        // Force reflow and add .show to bypass Safari [open] bug
-        void this.dialog.offsetWidth;
-        this.dialog.classList.add('show');
+        // Force reflow and add .show
+        void this.backdrop.offsetWidth;
+        this.backdrop.classList.add('show');
         document.body.style.overflow = 'hidden';
     }
 
     close(): void {
         // Stop any playing video before closing
         this.mediaEl.querySelector('video')?.pause();
-        this.dialog.classList.remove('show');
+        this.backdrop.classList.remove('show');
 
         // Wait for CSS transition to finish before actually closing
         setTimeout(() => {
-            if (typeof this.dialog.close === 'function') {
-                this.dialog.close();
-            } else {
-                this.dialog.removeAttribute('open');
-                this.dialog.style.display = 'none';
-            }
             document.body.style.overflow = '';
         }, 300); // 300ms matches --t-normal
     }
