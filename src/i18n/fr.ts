@@ -164,6 +164,7 @@ export const fr = {
     },
 
     modal: {
-        github: 'Voir sur GitHub'
+        github: 'Voir sur GitHub',
+        trySim: 'Essayer'
     }
 };
