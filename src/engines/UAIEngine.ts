@@ -8,8 +8,8 @@ export type NeedKey = 'hunger' | 'thirst' | 'rest' | 'social';
 export interface Need {
     key: NeedKey;
     label: string;
-    value: number;       // 0–1, 0 = fully satisfied, 1 = desperate
-    decayRate: number;   // how fast it grows per tick (0–1 range/s at 60fps)
+    value: number; // 0–1, 0 = fully satisfied, 1 = desperate
+    decayRate: number; // how fast it grows per tick (0–1 range/s at 60fps)
     color: string;
 }
 
@@ -37,17 +37,49 @@ export class UAIEngine {
 
     constructor(canvasW: number, canvasH: number) {
         this.needs = [
-            { key: 'hunger', label: 'Hunger',  value: 0.2, decayRate: 0.00035, color: '#fb923c' },
-            { key: 'thirst', label: 'Thirst',  value: 0.1, decayRate: 0.00055, color: '#22d3ee' },
-            { key: 'rest',   label: 'Fatigue', value: 0.4, decayRate: 0.00020, color: '#a78bfa' },
-            { key: 'social', label: 'Social',  value: 0.6, decayRate: 0.00015, color: '#34d399' },
+            { key: 'hunger', label: 'Hunger', value: 0.2, decayRate: 0.00035, color: '#fb923c' },
+            { key: 'thirst', label: 'Thirst', value: 0.1, decayRate: 0.00055, color: '#22d3ee' },
+            { key: 'rest', label: 'Fatigue', value: 0.4, decayRate: 0.0002, color: '#a78bfa' },
+            { key: 'social', label: 'Social', value: 0.6, decayRate: 0.00015, color: '#34d399' }
         ];
 
         this.points = [
-            { id: 'hunger', label: 'Food',    x: canvasW * 0.78, y: canvasH * 0.18, radius: 24, color: '#fb923c', icon: '🍎' },
-            { id: 'thirst', label: 'Water',   x: canvasW * 0.20, y: canvasH * 0.22, radius: 24, color: '#22d3ee', icon: '💧' },
-            { id: 'rest',   label: 'Sleep',   x: canvasW * 0.78, y: canvasH * 0.78, radius: 24, color: '#a78bfa', icon: '🛏' },
-            { id: 'social', label: 'Social',  x: canvasW * 0.20, y: canvasH * 0.78, radius: 24, color: '#34d399', icon: '👥' },
+            {
+                id: 'hunger',
+                label: 'Food',
+                x: canvasW * 0.78,
+                y: canvasH * 0.18,
+                radius: 24,
+                color: '#fb923c',
+                icon: '🍎'
+            },
+            {
+                id: 'thirst',
+                label: 'Water',
+                x: canvasW * 0.2,
+                y: canvasH * 0.22,
+                radius: 24,
+                color: '#22d3ee',
+                icon: '💧'
+            },
+            {
+                id: 'rest',
+                label: 'Sleep',
+                x: canvasW * 0.78,
+                y: canvasH * 0.78,
+                radius: 24,
+                color: '#a78bfa',
+                icon: '🛏'
+            },
+            {
+                id: 'social',
+                label: 'Social',
+                x: canvasW * 0.2,
+                y: canvasH * 0.78,
+                radius: 24,
+                color: '#34d399',
+                icon: '👥'
+            }
         ];
 
         this.weights = { hunger: 1.0, thirst: 1.0, rest: 1.0, social: 1.0 };
@@ -61,11 +93,11 @@ export class UAIEngine {
 
     /** Evaluate utility scores for all actions this tick */
     evaluateActions(): Action[] {
-        const actions: Action[] = this.needs.map(need => ({
-            id:    need.key,
+        const actions: Action[] = this.needs.map((need) => ({
+            id: need.key,
             label: need.label,
             score: this.curve(need.value) * this.weights[need.key],
-            isWinning: false,
+            isWinning: false
         }));
 
         // Mark the winner
@@ -88,12 +120,12 @@ export class UAIEngine {
 
     /** Satisfy a need when the agent reaches its point */
     satisfy(needKey: NeedKey, rate: number) {
-        const need = this.needs.find(n => n.key === needKey);
+        const need = this.needs.find((n) => n.key === needKey);
         if (need) need.value = Math.max(0, need.value - rate);
     }
 
     getNeed(key: NeedKey): Need {
-        return this.needs.find(n => n.key === key)!;
+        return this.needs.find((n) => n.key === key)!;
     }
 
     reset() {

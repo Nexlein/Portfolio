@@ -41,8 +41,8 @@ export class UAISimulation extends SimBase {
         this.scoreRows = {
             hunger: { bar: null, score: null },
             thirst: { bar: null, score: null },
-            rest:   { bar: null, score: null },
-            social: { bar: null, score: null },
+            rest: { bar: null, score: null },
+            social: { bar: null, score: null }
         };
 
         this.init();
@@ -61,8 +61,8 @@ export class UAISimulation extends SimBase {
         // Score rows refs
         for (const key of Object.keys(this.scoreRows) as NeedKey[]) {
             this.scoreRows[key] = {
-                bar:   document.getElementById(`uai-bar-${key}`),
-                score: document.getElementById(`uai-score-${key}`),
+                bar: document.getElementById(`uai-bar-${key}`),
+                score: document.getElementById(`uai-score-${key}`)
             };
         }
 
@@ -93,7 +93,7 @@ export class UAISimulation extends SimBase {
         this.lastActions = actions;
         this.ticks++;
 
-        const best = actions.find(a => a.isWinning)!;
+        const best = actions.find((a) => a.isWinning)!;
 
         // ── Satisfying phase ───────────────────────────────────────────────
         if (this.satisfyingTimer > 0) {
@@ -103,7 +103,7 @@ export class UAISimulation extends SimBase {
             if (this.satisfyingTimer === 0) {
                 // Done — wipe state so re-evaluation is forced next tick
                 this.currentAction = null;
-                this.agentTarget   = null;
+                this.agentTarget = null;
             }
             this.updateStatsPanel(actions);
             return;
@@ -112,7 +112,7 @@ export class UAISimulation extends SimBase {
         // ── Pick best action target ────────────────────────────────────────
         if (best.id !== this.currentAction) {
             this.currentAction = best.id;
-            const pt = this.engine.points.find(p => p.id === this.currentAction)!;
+            const pt = this.engine.points.find((p) => p.id === this.currentAction)!;
             this.agentTarget = new Vector(pt.x, pt.y);
         }
 
@@ -120,7 +120,7 @@ export class UAISimulation extends SimBase {
         if (this.agentTarget && this.currentAction) {
             const diff = Vector.sub(this.agentTarget, this.agentPos);
             const dist = diff.mag();
-            const targetPt = this.engine.points.find(p => p.id === this.currentAction)!;
+            const targetPt = this.engine.points.find((p) => p.id === this.currentAction)!;
 
             if (dist < targetPt.radius + 4) {
                 // Arrived — lock into satisfying
@@ -142,7 +142,7 @@ export class UAISimulation extends SimBase {
     updateStatsPanel(actions: Action[]) {
         if (this.ui.lblTicks) this.ui.lblTicks.textContent = this.ticks.toString();
 
-        const winnerAction = actions.find(a => a.isWinning);
+        const winnerAction = actions.find((a) => a.isWinning);
         if (this.ui.lblAction && winnerAction) {
             this.ui.lblAction.textContent = winnerAction.label;
             const need = this.engine.getNeed(winnerAction.id);
@@ -157,13 +157,11 @@ export class UAISimulation extends SimBase {
             if (row.bar) {
                 (row.bar as HTMLElement).style.width = `${pct}%`;
                 (row.bar as HTMLElement).style.background = need.color;
-                (row.bar as HTMLElement).style.boxShadow = action.isWinning
-                    ? `0 0 8px ${need.color}` : 'none';
+                (row.bar as HTMLElement).style.boxShadow = action.isWinning ? `0 0 8px ${need.color}` : 'none';
             }
             if (row.score) {
-                row.score.textContent = (action.score).toFixed(2);
-                (row.score as HTMLElement).style.color = action.isWinning
-                    ? need.color : 'var(--text-muted)';
+                row.score.textContent = action.score.toFixed(2);
+                (row.score as HTMLElement).style.color = action.isWinning ? need.color : 'var(--text-muted)';
                 (row.score as HTMLElement).style.fontWeight = action.isWinning ? '700' : '400';
             }
         }
@@ -183,9 +181,7 @@ export class UAISimulation extends SimBase {
             this.ctx.beginPath();
             this.ctx.moveTo(this.agentPos.x, this.agentPos.y);
             this.ctx.lineTo(pt.x, pt.y);
-            this.ctx.strokeStyle = isTarget
-                ? `${pt.color}44`
-                : 'rgba(255,255,255,0.03)';
+            this.ctx.strokeStyle = isTarget ? `${pt.color}44` : 'rgba(255,255,255,0.03)';
             this.ctx.lineWidth = isTarget ? 1.5 : 0.5;
             this.ctx.setLineDash(isTarget ? [6, 4] : []);
             this.ctx.stroke();
@@ -202,16 +198,16 @@ export class UAISimulation extends SimBase {
             const ring = pt.radius + 8 + urgency * 12;
             this.ctx.beginPath();
             this.ctx.arc(pt.x, pt.y, ring, 0, Math.PI * 2);
-            this.ctx.strokeStyle = `${pt.color}${Math.round(urgency * 40).toString(16).padStart(2,'0')}`;
+            this.ctx.strokeStyle = `${pt.color}${Math.round(urgency * 40)
+                .toString(16)
+                .padStart(2, '0')}`;
             this.ctx.lineWidth = 1;
             this.ctx.stroke();
 
             // Background fill
             this.ctx.beginPath();
             this.ctx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
-            this.ctx.fillStyle = isActive
-                ? `${pt.color}30`
-                : `${pt.color}12`;
+            this.ctx.fillStyle = isActive ? `${pt.color}30` : `${pt.color}12`;
             this.ctx.fill();
 
             // Border
@@ -237,12 +233,14 @@ export class UAISimulation extends SimBase {
             CanvasHelper.drawText(this.ctx, pt.label, pt.x, pt.y + 16, '9px Inter', `${pt.color}cc`);
 
             // Utility score badge
-            const action = this.lastActions.find(a => a.id === pt.id);
+            const action = this.lastActions.find((a) => a.id === pt.id);
             if (action) {
                 const scoreStr = action.score.toFixed(2);
                 CanvasHelper.drawText(
-                    this.ctx, scoreStr,
-                    pt.x, pt.y - pt.radius - 16,
+                    this.ctx,
+                    scoreStr,
+                    pt.x,
+                    pt.y - pt.radius - 16,
                     `${action.isWinning ? '700' : '400'} 10px JetBrains Mono`,
                     action.isWinning ? pt.color : 'rgba(255,255,255,0.3)'
                 );
@@ -251,9 +249,7 @@ export class UAISimulation extends SimBase {
 
         // Agent
         const isSatisfying = this.satisfyingTimer > 0;
-        const agentColor = this.currentAction
-            ? this.engine.getNeed(this.currentAction).color
-            : '#f0f4f8';
+        const agentColor = this.currentAction ? this.engine.getNeed(this.currentAction).color : '#f0f4f8';
 
         // Glow
         CanvasHelper.drawGlowCircle(this.ctx, this.agentPos.x, this.agentPos.y, 18, `${agentColor}30`);

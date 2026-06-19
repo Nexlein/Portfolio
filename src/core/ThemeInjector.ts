@@ -20,7 +20,7 @@ function hexToRgba(hex: string, alpha: number): string {
 export function injectSimulationThemeVars(simulations: SimConfig[]): void {
     const root = document.documentElement;
     for (const sim of simulations) {
-        root.style.setProperty(`--clr-${sim.id}`,      sim.color);
+        root.style.setProperty(`--clr-${sim.id}`, sim.color);
         root.style.setProperty(`--clr-${sim.id}-glow`, hexToRgba(sim.color, 0.18));
         root.style.setProperty(`--clr-${sim.id}-soft`, hexToRgba(sim.color, 0.08));
     }

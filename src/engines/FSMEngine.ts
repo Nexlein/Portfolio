@@ -39,7 +39,7 @@ export class FSMEngine {
     constructor(waypoints: Vector[], charger: Vector) {
         this.waypoints = waypoints;
         this.charger = charger;
-        
+
         // Initialised via reset()
         this.guard = this.createDefaultGuard();
         this.intruder = this.createDefaultIntruder();
@@ -95,7 +95,10 @@ export class FSMEngine {
         if (this.intruder.active) {
             const dist = this.guard.pos.dist(this.intruder.pos);
             if (dist < 220) {
-                const angleToTarget = Math.atan2(this.intruder.pos.y - this.guard.pos.y, this.intruder.pos.x - this.guard.pos.x);
+                const angleToTarget = Math.atan2(
+                    this.intruder.pos.y - this.guard.pos.y,
+                    this.intruder.pos.x - this.guard.pos.x
+                );
                 let diffAngle = angleToTarget - this.guard.angle;
 
                 while (diffAngle < -Math.PI) diffAngle += Math.PI * 2;
@@ -200,7 +203,7 @@ export class FSMEngine {
         }
 
         this.guard.battery = Math.max(0, this.guard.battery);
-        
+
         return targetSpotted;
     }
 

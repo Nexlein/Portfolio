@@ -4,7 +4,7 @@ import { MLLocalEngine } from '../engines/MLLocalEngine.js';
 
 export class MLSimulation extends SimBase {
     ui: Record<string, HTMLElement | HTMLInputElement | null>;
-    points: { px_x: number, px_y: number, label: number, x_norm: number, y_norm: number }[];
+    points: { px_x: number; px_y: number; label: number; x_norm: number; y_norm: number }[];
     engine: MLLocalEngine;
     epochs: number;
     trainingInterval: ReturnType<typeof setInterval> | null;
@@ -94,7 +94,7 @@ export class MLSimulation extends SimBase {
         const rect = this.canvas.getBoundingClientRect();
         const px_x = e.clientX - rect.left;
         const px_y = e.clientY - rect.top;
-        const label = (isRightClick || e.shiftKey) ? -1 : 1;
+        const label = isRightClick || e.shiftKey ? -1 : 1;
 
         this.points.push(this.createPointObject(px_x, px_y, label));
         this.updateStats();
@@ -108,7 +108,7 @@ export class MLSimulation extends SimBase {
         this.isPlaying = true;
         this.onPlayStateChange(true);
 
-        const speed = parseFloat((this.ui.speedSlider as HTMLInputElement)?.value || "10");
+        const speed = parseFloat((this.ui.speedSlider as HTMLInputElement)?.value || '10');
         const ms = 1000 / speed;
 
         this.trainingInterval = setInterval(() => {

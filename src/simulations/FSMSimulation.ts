@@ -5,7 +5,7 @@ import { FSMEngine } from '../engines/FSMEngine.js';
 
 export class FSMSimulation extends SimBase {
     ui: Record<string, HTMLElement | null>;
-    
+
     engine: FSMEngine;
 
     constructor() {
@@ -23,12 +23,7 @@ export class FSMSimulation extends SimBase {
             REST: 'fsm-node-rest'
         });
 
-        const waypoints = [
-            new Vector(150, 80),
-            new Vector(500, 80),
-            new Vector(500, 320),
-            new Vector(200, 320)
-        ];
+        const waypoints = [new Vector(150, 80), new Vector(500, 80), new Vector(500, 320), new Vector(200, 320)];
         const charger = new Vector(50, 200);
 
         this.engine = new FSMEngine(waypoints, charger);
@@ -73,7 +68,7 @@ export class FSMSimulation extends SimBase {
 
     update() {
         const targetSpotted = this.engine.update();
-        
+
         if (!this.engine.intruder.active && this.ui.btnSpawn) {
             this.ui.btnSpawn.textContent = 'Spawn Intruder (Mouse Click)';
         }
@@ -83,7 +78,12 @@ export class FSMSimulation extends SimBase {
 
     updateUI(spotted = false) {
         const guard = this.engine.guard;
-        const stateColorMap: Record<string, string> = { 'PATROL': '#06b6d4', 'CHASE': '#ef4444', 'SEARCH': '#eab308', 'REST': '#10b981' };
+        const stateColorMap: Record<string, string> = {
+            PATROL: '#06b6d4',
+            CHASE: '#ef4444',
+            SEARCH: '#eab308',
+            REST: '#10b981'
+        };
 
         if (this.ui.lblState) {
             this.ui.lblState.textContent = guard.state;
@@ -95,13 +95,14 @@ export class FSMSimulation extends SimBase {
             this.ui.lblSpotted.textContent = spotted ? 'YES 🔴' : 'NO ⚪';
             this.ui.lblSpotted.style.color = spotted ? '#ef4444' : '#94a3b8';
         }
-        
+
         if (this.ui.lblBattery) {
             this.ui.lblBattery.textContent = Math.round(guard.battery) + '%';
-            this.ui.lblBattery.style.color = guard.battery < 20 ? '#ef4444' : guard.battery < 50 ? '#eab308' : '#10b981';
+            this.ui.lblBattery.style.color =
+                guard.battery < 20 ? '#ef4444' : guard.battery < 50 ? '#eab308' : '#10b981';
         }
 
-        ['PATROL', 'CHASE', 'SEARCH', 'REST'].forEach(state => {
+        ['PATROL', 'CHASE', 'SEARCH', 'REST'].forEach((state) => {
             const node = this.ui[state];
             if (node) {
                 node.className = 'fsm-node' + (state === guard.state ? ` active-${state.toLowerCase()}` : '');
@@ -140,7 +141,14 @@ export class FSMSimulation extends SimBase {
 
         waypoints.forEach((wp, idx) => {
             CanvasHelper.drawGlowCircle(this.ctx, wp.x, wp.y, 4, '#06b6d4');
-            CanvasHelper.drawText(this.ctx, `WP${idx + 1}`, wp.x, wp.y - 10, '9px JetBrains Mono', 'rgba(255, 255, 255, 0.3)');
+            CanvasHelper.drawText(
+                this.ctx,
+                `WP${idx + 1}`,
+                wp.x,
+                wp.y - 10,
+                '9px JetBrains Mono',
+                'rgba(255, 255, 255, 0.3)'
+            );
         });
 
         // 3. Vision Cone
@@ -165,10 +173,7 @@ export class FSMSimulation extends SimBase {
         this.ctx.lineWidth = 2;
         this.ctx.beginPath();
         this.ctx.moveTo(guard.pos.x, guard.pos.y);
-        this.ctx.lineTo(
-            guard.pos.x + Math.cos(guard.angle) * 16,
-            guard.pos.y + Math.sin(guard.angle) * 16
-        );
+        this.ctx.lineTo(guard.pos.x + Math.cos(guard.angle) * 16, guard.pos.y + Math.sin(guard.angle) * 16);
         this.ctx.stroke();
 
         let guardColor = '#06b6d4';
