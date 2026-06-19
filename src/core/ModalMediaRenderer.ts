@@ -12,7 +12,7 @@ export class ModalMediaRenderer {
                 const imagesHtml = media.images
                     .map(
                         (img, i) =>
-                            `<img src="${img.src}" alt="${img.alt}" class="${i === 0 ? 'active' : ''}" data-idx="${i}">`
+                            `<img src="${img.src}" alt="${img.alt}" class="${i === 0 ? 'active' : ''}" data-idx="${i}" loading="lazy">`
                     )
                     .join('');
                 const dotsHtml = media.images

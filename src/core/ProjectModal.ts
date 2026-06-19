@@ -55,7 +55,7 @@ export class ProjectModal {
         }
 
         // Global handler for native onclick attribute (bypass Safari event delegation issues)
-        (window as any).openProjectModal = (event: Event, id: string) => {
+        window.openProjectModal = (event: Event, id: string) => {
             const target = event.target as HTMLElement;
             if (target && target.closest('.project-link')) return;
             const project = projects.find((p) => p.id === id);
