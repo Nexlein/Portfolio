@@ -8,6 +8,7 @@ export class MLSimulation extends SimBase {
     engine: MLLocalEngine;
     epochs: number;
     trainingInterval: ReturnType<typeof setInterval> | null;
+    activeClass: number;
 
     constructor() {
         super('ml-canvas');
@@ -28,6 +29,7 @@ export class MLSimulation extends SimBase {
         this.engine = new MLLocalEngine();
         this.epochs = 0;
         this.trainingInterval = null;
+        this.activeClass = 1;
 
         this.init();
     }
@@ -52,6 +54,15 @@ export class MLSimulation extends SimBase {
         this.bindPlayButton(document.getElementById('ml-btn-train'), 'primary', 'danger', 'Train', 'Pause');
         this.ui.btnStep?.addEventListener('click', () => this.trainStep());
         this.ui.btnReset?.addEventListener('click', () => this.reset());
+
+        const btnClass = document.getElementById('ml-btn-class');
+        if (btnClass) {
+            btnClass.addEventListener('click', () => {
+                this.activeClass = this.activeClass === 1 ? -1 : 1;
+                const isRed = this.activeClass === 1;
+                btnClass.innerHTML = `<span class="color-dot ${isRed ? 'red' : 'blue'}"></span> Class ${isRed ? 'A' : 'B'}`;
+            });
+        }
 
         this.reset();
     }
@@ -92,9 +103,11 @@ export class MLSimulation extends SimBase {
 
     addPoint(e: MouseEvent, isRightClick = false) {
         const rect = this.canvas.getBoundingClientRect();
-        const px_x = e.clientX - rect.left;
-        const px_y = e.clientY - rect.top;
-        const label = isRightClick || e.shiftKey ? -1 : 1;
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        const px_x = (e.clientX - rect.left) * scaleX;
+        const px_y = (e.clientY - rect.top) * scaleY;
+        const label = isRightClick || e.shiftKey ? -1 : this.activeClass;
 
         this.points.push(this.createPointObject(px_x, px_y, label));
         this.updateStats();

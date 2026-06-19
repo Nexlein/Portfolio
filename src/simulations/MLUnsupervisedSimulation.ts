@@ -92,8 +92,10 @@ export class MLUnsupervisedSimulation extends SimBase {
 
     addPoint(e: MouseEvent) {
         const rect = this.canvas.getBoundingClientRect();
-        const px_x = e.clientX - rect.left;
-        const px_y = e.clientY - rect.top;
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        const px_x = (e.clientX - rect.left) * scaleX;
+        const px_y = (e.clientY - rect.top) * scaleY;
         this.points.push(this.createPointObject(px_x, px_y));
         this.draw();
     }
