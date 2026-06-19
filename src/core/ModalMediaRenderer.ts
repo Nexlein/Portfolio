@@ -1,4 +1,5 @@
 import { ProjectMedia } from '../data/projects.js';
+import { Icons } from '../utils/Icons.js';
 
 export class ModalMediaRenderer {
     static buildHtml(media: ProjectMedia): string {
@@ -21,10 +22,10 @@ export class ModalMediaRenderer {
                 <div class="modal-gallery">
                     ${imagesHtml}
                     <div class="gallery-nav-btn prev">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        ${Icons.Prev}
                     </div>
                     <div class="gallery-nav-btn next">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        ${Icons.Next}
                     </div>
                     <div class="gallery-dots">${dotsHtml}</div>
                 </div>`;

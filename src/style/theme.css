@@ -1,54 +1,79 @@
 /* ─── Design Tokens ───────────────────────────────── */
 :root {
-  /* Backgrounds */
-  --bg-base:   #080a0f;
-  --bg-surface: #0d1117;
-  --bg-elevated: #161b27;
-  --bg-hover:  rgba(255,255,255,0.04);
+    /* Backgrounds */
+    --bg-base: #080a0f;
+    --bg-surface: #0d1117;
+    --bg-elevated: #161b27;
+    --bg-hover: rgba(255, 255, 255, 0.04);
 
-  /* Borders */
-  --border:       rgba(255,255,255,0.07);
-  --border-hover: rgba(255,255,255,0.14);
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.07);
+    --border-hover: rgba(255, 255, 255, 0.14);
 
-  /* Text */
-  --text-primary: #f0f4f8;
-  --text-muted:   #6b7a99;
-  --text-dim:     #3a4560;
+    /* Text */
+    --text-primary: #f0f4f8;
+    --text-muted: #6b7a99;
+    --text-dim: #3a4560;
 
-  /* Per-simulation accent palette — injected at boot by ThemeInjector.ts from src/data/simulations.ts */
-  /* --clr-<id>, --clr-<id>-glow, --clr-<id>-soft  are available for every sim id */
+    /* Per-simulation accent palette — injected at boot by ThemeInjector.ts from src/data/simulations.ts */
+    /* --clr-<id>, --clr-<id>-glow, --clr-<id>-soft  are available for every sim id */
 
-  --clr-danger:  #f87171;
-  --clr-danger-glow: rgba(248,113,113,0.18);
+    --clr-danger: #f87171;
+    --clr-danger-glow: rgba(248, 113, 113, 0.18);
 
-  /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    /* Typography */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Transitions */
-  --t-fast:   150ms ease;
-  --t-normal: 220ms ease;
+    /* Transitions & Animation */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --t-fast: 150ms var(--ease-out);
+    --t-normal: 250ms var(--ease-out);
+
+    /* Interactive States */
+    --scale-press: 0.97;
 }
 
 /* ─── Reset ───────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-html { font-size: 15px; }
+html {
+    font-size: 15px;
+}
 
 body {
-  background: var(--bg-base);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
 }
 
-h1,h2,h3,h4 { font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
-p  { line-height: 1.65; }
-ul { list-style: none; }
-button { cursor: pointer; font-family: inherit; }
-input  { font-family: inherit; }
+h1,
+h2,
+h3,
+h4 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+p {
+    line-height: 1.65;
+}
+ul {
+    list-style: none;
+}
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+input {
+    font-family: inherit;
+}
