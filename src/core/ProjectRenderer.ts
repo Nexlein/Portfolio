@@ -13,9 +13,10 @@ function renderMedia(media: ProjectMedia): string {
         case 'video':
             const ext = media.src.split('.').pop()?.toLowerCase();
             const typeStr = ext === 'webm' ? 'video/webm' : 'video/mp4';
+            const posterAttr = media.poster ? `poster="${media.poster}"` : '';
             return /* html */ `
             <div class="project-media">
-                <video autoplay loop muted playsinline preload="auto" class="media-fit">
+                <video autoplay loop muted playsinline preload="auto" class="media-fit" ${posterAttr}>
                     <source src="${media.src}" type="${typeStr}">
                 </video>
             </div>`;
