@@ -11,7 +11,11 @@ export function injectNavbar(activeSection: 'home' | 'ailab' | 'availability') {
         <span class="brand-name">Nexlein</span>
       </a>
 
-      <nav class="topnav-links" aria-label="Main navigation">
+      <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+
+      <nav class="topnav-links" id="topnav-links" aria-label="Main navigation">
         <a href="${base}#home"     class="nav-link ${activeSection === 'home' ? 'active' : ''}" data-section="home" data-i18n="navbar.home">Home</a>
         <a href="${base}#parcours" class="nav-link" data-section="parcours" data-i18n="navbar.journey">Journey</a>
         <a href="${base}#projects" class="nav-link" data-section="projects" data-i18n="navbar.projects">Projects</a>
@@ -78,6 +82,28 @@ export function injectNavbar(activeSection: 'home' | 'ailab' | 'availability') {
             if (!popup.contains(e.target as Node) && !btn.contains(e.target as Node)) {
                 popup.classList.remove('show');
                 btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
+    // Mobile Menu logic
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const topnavLinks = document.getElementById('topnav-links');
+    if (mobileBtn && topnavLinks) {
+        mobileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            topnavLinks.classList.toggle('open');
+        });
+
+        // Close menu when clicking a link
+        topnavLinks.querySelectorAll('.nav-link').forEach((a) => {
+            a.addEventListener('click', () => topnavLinks.classList.remove('open'));
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!topnavLinks.contains(e.target as Node) && !mobileBtn.contains(e.target as Node)) {
+                topnavLinks.classList.remove('open');
             }
         });
     }
