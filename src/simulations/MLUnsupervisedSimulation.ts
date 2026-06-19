@@ -20,14 +20,22 @@ export class MLUnsupervisedSimulation extends SimBase {
             btnReset: 'ml-unsupervised-btn-reset'
         });
         this.ui.sliderK = this.bindSlider('ml-unsupervised-k', 'ml-unsupervised-k-val');
-        this.bindPlayButton(document.getElementById('ml-unsupervised-btn-train'), 'primary', 'danger', 'Auto Cluster', 'Pause');
+        this.bindPlayButton(
+            document.getElementById('ml-unsupervised-btn-train'),
+            'primary',
+            'danger',
+            'Auto Cluster',
+            'Pause'
+        );
 
         this.init();
     }
 
     init() {
         this.canvas.addEventListener('click', (e) => this.addPoint(e));
-        this.ui.btnStep?.addEventListener('click', () => { this.trainStep(); });
+        this.ui.btnStep?.addEventListener('click', () => {
+            this.trainStep();
+        });
         this.ui.btnReset?.addEventListener('click', () => this.reset());
 
         this.ui.sliderK?.addEventListener('input', () => {
@@ -49,7 +57,7 @@ export class MLUnsupervisedSimulation extends SimBase {
     }
 
     resetCentroids() {
-        this.points.forEach(p => p.cluster = -1);
+        this.points.forEach((p) => (p.cluster = -1));
         this.engine.initCentroids(this.points);
         this.stepPhase = 'assign';
         this.draw();
@@ -74,7 +82,8 @@ export class MLUnsupervisedSimulation extends SimBase {
 
     createPointObject(px_x: number, px_y: number): Point {
         return {
-            px_x, px_y,
+            px_x,
+            px_y,
             x_norm: (px_x - this.width / 2) / (this.width / 2),
             y_norm: -(px_y - this.height / 2) / (this.height / 2),
             cluster: -1
@@ -143,11 +152,13 @@ export class MLUnsupervisedSimulation extends SimBase {
             const px = c.x_norm * (this.width / 2) + this.width / 2;
             const py = this.height / 2 - c.y_norm * (this.height / 2);
             const color = CLUSTER_COLORS[i % CLUSTER_COLORS.length];
-            
+
             // Draw a cross for the centroid
             this.ctx.beginPath();
-            this.ctx.moveTo(px - 10, py - 10); this.ctx.lineTo(px + 10, py + 10);
-            this.ctx.moveTo(px + 10, py - 10); this.ctx.lineTo(px - 10, py + 10);
+            this.ctx.moveTo(px - 10, py - 10);
+            this.ctx.lineTo(px + 10, py + 10);
+            this.ctx.moveTo(px + 10, py - 10);
+            this.ctx.lineTo(px - 10, py + 10);
             this.ctx.strokeStyle = color;
             this.ctx.lineWidth = 4;
             this.ctx.stroke();

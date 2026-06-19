@@ -1,6 +1,6 @@
 export class RLLocalEngine {
     qTable: number[][][] = [];
-    actions: { dr: number, dc: number }[];
+    actions: { dr: number; dc: number }[];
     grid: number[][];
     rows: number;
     cols: number;
@@ -48,7 +48,16 @@ export class RLLocalEngine {
         }
     }
 
-    updateQ(r: number, c: number, action: number, reward: number, nextR: number, nextC: number, alpha: number, gamma: number) {
+    updateQ(
+        r: number,
+        c: number,
+        action: number,
+        reward: number,
+        nextR: number,
+        nextC: number,
+        alpha: number,
+        gamma: number
+    ) {
         const maxFutureQ = this.getMaxQ(nextR, nextC).value;
         const currentQ = this.qTable[r][c][action];
         this.qTable[r][c][action] = currentQ + alpha * (reward + gamma * maxFutureQ - currentQ);

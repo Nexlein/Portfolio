@@ -26,7 +26,7 @@ export class MLLocalEngine {
         return false;
     }
 
-    countErrors(points: {x_norm: number, y_norm: number, label: number}[]): number {
+    countErrors(points: { x_norm: number; y_norm: number; label: number }[]): number {
         let errors = 0;
         for (const p of points) {
             if (this.predict(p.x_norm, p.y_norm) !== p.label) {

@@ -87,7 +87,13 @@ export class SimBase {
         // Override in subclass
     }
 
-    bindPlayButton(btnElement: HTMLElement | null, playClass: string = 'primary', pauseClass: string = 'danger', playText: string = 'Play', pauseText: string = 'Pause') {
+    bindPlayButton(
+        btnElement: HTMLElement | null,
+        playClass: string = 'primary',
+        pauseClass: string = 'danger',
+        playText: string = 'Play',
+        pauseText: string = 'Pause'
+    ) {
         if (!btnElement) return;
         this.btnPlay = btnElement;
         this.playClass = playClass;
@@ -97,7 +103,12 @@ export class SimBase {
         this.btnPlay.addEventListener('click', () => this.toggle());
     }
 
-    bindSlider(sliderId: string, valId: string, suffix: string = '', onChange: ((val: string) => void) | null = null): HTMLInputElement | null {
+    bindSlider(
+        sliderId: string,
+        valId: string,
+        suffix: string = '',
+        onChange: ((val: string) => void) | null = null
+    ): HTMLInputElement | null {
         const slider = document.getElementById(sliderId) as HTMLInputElement;
         const val = document.getElementById(valId);
         if (!slider || !val) return null;
@@ -113,7 +124,9 @@ export class SimBase {
      * Automatically binds a map of property keys to DOM element IDs.
      * @param map A dictionary where key is the property name, and value is the DOM ID.
      */
-    protected bindUIElements<T extends Record<string, string>>(map: T): Record<keyof T, HTMLElement | HTMLInputElement | null> {
+    protected bindUIElements<T extends Record<string, string>>(
+        map: T
+    ): Record<keyof T, HTMLElement | HTMLInputElement | null> {
         const bound: Record<string, HTMLElement | null> = {};
         for (const [key, id] of Object.entries(map)) {
             bound[key] = document.getElementById(id);
