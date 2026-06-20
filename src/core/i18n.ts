@@ -12,15 +12,24 @@ class I18nService {
     private listeners: (() => void)[] = [];
 
     constructor() {
-        const savedLang = localStorage.getItem('lang') as Lang;
-        if (savedLang === 'en' || savedLang === 'fr') {
-            this.currentLang = savedLang;
+        const stored = localStorage.getItem('lang') as Lang;
+        if (stored && (stored === 'en' || stored === 'fr')) {
+            this.currentLang = stored;
         } else {
-            // Default to browser language if available, else English
-            const browserLang = navigator.language.startsWith('fr') ? 'fr' : 'en';
-            this.currentLang = browserLang;
+            const browserLang = navigator.language.slice(0, 2);
+            this.currentLang = browserLang === 'fr' ? 'fr' : 'en';
         }
         document.documentElement.lang = this.currentLang;
+
+        // Listen to localStorage changes (e.g. from iframe or other tabs)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'lang' && (e.newValue === 'en' || e.newValue === 'fr')) {
+                this.currentLang = e.newValue as Lang;
+                document.documentElement.lang = this.currentLang;
+                this.translateDOM();
+                this.notifyListeners();
+            }
+        });
     }
 
     getLang(): Lang {
