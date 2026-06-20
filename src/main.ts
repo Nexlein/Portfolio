@@ -27,7 +27,7 @@ import { renderSimPills, renderSimViews } from './core/SimRenderer.js';
 import { injectSimulationThemeVars } from './core/ThemeInjector.js';
 import { ProjectModal } from './core/ProjectModal.js';
 import { SimBase } from './core/SimBase.js';
-import { injectNavbar, injectModal } from './core/Components.js';
+import { injectNavbar, injectModal, injectCvModal } from './core/Components.js';
 import { i18n } from './core/i18n.js';
 
 // ── Map simulation id → constructor ───────────────────────────────────────────
@@ -45,6 +45,35 @@ async function bootstrap(): Promise<void> {
     const isAiLab = document.getElementById('sim-panel') !== null;
     injectNavbar(isAiLab ? 'ailab' : 'home');
     injectModal();
+    injectCvModal();
+
+    // CV Modal logic
+    const cvLink = document.getElementById('hero-cv-link');
+    const cvModal = document.getElementById('cv-modal-backdrop');
+    const cvClose = document.getElementById('cv-modal-close');
+
+    if (cvLink && cvModal) {
+        cvLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            cvModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const closeCv = () => {
+            cvModal.classList.remove('show');
+            setTimeout(() => {
+                document.body.style.overflow = '';
+            }, 300);
+        };
+
+        cvClose?.addEventListener('click', closeCv);
+        cvModal.addEventListener('click', (e) => {
+            if (e.target === cvModal) closeCv();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && cvModal.classList.contains('show')) closeCv();
+        });
+    }
 
     // 0. Inject per-sim CSS vars from data (single source of truth)
     injectSimulationThemeVars(SIMULATIONS);
