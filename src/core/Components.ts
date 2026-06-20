@@ -135,3 +135,21 @@ export function injectModal() {
     backdrop.innerHTML = html;
     document.body.appendChild(backdrop);
 }
+
+export function injectCvModal() {
+    const html = `
+    <div class="modal-window" style="max-width: 1000px; width: 95%; height: 90vh; display: flex; flex-direction: column; padding: 0; background: #080a0f; border: 1px solid var(--border);">
+        <button class="modal-close" id="cv-modal-close" aria-label="Close CV" style="position: absolute; top: 16px; right: 16px; z-index: 10; background: rgba(0,0,0,0.5); border-radius: 50%;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div style="flex: 1; overflow: hidden; position: relative; border-radius: 14px;">
+             <iframe id="cv-iframe" src="cv.html" style="width: 100%; height: 100%; border: none;"></iframe>
+        </div>
+    </div>
+    `;
+    const backdrop = document.createElement('div');
+    backdrop.id = 'cv-modal-backdrop';
+    backdrop.className = 'modal-backdrop';
+    backdrop.innerHTML = html;
+    document.body.appendChild(backdrop);
+}
