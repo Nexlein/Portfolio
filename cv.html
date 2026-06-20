@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nielsen Combe-Bracciale - CV</title>
+
+        <!-- Premium Typography -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+
+        <style>
+            :root {
+                --bg-color: #fafafa;
+                --card-bg: #ffffff;
+                --text-main: #09090b;
+                --text-muted: #52525b;
+                --border-color: #e4e4e7;
+                --accent-blue: #2563eb;
+                --accent-blue-light: #eff6ff;
+                --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+            }
+
+            /* A4 Print Setup */
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            body {
+                margin: 0;
+                padding: 20px 0;
+                background-color: transparent; /* Match modal dark bg implicitly */
+                color: var(--text-main);
+                font-family:
+                    'Inter',
+                    -apple-system,
+                    sans-serif;
+                min-height: 100vh;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            .page {
+                width: 210mm;
+                margin: 0 auto;
+                background: #ffffff; /* Real paper white */
+                padding: 15mm;
+                box-sizing: border-box;
+                position: relative;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Drop shadow on screen */
+                border-radius: 4px;
+            }
+
+            /* Typography */
+            h1,
+            h2,
+            h3 {
+                font-family: 'Space Grotesk', sans-serif;
+                margin: 0;
+            }
+
+            h1 {
+                font-size: 32px;
+                font-weight: 700;
+                color: var(--text-main);
+                letter-spacing: -0.5px;
+            }
+            h2 {
+                font-size: 14px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: var(--text-muted);
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            h3 {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--text-main);
+                margin-bottom: 4px;
+            }
+
+            p {
+                margin: 0 0 8px 0;
+                font-size: 13px;
+                line-height: 1.6;
+                color: var(--text-muted);
+            }
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+            li {
+                font-size: 13px;
+                line-height: 1.6;
+                color: var(--text-muted);
+                margin-bottom: 12px;
+                position: relative;
+                padding-left: 14px;
+            }
+            li::before {
+                content: '•';
+                position: absolute;
+                left: 0;
+                color: var(--accent-blue);
+                font-weight: bold;
+            }
+            strong {
+                color: var(--text-main);
+                font-weight: 600;
+            }
+
+            /* Links & Interactions */
+            a.cv-link {
+                color: var(--text-main);
+                text-decoration: none;
+                font-size: 13px;
+                font-weight: 500;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 10px;
+                border-radius: 6px;
+                transition:
+                    background-color 150ms ease,
+                    transform 150ms ease-out;
+                background-color: var(--card-bg);
+                border: 1px solid var(--border-color);
+            }
+
+            @media (hover: hover) and (pointer: fine) {
+                a.cv-link:hover {
+                    background-color: var(--accent-blue-light);
+                    color: var(--accent-blue);
+                    border-color: #bfdbfe;
+                }
+                .card:hover {
+                    transform: scale(1.01);
+                    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.05);
+                    border-color: #d4d4d8;
+                }
+                .cv-controls button:hover,
+                .cv-controls a:hover {
+                    background: rgba(255, 255, 255, 0.9);
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                }
+            }
+
+            a.cv-link:active {
+                transform: scale(0.97);
+            }
+
+            /* Bento Grid */
+            .bento-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                margin-top: 40px; /* space for controls */
+            }
+
+            .card {
+                background: var(--card-bg) !important;
+                border: 1px solid var(--border-color) !important;
+                border-radius: 12px !important;
+                padding: 20px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                transition:
+                    transform 300ms var(--ease-out),
+                    box-shadow 300ms var(--ease-out),
+                    border-color 300ms ease !important;
+            }
+
+            .span-3 {
+                grid-column: span 3;
+            }
+            .span-2 {
+                grid-column: span 2;
+            }
+            .span-1 {
+                grid-column: span 1;
+            }
+
+            /* Custom Stats Bars */
+            .stat-row {
+                display: flex;
+                align-items: center;
+                margin-bottom: 12px;
+            }
+            .stat-label {
+                width: 95px;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-main);
+            }
+            .stat-bar-bg {
+                flex-grow: 1;
+                height: 6px;
+                background-color: var(--border-color);
+                border-radius: 3px;
+                overflow: hidden;
+            }
+            .stat-bar-fill {
+                height: 100%;
+                background-color: var(--accent-blue);
+                border-radius: 3px;
+            }
+
+            /* Tags */
+            .tech-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-top: 8px;
+            }
+            .tech-tags span {
+                background: var(--bg-color);
+                border: 1px solid var(--border-color);
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 11px;
+                font-weight: 500;
+                color: var(--text-muted);
+            }
+
+            /* SVGs */
+            svg {
+                width: 14px;
+                height: 14px;
+                stroke: currentColor;
+                stroke-width: 2;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                fill: none;
+            }
+            .icon-header {
+                color: var(--accent-blue);
+                width: 16px;
+                height: 16px;
+            }
+
+            /* Controls */
+            .cv-controls {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                display: flex;
+                gap: 10px;
+                z-index: 100;
+            }
+
+            .cv-controls button,
+            .cv-controls a {
+                background: rgba(255, 255, 255, 0.7);
+                backdrop-filter: blur(10px);
+                border: 1px solid var(--border-color);
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-family: 'Inter', sans-serif;
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--text-main);
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                transition: all 200ms ease;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            }
+            .print-qr-code {
+                display: none;
+            }
+
+            /* Print Specifics */
+            @media print {
+                @page {
+                    size: A4;
+                    margin: 0;
+                }
+                body {
+                    background: #fff;
+                    padding: 0;
+                    margin: 0;
+                    display: block;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                }
+                .topnav {
+                    display: none !important;
+                }
+                .cv-controls {
+                    display: none !important;
+                }
+
+                .page {
+                    padding: 10mm 15mm;
+                    height: 296mm; /* Lock to exact A4 height */
+                    width: 210mm;
+                    margin: 0 auto;
+                    box-shadow: none;
+                    border-radius: 0;
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden; /* Prevent ANY browser overflow triggering page 2 */
+                }
+
+                .bento-grid {
+                    margin-top: 0;
+                    gap: 12px;
+                    flex-grow: 1; /* Stretch to fill the locked height */
+                    display: grid;
+                    align-content: stretch;
+                }
+
+                /* Card & Header Spacing */
+                .card {
+                    break-inside: avoid;
+                    border-color: #e4e4e7 !important;
+                    box-shadow: none !important;
+                    transform: none !important;
+                    padding: 10px !important;
+                }
+                .card.span-3 {
+                    padding: 0 0 6px 0 !important;
+                }
+                h1 {
+                    font-size: 26px;
+                }
+                h2 {
+                    font-size: 12px;
+                    margin-bottom: 6px;
+                }
+                h3 {
+                    font-size: 14px;
+                    margin-bottom: 2px;
+                }
+
+                /* Line Heights & Margins */
+                p {
+                    margin-bottom: 4px;
+                    line-height: 1.35;
+                    font-size: 11px;
+                }
+                li {
+                    margin-bottom: 4px;
+                    line-height: 1.35;
+                    font-size: 11px;
+                }
+
+                /* Stats Bars */
+                .stat-row {
+                    margin-bottom: 6px;
+                }
+                .stat-label {
+                    font-size: 10.5px;
+                }
+
+                /* Tags */
+                .tech-tags span {
+                    padding: 2px 6px;
+                    font-size: 9px;
+                }
+
+                a.cv-link {
+                    border: none;
+                    padding: 0;
+                    font-size: 11px;
+                }
+
+                .print-qr-code {
+                    display: block !important;
+                    width: 72px;
+                    height: 72px;
+                    mix-blend-mode: multiply;
+                    margin-top: 2px;
+                }
+            }
+        </style>
+        <script type="module" src="/src/cv.ts"></script>
+        <script>
+            (function () {
+                var lang = localStorage.getItem('lang');
+                if (!lang) lang = navigator.language.startsWith('fr') ? 'fr' : 'en';
+                if (lang === 'fr') {
+                    document.write('<style>html:not(.i18n-ready) body { visibility: hidden; }</style>');
+                }
+            })();
+        </script>
+    </head>
+    <body>
+        <!-- Floating Controls -->
+        <div class="cv-controls">
+            <button id="cv-print-btn">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span data-i18n="cv.controls.print">Save PDF / Print</span>
+            </button>
+        </div>
+
+        <div class="page">
+            <div class="bento-grid">
+                <!-- Hero Section -->
+                <div class="card span-3" style="background: transparent; border: none; padding: 0 0 10px 0">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start">
+                        <div>
+                            <h1>Nielsen Combe-Bracciale</h1>
+                            <h3 style="color: var(--accent-blue); margin-top: 4px" data-i18n="cv.hero.role">
+                                AI Systems Architect & C++ Developer
+                            </h3>
+                            <p
+                                style="margin-top: 12px; font-size: 14px; max-width: 600px; color: var(--text-main)"
+                                data-i18n="cv.hero.summary"
+                            >
+                                Building AI systems that decide and learn. Focused on autonomous decision architectures,
+                                real-time simulation engines, and high-performance engineering.
+                            </p>
+                            <div style="margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px">
+                                <div
+                                    style="
+                                        background: var(--accent-blue-light);
+                                        border: 1px solid #bfdbfe;
+                                        color: var(--accent-blue);
+                                        padding: 6px 12px;
+                                        border-radius: 6px;
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 6px;
+                                    "
+                                >
+                                    <svg style="width: 14px; height: 14px" viewBox="0 0 24 24">
+                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                    </svg>
+                                    <span data-i18n="cv.hero.badge1">Part-Time (Sept–Jan)</span>
+                                </div>
+                                <div
+                                    style="
+                                        background: #f0fdf4;
+                                        border: 1px solid #bbf7d0;
+                                        color: #15803d;
+                                        padding: 6px 12px;
+                                        border-radius: 6px;
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 6px;
+                                    "
+                                >
+                                    <svg style="width: 14px; height: 14px" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <span data-i18n="cv.hero.badge2">Full-Time Intern (Mar–Aug)</span>
+                                </div>
+                                <div
+                                    style="
+                                        background: #faf5ff;
+                                        border: 1px solid #e9d5ff;
+                                        color: #7e22ce;
+                                        padding: 6px 12px;
+                                        border-radius: 6px;
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                        display: flex;
+                                        align-items: center;
+                                        gap: 6px;
+                                    "
+                                >
+                                    <svg style="width: 14px; height: 14px" viewBox="0 0 24 24">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                    <span data-i18n="cv.hero.badge3">Freelance</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 16px; align-items: flex-start">
+                            <div style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end">
+                                <a
+                                    href="mailto:nielsen.combe-bracciale@epitech.eu"
+                                    class="cv-link"
+                                    style="white-space: nowrap"
+                                >
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                                        ></path>
+                                        <polyline points="22,6 12,13 2,6"></polyline>
+                                    </svg>
+                                    nielsen.combe-bracciale@epitech.eu
+                                </a>
+
+                                <a href="https://nexlein.vercel.app" class="cv-link">
+                                    <svg viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <line x1="2" y1="12" x2="22" y2="12" />
+                                        <path
+                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                                        />
+                                    </svg>
+                                    nexlein.vercel.app
+                                </a>
+                                <a href="https://github.com/Nexlein" class="cv-link">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                        />
+                                    </svg>
+                                    github.com/Nexlein
+                                </a>
+                                <a href="https://www.linkedin.com/in/nielsen-combebracciale/" class="cv-link">
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                                        />
+                                        <rect x="2" y="9" width="4" height="12" />
+                                        <circle cx="4" cy="4" r="2" />
+                                    </svg>
+                                    LinkedIn Profile
+                                </a>
+                            </div>
+                            <img src="/qrcode.svg" alt="Portfolio QR Code" class="print-qr-code" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience -->
+                <div class="card span-2">
+                    <h2>
+                        <svg class="icon-header" viewBox="0 0 24 24">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                        </svg>
+                        <span data-i18n="cv.sections.experience">Experience</span>
+                    </h2>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px">
+                            <h3 data-i18n="cv.exp.climb.title">Full-Stack & AI Developer Intern</h3>
+                            <span
+                                style="font-size: 12px; font-weight: 500; color: var(--text-muted)"
+                                data-i18n="cv.exp.climb.date"
+                                >Sept – Dec 2025</span
+                            >
+                        </div>
+                        <div style="font-size: 13px; color: var(--accent-blue); margin-bottom: 12px; font-weight: 500">
+                            Climb2C (Eliona Conseil)
+                        </div>
+                        <ul>
+                            <li data-i18n="cv.exp.climb.desc1">
+                                Engineered an internal AI Retrieval-Augmented Generation (RAG) system using Microsoft
+                                Agent Framework and local Ollama LLMs.
+                            </li>
+                            <li data-i18n="cv.exp.climb.desc2">
+                                Developed Razor components and managed databases with Entity Framework.
+                            </li>
+                        </ul>
+                    </div>
+                    <div style="margin-top: 16px">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px">
+                            <h3 data-i18n="cv.exp.hack.title">Hackathons & Cybersecurity</h3>
+                            <span
+                                style="font-size: 12px; font-weight: 500; color: var(--text-muted)"
+                                data-i18n="cv.exp.hack.date"
+                                >2025 – 2026</span
+                            >
+                        </div>
+                        <ul>
+                            <li data-i18n="cv.exp.hack.desc1">
+                                Competed in 2 Generative AI Hackathons (building innovative LLM tools).
+                            </li>
+                            <li data-i18n="cv.exp.hack.desc2">
+                                Participated in 2 Cycom events (Cybersecurity talks and CTFs).
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Core Expertise -->
+                <div class="card span-1">
+                    <h2>
+                        <svg class="icon-header" viewBox="0 0 24 24">
+                            <polyline points="16 18 22 12 16 6" />
+                            <polyline points="8 6 2 12 8 18" />
+                        </svg>
+                        <span data-i18n="cv.sections.expertise">Core Expertise</span>
+                    </h2>
+                    <div class="stat-row">
+                        <span class="stat-label">C / C++</span>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 95%"></div></div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Python</span>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 90%"></div></div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">AI / ML</span>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 85%"></div></div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label" data-i18n="cv.expertise.arch">Architecture</span>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 90%"></div></div>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">C# .NET</span>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 50%"></div></div>
+                    </div>
+
+                    <div class="tech-tags" style="margin-top: 16px">
+                        <span>PyTorch</span><span>Docker</span><span>Linux</span><span>Git</span><span>Ansible</span
+                        ><span>Jenkins</span>
+                    </div>
+                </div>
+
+                <!-- Systems Architecture -->
+                <div class="card span-1">
+                    <h2>
+                        <svg class="icon-header" viewBox="0 0 24 24">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                            <line x1="8" y1="21" x2="16" y2="21" />
+                            <line x1="12" y1="17" x2="12" y2="21" />
+                        </svg>
+                        <span data-i18n="cv.sections.systems">Systems Architecture</span>
+                    </h2>
+                    <div style="margin-bottom: 16px">
+                        <h3>Zappy</h3>
+                        <p data-i18n="cv.proj.zappy.desc">
+                            Multiplayer autonomous AI network game. Handled concurrent socket connections and state.
+                        </p>
+                        <div class="tech-tags"><span>C</span><span>Sockets</span></div>
+                    </div>
+                    <div style="margin-bottom: 16px">
+                        <h3>Arcade & Raytracer</h3>
+                        <p data-i18n="cv.proj.arcade.desc">3D math rendering engine and modular gaming architecture.</p>
+                        <div class="tech-tags"><span>C++</span></div>
+                    </div>
+                    <div>
+                        <h3>Secured</h3>
+                        <p data-i18n="cv.proj.secured.desc">Hash Table library with custom cryptographic hashing.</p>
+                        <div class="tech-tags"><span>C</span></div>
+                    </div>
+                </div>
+
+                <!-- AI & Data Science -->
+                <div class="card span-1">
+                    <h2>
+                        <svg class="icon-header" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                            <path d="M2 12h20" />
+                        </svg>
+                        <span data-i18n="cv.sections.ai">AI & Data Science</span>
+                    </h2>
+                    <div style="margin-bottom: 16px">
+                        <h3>StartTrek</h3>
+                        <p data-i18n="cv.proj.starttrek.desc">
+                            Reinforcement Learning agent (DQN) for lunar module landing. Features experience replay.
+                        </p>
+                        <div class="tech-tags"><span>Python</span><span>PyTorch</span></div>
+                    </div>
+                    <div style="margin-bottom: 16px">
+                        <h3>Persona</h3>
+                        <p data-i18n="cv.proj.persona.desc">Self-hosted AI personalized news digest workflow.</p>
+                        <div class="tech-tags"><span>N8N</span><span>Mistral</span></div>
+                    </div>
+                    <div>
+                        <h3>Cvrie</h3>
+                        <p data-i18n="cv.proj.cvrie.desc">
+                            Machine learning laboratory exploring supervised and unsupervised learning algorithms with
+                            scikit-learn.
+                        </p>
+                        <div class="tech-tags">
+                            <span>Python</span><span>Prompt Engineering</span><span>Machine Learning</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div class="card span-1">
+                    <h2>
+                        <svg class="icon-header" viewBox="0 0 24 24">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                        </svg>
+                        <span data-i18n="cv.sections.education">Education & Certs</span>
+                    </h2>
+                    <div style="margin-bottom: 12px">
+                        <h3>Epitech</h3>
+                        <span
+                            style="
+                                font-size: 12px;
+                                font-weight: 500;
+                                color: var(--text-muted);
+                                display: block;
+                                margin-bottom: 4px;
+                            "
+                            data-i18n="cv.edu.epitech.date"
+                            >Expected 2029</span
+                        >
+                        <p data-i18n="cv.edu.epitech.desc">
+                            Master's Degree in Information Technology. Intensive focus on advanced software engineering.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 12px">
+                        <h3>Google Cloud</h3>
+                        <span
+                            style="
+                                font-size: 12px;
+                                font-weight: 500;
+                                color: var(--text-muted);
+                                display: block;
+                                margin-bottom: 4px;
+                            "
+                            data-i18n="cv.edu.gc.date"
+                            >2026</span
+                        >
+                        <p data-i18n="cv.edu.gc.desc">
+                            Cloud Computing Foundations & Generative AI Leader Certifications.
+                        </p>
+                    </div>
+                    <div style="margin-bottom: 12px">
+                        <h3>High School</h3>
+                        <span
+                            style="
+                                font-size: 12px;
+                                font-weight: 500;
+                                color: var(--text-muted);
+                                display: block;
+                                margin-bottom: 4px;
+                            "
+                            data-i18n="cv.edu.highschool.date"
+                            >2024</span
+                        >
+                        <p data-i18n="cv.edu.highschool.desc">
+                            Baccalaureate (Specialization: Mathematics & Computer Science).
+                        </p>
+                    </div>
+                    <div>
+                        <h3 data-i18n="cv.edu.other.title">Additional</h3>
+                        <p data-i18n="cv.edu.other.desc">
+                            BIA (Aeronautics), PSC 1 (First Aid). Languages: French (Native), English (Fluent).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
