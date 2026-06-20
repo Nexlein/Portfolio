@@ -14,6 +14,7 @@ export const fr = {
         bio: "Je conçois des systèmes d'IA capables de décider et d'apprendre. Mon travail englobe les architectures de décision autonomes, les moteurs de simulation en temps réel et le C++ haute performance.<br><br>Actuellement étudiant à Epitech avec une spécialisation en intelligence artificielle.",
         explore: 'Explorer le Labo IA',
         projects: 'Voir les Projets',
+        viewcv: 'Voir le CV',
         footerTitle: 'Construisons ensemble.',
         footerDesc:
             'Je suis actuellement ouvert à de nouvelles opportunités. Vérifiez ma disponibilité pour voir si nos calendriers correspondent, ou contactez-moi directement.',
@@ -39,6 +40,10 @@ export const fr = {
         internTitle: 'Développeur Full-Stack & IA',
         internDesc:
             "Développement de composants Razor et gestion de bases de données via Entity Framework. Conception d'un système RAG interne utilisant Microsoft Agent Framework et Ollama pour interroger les données de l'entreprise de manière sécurisée.",
+        biaDate: '2020 - 2021',
+        biaTitle: 'Aéronautique & Secourisme',
+        biaDesc:
+            "Obtention du BIA (Brevet d'initiation à l'Aéronautique) démontrant un fort intérêt pour l'ingénierie aérospatiale, et certification PSC 1 (Prévention et Secours Civiques).",
         highschoolDate: '2024',
         highschoolTitle: 'Baccalauréat & Admission à Epitech',
         highschoolDesc:
@@ -166,5 +171,74 @@ export const fr = {
     modal: {
         github: 'Voir sur GitHub',
         trySim: 'Essayer'
+    },
+    cv: {
+        controls: {
+            print: 'Sauvegarder PDF / Imprimer'
+        },
+        hero: {
+            role: 'Architecte Systèmes IA & Développeur C++',
+            summary:
+                "Concepteur de systèmes d'IA autonomes. Spécialisé dans les architectures de décision, les moteurs de simulation en temps réel et le développement haute performance.",
+            badge1: 'Temps Partiel (Sept–Jan)',
+            badge2: 'Stage Temps Plein (Mar–Aoû)',
+            badge3: 'Freelance'
+        },
+        sections: {
+            experience: 'Expérience',
+            expertise: 'Expertise Technique',
+            systems: 'Architecture Systèmes',
+            ai: 'IA & Data Science',
+            education: 'Formation & Certifications'
+        },
+        expertise: {
+            arch: 'Architecture'
+        },
+        exp: {
+            climb: {
+                title: 'Développeur Full-Stack & IA',
+                date: 'Sept – Déc 2025',
+                desc1: "Conception d'un système interne RAG (Retrieval-Augmented Generation) utilisant Microsoft Agent Framework et des modèles locaux Ollama.",
+                desc2: 'Développement de composants Razor et gestion de bases de données avec Entity Framework.'
+            },
+            hack: {
+                title: 'Hackathons & Cybersécurité',
+                date: '2025 – 2026',
+                desc1: "Participation à 2 Hackathons IA Générative (création d'outils LLM innovants).",
+                desc2: 'Participation à 2 événements Cycom (Conférences et CTFs Cybersécurité).'
+            }
+        },
+        proj: {
+            zappy: {
+                desc: "Jeu réseau multijoueur avec IA autonome. Gestion des connexions de sockets concurrentes et de l'état."
+            },
+            arcade: { desc: 'Moteur de rendu mathématique 3D et architecture de jeu modulaire.' },
+            secured: { desc: 'Bibliothèque de table de hachage avec hachage cryptographique personnalisé.' },
+            starttrek: {
+                desc: "Agent d'apprentissage par renforcement (DQN) pour alunissage. Intègre l'Experience Replay."
+            },
+            persona: { desc: "Workflow de résumé d'actualités personnalisé par IA auto-hébergé." },
+            cvrie: {
+                desc: 'Laboratoire de Machine Learning explorant des algorithmes supervisés et non supervisés avec scikit-learn.'
+            }
+        },
+        edu: {
+            epitech: {
+                date: 'Prévu pour 2029',
+                desc: "Master en Technologies de l'Information. Formation intensive axée sur l'ingénierie logicielle avancée."
+            },
+            gc: {
+                date: '2026',
+                desc: 'Certifications Google Cloud Computing Foundations & Generative AI Leader.'
+            },
+            highschool: {
+                date: '2024',
+                desc: 'Baccalauréat (Spécialités : Mathématiques & NSI).'
+            },
+            other: {
+                title: 'Divers',
+                desc: 'BIA (2020), PSC 1 (2021).<br />Langues:<br />Français (Natif), Anglais (Bilingue).'
+            }
+        }
     }
 };

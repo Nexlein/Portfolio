@@ -14,6 +14,7 @@ export const en = {
         bio: 'I build AI systems that decide and learn. My work spans autonomous decision architectures, real-time simulation engines, and high-performance C++.<br><br>Currently studying at Epitech with a focus on applied artificial intelligence.',
         explore: 'Explore AI Lab',
         projects: 'View Projects',
+        viewcv: 'View CV',
         footerTitle: "Let's Build Something.",
         footerDesc:
             'I am currently open to new opportunities. Check my availability to see if our timelines align, or reach out directly.',
@@ -39,6 +40,10 @@ export const en = {
         internTitle: 'Full-Stack & AI Developer Intern',
         internDesc:
             'Developed Razor components and managed databases via Entity Framework. Engineered an internal Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and Ollama to securely query enterprise data.',
+        biaDate: '2020 - 2021',
+        biaTitle: 'Aeronautics & First Aid',
+        biaDesc:
+            "Obtained the BIA (Brevet d'initiation à l'Aéronautique) demonstrating a strong passion for aerospace systems, alongside the PSC 1 (First Aid) certification.",
         highschoolDate: '2024',
         highschoolTitle: 'High School Graduation & Epitech Admission',
         highschoolDesc:
@@ -166,5 +171,72 @@ export const en = {
     modal: {
         github: 'View on GitHub',
         trySim: 'Try'
+    },
+    cv: {
+        controls: {
+            print: 'Save PDF / Print'
+        },
+        hero: {
+            role: 'AI Systems Architect & C++ Developer',
+            summary:
+                'Building AI systems that decide and learn. Focused on autonomous decision architectures, real-time simulation engines, and high-performance engineering.',
+            badge1: 'Part-Time (Sept–Jan)',
+            badge2: 'Full-Time Intern (Mar–Aug)',
+            badge3: 'Freelance'
+        },
+        sections: {
+            experience: 'Experience',
+            expertise: 'Core Expertise',
+            systems: 'Systems Architecture',
+            ai: 'AI & Data Science',
+            education: 'Education & Certs'
+        },
+        expertise: {
+            arch: 'Architecture'
+        },
+        exp: {
+            climb: {
+                title: 'Full-Stack & AI Developer Intern',
+                date: 'Sept – Dec 2025',
+                desc1: 'Engineered an internal AI Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and local Ollama LLMs.',
+                desc2: 'Developed Razor components and managed databases with Entity Framework.'
+            },
+            hack: {
+                title: 'Hackathons & Cybersecurity',
+                date: '2025 – 2026',
+                desc1: 'Competed in 2 Generative AI Hackathons (building innovative LLM tools).',
+                desc2: 'Participated in 2 Cycom events (Cybersecurity talks and CTFs).'
+            }
+        },
+        proj: {
+            zappy: { desc: 'Multiplayer autonomous AI network game. Handled concurrent socket connections and state.' },
+            arcade: { desc: '3D math rendering engine and modular gaming architecture.' },
+            secured: { desc: 'Hash Table library with custom cryptographic hashing.' },
+            starttrek: {
+                desc: 'Reinforcement Learning agent (DQN) for lunar module landing. Features experience replay.'
+            },
+            persona: { desc: 'Self-hosted AI personalized news digest workflow.' },
+            cvrie: {
+                desc: 'Machine learning laboratory exploring supervised and unsupervised learning algorithms with scikit-learn.'
+            }
+        },
+        edu: {
+            epitech: {
+                date: 'Expected 2029',
+                desc: "Master's Degree in Information Technology. Intensive focus on advanced software engineering."
+            },
+            gc: {
+                date: '2026',
+                desc: 'Cloud Computing Foundations & Generative AI Leader Certifications.'
+            },
+            highschool: {
+                date: '2024',
+                desc: 'Baccalaureate (Specialization: Mathematics & Computer Science).'
+            },
+            other: {
+                title: 'Additional',
+                desc: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent).'
+            }
+        }
     }
 };
