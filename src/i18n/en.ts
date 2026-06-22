@@ -71,9 +71,9 @@ export const en = {
             l1Lbl: 'Timeline & Rhythm',
             l1Val: 'Sept. 15 to end of January.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Thursday and Friday (14h/week).</span>',
             l2Lbl: 'Contract Types',
-            l2Val: 'Part-time Internship<br /><span style="color: var(--text-muted); font-size: 0.9rem">Work-Study or Student Contract.</span>',
+            l2Val: 'Part-time Internship<br /><span style="color: var(--text-muted); font-size: 0.9rem">Or Student CDD.</span>',
             l3Lbl: 'Recruiter Info',
-            l3Val: 'Internship: Legal minimum prorated.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Work-Study: ~43% to 53% SMIC.</span>'
+            l3Val: 'Internship: ~4.50€/h (2026 legal min).<br /><span style="color: var(--text-muted); font-size: 0.9rem">Student CDD: SMIC rate (no fees covered).</span>'
         },
         fullTime: {
             title: 'Full-Time Internship',
@@ -83,7 +83,7 @@ export const en = {
             l2Lbl: 'Contract Type',
             l2Val: 'Full-time Internship Agreement<br /><span style="color: var(--text-muted); font-size: 0.9rem">Tripartite agreement via Epitech.</span>',
             l3Lbl: 'Recruiter Info',
-            l3Val: 'Legal minimum (prorated).<br /><span style="color: var(--text-muted); font-size: 0.9rem">Seeking competitive compensation.</span>'
+            l3Val: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).<br /><span style="color: var(--text-muted); font-size: 0.9rem">No school fees covered by the company.<br />Seeking competitive compensation.</span>'
         },
         freelance: {
             title: 'Freelance Missions',
