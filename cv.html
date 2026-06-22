@@ -43,6 +43,8 @@
                     sans-serif;
                 min-height: 100vh;
                 -webkit-font-smoothing: antialiased;
+                -webkit-text-size-adjust: 100%;
+                text-size-adjust: 100%;
             }
 
             .page {
@@ -314,6 +316,8 @@
                     display: flex;
                     flex-direction: column;
                     overflow: hidden; /* Prevent ANY browser overflow triggering page 2 */
+                    page-break-after: avoid;
+                    page-break-inside: avoid;
                 }
 
                 .bento-grid {
