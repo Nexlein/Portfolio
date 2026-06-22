@@ -295,6 +295,8 @@
                     padding: 0;
                     margin: 0;
                     display: block;
+                    width: 100%;
+                    height: 100%;
                     -webkit-print-color-adjust: exact !important;
                     print-color-adjust: exact !important;
                 }
@@ -306,9 +308,11 @@
                 }
 
                 .page {
-                    padding: 10mm 15mm;
-                    height: 296mm; /* Lock to exact A4 height */
-                    width: 210mm;
+                    padding: 8mm 12mm;
+                    height: 99vh; /* Lock to exactly 1 printed page height */
+                    max-height: 296mm;
+                    width: 100%;
+                    max-width: 210mm;
                     margin: 0 auto;
                     box-shadow: none;
                     border-radius: 0;
