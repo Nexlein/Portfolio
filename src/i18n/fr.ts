@@ -71,9 +71,9 @@ export const fr = {
             l1Lbl: 'Période & Rythme',
             l1Val: '15 Sept. à fin Janvier.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Jeudi et Vendredi (14h/semaine).</span>',
             l2Lbl: 'Type de Contrat',
-            l2Val: 'Stage à Temps Partiel<br /><span style="color: var(--text-muted); font-size: 0.9rem">Alternance ou Contrat Étudiant.</span>',
+            l2Val: 'Stage à Temps Partiel (Convention)<br /><span style="color: var(--text-muted); font-size: 0.9rem">Ou CDD Étudiant.</span>',
             l3Lbl: 'Infos Recruteur',
-            l3Val: 'Stage : Minimum légal proratisé.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Alternance : ~43% à 53% du SMIC.</span>'
+            l3Val: 'Stage : ~4,50€/h (min. légal 2026).<br /><span style="color: var(--text-muted); font-size: 0.9rem">CDD Étudiant : Taux SMIC (pas de frais couverts).</span>'
         },
         fullTime: {
             title: 'Stage à Temps Plein',
@@ -83,7 +83,7 @@ export const fr = {
             l2Lbl: 'Type de Contrat',
             l2Val: 'Convention de Stage à Temps Plein<br /><span style="color: var(--text-muted); font-size: 0.9rem">Convention tripartite via Epitech.</span>',
             l3Lbl: 'Infos Recruteur',
-            l3Val: 'Minimum légal (proratisé).<br /><span style="color: var(--text-muted); font-size: 0.9rem">Recherche d\'une rémunération compétitive.</span>'
+            l3Val: 'Min. légal : 4,50€/h (taux 2026, ~650-700€/mois).<br /><span style="color: var(--text-muted); font-size: 0.9rem">Aucun frais de scolarité à la charge de l\'entreprise.<br />Recherche d\'une rémunération compétitive.</span>'
         },
         freelance: {
             title: 'Missions Freelance',
