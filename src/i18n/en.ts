@@ -69,7 +69,7 @@ export const en = {
             title: 'Part-Time Job',
             desc: 'Mandatory Epitech Tek3 placement (2 days/week)',
             l1Lbl: 'Timeline & Rhythm',
-            l1Val: 'Sept. 17 to Feb. 26.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Thursday and Friday (2 days/week).</span>',
+            l1Val: 'Sept. 17 to Feb. 26.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Thursday & Friday (2 days/week). Montpellier or Remote.</span>',
             l2Lbl: 'Contract Types',
             l2Val: 'Internship, CDD, CDI, SEE.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Multiple contract types accepted.</span>',
             l3Lbl: 'Recruiter Info',
