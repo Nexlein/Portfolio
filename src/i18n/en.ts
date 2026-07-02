@@ -69,9 +69,9 @@ export const en = {
             title: 'Part-Time Job',
             desc: 'Mandatory Epitech Tek3 placement (2 days/week)',
             l1Lbl: 'Timeline & Rhythm',
-            l1Val: 'Sept. 15 to end of January.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Thursday and Friday (14h/week).</span>',
+            l1Val: 'Sept. 17 to Feb. 26.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Thursday and Friday (2 days/week).</span>',
             l2Lbl: 'Contract Types',
-            l2Val: 'Part-time Internship<br /><span style="color: var(--text-muted); font-size: 0.9rem">Or Student CDD.</span>',
+            l2Val: 'Internship, CDD, CDI, SEE.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Multiple contract types accepted.</span>',
             l3Lbl: 'Recruiter Info',
             l3Val: 'Internship: ~4.50€/h (2026 legal min).<br /><span style="color: var(--text-muted); font-size: 0.9rem">Student CDD: SMIC rate (no fees covered).</span>'
         },
@@ -79,9 +79,9 @@ export const en = {
             title: 'Full-Time Internship',
             desc: 'Mandatory Epitech Tek3 placement (Full-time)',
             l1Lbl: 'Timeline & Rhythm',
-            l1Val: 'Between March and August.<br /><span style="color: var(--text-muted); font-size: 0.9rem">4 to 6 months (5 days/week).</span>',
+            l1Val: 'March 29 to Aug. 27.<br /><span style="color: var(--text-muted); font-size: 0.9rem">At least 4 months (5 days/week).</span>',
             l2Lbl: 'Contract Type',
-            l2Val: 'Full-time Internship Agreement<br /><span style="color: var(--text-muted); font-size: 0.9rem">Tripartite agreement via Epitech.</span>',
+            l2Val: 'Internship, CDD, or CDI.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Full-time placement.</span>',
             l3Lbl: 'Recruiter Info',
             l3Val: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).<br /><span style="color: var(--text-muted); font-size: 0.9rem">No school fees covered by the company.<br />Seeking competitive compensation.</span>'
         },
