@@ -69,9 +69,9 @@ export const fr = {
             title: 'Contrat à Temps Partiel',
             desc: 'Stage alterné obligatoire Epitech Tek3 (2 jours/semaine)',
             l1Lbl: 'Période & Rythme',
-            l1Val: '15 Sept. à fin Janvier.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Jeudi et Vendredi (14h/semaine).</span>',
+            l1Val: '17 Sept. au 26 Fév.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Jeudi et Vendredi (2 jours/semaine).</span>',
             l2Lbl: 'Type de Contrat',
-            l2Val: 'Stage à Temps Partiel (Convention)<br /><span style="color: var(--text-muted); font-size: 0.9rem">Ou CDD Étudiant.</span>',
+            l2Val: 'Stage, CDD, CDI, SEE.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Plusieurs contrats acceptés.</span>',
             l3Lbl: 'Infos Recruteur',
             l3Val: 'Stage : ~4,50€/h (min. légal 2026).<br /><span style="color: var(--text-muted); font-size: 0.9rem">CDD Étudiant : Taux SMIC (pas de frais couverts).</span>'
         },
@@ -79,9 +79,9 @@ export const fr = {
             title: 'Stage à Temps Plein',
             desc: "Stage de fin d'année obligatoire Epitech Tek3 (Temps plein)",
             l1Lbl: 'Période & Rythme',
-            l1Val: 'Entre Mars et Août.<br /><span style="color: var(--text-muted); font-size: 0.9rem">4 à 6 mois (5 jours/semaine).</span>',
+            l1Val: '29 Mars au 27 Août.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Au moins 4 mois (5 jours/semaine).</span>',
             l2Lbl: 'Type de Contrat',
-            l2Val: 'Convention de Stage à Temps Plein<br /><span style="color: var(--text-muted); font-size: 0.9rem">Convention tripartite via Epitech.</span>',
+            l2Val: 'Stage, CDD ou CDI.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Temps plein.</span>',
             l3Lbl: 'Infos Recruteur',
             l3Val: 'Min. légal : 4,50€/h (taux 2026, ~650-700€/mois).<br /><span style="color: var(--text-muted); font-size: 0.9rem">Aucun frais de scolarité à la charge de l\'entreprise.<br />Recherche d\'une rémunération compétitive.</span>'
         },
