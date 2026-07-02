@@ -69,7 +69,7 @@ export const fr = {
             title: 'Contrat à Temps Partiel',
             desc: 'Stage alterné obligatoire Epitech Tek3 (2 jours/semaine)',
             l1Lbl: 'Période & Rythme',
-            l1Val: '17 Sept. au 26 Fév.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Jeudi et Vendredi (2 jours/semaine).</span>',
+            l1Val: '17 Sept. au 26 Fév.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Jeudi et Vendredi. Montpellier ou 100% Télétravail.</span>',
             l2Lbl: 'Type de Contrat',
             l2Val: 'Stage, CDD, CDI, SEE.<br /><span style="color: var(--text-muted); font-size: 0.9rem">Plusieurs contrats acceptés.</span>',
             l3Lbl: 'Infos Recruteur',
