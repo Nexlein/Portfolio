@@ -180,7 +180,7 @@ export const en = {
             role: 'AI Systems Architect & C++ Developer',
             summary:
                 'Building AI systems that decide and learn. Focused on autonomous decision architectures, real-time simulation engines, and high-performance engineering.',
-            badge1: 'Part-Time (Sept–Jan)',
+            badge1: 'Part-Time (Sept–Feb)',
             badge2: 'Full-Time Intern (Mar–Aug)',
             badge3: 'Freelance'
         },
@@ -212,6 +212,7 @@ export const en = {
             zappy: { desc: 'Multiplayer autonomous AI network game. Handled concurrent socket connections and state.' },
             arcade: { desc: '3D math rendering engine and modular gaming architecture.' },
             secured: { desc: 'Hash Table library with custom cryptographic hashing.' },
+            plazza: { desc: 'Multi-process, multi-threaded pizzeria simulation exploring IPC and mutex coordination.' },
             starttrek: {
                 desc: 'Reinforcement Learning agent (DQN) for lunar module landing. Features experience replay.'
             },
