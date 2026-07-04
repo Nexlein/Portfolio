@@ -180,7 +180,7 @@ export const fr = {
             role: 'Architecte Systèmes IA & Développeur C++',
             summary:
                 "Concepteur de systèmes d'IA autonomes. Spécialisé dans les architectures de décision, les moteurs de simulation en temps réel et le développement haute performance.",
-            badge1: 'Temps Partiel (Sept–Jan)',
+            badge1: 'Temps Partiel (Sept–Fév)',
             badge2: 'Stage Temps Plein (Mar–Aoû)',
             badge3: 'Freelance'
         },
@@ -214,6 +214,9 @@ export const fr = {
             },
             arcade: { desc: 'Moteur de rendu mathématique 3D et architecture de jeu modulaire.' },
             secured: { desc: 'Bibliothèque de table de hachage avec hachage cryptographique personnalisé.' },
+            plazza: {
+                desc: 'Simulation multi-processus et multi-thread explorant la communication inter-processus (IPC) et la coordination par mutex.'
+            },
             starttrek: {
                 desc: "Agent d'apprentissage par renforcement (DQN) pour alunissage. Intègre l'Experience Replay."
             },
