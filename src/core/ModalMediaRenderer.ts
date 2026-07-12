@@ -9,7 +9,7 @@ export class ModalMediaRenderer {
                 const typeStr = ext === 'webm' ? 'video/webm' : 'video/mp4';
                 return `<video autoplay loop muted playsinline preload="auto"><source src="${media.src}" type="${typeStr}"></video>`;
             case 'image':
-                return `<img src="${media.src}" alt="${media.alt}">`;
+                return `<img src="${media.src}" alt="${media.alt}" loading="lazy">`;
             case 'gallery':
                 const imagesHtml = media.images
                     .map(
@@ -32,7 +32,7 @@ export class ModalMediaRenderer {
                     <div class="gallery-dots">${dotsHtml}</div>
                 </div>`;
             default: {
-                return `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:0.8rem;font-family:var(--font-mono)">No preview</div>`;
+                return `<div class="modal-media-empty">No preview</div>`;
             }
         }
     }

@@ -24,7 +24,7 @@ export class NavbarComponent {
         return `
         <div class="topnav-inner">
           <a href="${base}#home" class="topnav-brand" aria-label="Back to top">
-            <img class="brand-icon" src="/favicon.jpg" alt="Nexlein Logo" style="border-radius: 8px;" />
+            <img class="brand-icon" src="/favicon.jpg" alt="Nexlein Logo" />
             <span class="brand-name">Nexlein</span>
           </a>
 
@@ -42,8 +42,8 @@ export class NavbarComponent {
                 <span class="lang-en">EN</span> / <span class="lang-fr">FR</span>
             </button>
 
-            <div class="nav-cta-wrapper" style="position: relative; display: inline-block; margin-left: 8px;">
-                <button id="nav-contact-btn" class="nav-cta" aria-haspopup="true" aria-expanded="false" style="margin-left: 0; border: none; outline: none; cursor: pointer; font-family: inherit;" data-i18n="navbar.contact">Contact</button>
+            <div class="nav-cta-wrapper">
+                <button id="nav-contact-btn" class="nav-cta" aria-haspopup="true" aria-expanded="false" data-i18n="navbar.contact">Contact</button>
                 <div id="nav-contact-popup" class="contact-popup">
                     <a href="mailto:nielsen.combe-bracciale@epitech.eu" class="popup-link">
                         ${Icons.Email}
