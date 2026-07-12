@@ -715,3 +715,18 @@
 .lbl-freelance {
     color: var(--clr-accent-3);
 }
+
+.modal-media-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+}
+
+.text-muted-small {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
