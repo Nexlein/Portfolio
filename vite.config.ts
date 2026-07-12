@@ -6,7 +6,6 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: resolve(__dirname, 'index.html'),
-                ailab: resolve(__dirname, 'ailab.html'),
                 availability: resolve(__dirname, 'availability.html'),
                 cv: resolve(__dirname, 'cv.html')
             }

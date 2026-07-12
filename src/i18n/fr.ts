@@ -4,7 +4,6 @@ export const fr = {
         journey: 'Parcours',
         projects: 'Projets',
         availability: 'Disponibilité',
-        ailab: 'Laboratoire IA',
         contact: 'Contact',
         email: 'Email Me',
         linkedin: 'LinkedIn'
@@ -43,7 +42,7 @@ export const fr = {
         biaDate: '2020 - 2021',
         biaTitle: 'Aéronautique & Secourisme',
         biaDesc:
-            "Obtention du BIA (Brevet d'initiation à l'Aéronautique) démontrant un fort intérêt pour l'ingénierie aérospatiale, et certification PSC 1 (Prévention et Secours Civiques).",
+            "Obtention du BIA (Brevet d'initiation à l'Aéronautique) et certification PSC (Prévention et Secours Civiques).",
         highschoolDate: '2024',
         highschoolTitle: 'Baccalauréat & Admission à Epitech',
         highschoolDesc:
@@ -59,7 +58,8 @@ export const fr = {
         filterArch: 'Architecture Logicielle',
         filterSys: 'Systèmes & Unix',
         filterDevops: 'DevOps & Infrastructure',
-        filterGraph: 'Graphisme & Jeux'
+        filterGraph: 'Graphisme & Jeux',
+        showMore: 'Voir plus'
     },
     availability: {
         tag: 'Disponible',
@@ -99,75 +99,6 @@ export const fr = {
         footerBtnEmail: 'Email Me',
         footerBtnLinkedin: 'LinkedIn'
     },
-    ailab: {
-        tag: 'Simulations en Direct',
-        title: 'Le Laboratoire IA',
-        bio: "Un bac à sable interactif des architectures d'intelligence que je conçois. Observez des machines à états, des algorithmes évolutionnistes et des agents par renforcement interagir en temps réel.",
-        relatedDetails: 'Détails du Projet Lié'
-    },
-
-    sim_fsm: {
-        title: 'Finite State Machine (FSM)',
-        desc: "IA basée sur des règles. L'agent passe d'un état à l'autre selon des déclencheurs environnementaux. Simple, prévisible, mais très efficace pour les PNJ.",
-        graph: 'Graphe de Transition',
-        vars: 'Variables FSM',
-        controls: 'Contrôles',
-        spawn: 'Générer un Intrus (Clic)',
-        related: 'Projets Liés',
-        simTitle: 'Simulation de Garde de Sécurité',
-        simSub: "Cliquez pour placer un intrus. Le garde patrouille, poursuit l'intrus et se repose quand sa batterie est faible."
-    },
-    sim_uai: {
-        title: 'Utility AI (UAI)',
-        desc: "Prise de décision par scores. Évalue toutes les actions possibles et les note selon les besoins actuels (faim, soif, repos, social). Le meilleur score l'emporte.",
-        needs: "Besoins de l'Agent",
-        actions: 'Scores des Actions',
-        controls: 'Contrôles',
-        spawnFood: 'Générer Nourriture',
-        spawnGold: 'Générer Or',
-        related: 'Projets Liés',
-        simTitle: 'Simulation de Survie',
-        simSub: "L'agent décide automatiquement s'il doit chercher de la nourriture, boire l'eau, se reposer ou socialiser selon ses besoins dynamiques."
-    },
-    sim_rl: {
-        title: 'Reinforcement Learning (RL)',
-        desc: "Apprentissage par essais et erreurs. L'agent explore une grille, reçoit des récompenses ou pénalités, et met à jour sa Q-Table pour trouver le chemin optimal.",
-        qtable: 'Q-Table (Valeurs État-Action)',
-        controls: 'Contrôles',
-        train: 'Entraîner (Rapide)',
-        eval: 'Évaluer (Lent)',
-        reset: 'Réinitialiser',
-        related: 'Projets Liés',
-        simTitle: 'Navigateur Gridworld',
-        simSub: "Observez l'agent apprendre le labyrinthe. Départ, But (+1), Piège (-1). Utilisez Entraîner pour des épisodes rapides."
-    },
-    sim_ml: {
-        title: 'Machine Learning (ML) - Supervisé',
-        desc: 'Apprentissage sur données étiquetées. Le réseau traite les entrées via des couches cachées pour classer les points en deux catégories (Rouge/Bleu).',
-        network: 'Architecture du Réseau',
-        metrics: 'Métriques',
-        controls: 'Contrôles',
-        train: 'Entraîner (Époques)',
-        reset: 'Réinitialiser Poids',
-        related: 'Projets Liés',
-        simTitle: 'Classification Binaire',
-        simSub: 'Cliquez pour ajouter des points (Clic G = Classe sélectionnée, Clic D = Autre classe). Entraînez le réseau pour trouver la frontière de décision.'
-    },
-    sim_ml_unsupervised: {
-        title: 'Machine Learning (ML) - Non Supervisé',
-        desc: "Découverte de motifs cachés. L'algorithme regroupe automatiquement les données non étiquetées en K clusters en déplaçant itérativement des centroïdes.",
-        clusters: 'Centroïdes des Clusters',
-        metrics: "État de l'Algorithme",
-        controls: 'Contrôles',
-        step: 'Étape Suivante',
-        run: "Lancer jusqu'à Convergence",
-        reset: 'Réinitialiser Centroïdes',
-        clear: 'Effacer Données',
-        related: 'Projets Liés',
-        simTitle: 'Clustering K-Means',
-        simSub: "Cliquez pour ajouter des points. L'algorithme découvrira automatiquement les regroupements naturels sans étiquettes préalables."
-    },
-
     modal: {
         github: 'Voir sur GitHub',
         trySim: 'Essayer'
