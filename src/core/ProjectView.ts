@@ -20,7 +20,7 @@ export class ProjectView {
                     ${p.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('')}
                 </div>
                 <h3>${p.title}</h3>
-                <p>${i18n.t_obj(p.description)}</p>
+                <p>${i18n.t(`projects_desc.${p.id}`)}</p>
                 ${this.renderGithubLink(p.github, p.id)}
             </div>
         </article>`;
