@@ -4,7 +4,6 @@ export const en = {
         journey: 'Journey',
         projects: 'Projects',
         availability: 'Availability',
-        ailab: 'AI Lab',
         contact: 'Contact',
         email: 'Email Me',
         linkedin: 'LinkedIn'
@@ -42,8 +41,7 @@ export const en = {
             'Developed Razor components and managed databases via Entity Framework. Engineered an internal Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and Ollama to securely query enterprise data.',
         biaDate: '2020 - 2021',
         biaTitle: 'Aeronautics & First Aid',
-        biaDesc:
-            "Obtained the BIA (Brevet d'initiation à l'Aéronautique) demonstrating a strong passion for aerospace systems, alongside the PSC 1 (First Aid) certification.",
+        biaDesc: 'Obtained the BIA (Aeronautics Initiation Certificate) and the PSC (First Aid) certification.',
         highschoolDate: '2024',
         highschoolTitle: 'High School Graduation & Epitech Admission',
         highschoolDesc:
@@ -59,7 +57,8 @@ export const en = {
         filterArch: 'Software Architecture',
         filterSys: 'Systems & Unix',
         filterDevops: 'DevOps & Infrastructure',
-        filterGraph: 'Graphical & Games'
+        filterGraph: 'Graphical & Games',
+        showMore: 'Show More'
     },
     availability: {
         tag: 'Available Now',
@@ -99,75 +98,6 @@ export const en = {
         footerBtnEmail: 'Email Me',
         footerBtnLinkedin: 'LinkedIn'
     },
-    ailab: {
-        tag: 'Live Simulations',
-        title: 'The AI Lab',
-        bio: 'An interactive sandbox of the intelligence architectures I build. Watch state machines, evolutionary algorithms, and reinforcement agents interact in real-time.',
-        relatedDetails: 'Related Project Details'
-    },
-
-    sim_fsm: {
-        title: 'Finite State Machine (FSM)',
-        desc: 'Rule-based AI. The agent transitions between discrete states based on environmental triggers. Simple, predictable, but highly effective for NPC behavior.',
-        graph: 'State Transition Graph',
-        vars: 'FSM Variables',
-        controls: 'Controls',
-        spawn: 'Spawn Intruder (Mouse Click)',
-        related: 'Related Projects',
-        simTitle: 'Patrol Security Guard Simulation',
-        simSub: 'Click canvas to place intruder or lure the guard. Guard patrols points, chases intruder, rests when low battery.'
-    },
-    sim_uai: {
-        title: 'Utility AI (UAI)',
-        desc: 'Score-based decision making. Evaluates all possible actions and scores them based on current needs (hunger, thirst, rest, social). The highest score wins.',
-        needs: 'Agent Needs',
-        actions: 'Action Scores',
-        controls: 'Controls',
-        spawnFood: 'Spawn Food',
-        spawnGold: 'Spawn Gold',
-        related: 'Related Projects',
-        simTitle: 'Survival Simulation',
-        simSub: 'Agent automatically decides whether to forage for food, seek water, rest, or socialize based on its dynamically changing internal needs.'
-    },
-    sim_rl: {
-        title: 'Reinforcement Learning (RL)',
-        desc: 'Learning by trial and error. The agent explores a grid, receives rewards or penalties, and updates its Q-Table to find the optimal path to the goal.',
-        qtable: 'Q-Table (State-Action Values)',
-        controls: 'Controls',
-        train: 'Train (Fast)',
-        eval: 'Evaluate (Slow)',
-        reset: 'Reset Brain',
-        related: 'Related Projects',
-        simTitle: 'Gridworld Navigator',
-        simSub: 'Watch the agent learn to navigate the maze. Start, Goal (+1), Pit (-1). Toggle Train to run fast episodes.'
-    },
-    sim_ml: {
-        title: 'Machine Learning (ML) - Supervised',
-        desc: 'Learning from labeled data. The network processes inputs through hidden layers to classify points into two categories (Red vs Blue).',
-        network: 'Network Architecture',
-        metrics: 'Training Metrics',
-        controls: 'Controls',
-        train: 'Train Epochs',
-        reset: 'Reset Weights',
-        related: 'Related Projects',
-        simTitle: 'Binary Classification',
-        simSub: 'Click canvas to add data points (Left click = Selected Class, Right click = Opposite Class). Train the network to find the decision boundary.'
-    },
-    sim_ml_unsupervised: {
-        title: 'Machine Learning (ML) - Unsupervised',
-        desc: 'Finding hidden patterns. The algorithm automatically groups unlabeled data points into K distinct clusters by iteratively moving centroids.',
-        clusters: 'Cluster Centroids',
-        metrics: 'Algorithm State',
-        controls: 'Controls',
-        step: 'Step Algorithm',
-        run: 'Run to Convergence',
-        reset: 'Reset Centroids',
-        clear: 'Clear Data',
-        related: 'Related Projects',
-        simTitle: 'K-Means Clustering',
-        simSub: 'Click canvas to add data points. The algorithm will automatically discover natural groupings without any prior labels.'
-    },
-
     modal: {
         github: 'View on GitHub',
         trySim: 'Try'
