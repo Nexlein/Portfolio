@@ -5,7 +5,9 @@ export class ModalMediaRenderer {
     static buildHtml(media: ProjectMedia): string {
         switch (media.type) {
             case 'video':
-                return `<video src="${media.src}" autoplay loop muted playsinline></video>`;
+                const ext = media.src.split('.').pop()?.toLowerCase();
+                const typeStr = ext === 'webm' ? 'video/webm' : 'video/mp4';
+                return `<video autoplay loop muted playsinline preload="auto"><source src="${media.src}" type="${typeStr}"></video>`;
             case 'image':
                 return `<img src="${media.src}" alt="${media.alt}">`;
             case 'gallery':
