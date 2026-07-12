@@ -32,11 +32,6 @@
         <main>
             <!-- ─── Hero ─────────────────────────────────────── -->
             <section id="home" class="section section-home">
-                <div class="home-ambient" aria-hidden="true">
-                    <div class="ambient-orb orb-1"></div>
-                    <div class="ambient-orb orb-2"></div>
-                </div>
-
                 <div class="home-content">
                     <div class="home-eyebrow">
                         <span class="mono-tag">Epitech · AI Track</span>
@@ -54,10 +49,7 @@
                     </p>
 
                     <div class="home-actions">
-                        <a href="ailab.html" class="btn-hero-primary" id="hero-ailab-link" data-i18n="home.explore"
-                            >Explore AI Lab</a
-                        >
-                        <a href="#projects" class="btn-hero-ghost" id="hero-projects-link" data-i18n="home.projects"
+                        <a href="#projects" class="btn-hero-primary" id="hero-projects-link" data-i18n="home.projects"
                             >View Projects</a
                         >
                         <button class="btn-hero-ghost" id="hero-cv-link" data-i18n="home.viewcv">View CV</button>
@@ -231,8 +223,8 @@
                             <div class="timeline-date" data-i18n="journey.biaDate">Certifications</div>
                             <h3 class="timeline-title" data-i18n="journey.biaTitle">Aeronautics & First Aid</h3>
                             <p class="timeline-desc" data-i18n="journey.biaDesc">
-                                Obtained the BIA (Brevet d'initiation à l'Aéronautique) demonstrating a strong passion
-                                for aerospace systems, alongside the PSC 1 (First Aid) certification.
+                                Obtained the BIA (Aeronautics Initiation Certificate) and the PSC (First Aid)
+                                certification.
                             </p>
                         </div>
                     </div>
@@ -314,36 +306,39 @@
 
                 <!-- Project cards are rendered from src/data/projects.ts at boot time -->
                 <div class="projects-grid" id="projects-grid"></div>
+
+                <div id="show-more-container" class="show-more-wrapper">
+                    <button id="show-more-projects" class="btn-hero-ghost show-more-btn">
+                        <span data-i18n="projects.showMore">Show More</span>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            class="show-more-icon"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                </div>
             </section>
 
             <!-- ─── Contact / Footer ──────────────────────────── -->
-            <footer id="contact" style="padding: 100px 40px; text-align: center; border-top: 1px solid var(--border)">
-                <div style="max-width: 600px; margin: 0 auto">
-                    <h2
-                        style="font-size: 2rem; color: var(--text-primary); margin-bottom: 1rem"
-                        data-i18n="home.footerTitle"
-                    >
-                        Let's Build Something.
-                    </h2>
-                    <p
-                        style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2.5rem"
-                        data-i18n="home.footerDesc"
-                    >
+            <footer id="contact" class="site-footer">
+                <div class="footer-inner">
+                    <h2 class="footer-title" data-i18n="home.footerTitle">Let's Build Something.</h2>
+                    <p class="footer-desc" data-i18n="home.footerDesc">
                         I am currently open to new opportunities. Check my availability to see if our timelines align,
                         or reach out directly.
                     </p>
-                    <div style="display: flex; justify-content: center">
-                        <a
-                            href="availability.html"
-                            class="btn-hero-primary"
-                            style="display: flex; align-items: center; gap: 8px"
-                        >
+                    <div class="footer-actions">
+                        <a href="availability.html" class="btn-hero-primary footer-btn">
                             <svg
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
                                 stroke-width="2"
-                                style="width: 18px; height: 18px"
+                                class="footer-btn-icon"
                             >
                                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                                 <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -356,6 +351,101 @@
                 </div>
             </footer>
         </main>
+
+        <!-- CV Modal -->
+        <div id="cv-modal-backdrop" class="modal-backdrop">
+            <div
+                class="modal-window"
+                style="
+                    max-width: 1000px;
+                    width: 95%;
+                    height: 90vh;
+                    display: flex;
+                    flex-direction: column;
+                    padding: 0;
+                    background: #080a0f;
+                    border: 1px solid var(--border);
+                "
+            >
+                <button
+                    class="modal-close"
+                    id="cv-modal-close"
+                    aria-label="Close CV"
+                    style="
+                        position: absolute;
+                        top: 16px;
+                        right: 16px;
+                        z-index: 10;
+                        background: rgba(0, 0, 0, 0.5);
+                        border-radius: 50%;
+                    "
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        style="width: 20px; height: 20px"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div style="flex: 1; overflow: hidden; position: relative; border-radius: 14px">
+                    <iframe id="cv-iframe" src="cv.html" style="width: 100%; height: 100%; border: none"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Modal -->
+        <div id="project-modal-backdrop" class="modal-backdrop">
+            <div
+                class="modal-window"
+                id="project-modal-window"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modal-title"
+            >
+                <button class="modal-close" id="modal-close" aria-label="Close project">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="modal-inner">
+                    <div class="modal-media" id="modal-media"></div>
+                    <div class="modal-info">
+                        <div class="modal-tags" id="modal-tags"></div>
+                        <h2 class="modal-title" id="modal-title"></h2>
+                        <p class="modal-desc" id="modal-desc"></p>
+                        <a class="modal-github" id="modal-github" target="_blank" rel="noopener">
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                aria-hidden="true"
+                                style="width: 16px; height: 16px"
+                            >
+                                <path
+                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                ></path>
+                            </svg>
+                            View on GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <script type="module" src="/src/main.ts"></script>
     </body>

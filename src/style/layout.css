@@ -9,6 +9,8 @@ body {
     display: block;
     min-height: 100vh;
     overflow-x: hidden;
+    background-image: radial-gradient(var(--border) 1px, transparent 1px);
+    background-size: 32px 32px;
 }
 
 /* ─── Top Navigation ──────────────────────────────── */
@@ -205,7 +207,8 @@ main {
 .section {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 100px 40px;
+    padding: 40px 40px;
+    scroll-margin-top: 80px;
 }
 
 .section-eyebrow {
@@ -236,55 +239,13 @@ main {
 /* ─── Hero / Home ─────────────────────────────────── */
 .section-home {
     position: relative;
-    min-height: calc(100vh - 60px);
+    min-height: calc(70vh - 60px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-    padding-top: 60px;
-    padding-bottom: 60px;
-}
-
-.home-ambient {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.ambient-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.25;
-    animation: orbFloat 8s ease-in-out infinite alternate;
-}
-
-.orb-1 {
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, #22d3ee, transparent 70%);
-    top: -100px;
-    right: -80px;
-    animation-delay: 0s;
-}
-
-.orb-2 {
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, #a78bfa, transparent 70%);
-    bottom: 0;
-    left: -60px;
-    animation-delay: -4s;
-}
-
-@keyframes orbFloat {
-    from {
-        transform: translate(0, 0) scale(1);
-    }
-    to {
-        transform: translate(20px, 30px) scale(1.05);
-    }
+    padding-top: 40px;
+    padding-bottom: 20px;
 }
 
 .home-content {
@@ -451,9 +412,6 @@ main {
 }
 
 /* ─── Projects Section ────────────────────────────── */
-.section-projects {
-    border-top: 1px solid var(--border);
-}
 
 .filter-group {
     display: flex;
@@ -569,39 +527,6 @@ main {
     display: block;
 }
 
-.terminal-style {
-    background: #05080e;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 14px 16px;
-    gap: 10px;
-}
-.term-header {
-    display: flex;
-    gap: 6px;
-}
-.term-header .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--text-dim);
-}
-.term-header .dot:nth-child(1) {
-    background: #f87171;
-}
-.term-header .dot:nth-child(2) {
-    background: #fbbf24;
-}
-.term-header .dot:nth-child(3) {
-    background: #4ade80;
-}
-.term-body {
-    font-family: var(--font-mono);
-    font-size: 0.73rem;
-    color: #4ade80;
-    line-height: 1.7;
-}
-
 .project-info {
     padding: 20px;
     display: flex;
@@ -654,116 +579,10 @@ main {
     color: var(--text-primary);
 }
 
-/* ─── AI Lab Section ──────────────────────────────── */
-.section-ailab {
-    border-top: 1px solid var(--border);
-    padding-bottom: 120px;
-}
-
-/* ─── Pill Switcher ───────────────────────────────── */
-.sim-pills {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 0 auto 28px auto;
-    padding: 6px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
-    border-radius: 30px;
-    width: fit-content;
-    max-width: 100%;
-}
-
-.pill .pill-label {
-    display: none;
-}
-
-.pill {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border-radius: 50%;
-    border: 1px solid transparent;
-    background: transparent;
-    color: var(--text-muted);
-    font-size: 0.82rem;
-    font-weight: 500;
-    transition:
-        color var(--t-fast),
-        background var(--t-fast),
-        border-color var(--t-fast),
-        transform var(--t-fast);
-    white-space: nowrap;
-}
-.pill:hover {
-    color: var(--text-primary);
-    background: var(--bg-hover);
-}
-.pill:active {
-    transform: scale(var(--scale-press));
-    transition: transform 160ms var(--ease-out);
-}
-
-.pill.active {
-    background: var(--bg-elevated);
-    border-color: var(--border-hover);
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-.pill-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-/* ─── Simulation Views ────────────────────────────── */
-.sim-view {
-    display: none;
-}
-.sim-view.active {
-    display: block;
-    animation: simFadeIn 0.2s var(--ease-out) forwards;
-}
-
-@keyframes simFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ─── Simulation Two-Column Layout ───────────────── */
-.layout-grid {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 16px;
-    align-items: start;
-}
-
-.layout-grid > div {
-    min-width: 0;
-}
-
 /* ─── Responsive ──────────────────────────────────── */
 @media (max-width: 1024px) {
     .section {
         padding: 80px 24px;
-    }
-    .layout-grid {
-        grid-template-columns: 1fr;
-    }
-    .sim-pills {
-        width: auto;
     }
 }
 
@@ -850,29 +669,69 @@ main {
     .section-title {
         font-size: 1.75rem;
     }
-    .pill {
-        padding: 8px 12px;
-    }
-    .pill-dot {
-        width: 10px;
-        height: 10px;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .ambient-orb {
-        animation: none;
-    }
-    .sim-view.active {
-        animation: none;
-    }
     .topnav,
     .project-card,
-    .pill,
     .btn-hero-primary,
     .btn-hero-ghost,
     .contact-link,
     .filter-btn {
         transition: none;
     }
+}
+
+/* Show More Container */
+.show-more-wrapper {
+    text-align: center;
+    margin-top: 3rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.show-more-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.show-more-icon {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s;
+}
+
+/* Site Footer */
+.site-footer {
+    padding: 60px 40px;
+    text-align: center;
+    scroll-margin-top: 80px;
+}
+.footer-inner {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.footer-title {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+.footer-desc {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+.footer-actions {
+    display: flex;
+    justify-content: center;
+}
+.footer-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-btn-icon {
+    width: 18px;
+    height: 18px;
 }

@@ -29,10 +29,8 @@ export class ModalMediaRenderer {
                     </div>
                     <div class="gallery-dots">${dotsHtml}</div>
                 </div>`;
-            case 'placeholder':
             default: {
-                const label = media.type === 'placeholder' ? (media.label ?? 'No preview') : 'No preview';
-                return `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:0.8rem;font-family:var(--font-mono)">${label}</div>`;
+                return `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-dim);font-size:0.8rem;font-family:var(--font-mono)">No preview</div>`;
             }
         }
     }

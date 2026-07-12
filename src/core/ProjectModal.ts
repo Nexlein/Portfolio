@@ -6,7 +6,6 @@
  */
 
 import { ProjectEntry } from '../data/projects.js';
-import { SIMULATIONS } from '../data/simulations.js';
 
 import { ModalMediaRenderer } from './ModalMediaRenderer.js';
 import { ModalGallery } from './ModalGallery.js';
@@ -54,13 +53,11 @@ export class ProjectModal {
             this.actionsContainerEl = document.getElementById('modal-extra-actions') as HTMLElement;
         }
 
-        // Global handler for native onclick attribute (bypass Safari event delegation issues)
-        window.openProjectModal = (event: Event, id: string) => {
-            const target = event.target as HTMLElement;
-            if (target && target.closest('.project-link')) return;
-            const project = projects.find((p) => p.id === id);
+        // Listen for custom event from ProjectManager
+        window.addEventListener('openProjectModal', ((e: CustomEvent<{ id: string }>) => {
+            const project = projects.find((p) => p.id === e.detail.id);
             if (project) this.open(project);
-        };
+        }) as EventListener);
 
         this.bindClose();
     }
@@ -109,27 +106,8 @@ export class ProjectModal {
             this.githubEl.style.display = 'none';
         }
 
-        // Render "Try Simulation" buttons
+        // Clean out actions container
         this.actionsContainerEl.innerHTML = '';
-        if (project.relatedSims && project.relatedSims.length > 0) {
-            project.relatedSims.forEach((simId) => {
-                const simConfig = SIMULATIONS.find((s) => s.id === simId);
-                if (!simConfig) return;
-                const btn = document.createElement('button');
-                btn.className = 'modal-github'; // Match GitHub button styling
-                btn.innerHTML = `
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                    ${i18n.t('modal.trySim')} ${i18n.t_obj(simConfig.label)}
-                `;
-                btn.onclick = () => {
-                    this.close();
-                    window.location.href = `ailab.html?sim=${simId}`;
-                };
-                this.actionsContainerEl.appendChild(btn);
-            });
-        }
 
         // Force reflow and add .show
         void this.backdrop.offsetWidth;
