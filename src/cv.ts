@@ -1,12 +1,12 @@
-import { i18n } from './core/i18n.js';
+import { i18n, translateDOM } from './core/i18n.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initial translation pass
-    i18n.translateDOM();
+    translateDOM();
 
     // Listen to i18n changes
     i18n.subscribe(() => {
-        i18n.translateDOM();
+        translateDOM();
     });
 
     const printBtn = document.getElementById('cv-print-btn');

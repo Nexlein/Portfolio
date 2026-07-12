@@ -19,27 +19,12 @@ export interface ProjectMediaImage {
     alt: string;
 }
 
-export interface ProjectMediaPlaceholder {
-    type: 'placeholder';
-    label?: string;
-}
-
-export interface ProjectMediaTerminal {
-    type: 'terminal';
-    lines: string[];
-}
-
 export interface ProjectMediaGallery {
     type: 'gallery';
     images: { src: string; alt: string }[];
 }
 
-export type ProjectMedia =
-    | ProjectMediaVideo
-    | ProjectMediaImage
-    | ProjectMediaPlaceholder
-    | ProjectMediaTerminal
-    | ProjectMediaGallery;
+export type ProjectMedia = ProjectMediaVideo | ProjectMediaImage | ProjectMediaGallery;
 
 import { LocaleString } from '../core/i18n.js';
 
@@ -52,7 +37,6 @@ export interface ProjectEntry {
     year?: 'Tek1' | 'Tek2';
     github: string; // full URL or '' to hide the link
     media: ProjectMedia;
-    relatedSims?: string[];
 }
 
 export const PROJECTS: ProjectEntry[] = [
@@ -121,8 +105,7 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/cvrie/cvrie.jpg',
             alt: 'Abstract visualization of Machine Learning clusters and neural networks'
-        },
-        relatedSims: ['ml', 'ml-unsupervised']
+        }
     },
     {
         id: 'starttrek',
@@ -134,8 +117,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Python', 'PyTorch', 'RL', 'DQN'],
         category: 'ai',
         github: 'https://github.com/Nexlein/StartTrek',
-        media: { type: 'video', src: '/projects/starttrek/starttrek.mp4' },
-        relatedSims: ['rl']
+        media: { type: 'video', src: '/projects/starttrek/starttrek.mp4' }
     },
     {
         id: 'zappy',
@@ -150,8 +132,7 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'video',
             src: '/projects/zappy/zappy.mp4'
-        },
-        relatedSims: ['fsm', 'uai']
+        }
     },
     {
         id: 'persona',

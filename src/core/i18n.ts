@@ -26,7 +26,7 @@ class I18nService {
             if (e.key === 'lang' && (e.newValue === 'en' || e.newValue === 'fr')) {
                 this.currentLang = e.newValue as Lang;
                 document.documentElement.lang = this.currentLang;
-                this.translateDOM();
+                translateDOM();
                 this.notifyListeners();
             }
         });
@@ -41,7 +41,7 @@ class I18nService {
         this.currentLang = lang;
         localStorage.setItem('lang', lang);
         document.documentElement.lang = lang;
-        this.translateDOM();
+        translateDOM();
         this.notifyListeners();
     }
 
@@ -65,17 +65,6 @@ class I18nService {
         return obj[this.currentLang] || obj.en;
     }
 
-    translateDOM(root: HTMLElement | Document = document) {
-        const elements = root.querySelectorAll<HTMLElement>('[data-i18n]');
-        elements.forEach((el) => {
-            const key = el.getAttribute('data-i18n');
-            if (key) {
-                el.innerHTML = this.t(key);
-            }
-        });
-        document.documentElement.classList.add('i18n-ready');
-    }
-
     subscribe(fn: () => void) {
         this.listeners.push(fn);
     }
@@ -83,6 +72,17 @@ class I18nService {
     private notifyListeners() {
         this.listeners.forEach((fn) => fn());
     }
+}
+
+export function translateDOM(root: HTMLElement | Document = document) {
+    const elements = root.querySelectorAll<HTMLElement>('[data-i18n]');
+    elements.forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (key) {
+            el.innerHTML = i18n.t(key);
+        }
+    });
+    document.documentElement.classList.add('i18n-ready');
 }
 
 export const i18n = new I18nService();
