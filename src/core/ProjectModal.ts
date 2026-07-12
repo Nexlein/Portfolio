@@ -83,7 +83,7 @@ export class ProjectModal {
 
     open(project: ProjectEntry): void {
         this.titleEl.textContent = project.title as string;
-        this.descEl.innerHTML = i18n.t_obj(project.description);
+        this.descEl.innerHTML = i18n.t(`projects_desc.${project.id}`);
 
         this.tagsEl.innerHTML = project.tags.map((t) => `<span class="project-tag">${t}</span>`).join('');
 

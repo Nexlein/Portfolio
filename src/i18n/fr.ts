@@ -1,4 +1,22 @@
 export const fr = {
+    projects_desc: {
+        arcade: `Architecture de jeu modulaire. Charge dynamiquement des bibliothèques de jeux (Pacman, Nibbler) et des moteurs graphiques (SDL2, SFML, ncurses) à l'exécution via des objets partagés.`,
+        raytracer: `Moteur de rendu 3D codé de zéro. Calcule l'éclairage, les ombres et les reflets en traçant mathématiquement le chemin de la lumière à travers la définition d'une scène.`,
+        plazza: `Simulation de pizzeria multi-processus et multi-thread. Explore les architectures concurrentes, la communication inter-processus (IPC) et la coordination par mutex sous charge.`,
+        cvrie: `Un laboratoire complet d'apprentissage automatique explorant des algorithmes supervisés et non supervisés, utilisant pandas, numpy et scikit-learn.`,
+        starttrek: `Agent d'Apprentissage par Renforcement entraîné via Deep Q-Networks (DQN) pour atterrir un module lunaire en toute sécurité. Inclut le rejeu d'expérience et la randomisation de domaine.`,
+        zappy: `Jeu réseau multijoueur où des équipes d'IA autonomes s'affrontent. Développé en C/C++ avec un serveur, un client graphique et des clients autonomes pilotés par des machines à états (FSM) et de l'IA utilitaire.`,
+        persona: `Système d'IA automatisé et auto-hébergé fournissant des résumés d'actualités personnalisés basés sur les fuseaux horaires des utilisateurs. Construit avec N8N, Supabase, Mistral AI et NewsAPI.`,
+        codename: `Un framework de test robuste conçu pour évaluer et fortifier les modèles de langage (LLM) contre les injections de prompt et les jailbreaks. Intègre du prompting antagoniste pour sécuriser les déploiements.`,
+        mymarvin: `Projet complet d'automatisation de pipeline CI/CD basé sur Jenkins. Utilise Docker et Groovy DSL pour définir et provisionner dynamiquement des jobs de build.`,
+        octopus: `Projet d'automatisation Infrastructure-as-Code (IaC). Utilise Ansible pour provisionner, configurer et orchestrer des environnements complexes sur plusieurs hôtes distants de manière concurrente.`,
+        nanotekspice: `Un simulateur de portes logiques codé en C++. Modélise des composants électroniques numériques en utilisant les principes purs de la programmation orientée objet (OOP).`,
+        myradar: `Un simulateur graphique 2D de contrôle aérien construit en C avec CSFML. Simule la navigation d'avions avec détection de collisions complexe et optimisation spatiale par secteurs.`,
+        tardis: `Projet d'analyse et de visualisation de données aboutissant à un tableau de bord complet. Se concentre sur le traitement des données, la modélisation statistique et l'extraction d'informations.`,
+        mytop: `Un clone sur mesure de l'utilitaire Unix top. Dispose d'une surveillance système en temps réel, de la liste des processus, et de l'utilisation CPU/RAM, développé en C avec ncurses.`,
+        secured: `Une bibliothèque C robuste implémentant une table de hachage hautement efficace. Comprend des fonctions de hachage personnalisées et des stratégies de résolution de collisions.`
+    },
+
     navbar: {
         home: 'Accueil',
         journey: 'Parcours',
