@@ -33,7 +33,7 @@ export class ProjectView {
                 const typeStr = ext === 'webm' ? 'video/webm' : 'video/mp4';
                 return /* html */ `
                 <div class="project-media">
-                    <video autoplay loop muted playsinline preload="auto" class="media-fit">
+                    <video autoplay loop muted playsinline preload="metadata" class="media-fit">
                         <source src="${media.src}" type="${typeStr}">
                     </video>
                 </div>`;
