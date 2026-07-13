@@ -1,0 +1,196 @@
+/* ─── Top Navigation ──────────────────────────────── */
+.topnav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 100;
+    background: rgba(8, 10, 15, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition:
+        background var(--t-normal),
+        border-color var(--t-normal);
+}
+
+.topnav.scrolled {
+    background: rgba(8, 10, 15, 0.95);
+    border-color: var(--border-hover);
+}
+
+.topnav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+}
+
+.topnav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: -0.01em;
+    transition: opacity var(--t-fast);
+}
+.topnav-brand:hover {
+    opacity: 0.75;
+}
+.brand-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+.brand-name {
+    font-family: var(--font-sans);
+}
+
+.topnav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition:
+        color var(--t-fast),
+        background var(--t-fast);
+    position: relative;
+}
+.nav-link:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+}
+.nav-link.active {
+    color: var(--text-primary);
+}
+
+.nav-lang-toggle {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    margin-left: 8px;
+    transition:
+        color var(--t-fast),
+        background var(--t-fast),
+        transform var(--t-fast);
+}
+.nav-lang-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+.nav-lang-toggle:active {
+    transform: scale(var(--scale-press));
+    transition: transform 160ms var(--ease-out);
+}
+.nav-lang-toggle .lang-en,
+.nav-lang-toggle .lang-fr {
+    transition: color var(--t-fast);
+}
+html[lang='en'] .nav-lang-toggle .lang-en {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+html[lang='fr'] .nav-lang-toggle .lang-fr {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.nav-cta-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-left: 8px;
+}
+.nav-cta {
+    margin-left: 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-decoration: none;
+    background: var(--text-primary);
+    color: var(--bg-base);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition:
+        opacity var(--t-fast),
+        transform var(--t-fast);
+}
+.nav-cta:hover {
+    opacity: 0.9;
+}
+.nav-cta:active {
+    transform: scale(var(--scale-press));
+    transition: transform 160ms var(--ease-out);
+}
+
+.contact-popup {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 180px;
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: scale(0.95) translateY(-5px);
+    transform-origin: top right;
+    pointer-events: none;
+    transition:
+        opacity var(--t-fast),
+        transform var(--t-fast);
+}
+
+.contact-popup.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+.popup-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition:
+        background var(--t-fast),
+        color var(--t-fast);
+}
+
+.popup-link:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}

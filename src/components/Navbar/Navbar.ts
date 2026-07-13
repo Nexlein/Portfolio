@@ -1,3 +1,4 @@
+import './Navbar.css';
 import { Icons } from '../../utils/Icons.js';
 import { i18n } from '../../core/i18n.js';
 
