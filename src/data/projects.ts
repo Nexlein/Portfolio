@@ -6,20 +6,20 @@
  * The UI is generated automatically from this data at boot time.
  */
 
-export type ProjectCategory = 'architecture' | 'systems' | 'ai' | 'devops' | 'graphical';
+type ProjectCategory = 'architecture' | 'systems' | 'ai' | 'devops' | 'graphical';
 
-export interface ProjectMediaVideo {
+interface ProjectMediaVideo {
     type: 'video';
     src: string; // path relative to /public
 }
 
-export interface ProjectMediaImage {
+interface ProjectMediaImage {
     type: 'image';
     src: string;
     alt: string;
 }
 
-export interface ProjectMediaGallery {
+interface ProjectMediaGallery {
     type: 'gallery';
     images: { src: string; alt: string }[];
 }
