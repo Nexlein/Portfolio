@@ -35,3 +35,411 @@ main {
         padding: 60px 20px;
     }
 }
+
+/* Site Footer */
+.site-footer {
+    padding: 60px 40px;
+    text-align: center;
+    scroll-margin-top: 80px;
+}
+.footer-inner {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.footer-title {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+.footer-desc {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+.footer-actions {
+    display: flex;
+    justify-content: center;
+}
+.footer-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-btn-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* ─── Cards ───────────────────────────────────────── */
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    transition: border-color var(--t-fast);
+    max-width: 100%;
+    min-width: 0;
+}
+
+.card:hover {
+    border-color: var(--border-hover);
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    position: sticky;
+    top: 0;
+}
+
+/* ─── Profile & Home Layout ───────────────────────── */
+.card-profile {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.avatar-placeholder svg {
+    width: 32px;
+    height: 32px;
+}
+
+.profile-titles h1 {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+.profile-titles .alias {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+}
+
+.bio {
+    color: var(--text-muted);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.contact-links {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    padding: 8px 16px;
+}
+.link-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.tech-stack {
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+.tech-stack h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+}
+
+.tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.tag {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+}
+
+/* ─── AI Cards Grid ───────────────────────────────── */
+.projects-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.section-header h2 {
+    font-size: 1.25rem;
+}
+.section-header .subtitle {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.ai-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.ai-card {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    transition:
+        transform 300ms cubic-bezier(0.19, 1, 0.22, 1),
+        border-color var(--t-fast),
+        box-shadow 300ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.ai-card:hover {
+    transform: translateY(-2px) scale(1.02);
+    border-color: var(--border-hover);
+    box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.2);
+}
+
+.ai-card-indicator {
+    width: 4px;
+    flex-shrink: 0;
+}
+.ai-card-content {
+    padding: 16px 16px 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+.ai-card-content h3 {
+    font-size: 1rem;
+}
+.ai-card-content p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    flex: 1;
+}
+
+/* ─── Projects Filter & Grid ──────────────────────── */
+.projects-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 40px;
+}
+.projects-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 600px;
+}
+.projects-header h2 {
+    font-size: 1.75rem;
+}
+.projects-header p {
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.filter-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.filter-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.filter-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    transition:
+        color var(--t-fast),
+        background var(--t-fast),
+        border-color var(--t-fast);
+}
+.filter-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+.filter-btn.active {
+    background: var(--text-primary);
+    color: var(--bg-base);
+    border-color: transparent;
+    font-weight: 600;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+        transform 300ms cubic-bezier(0.19, 1, 0.22, 1),
+        border-color var(--t-fast),
+        box-shadow 300ms cubic-bezier(0.19, 1, 0.22, 1);
+}
+@media (hover: hover) {
+    .project-card:hover {
+        transform: translateY(-4px) scale(1.01);
+        border-color: var(--border-hover);
+        box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Fix iOS Safari tap bug: force taps to hit the card itself, not the unclickable children */
+.project-card > * {
+    pointer-events: none;
+}
+.project-card .project-link {
+    pointer-events: auto;
+}
+
+.project-media {
+    height: 180px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--bg-elevated);
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+}
+.project-media svg {
+    width: 32px;
+    height: 32px;
+}
+
+.project-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+.project-info h3 {
+    font-size: 1.1rem;
+}
+.project-info p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    flex: 1;
+}
+.project-actions {
+    margin-top: 8px;
+}
+
+/* ─── Timeline ────────────────────────────────────── */
+.section-parcours {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.timeline {
+    position: relative;
+    margin-top: 40px;
+    padding-left: 20px;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+}
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+.timeline-marker {
+    position: absolute;
+    left: -25px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg-base);
+    border: 2px solid var(--text-primary);
+    box-shadow: 0 0 0 4px var(--bg-base);
+    z-index: 1;
+}
+.timeline-content {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.timeline-date {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.timeline-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.timeline-title .highlight {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+.timeline-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+.timeline-content .tags {
+    margin-top: 8px;
+}
