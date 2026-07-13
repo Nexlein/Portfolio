@@ -1,71 +1,71 @@
 /* Auto-generated utility classes from inline styles */
 
-.util-style-1 {
+.avail-page {
     min-height: 100vh;
 }
 
-.util-style-2 {
+.avail-container {
     margin: 0 auto;
     max-width: 800px;
 }
 
-.text-3rem {
+.text-hero {
     font-size: 3rem;
     margin-bottom: 2rem;
 }
 
-.util-style-3 {
+.avail-bio {
     margin-bottom: 3rem;
 }
 
-.util-style-4 {
+.avail-cards {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     text-align: left;
 }
 
-.flex-row-items-center {
+.flex-row-center {
     align-items: center;
     display: flex;
     gap: 1rem;
     margin-bottom: 0.5rem;
 }
 
-.size-24 {
+.icon-24 {
     height: 24px;
     width: 24px;
 }
 
-.text-1_3rem-color-text-primary {
+.text-primary-lg {
     color: var(--text-primary);
     font-size: 1.3rem;
     margin-bottom: 0.2rem;
 }
 
-.text-0_85rem {
+.text-sm {
     font-size: 0.85rem;
     margin: 0;
 }
 
-.flex-col {
+.flex-col-gap {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
 }
 
-.text-0_95rem-color-text-primary {
+.text-primary-md {
     color: var(--text-primary);
     font-size: 0.95rem;
     line-height: 1.5;
 }
 
-.text-0_9rem-color-text-muted {
+.text-muted-sm {
     color: var(--text-muted);
     font-size: 0.9rem;
 }
 
-.util-style-5 {
+.cv-hero-card {
     background: transparent;
     border: none;
     padding: 0 0 10px 0;
@@ -77,7 +77,7 @@
     justify-content: space-between;
 }
 
-.util-style-6 {
+.cv-hero-role {
     color: var(--accent-blue);
     margin-top: 4px;
 }
@@ -96,7 +96,7 @@
     margin-top: 16px;
 }
 
-.flex-row-items-center-text-12px-color-accent-blue {
+.flex-row-center-text-12px-color-accent-blue {
     align-items: center;
     background: var(--accent-blue-light);
     border: 1px solid #bfdbfe;
@@ -109,12 +109,12 @@
     padding: 6px 12px;
 }
 
-.size-14 {
+.icon-14 {
     height: 14px;
     width: 14px;
 }
 
-.flex-row-items-center-text-12px {
+.flex-row-center-text-12px {
     align-items: center;
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
@@ -127,7 +127,7 @@
     padding: 6px 12px;
 }
 
-.flex-row-items-center-text-12px-1 {
+.flex-row-center-text-12px-1 {
     align-items: center;
     background: #faf5ff;
     border: 1px solid #e9d5ff;
@@ -146,14 +146,14 @@
     gap: 16px;
 }
 
-.flex-col-items-flex-end {
+.flex-col-gap-items-flex-end {
     align-items: flex-end;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.util-style-7 {
+.cv-nowrap {
     white-space: nowrap;
 }
 
@@ -176,35 +176,35 @@
     margin-bottom: 12px;
 }
 
-.util-style-8 {
+.mt-16 {
     margin-top: 16px;
 }
 
-.util-style-9 {
+.w-95 {
     width: 95%;
 }
 
-.util-style-10 {
+.w-90 {
     width: 90%;
 }
 
-.util-style-11 {
+.w-85 {
     width: 85%;
 }
 
-.util-style-12 {
+.w-80 {
     width: 80%;
 }
 
-.util-style-13 {
+.w-50 {
     width: 50%;
 }
 
-.util-style-14 {
+.mb-16 {
     margin-bottom: 16px;
 }
 
-.util-style-15 {
+.mb-12 {
     margin-bottom: 12px;
 }
 
@@ -216,7 +216,7 @@
     margin-bottom: 4px;
 }
 
-.flex-col-1 {
+.flex-col-gap-1 {
     background: #080a0f;
     border: 1px solid var(--border);
     display: flex;
@@ -227,7 +227,7 @@
     width: 95%;
 }
 
-.util-style-16 {
+.cv-modal-close-btn {
     background: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     position: absolute;
@@ -236,25 +236,25 @@
     z-index: 10;
 }
 
-.size-20 {
+.icon-20 {
     height: 20px;
     width: 20px;
 }
 
-.util-style-17 {
+.cv-modal-wrapper {
     border-radius: 14px;
     flex: 1;
     overflow: hidden;
     position: relative;
 }
 
-.util-style-18 {
+.cv-modal-iframe {
     border: none;
     height: 100%;
     width: 100%;
 }
 
-.size-16 {
+.icon-16 {
     height: 16px;
     width: 16px;
 }

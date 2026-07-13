@@ -1,5 +1,3 @@
-import '../../styles/global.css';
-import './home.css';
 /**
  * src/main.ts — Application entry point.
  *

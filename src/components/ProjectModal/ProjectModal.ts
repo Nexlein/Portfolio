@@ -1,4 +1,3 @@
-import './ProjectModal.css';
 /**
  * src/core/ProjectModal.ts
  *

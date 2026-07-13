@@ -146,61 +146,6 @@ html[lang='fr'] .nav-lang-toggle .lang-fr {
     transition: transform 160ms var(--ease-out);
 }
 
-.contact-popup {
-    position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    width: 180px;
-    background: rgba(13, 17, 23, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transform: scale(0.95) translateY(-5px);
-    transform-origin: top right;
-    pointer-events: none;
-    transition:
-        opacity var(--t-fast),
-        transform var(--t-fast);
-}
-
-.contact-popup.show {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    pointer-events: auto;
-}
-
-.popup-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    text-decoration: none;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    font-weight: 500;
-    border-radius: 8px;
-    transition:
-        background var(--t-fast),
-        color var(--t-fast);
-}
-
-.popup-link:hover {
-    background: var(--bg-hover);
-    color: var(--text-primary);
-}
-
-.popup-link svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-}
-
 /* ─── Mobile Menu ─────────────────────────────────── */
 .mobile-menu-btn {
     display: none;
@@ -257,21 +202,6 @@ html[lang='fr'] .nav-lang-toggle .lang-fr {
         text-align: center;
         width: 100%;
         box-sizing: border-box;
-    }
-    .contact-popup {
-        position: static;
-        width: 100%;
-        transform: none;
-        box-shadow: none;
-        border: none;
-        background: transparent;
-        padding: 8px 0 0 0;
-        opacity: 1;
-        display: none;
-    }
-    .contact-popup.show {
-        display: flex;
-        pointer-events: auto;
     }
     .nav-link {
         width: 100%;

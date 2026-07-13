@@ -48,15 +48,15 @@ class I18nService {
     // Lookup a key like 'home.heroTitle'
     t(key: string): string {
         const parts = key.split('.');
-        let obj: any = this.dictionaries[this.currentLang];
+        let obj: unknown = this.dictionaries[this.currentLang];
         for (const p of parts) {
             if (obj && typeof obj === 'object') {
-                obj = obj[p];
+                obj = (obj as Record<string, unknown>)[p];
             } else {
-                return key; // Fallback to key if not found
+                return key;
             }
         }
-        return obj as string;
+        return typeof obj === 'string' ? obj : key;
     }
 
     // Returns the correct string from a LocaleString object

@@ -87,31 +87,31 @@ export const fr = {
             title: 'Contrat à Temps Partiel',
             desc: 'Stage alterné obligatoire Epitech Tek3 (2 jours/semaine)',
             l1Lbl: 'Période & Rythme',
-            l1Val: '17 Sept. au 26 Fév.<br /><span class="text-muted-small">Jeudi et Vendredi. Montpellier ou 100% Télétravail.</span>',
+            l1Val: '17 Sept. au 26 Fév.<br /><span class="text-muted-sm">Jeudi et Vendredi. Montpellier ou 100% Télétravail.</span>',
             l2Lbl: 'Type de Contrat',
-            l2Val: 'Stage, CDD, CDI, SEE.<br /><span class="text-muted-small">Plusieurs contrats acceptés.</span>',
+            l2Val: 'Stage, CDD, CDI, SEE.<br /><span class="text-muted-sm">Plusieurs contrats acceptés.</span>',
             l3Lbl: 'Infos Recruteur',
-            l3Val: 'Stage : ~4,50€/h (min. légal 2026).<br /><span class="text-muted-small">CDD Étudiant : Taux SMIC (pas de frais couverts).</span>'
+            l3Val: 'Stage : ~4,50€/h (min. légal 2026).<br /><span class="text-muted-sm">CDD Étudiant : Taux SMIC (pas de frais couverts).</span>'
         },
         fullTime: {
             title: 'Stage à Temps Plein',
             desc: "Stage de fin d'année obligatoire Epitech Tek3 (Temps plein)",
             l1Lbl: 'Période & Rythme',
-            l1Val: '29 Mars au 27 Août.<br /><span class="text-muted-small">Au moins 4 mois (5 jours/semaine).</span>',
+            l1Val: '29 Mars au 27 Août.<br /><span class="text-muted-sm">Au moins 4 mois (5 jours/semaine).</span>',
             l2Lbl: 'Type de Contrat',
-            l2Val: 'Stage, CDD ou CDI.<br /><span class="text-muted-small">Temps plein.</span>',
+            l2Val: 'Stage, CDD ou CDI.<br /><span class="text-muted-sm">Temps plein.</span>',
             l3Lbl: 'Infos Recruteur',
-            l3Val: 'Min. légal : 4,50€/h (taux 2026, ~650-700€/mois).<br /><span class="text-muted-small">Aucun frais de scolarité à la charge de l\'entreprise.<br />Recherche d\'une rémunération compétitive.</span>'
+            l3Val: 'Min. légal : 4,50€/h (taux 2026, ~650-700€/mois).<br /><span class="text-muted-sm">Aucun frais de scolarité à la charge de l\'entreprise.<br />Recherche d\'une rémunération compétitive.</span>'
         },
         freelance: {
             title: 'Missions Freelance',
             desc: 'Collaboration B2B par projet',
             l1Lbl: 'Périmètre & Disponibilité',
-            l1Val: 'APIs Backend, intégration IA.<br /><span class="text-muted-small">Horaires flexibles, livraison asynchrone.</span>',
+            l1Val: 'APIs Backend, intégration IA.<br /><span class="text-muted-sm">Horaires flexibles, livraison asynchrone.</span>',
             l2Lbl: 'Statut',
-            l2Val: 'Freelance (Auto-entrepreneur)<br /><span class="text-muted-small">Pas de charges patronales.</span>',
+            l2Val: 'Freelance (Auto-entrepreneur)<br /><span class="text-muted-sm">Pas de charges patronales.</span>',
             l3Lbl: 'Tarifs',
-            l3Val: 'TJM ou Forfait.<br /><span class="text-muted-small">Devis fourni sur demande.</span>'
+            l3Val: 'TJM ou Forfait.<br /><span class="text-muted-sm">Devis fourni sur demande.</span>'
         },
         footer: 'Intéressé ? Contactons-nous.',
         footerBtnEmail: 'Email Me',

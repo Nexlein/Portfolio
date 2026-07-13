@@ -1,5 +1,3 @@
-import './Navbar.css';
-import { Icons } from '../../utils/Icons.js';
 import { i18n } from '../../core/i18n.js';
 
 export class NavbarComponent {
@@ -43,19 +41,7 @@ export class NavbarComponent {
                 <span class="lang-en">EN</span> / <span class="lang-fr">FR</span>
             </button>
 
-            <div class="nav-cta-wrapper">
-                <button id="nav-contact-btn" class="nav-cta" aria-haspopup="true" aria-expanded="false" data-i18n="navbar.contact">Contact</button>
-                <div id="nav-contact-popup" class="contact-popup">
-                    <a href="mailto:nielsen.combe-bracciale@epitech.eu" class="popup-link">
-                        ${Icons.Email}
-                        <span data-i18n="navbar.email">Email Me</span>
-                    </a>
-                    <a href="https://www.linkedin.com/in/nielsen-combebracciale/" target="_blank" rel="noopener" class="popup-link">
-                        ${Icons.LinkedIn}
-                        <span data-i18n="navbar.linkedin">LinkedIn</span>
-                    </a>
-                </div>
-            </div>
+            <a href="#contact" class="nav-cta" data-i18n="navbar.contact">Contact</a>
           </nav>
         </div>
         `;
@@ -63,7 +49,6 @@ export class NavbarComponent {
 
     private bindEvents(): void {
         this.bindLanguageToggle();
-        this.bindContactPopup();
         this.bindMobileMenu();
     }
 
@@ -85,24 +70,6 @@ export class NavbarComponent {
                 const next = i18n.getLang() === 'en' ? 'fr' : 'en';
                 i18n.setLang(next);
                 updateLangBtn();
-            });
-        }
-    }
-
-    private bindContactPopup(): void {
-        const btn = document.getElementById('nav-contact-btn');
-        const popup = document.getElementById('nav-contact-popup');
-        if (btn && popup) {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                popup.classList.toggle('show');
-                btn.setAttribute('aria-expanded', String(popup.classList.contains('show')));
-            });
-            document.addEventListener('click', (e) => {
-                if (!popup.contains(e.target as Node) && !btn.contains(e.target as Node)) {
-                    popup.classList.remove('show');
-                    btn.setAttribute('aria-expanded', 'false');
-                }
             });
         }
     }

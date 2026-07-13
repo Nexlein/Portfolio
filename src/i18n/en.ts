@@ -86,31 +86,31 @@ export const en = {
             title: 'Part-Time Job',
             desc: 'Mandatory Epitech Tek3 placement (2 days/week)',
             l1Lbl: 'Timeline & Rhythm',
-            l1Val: 'Sept. 17 to Feb. 26.<br /><span class="text-muted-small">Thursday & Friday (2 days/week). Montpellier or Remote.</span>',
+            l1Val: 'Sept. 17 to Feb. 26.<br /><span class="text-muted-sm">Thursday & Friday (2 days/week). Montpellier or Remote.</span>',
             l2Lbl: 'Contract Types',
-            l2Val: 'Internship, CDD, CDI, SEE.<br /><span class="text-muted-small">Multiple contract types accepted.</span>',
+            l2Val: 'Internship, CDD, CDI, SEE.<br /><span class="text-muted-sm">Multiple contract types accepted.</span>',
             l3Lbl: 'Recruiter Info',
-            l3Val: 'Internship: ~4.50€/h (2026 legal min).<br /><span class="text-muted-small">Student CDD: SMIC rate (no fees covered).</span>'
+            l3Val: 'Internship: ~4.50€/h (2026 legal min).<br /><span class="text-muted-sm">Student CDD: SMIC rate (no fees covered).</span>'
         },
         fullTime: {
             title: 'Full-Time Internship',
             desc: 'Mandatory Epitech Tek3 placement (Full-time)',
             l1Lbl: 'Timeline & Rhythm',
-            l1Val: 'March 29 to Aug. 27.<br /><span class="text-muted-small">At least 4 months (5 days/week).</span>',
+            l1Val: 'March 29 to Aug. 27.<br /><span class="text-muted-sm">At least 4 months (5 days/week).</span>',
             l2Lbl: 'Contract Type',
-            l2Val: 'Internship, CDD, or CDI.<br /><span class="text-muted-small">Full-time placement.</span>',
+            l2Val: 'Internship, CDD, or CDI.<br /><span class="text-muted-sm">Full-time placement.</span>',
             l3Lbl: 'Recruiter Info',
-            l3Val: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).<br /><span class="text-muted-small">No school fees covered by the company.<br />Seeking competitive compensation.</span>'
+            l3Val: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).<br /><span class="text-muted-sm">No school fees covered by the company.<br />Seeking competitive compensation.</span>'
         },
         freelance: {
             title: 'Freelance Missions',
             desc: 'B2B project-based collaboration',
             l1Lbl: 'Scope & Availability',
-            l1Val: 'Backend APIs, AI integration.<br /><span class="text-muted-small">Flexible hours, async delivery.</span>',
+            l1Val: 'Backend APIs, AI integration.<br /><span class="text-muted-sm">Flexible hours, async delivery.</span>',
             l2Lbl: 'Status',
-            l2Val: 'Freelancer (Auto-entrepreneur)<br /><span class="text-muted-small">No payroll taxes for the client.</span>',
+            l2Val: 'Freelancer (Auto-entrepreneur)<br /><span class="text-muted-sm">No payroll taxes for the client.</span>',
             l3Lbl: 'Rates',
-            l3Val: 'Daily Rate or Fixed Price.<br /><span class="text-muted-small">Quotation provided upon request.</span>'
+            l3Val: 'Daily Rate or Fixed Price.<br /><span class="text-muted-sm">Quotation provided upon request.</span>'
         },
         footer: "Interested? Let's connect.",
         footerBtnEmail: 'Email Me',

@@ -1,4 +1,3 @@
-import '../../styles/global.css';
 import { i18n, translateDOM } from '../../core/i18n.js';
 
 document.addEventListener('DOMContentLoaded', () => {
