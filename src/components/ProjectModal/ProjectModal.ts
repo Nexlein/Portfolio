@@ -1,3 +1,4 @@
+import './ProjectModal.css';
 /**
  * src/core/ProjectModal.ts
  *
@@ -5,11 +6,11 @@
  * Reads directly from PROJECTS data — no DOM scraping.
  */
 
-import { ProjectEntry } from '../data/projects.js';
+import { ProjectEntry } from '../../data/projects.js';
 
-import { ModalMediaRenderer } from './ModalMediaRenderer.js';
-import { ModalGallery } from './ModalGallery.js';
-import { i18n } from './i18n.js';
+import { ModalMediaRenderer } from '../ModalMediaRenderer/ModalMediaRenderer.js';
+import { ModalGallery } from '../ModalGallery/ModalGallery.js';
+import { i18n } from '../../core/i18n.js';
 
 export class ProjectModal {
     private readonly backdrop: HTMLElement;
@@ -85,7 +86,7 @@ export class ProjectModal {
         this.titleEl.textContent = project.title as string;
         this.descEl.innerHTML = i18n.t(`projects_desc.${project.id}`);
 
-        this.tagsEl.innerHTML = project.tags.map((t) => `<span class="project-tag">${t}</span>`).join('');
+        this.tagsEl.innerHTML = project.tags.map((t: string) => `<span class="project-tag">${t}</span>`).join('');
 
         this.mediaEl.innerHTML = ModalMediaRenderer.buildHtml(project.media);
 

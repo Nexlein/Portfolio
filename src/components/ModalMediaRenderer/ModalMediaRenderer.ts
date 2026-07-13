@@ -1,5 +1,5 @@
-import { ProjectMedia } from '../data/projects.js';
-import { Icons } from '../utils/Icons.js';
+import { ProjectMedia } from '../../data/projects.js';
+import { Icons } from '../../utils/Icons.js';
 
 export class ModalMediaRenderer {
     static buildHtml(media: ProjectMedia): string {
@@ -18,7 +18,7 @@ export class ModalMediaRenderer {
                     )
                     .join('');
                 const dotsHtml = media.images
-                    .map((_, i) => `<div class="gallery-dot ${i === 0 ? 'active' : ''}" data-idx="${i}"></div>`)
+                    .map((_, i: number) => `<div class="gallery-dot ${i === 0 ? 'active' : ''}" data-idx="${i}"></div>`)
                     .join('');
                 return `
                 <div class="modal-gallery">
