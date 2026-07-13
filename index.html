@@ -15,6 +15,10 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
             rel="stylesheet"
         />
+        <link rel="stylesheet" href="/src/styles/global.css" />
+        <link rel="stylesheet" href="/src/components/Navbar/Navbar.css" />
+        <link rel="stylesheet" href="/src/components/ProjectView/ProjectView.css" />
+        <link rel="stylesheet" href="/src/components/ProjectModal/ProjectModal.css" />
 
         <script>
             (function () {
@@ -43,8 +47,8 @@
 
                     <p class="hero-bio" data-i18n="home.bio">
                         I build AI systems that decide and learn. My work spans autonomous decision architectures,
-                        real-time simulation engines, and high-performance C++. Currently studying at Epitech with a
-                        focus on applied artificial intelligence.
+                        real-time simulation engines, and high-performance C++.<br /><br />Currently studying at Epitech
+                        with a focus on applied artificial intelligence.
                     </p>
 
                     <div class="home-actions">
@@ -63,6 +67,8 @@
                             id="link-github"
                         >
                             <svg
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -83,6 +89,8 @@
                             id="link-linkedin"
                         >
                             <svg
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -99,6 +107,8 @@
                         </a>
                         <a href="mailto:nielsen.combe-bracciale@epitech.eu" class="contact-link" id="link-email">
                             <svg
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -310,6 +320,8 @@
                     <button id="show-more-projects" class="btn-hero-ghost show-more-btn">
                         <span data-i18n="projects.showMore">Show More</span>
                         <svg
+                            width="24"
+                            height="24"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
@@ -333,6 +345,8 @@
                     <div class="footer-actions">
                         <a href="availability.html" class="btn-hero-primary footer-btn">
                             <svg
+                                width="24"
+                                height="24"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
@@ -353,10 +367,12 @@
 
         <!-- CV Modal -->
         <div id="cv-modal-backdrop" class="modal-backdrop">
-            <div class="modal-window flex-col-1">
-                <button class="modal-close util-style-16" id="cv-modal-close" aria-label="Close CV">
+            <div class="modal-window flex-col-gap-1">
+                <button class="modal-close cv-modal-close-btn" id="cv-modal-close" aria-label="Close CV">
                     <svg
-                        class="size-20"
+                        width="24"
+                        height="24"
+                        class="icon-20"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -368,8 +384,8 @@
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
-                <div class="util-style-17">
-                    <iframe class="util-style-18" id="cv-iframe" src="cv.html"></iframe>
+                <div class="cv-modal-wrapper">
+                    <iframe class="cv-modal-iframe" id="cv-iframe" src="cv.html"></iframe>
                 </div>
             </div>
         </div>
@@ -385,6 +401,8 @@
             >
                 <button class="modal-close" id="modal-close" aria-label="Close project">
                     <svg
+                        width="24"
+                        height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -404,7 +422,9 @@
                         <p class="modal-desc" id="modal-desc"></p>
                         <a class="modal-github" id="modal-github" target="_blank" rel="noopener">
                             <svg
-                                class="size-16"
+                                width="24"
+                                height="24"
+                                class="icon-16"
                                 viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
