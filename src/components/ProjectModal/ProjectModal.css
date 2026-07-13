@@ -62,10 +62,15 @@
 .modal-close:hover {
     color: var(--text-primary);
     border-color: var(--border-hover);
-    transform: scale(1.1);
 }
-.modal-close:active {
-    transform: scale(var(--scale-press));
+
+@media (hover: hover) and (pointer: fine) {
+    .modal-close:hover {
+        transform: scale(1.1);
+    }
+    .modal-close:active {
+        transform: scale(var(--scale-press));
+    }
 }
 .modal-close svg {
     width: 16px;
@@ -140,10 +145,15 @@
 }
 .gallery-nav-btn:hover {
     background: rgba(0, 0, 0, 0.7);
-    transform: translateY(-50%) scale(1.1);
 }
-.gallery-nav-btn:active {
-    transform: translateY(-50%) scale(var(--scale-press));
+
+@media (hover: hover) and (pointer: fine) {
+    .gallery-nav-btn:hover {
+        transform: translateY(-50%) scale(1.1);
+    }
+    .gallery-nav-btn:active {
+        transform: translateY(-50%) scale(var(--scale-press));
+    }
 }
 .gallery-nav-btn.prev {
     left: 16px;
@@ -241,8 +251,11 @@
 .modal-github:hover {
     opacity: 0.88;
 }
-.modal-github:active {
-    transform: scale(var(--scale-press));
+
+@media (hover: hover) and (pointer: fine) {
+    .modal-github:active {
+        transform: scale(var(--scale-press));
+    }
 }
 .modal-github svg {
     width: 15px;

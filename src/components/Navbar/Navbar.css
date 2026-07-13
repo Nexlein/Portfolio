@@ -99,9 +99,11 @@
     background: var(--bg-hover);
     color: var(--text-primary);
 }
-.nav-lang-toggle:active {
-    transform: scale(var(--scale-press));
-    transition: transform 160ms var(--ease-out);
+@media (hover: hover) and (pointer: fine) {
+    .nav-lang-toggle:active {
+        transform: scale(var(--scale-press));
+        transition: transform 160ms var(--ease-out);
+    }
 }
 .nav-lang-toggle .lang-en,
 .nav-lang-toggle .lang-fr {
@@ -141,9 +143,11 @@ html[lang='fr'] .nav-lang-toggle .lang-fr {
 .nav-cta:hover {
     opacity: 0.9;
 }
-.nav-cta:active {
-    transform: scale(var(--scale-press));
-    transition: transform 160ms var(--ease-out);
+@media (hover: hover) and (pointer: fine) {
+    .nav-cta:active {
+        transform: scale(var(--scale-press));
+        transition: transform 160ms var(--ease-out);
+    }
 }
 
 /* ─── Mobile Menu ─────────────────────────────────── */
