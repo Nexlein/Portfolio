@@ -1,5 +1,5 @@
-import { Icons } from '../utils/Icons.js';
-import { i18n } from './i18n.js';
+import { Icons } from '../../utils/Icons.js';
+import { i18n } from '../../core/i18n.js';
 
 export class NavbarComponent {
     private readonly activeSection: 'home' | 'availability';

@@ -1,5 +1,5 @@
-import { ProjectEntry, ProjectMedia } from '../data/projects.js';
-import { i18n, translateDOM } from './i18n.js';
+import { ProjectEntry, ProjectMedia } from '../../data/projects.js';
+import { i18n, translateDOM } from '../../core/i18n.js';
 
 export class ProjectView {
     static renderGrid(projects: ProjectEntry[]): void {
@@ -17,7 +17,7 @@ export class ProjectView {
             ${this.renderMedia(p.media)}
             <div class="project-info">
                 <div class="project-tags">
-                    ${p.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('')}
+                    ${p.tags.map((tag: string) => `<span class="project-tag">${tag}</span>`).join('')}
                 </div>
                 <h3>${p.title}</h3>
                 <p>${i18n.t(`projects_desc.${p.id}`)}</p>

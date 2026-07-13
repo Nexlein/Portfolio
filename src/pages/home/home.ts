@@ -1,3 +1,5 @@
+import '../../styles/global.css';
+import './home.css';
 /**
  * src/main.ts — Application entry point.
  *
@@ -5,14 +7,14 @@
  *  Add a ProjectEntry in src/data/projects.ts  ← that's it.
  */
 
-import { PROJECTS } from './data/projects.js';
-import { ProjectManager } from './core/ProjectManager.js';
-import { ScrollObserver } from './core/ScrollObserver.js';
-import { NavShadow } from './core/NavShadow.js';
-import { ProjectModal } from './core/ProjectModal.js';
-import { CvModal } from './core/CvModal.js';
-import { injectNavbar } from './core/Components.js';
-import { i18n, translateDOM } from './core/i18n.js';
+import { PROJECTS } from '../../data/projects.js';
+import { ProjectManager } from '../../core/ProjectManager.js';
+import { ScrollObserver } from '../../core/ScrollObserver.js';
+import { NavShadow } from '../../components/NavShadow/NavShadow.js';
+import { ProjectModal } from '../../components/ProjectModal/ProjectModal.js';
+import { CvModal } from '../../components/CvModal/CvModal.js';
+import { injectNavbar } from '../../components/Navbar/Navbar.js';
+import { i18n, translateDOM } from '../../core/i18n.js';
 
 // ── Boot ───────────────────────────────────────────────────────────────────────
 async function bootstrap(): Promise<void> {

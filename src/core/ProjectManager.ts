@@ -1,5 +1,5 @@
 import { ProjectEntry } from '../data/projects.js';
-import { ProjectView } from './ProjectView.js';
+import { ProjectView } from '../components/ProjectView/ProjectView.js';
 
 export class ProjectManager {
     private projects: ProjectEntry[];
