@@ -1,8 +1,7 @@
 import { en } from '../i18n/en.js';
 import { fr } from '../i18n/fr.js';
 
-export type Lang = 'en' | 'fr';
-export type LocaleString = { en: string; fr: string };
+type Lang = 'en' | 'fr';
 
 type Dictionary = typeof en;
 
@@ -57,12 +56,6 @@ class I18nService {
             }
         }
         return typeof obj === 'string' ? obj : key;
-    }
-
-    // Returns the correct string from a LocaleString object
-    t_obj(obj: string | LocaleString): string {
-        if (typeof obj === 'string') return obj;
-        return obj[this.currentLang] || obj.en;
     }
 
     subscribe(fn: () => void) {

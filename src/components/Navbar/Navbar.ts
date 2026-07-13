@@ -1,6 +1,6 @@
 import { i18n } from '../../core/i18n.js';
 
-export class NavbarComponent {
+class NavbarComponent {
     private readonly activeSection: 'home' | 'availability';
 
     constructor(activeSection: 'home' | 'availability') {

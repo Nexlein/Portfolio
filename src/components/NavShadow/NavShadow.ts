@@ -5,13 +5,12 @@ export class NavShadow {
 
     private initNavShadow(): void {
         const nav = document.getElementById('topnav');
-        if (!nav) return;
-        window.addEventListener(
-            'scroll',
-            () => {
-                nav.classList.toggle('scrolled', window.scrollY > 20);
-            },
-            { passive: true }
-        );
+        const sentinel = document.getElementById('nav-sentinel');
+        if (!nav || !sentinel) return;
+
+        const observer = new IntersectionObserver(([entry]) => {
+            nav.classList.toggle('scrolled', !entry.isIntersecting);
+        });
+        observer.observe(sentinel);
     }
 }
