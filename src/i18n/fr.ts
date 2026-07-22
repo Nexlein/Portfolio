@@ -172,8 +172,8 @@ export const fr = {
                 desc: "Agent d'apprentissage par renforcement (DQN) pour alunissage. Intègre l'Experience Replay."
             },
             persona: { desc: "Workflow de résumé d'actualités personnalisé par IA auto-hébergé." },
-            cvrie: {
-                desc: 'Laboratoire de Machine Learning explorant des algorithmes supervisés et non supervisés avec scikit-learn.'
+            blackjack: {
+                desc: 'Agent RL profond (Maskable PPO) apprenant la stratégie optimale du Blackjack dans un environnement personnalisé.'
             }
         },
         edu: {
