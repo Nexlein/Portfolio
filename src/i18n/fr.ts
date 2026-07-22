@@ -14,7 +14,8 @@ export const fr = {
         myradar: `Un simulateur graphique 2D de contrôle aérien construit en C avec CSFML. Simule la navigation d'avions avec détection de collisions complexe et optimisation spatiale par secteurs.`,
         tardis: `Projet d'analyse et de visualisation de données aboutissant à un tableau de bord complet. Se concentre sur le traitement des données, la modélisation statistique et l'extraction d'informations.`,
         mytop: `Un clone sur mesure de l'utilitaire Unix top. Dispose d'une surveillance système en temps réel, de la liste des processus, et de l'utilisation CPU/RAM, développé en C avec ncurses.`,
-        secured: `Une bibliothèque C robuste implémentant une table de hachage hautement efficace. Comprend des fonctions de hachage personnalisées et des stratégies de résolution de collisions.`
+        secured: `Une bibliothèque C robuste implémentant une table de hachage hautement efficace. Comprend des fonctions de hachage personnalisées et des stratégies de résolution de collisions.`,
+        'blackjack-ai': `Un écosystème complet utilisant l'Apprentissage par Renforcement Profond (Maskable PPO) pour apprendre et visualiser la stratégie optimale du Blackjack sans aucune règle codée en dur.`
     },
 
     navbar: {
@@ -77,6 +78,7 @@ export const fr = {
         filterSys: 'Systèmes & Unix',
         filterDevops: 'DevOps & Infrastructure',
         filterGraph: 'Graphisme & Jeux',
+        filterPersonal: 'Personnel',
         showMore: 'Voir plus'
     },
     availability: {
