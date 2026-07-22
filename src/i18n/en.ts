@@ -14,7 +14,8 @@ export const en = {
         myradar: `A 2D graphical air traffic control simulator built in C using CSFML. Simulates planes navigating between control towers with complex collision detection and sector-based grid optimization.`,
         tardis: `Data analysis and visualization project culminating in a comprehensive dashboard. Focuses on data processing, statistical modeling, and extracting actionable insights from large datasets.`,
         mytop: `A customized clone of the Unix top utility. Features real-time system monitoring, process listing, memory metrics, and CPU usage, built with C and the ncurses library.`,
-        secured: `A robust C library implementing a highly efficient Hash Table data structure. Features custom cryptographic hashing functions and collision resolution strategies to ensure secure and fast data retrieval.`
+        secured: `A robust C library implementing a highly efficient Hash Table data structure. Features custom cryptographic hashing functions and collision resolution strategies to ensure secure and fast data retrieval.`,
+        'blackjack-ai': `A complete ecosystem using Deep Reinforcement Learning (Maskable PPO) to learn and visualize the mathematically optimal Blackjack strategy without any hardcoded rules.`
     },
 
     navbar: {
@@ -76,6 +77,7 @@ export const en = {
         filterSys: 'Systems & Unix',
         filterDevops: 'DevOps & Infrastructure',
         filterGraph: 'Graphical & Games',
+        filterPersonal: 'Personal',
         showMore: 'Show More'
     },
     availability: {
