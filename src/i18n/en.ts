@@ -167,8 +167,8 @@ export const en = {
                 desc: 'Reinforcement Learning agent (DQN) for lunar module landing. Features experience replay.'
             },
             persona: { desc: 'Self-hosted AI personalized news digest workflow.' },
-            cvrie: {
-                desc: 'Machine learning laboratory exploring supervised and unsupervised learning algorithms with scikit-learn.'
+            blackjack: {
+                desc: 'Deep RL agent (Maskable PPO) learning optimal Blackjack strategy in a custom environment.'
             }
         },
         edu: {
