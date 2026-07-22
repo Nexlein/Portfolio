@@ -226,7 +226,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/blackjack-ai',
         media: {
             type: 'video',
-            src: '/projects/blackjack-ai/blackjack-ai.webm'
+            src: '/projects/blackjack-ai/blackjack-ai.mp4'
         }
     }
 ];
