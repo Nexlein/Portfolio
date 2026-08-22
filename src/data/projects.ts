@@ -228,5 +228,17 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'video',
             src: '/projects/blackjack-ai/blackjack-ai.mp4'
         }
+    },
+    {
+        id: 'ai-racing',
+        title: 'AI Racing',
+        tags: ['Python', 'Reinforcement Learning', 'Stable-Baselines3', 'Gymnasium', 'Pygame'],
+        category: 'ai',
+        year: 'Personal',
+        github: 'https://github.com/Nexlein/AI-Racing',
+        media: {
+            type: 'video',
+            src: '/projects/ai-racing/ai-racing.mp4'
+        }
     }
 ];
