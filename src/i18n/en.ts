@@ -164,8 +164,8 @@ export const en = {
             arcade: { desc: '3D math rendering engine and modular gaming architecture.' },
             secured: { desc: 'Hash Table library with custom cryptographic hashing.' },
             plazza: { desc: 'Multi-process, multi-threaded pizzeria simulation exploring IPC and mutex coordination.' },
-            starttrek: {
-                desc: 'Reinforcement Learning agent (DQN) for lunar module landing. Features experience replay.'
+            airacing: {
+                desc: 'RL agent (PPO) navigating a custom kinematic physics environment with raycast sensors.'
             },
             persona: { desc: 'Self-hosted AI personalized news digest workflow.' },
             blackjack: {
