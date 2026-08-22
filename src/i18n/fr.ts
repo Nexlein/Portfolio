@@ -169,8 +169,8 @@ export const fr = {
             plazza: {
                 desc: 'Simulation multi-processus et multi-thread explorant la communication inter-processus (IPC) et la coordination par mutex.'
             },
-            starttrek: {
-                desc: "Agent d'apprentissage par renforcement (DQN) pour alunissage. Intègre l'Experience Replay."
+            airacing: {
+                desc: 'Agent RL (PPO) naviguant dans un environnement de physique cinématique personnalisé avec capteurs à lancer de rayons.'
             },
             persona: { desc: "Workflow de résumé d'actualités personnalisé par IA auto-hébergé." },
             blackjack: {
