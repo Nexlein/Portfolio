@@ -15,7 +15,8 @@ export const en = {
         tardis: `Data analysis and visualization project culminating in a comprehensive dashboard. Focuses on data processing, statistical modeling, and extracting actionable insights from large datasets.`,
         mytop: `A customized clone of the Unix top utility. Features real-time system monitoring, process listing, memory metrics, and CPU usage, built with C and the ncurses library.`,
         secured: `A robust C library implementing a highly efficient Hash Table data structure. Features custom cryptographic hashing functions and collision resolution strategies to ensure secure and fast data retrieval.`,
-        'blackjack-ai': `A complete ecosystem using Deep Reinforcement Learning (Maskable PPO) to learn and visualize the mathematically optimal Blackjack strategy without any hardcoded rules.`
+        'blackjack-ai': `A complete ecosystem using Deep Reinforcement Learning (Maskable PPO) to learn and visualize the mathematically optimal Blackjack strategy without any hardcoded rules.`,
+        'ai-racing': `A Reinforcement Learning agent built with Gymnasium, Pygame, and Stable Baselines3 (PPO) that learns to drive a car around a track using custom kinematic physics and raycast sensors.`
     },
 
     navbar: {

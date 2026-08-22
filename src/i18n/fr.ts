@@ -15,7 +15,8 @@ export const fr = {
         tardis: `Projet d'analyse et de visualisation de données aboutissant à un tableau de bord complet. Se concentre sur le traitement des données, la modélisation statistique et l'extraction d'informations.`,
         mytop: `Un clone sur mesure de l'utilitaire Unix top. Dispose d'une surveillance système en temps réel, de la liste des processus, et de l'utilisation CPU/RAM, développé en C avec ncurses.`,
         secured: `Une bibliothèque C robuste implémentant une table de hachage hautement efficace. Comprend des fonctions de hachage personnalisées et des stratégies de résolution de collisions.`,
-        'blackjack-ai': `Un écosystème complet utilisant l'Apprentissage par Renforcement Profond (Maskable PPO) pour apprendre et visualiser la stratégie optimale du Blackjack sans aucune règle codée en dur.`
+        'blackjack-ai': `Un écosystème complet utilisant l'Apprentissage par Renforcement Profond (Maskable PPO) pour apprendre et visualiser la stratégie optimale du Blackjack sans aucune règle codée en dur.`,
+        'ai-racing': `Un agent d'Apprentissage par Renforcement construit avec Gymnasium, Pygame et Stable Baselines3 (PPO) qui apprend à conduire une voiture sur un circuit en utilisant une physique cinématique personnalisée et des capteurs à lancer de rayons.`
     },
 
     navbar: {
