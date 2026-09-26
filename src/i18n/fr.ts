@@ -86,16 +86,6 @@ export const fr = {
         tag: 'Disponible',
         title: 'Ce que je recherche',
         bio: 'Étudiant en Tek3 à Epitech, je recherche activement des opportunités professionnelles pour mettre en pratique mes compétences en IA, en architecture backend et en développement logiciel haute performance.',
-        partTime: {
-            title: 'Contrat à Temps Partiel',
-            desc: 'Stage alterné obligatoire Epitech Tek3 (2 jours/semaine)',
-            l1Lbl: 'Période & Rythme',
-            l1Val: '17 Sept. au 26 Fév.<br /><span class="text-muted-sm">Jeudi et Vendredi. Montpellier ou 100% Télétravail.</span>',
-            l2Lbl: 'Type de Contrat',
-            l2Val: 'Stage, CDD, CDI, SEE.<br /><span class="text-muted-sm">Plusieurs contrats acceptés.</span>',
-            l3Lbl: 'Infos Recruteur',
-            l3Val: 'Stage : ~4,50€/h (min. légal 2026).<br /><span class="text-muted-sm">CDD Étudiant : Taux SMIC (pas de frais couverts).</span>'
-        },
         fullTime: {
             title: 'Stage à Temps Plein',
             desc: "Stage de fin d'année obligatoire Epitech Tek3 (Temps plein)",
@@ -132,8 +122,8 @@ export const fr = {
             role: 'Architecte Systèmes IA & Développeur C++',
             summary:
                 "Concepteur de systèmes d'IA autonomes. Spécialisé dans les architectures de décision, les moteurs de simulation en temps réel et le développement haute performance.",
-            badge1: 'Temps Partiel (Sept–Fév)',
-            badge2: 'Stage Temps Plein (Mar–Aoû)',
+            badge1: 'Temps Partiel (Sept-Fév)',
+            badge2: 'Stage Temps Plein (Mar-Aoû)',
             badge3: 'Freelance'
         },
         sections: {
@@ -147,15 +137,21 @@ export const fr = {
             arch: 'Architecture'
         },
         exp: {
+            issanka: {
+                title: 'Développeur IA (Temps partiel)',
+                date: 'Sept 2026 - Fév 2027',
+                desc1: "Création from scratch d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG.",
+                desc2: "Développement d'agents conversationnels et modernisation de l'architecture technique web."
+            },
             climb: {
                 title: 'Développeur Full-Stack & IA',
-                date: 'Sept – Déc 2025',
+                date: 'Sept - Déc 2025',
                 desc1: "Conception d'un système interne RAG (Retrieval-Augmented Generation) utilisant Microsoft Agent Framework et des modèles locaux Ollama.",
                 desc2: 'Développement de composants Razor et gestion de bases de données avec Entity Framework.'
             },
             hack: {
                 title: 'Hackathons & Cybersécurité',
-                date: '2025 – 2026',
+                date: '2025 - 2026',
                 desc1: "Participation à 2 Hackathons IA Générative (création d'outils LLM innovants).",
                 desc2: 'Participation à 2 événements Cycom (Conférences et CTFs Cybersécurité).'
             }

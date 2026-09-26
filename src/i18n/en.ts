@@ -85,16 +85,6 @@ export const en = {
         tag: 'Available Now',
         title: "What I'm Looking For",
         bio: 'I am an Epitech Tek3 student actively seeking professional opportunities to apply my skills in AI, backend architecture, and high-performance software development.',
-        partTime: {
-            title: 'Part-Time Job',
-            desc: 'Mandatory Epitech Tek3 placement (2 days/week)',
-            l1Lbl: 'Timeline & Rhythm',
-            l1Val: 'Sept. 17 to Feb. 26.<br /><span class="text-muted-sm">Thursday & Friday (2 days/week). Montpellier or Remote.</span>',
-            l2Lbl: 'Contract Types',
-            l2Val: 'Internship, CDD, CDI, SEE.<br /><span class="text-muted-sm">Multiple contract types accepted.</span>',
-            l3Lbl: 'Recruiter Info',
-            l3Val: 'Internship: ~4.50€/h (2026 legal min).<br /><span class="text-muted-sm">Student CDD: SMIC rate (no fees covered).</span>'
-        },
         fullTime: {
             title: 'Full-Time Internship',
             desc: 'Mandatory Epitech Tek3 placement (Full-time)',
@@ -131,8 +121,8 @@ export const en = {
             role: 'AI Systems Architect & C++ Developer',
             summary:
                 'Building AI systems that decide and learn. Focused on autonomous decision architectures, real-time simulation engines, and high-performance engineering.',
-            badge1: 'Part-Time (Sept–Feb)',
-            badge2: 'Full-Time Intern (Mar–Aug)',
+            badge1: 'Part-Time (Sept-Feb)',
+            badge2: 'Full-Time Intern (Mar-Aug)',
             badge3: 'Freelance'
         },
         sections: {
@@ -146,15 +136,21 @@ export const en = {
             arch: 'Architecture'
         },
         exp: {
+            issanka: {
+                title: 'AI Developer (Part-Time)',
+                date: 'Sept 2026 - Feb 2027',
+                desc1: 'Building a SaaS platform from scratch integrating AI-driven workflows and RAG architectures.',
+                desc2: 'Developing conversational AI agents and modernizing the technical web architecture.'
+            },
             climb: {
                 title: 'Full-Stack & AI Developer Intern',
-                date: 'Sept – Dec 2025',
+                date: 'Sept - Dec 2025',
                 desc1: 'Engineered an internal AI Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and local Ollama LLMs.',
                 desc2: 'Developed Razor components and managed databases with Entity Framework.'
             },
             hack: {
                 title: 'Hackathons & Cybersecurity',
-                date: '2025 – 2026',
+                date: '2025 - 2026',
                 desc1: 'Competed in 2 Generative AI Hackathons (building innovative LLM tools).',
                 desc2: 'Participated in 2 Cycom events (Cybersecurity talks and CTFs).'
             }
