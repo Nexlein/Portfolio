@@ -57,3 +57,19 @@ describe('HTML pages', () => {
         expect(html).not.toMatch(/\son[a-z]+="/); // inline event handlers
     });
 });
+
+describe('CV PDF redirects', () => {
+    const release = 'https://github.com/Nexlein/Portfolio/releases/download/cv/';
+    const redirects = Object.fromEntries(vercel.redirects.map((r) => [r.source, r.destination]));
+
+    it.each([
+        ['/cv.pdf', 'Nielsen-Combe-Bracciale-CV-EN.pdf'],
+        ['/fr/cv.pdf', 'Nielsen-Combe-Bracciale-CV-FR.pdf']
+    ])('%s points at %s in the rolling cv release (published by CI)', (source, file) => {
+        expect(redirects[source]).toBe(release + file);
+    });
+
+    it('the redirects are temporary, so the target can change without browsers caching it', () => {
+        for (const r of vercel.redirects) expect(r.permanent).toBe(false);
+    });
+});

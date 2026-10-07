@@ -13,7 +13,7 @@
     "rules": {},
     "overrides": [
         {
-            "files": ["e2e/**"],
+            "files": ["e2e/**", "scripts/**"],
             "rules": {
                 "no-await-in-loop": "off"
             }

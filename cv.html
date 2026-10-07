@@ -33,13 +33,21 @@
     <body>
         <!-- Floating Controls -->
         <div class="cv-controls">
+            <a id="cv-pdf-link" href="cv.pdf" target="_blank" rel="noopener">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span data-i18n="cv.controls.pdf">Download PDF</span>
+            </a>
             <button id="cv-print-btn">
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <polyline points="6 9 6 2 18 2 18 9"></polyline>
                     <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
                     <rect x="6" y="14" width="12" height="8"></rect>
                 </svg>
-                <span data-i18n="cv.controls.print">Save PDF / Print</span>
+                <span data-i18n="cv.controls.print">Print</span>
             </button>
         </div>
 
@@ -115,7 +123,7 @@
                                         <rect x="2" y="9" width="4" height="12" />
                                         <circle cx="4" cy="4" r="2" />
                                     </svg>
-                                    LinkedIn Profile
+                                    <span data-i18n="cv.links.linkedin">LinkedIn Profile</span>
                                 </a>
                             </div>
                             <img src="/qrcode.svg" alt="Portfolio QR Code" class="print-qr-code" />
@@ -194,20 +202,20 @@
                         <span data-i18n="cv.sections.expertise">Core Expertise</span>
                     </h2>
                     <div class="mb-16">
-                        <h3 class="text-13px-color-accent-blue mb-4">Languages</h3>
+                        <h3 class="text-13px-color-accent-blue mb-4" data-i18n="cv.expertise.languages">Languages</h3>
                         <div class="tech-tags">
                             <span>C/C++</span><span>Python</span><span>C# / .NET</span><span>TypeScript</span>
                         </div>
                     </div>
                     <div class="mb-16">
-                        <h3 class="text-13px-color-accent-blue mb-4">AI & Data</h3>
+                        <h3 class="text-13px-color-accent-blue mb-4" data-i18n="cv.expertise.aiData">AI & Data</h3>
                         <div class="tech-tags">
                             <span>PyTorch</span><span>RAG</span><span>LLMs (Ollama)</span><span>Agentic Frameworks</span
                             ><span>Prompt Engineering</span>
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-13px-color-accent-blue mb-4">DevOps & Arch</h3>
+                        <h3 class="text-13px-color-accent-blue mb-4" data-i18n="cv.expertise.devops">DevOps & Arch</h3>
                         <div class="tech-tags">
                             <span>Docker</span><span>Linux</span><span>Git</span><span>Ansible</span
                             ><span>Jenkins</span>

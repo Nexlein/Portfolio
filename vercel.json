@@ -1,5 +1,17 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
+    "redirects": [
+        {
+            "source": "/cv.pdf",
+            "destination": "https://github.com/Nexlein/Portfolio/releases/download/cv/Nielsen-Combe-Bracciale-CV-EN.pdf",
+            "permanent": false
+        },
+        {
+            "source": "/fr/cv.pdf",
+            "destination": "https://github.com/Nexlein/Portfolio/releases/download/cv/Nielsen-Combe-Bracciale-CV-FR.pdf",
+            "permanent": false
+        }
+    ],
     "headers": [
         {
             "source": "/(.*)",

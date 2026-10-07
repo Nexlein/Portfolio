@@ -305,3 +305,18 @@
         padding: 24px 20px;
     }
 }
+
+/* Link to the project's own page (shareable URL) */
+.modal-page-link {
+    align-self: flex-start;
+    display: inline-flex;
+    gap: 6px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--t-fast);
+}
+
+.modal-page-link:hover {
+    color: var(--text-primary);
+}

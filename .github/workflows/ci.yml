@@ -101,3 +101,48 @@ jobs:
                   name: playwright-report
                   path: playwright-report
                   retention-days: 7
+
+    cv-pdf:
+        name: CV PDF
+        needs: check
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        permissions:
+            contents: write # publish to the `cv` release (main only)
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: actions/setup-node@v7
+              with:
+                  node-version-file: .nvmrc
+                  cache: npm
+
+            - run: npm ci
+
+            - uses: actions/download-artifact@v8
+              with:
+                  name: dist
+                  path: dist
+
+            - name: Install Chromium
+              run: npx playwright install --with-deps chromium
+
+            # Prints /cv.html and /fr/cv.html to A4 and fails if the CV no longer fits on one page
+            - name: Render the CV to PDF
+              run: npm run cv:pdf
+
+            - uses: actions/upload-artifact@v7
+              with:
+                  name: cv-pdf
+                  path: cv-pdf
+                  retention-days: 7
+
+            # /cv.pdf and /fr/cv.pdf redirect to these files (vercel.json)
+            - name: Publish to the cv release
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh release view cv > /dev/null 2>&1 || gh release create cv --title "CV (latest)" --latest=false \
+                    --notes "Rendered from the CV page on every push to main. Stable links: https://nexlein.vercel.app/cv.pdf (EN) and https://nexlein.vercel.app/fr/cv.pdf (FR)."
+                  gh release upload cv cv-pdf/*.pdf --clobber

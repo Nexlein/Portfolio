@@ -366,6 +366,7 @@ svg {
 
     .card.span-3 {
         padding: 0 0 6px !important;
+        border-color: transparent !important; /* no frame around the header on paper: it touched the name */
     }
 
     h1 {

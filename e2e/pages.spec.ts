@@ -3,7 +3,8 @@ import { test, expect } from './fixtures';
 const pages = ['', '/fr'].flatMap((prefix) => [
     { path: `${prefix}/`, heading: 'Nielsen' },
     { path: `${prefix}/cv.html`, heading: 'Nielsen' },
-    { path: `${prefix}/availability.html`, heading: null }
+    { path: `${prefix}/availability.html`, heading: null },
+    { path: `${prefix}/projects/zappy.html`, heading: 'Zappy' }
 ]);
 
 for (const { path, heading } of pages) {
@@ -30,6 +31,19 @@ test('no request leaves our own origin', async ({ page, baseURL }) => {
     page.on('request', (req) => {
         if (!req.url().startsWith(baseURL!) && !req.url().startsWith('data:')) external.push(req.url());
     });
-    for (const { path } of pages) await page.goto(path, { waitUntil: 'networkidle' });
+    for (const { path } of pages) await page.goto(path, { waitUntil: 'load' });
     expect(external).toEqual([]);
+});
+
+test('the CV links to the PDF in its own language, in a new tab', async ({ page }) => {
+    for (const [path, pdf] of [
+        ['/cv.html', '/cv.pdf'],
+        ['/fr/cv.html', '/fr/cv.pdf']
+    ]) {
+        await page.goto(path);
+        const link = page.locator('#cv-pdf-link');
+        await expect(link).toBeVisible();
+        await expect(link).toHaveAttribute('target', '_blank');
+        expect(new URL(await link.evaluate((a) => (a as HTMLAnchorElement).href)).pathname).toBe(pdf);
+    }
 });

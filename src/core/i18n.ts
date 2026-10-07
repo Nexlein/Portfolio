@@ -3,7 +3,7 @@ import { lookup, localizedPath, translateTree, type Lang } from './translate';
 export type { Lang };
 
 /**
- * Each page is built once per language (vite-plugins/i18n-pages.ts) and its <html lang>
+ * Each page is built once per language (vite-plugins/pages.ts) and its <html lang>
  * says which one. Switching language navigates to the other page instead of rewriting
  * the DOM, so every language has its own URL for search engines and link previews.
  */

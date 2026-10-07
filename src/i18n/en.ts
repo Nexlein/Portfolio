@@ -129,11 +129,16 @@ export const en = {
     },
     modal: {
         github: 'View on GitHub',
-        trySim: 'Try'
+        trySim: 'Try',
+        page: 'Open project page'
+    },
+    projectPage: {
+        back: 'All projects'
     },
     cv: {
         controls: {
-            print: 'Save PDF / Print'
+            print: 'Print',
+            pdf: 'Download PDF'
         },
         hero: {
             role: 'AI Systems Architect & C++ Developer',
@@ -151,7 +156,13 @@ export const en = {
             education: 'Education & Certs'
         },
         expertise: {
-            arch: 'Architecture'
+            arch: 'Architecture',
+            languages: 'Languages',
+            aiData: 'AI & Data',
+            devops: 'DevOps & Arch'
+        },
+        links: {
+            linkedin: 'LinkedIn Profile'
         },
         exp: {
             issanka: {

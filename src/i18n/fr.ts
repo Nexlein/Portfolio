@@ -130,11 +130,16 @@ export const fr = {
     },
     modal: {
         github: 'Voir sur GitHub',
-        trySim: 'Essayer'
+        trySim: 'Essayer',
+        page: 'Ouvrir la page du projet'
+    },
+    projectPage: {
+        back: 'Tous les projets'
     },
     cv: {
         controls: {
-            print: 'Sauvegarder PDF / Imprimer'
+            print: 'Imprimer',
+            pdf: 'Télécharger le PDF'
         },
         hero: {
             role: 'Architecte Systèmes IA & Développeur C++',
@@ -152,7 +157,13 @@ export const fr = {
             education: 'Formation & Certifications'
         },
         expertise: {
-            arch: 'Architecture'
+            arch: 'Architecture',
+            languages: 'Langages',
+            aiData: 'IA & Data',
+            devops: 'DevOps & Archi'
+        },
+        links: {
+            linkedin: 'Profil LinkedIn'
         },
         exp: {
             issanka: {

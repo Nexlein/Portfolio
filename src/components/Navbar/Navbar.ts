@@ -1,9 +1,12 @@
 import { i18n } from '@/core/i18n';
+import { localizedPath } from '@/core/translate';
+
+type Section = 'home' | 'availability' | 'projects';
 
 class NavbarComponent {
-    private readonly activeSection: 'home' | 'availability';
+    private readonly activeSection: Section;
 
-    constructor(activeSection: 'home' | 'availability') {
+    constructor(activeSection: Section) {
         this.activeSection = activeSection;
     }
 
@@ -18,8 +21,12 @@ class NavbarComponent {
     }
 
     private buildHtml(): string {
-        const isHome = this.activeSection === 'home';
-        const base = isHome ? '' : 'index.html';
+        // Absolute, language-aware links so the navbar works from any depth (/fr/projects/x.html)
+        const lang = i18n.getLang();
+        const base = this.activeSection === 'home' ? '' : localizedPath('/', lang);
+        const availability = this.activeSection === 'availability' ? '#' : localizedPath('/availability.html', lang);
+        const contact = document.getElementById('contact') ? '#contact' : `${localizedPath('/', lang)}#contact`;
+        const active = (section: Section) => (this.activeSection === section ? 'active' : '');
         return `
         <div class="topnav-inner">
           <a href="${base}#home" class="topnav-brand" aria-label="Back to top">
@@ -32,16 +39,16 @@ class NavbarComponent {
           </button>
 
           <nav class="topnav-links" id="topnav-links" aria-label="Main navigation">
-            <a href="${base}#home"     class="nav-link ${this.activeSection === 'home' ? 'active' : ''}" data-section="home" data-i18n="navbar.home">Home</a>
+            <a href="${base}#home"     class="nav-link ${active('home')}" data-section="home" data-i18n="navbar.home">Home</a>
             <a href="${base}#parcours" class="nav-link" data-section="parcours" data-i18n="navbar.journey">Journey</a>
-            <a href="${base}#projects" class="nav-link" data-section="projects" data-i18n="navbar.projects">Projects</a>
-            <a href="${this.activeSection === 'availability' ? '#' : 'availability.html'}" class="nav-link ${this.activeSection === 'availability' ? 'active' : ''}" data-section="availability" data-i18n="navbar.availability">Availability</a>
+            <a href="${base}#projects" class="nav-link ${active('projects')}" data-section="projects" data-i18n="navbar.projects">Projects</a>
+            <a href="${availability}" class="nav-link ${active('availability')}" data-section="availability" data-i18n="navbar.availability">Availability</a>
             
             <button id="nav-lang-btn" class="nav-lang-toggle" aria-label="Toggle language">
                 <span class="lang-en">EN</span> / <span class="lang-fr">FR</span>
             </button>
 
-            <a href="#contact" class="nav-cta" data-i18n="navbar.contact">Contact</a>
+            <a href="${contact}" class="nav-cta" data-i18n="navbar.contact">Contact</a>
           </nav>
         </div>
         `;
@@ -81,6 +88,6 @@ class NavbarComponent {
     }
 }
 
-export function injectNavbar(activeSection: 'home' | 'availability') {
+export function injectNavbar(activeSection: Section) {
     new NavbarComponent(activeSection).inject();
 }

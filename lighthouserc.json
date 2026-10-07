@@ -3,7 +3,16 @@
         "collect": {
             "staticDistDir": "./dist",
             "numberOfRuns": 3,
-            "maxAutodiscoverUrls": 0
+            "url": [
+                "http://localhost/index.html",
+                "http://localhost/cv.html",
+                "http://localhost/availability.html",
+                "http://localhost/projects/zappy.html",
+                "http://localhost/fr/index.html",
+                "http://localhost/fr/cv.html",
+                "http://localhost/fr/availability.html",
+                "http://localhost/fr/projects/zappy.html"
+            ]
         },
         "assert": {
             "assertions": {
