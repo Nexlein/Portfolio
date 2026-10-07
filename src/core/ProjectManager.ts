@@ -1,5 +1,5 @@
 import { ProjectEntry } from '../data/projects.js';
-import { ProjectView } from '../components/ProjectView/ProjectView.js';
+import { renderProjectGrid } from '../components/ProjectView/ProjectView.js';
 
 export class ProjectManager {
     private projects: ProjectEntry[];
@@ -104,6 +104,6 @@ export class ProjectManager {
         }
 
         // 8. Render to DOM
-        ProjectView.renderGrid(visibleProjects);
+        renderProjectGrid(visibleProjects);
     }
 }

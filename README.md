@@ -23,15 +23,18 @@ npm run dev
 
 ## Scripts
 
-| Script                 | Description                        |
-| ---------------------- | ---------------------------------- |
-| `npm run dev`          | Start the Vite dev server          |
-| `npm run build`        | Typecheck and build to `dist/`     |
-| `npm run preview`      | Serve the production build locally |
-| `npm run typecheck`    | Run `tsc --noEmit`                 |
-| `npm test`             | Run Vitest                         |
-| `npm run format`       | Format all files with Prettier     |
-| `npm run format:check` | Check formatting without writing   |
+| Script                 | Description                          |
+| ---------------------- | ------------------------------------ |
+| `npm run dev`          | Start the Vite dev server            |
+| `npm run build`        | Typecheck and build to `dist/`       |
+| `npm run preview`      | Serve the production build locally   |
+| `npm run typecheck`    | Run `tsc --noEmit`                   |
+| `npm test`             | Run Vitest                           |
+| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint) |
+| `npm run lint:fix`     | Lint and autofix                     |
+| `npm run audit`        | Dependency audit (`audit-ci.jsonc`)  |
+| `npm run format`       | Format all files with Prettier       |
+| `npm run format:check` | Check formatting without writing     |
 
 ## Project structure
 
@@ -56,7 +59,9 @@ public/
 
 ## Quality checks
 
-- **Pre-commit** (Husky): Prettier on staged files, typecheck, tests.
-- **CI** (GitHub Actions, on PRs and `main`): `npm audit`, format check, typecheck, tests, build.
+- **Pre-commit** (Husky + lint-staged): Oxlint/Stylelint autofix and Prettier on staged files, then typecheck and tests.
+- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build.
+- **Linting**: [Oxlint](https://oxc.rs) for TypeScript (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
+- **Audit**: fails on high/critical advisories. Accepted exceptions live in `audit-ci.jsonc`, each with a reason.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
