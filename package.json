@@ -8,7 +8,9 @@
         "preview": "vite preview",
         "typecheck": "tsc --noEmit",
         "test": "vitest run --passWithNoTests",
-        "prepare": "husky"
+        "prepare": "husky",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "keywords": [],
     "author": "Nielsen Combe-Bracciale",
@@ -21,5 +23,8 @@
         "typescript": "^7.0.2",
         "vite": "^8.1.4",
         "vitest": "^4.1.10"
+    },
+    "engines": {
+        "node": ">=22"
     }
 }
