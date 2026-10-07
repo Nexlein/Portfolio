@@ -6,6 +6,7 @@
 
 import { PROJECTS } from '@/data/projects';
 import { i18n, translateDOM } from '@/core/i18n';
+import { initAnalytics } from '@/core/analytics';
 import { injectNavbar } from '@/components/Navbar/Navbar';
 import { initNavShadow, initScrollSpy } from '@/components/Navbar/scroll';
 import { initCvModal } from '@/components/CvModal/CvModal';
@@ -13,6 +14,7 @@ import { ProjectGrid } from '@/components/ProjectGrid/ProjectGrid';
 import { ProjectModal } from '@/components/ProjectModal/ProjectModal';
 
 function bootstrap(): void {
+    initAnalytics();
     injectNavbar('home');
     initNavShadow();
     initScrollSpy();
