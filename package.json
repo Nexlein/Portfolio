@@ -7,7 +7,7 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "typecheck": "tsc --noEmit",
-        "test": "vitest run --passWithNoTests",
+        "test": "vitest run",
         "lint": "oxlint && stylelint \"src/**/*.css\"",
         "lint:fix": "oxlint --fix && stylelint \"src/**/*.css\" --fix",
         "format": "prettier --write .",
@@ -21,6 +21,7 @@
     "type": "module",
     "devDependencies": {
         "audit-ci": "^7.1.0",
+        "happy-dom": "^20.14.5",
         "husky": "^9.1.7",
         "lint-staged": "^17.6.0",
         "oxlint": "^1.87.0",
