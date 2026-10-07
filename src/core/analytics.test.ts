@@ -1,10 +1,17 @@
 // @vitest-environment happy-dom
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { ANALYTICS_SCRIPT, initAnalytics } from './analytics';
 
 const scripts = () => document.querySelectorAll(`script[src="${ANALYTICS_SCRIPT}"]`);
 
 describe('initAnalytics', () => {
+    beforeAll(() => {
+        // happy-dom doesn't fetch scripts; treat that as a successful load instead of logging an error
+        (
+            window as unknown as { happyDOM: { settings: { handleDisabledFileLoadingAsSuccess: boolean } } }
+        ).happyDOM.settings.handleDisabledFileLoadingAsSuccess = true;
+    });
+
     afterEach(() => {
         document.head.innerHTML = '';
         vi.restoreAllMocks();
