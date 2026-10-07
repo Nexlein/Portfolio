@@ -67,3 +67,37 @@ jobs:
               with:
                   configPath: ./lighthouserc.json
                   uploadArtifacts: true
+
+    e2e:
+        name: Browser tests
+        needs: check
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: actions/setup-node@v7
+              with:
+                  node-version-file: .nvmrc
+                  cache: npm
+
+            - run: npm ci
+
+            - uses: actions/download-artifact@v8
+              with:
+                  name: dist
+                  path: dist
+
+            - name: Install Chromium
+              run: npx playwright install --with-deps chromium
+
+            # Desktop and mobile Chromium against the production build, served with the production headers
+            - name: Run Playwright
+              run: npx playwright test
+
+            - uses: actions/upload-artifact@v7
+              if: failure()
+              with:
+                  name: playwright-report
+                  path: playwright-report
+                  retention-days: 7

@@ -69,6 +69,14 @@ Conventions:
 2. Add a `ProjectEntry` to `src/data/projects.ts`.
 3. Add its translation keys to both `src/i18n/en.ts` and `src/i18n/fr.ts`.
 
+### Browser tests
+
+Playwright (`e2e/`) runs desktop and mobile Chromium against the production build, served by `vite preview` with the production headers. Scenarios: every page loads with no console errors or CSP violations and no third-party requests; filters, "show more" and the category fallback; the project modal (open, Escape, deep links, gallery, unreachable when closed); lazy videos and reduced motion; the EN/FR switch and first visit from a French browser; the CV modal; the mobile menu. Any console error fails the test.
+
+```bash
+npm run test:e2e   # builds, then runs Playwright (first time: npx playwright install chromium)
+```
+
 ## SEO and social previews
 
 Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and `public/sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
@@ -113,7 +121,7 @@ Because of the CSP:
 ## Quality checks
 
 - **Pre-commit** (Husky + lint-staged): Oxlint/Stylelint autofix and Prettier on staged files, then typecheck and tests.
-- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build.
+- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build; then browser tests and Lighthouse on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: fails on high/critical advisories. Accepted exceptions live in `audit-ci.jsonc`, each with a reason.
 - **Lighthouse** (CI job after the build): audits every page in `dist/`. Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.

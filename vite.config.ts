@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -14,6 +15,9 @@ const securityHeaders: Record<string, string> = Object.fromEntries(
 export default defineConfig({
     plugins: [sharedHead()],
     preview: { headers: securityHeaders },
+    test: {
+        include: ['src/**/*.test.ts'] // e2e/ holds Playwright browser tests
+    },
     resolve: {
         alias: { '@': resolve(import.meta.dirname, 'src') }
     },
