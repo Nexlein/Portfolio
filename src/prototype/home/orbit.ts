@@ -38,6 +38,10 @@ interface Card extends Pt {
     speed: number;
     hold: boolean;
     delay: number; // boot order
+    ox: number; // living web: offset from rest and velocity
+    oy: number;
+    vx: number;
+    vy: number;
 }
 
 interface Thread {
@@ -147,7 +151,10 @@ function nowHtml(): string {
 </div>`;
 }
 
-export function mountOrbits(host: HTMLElement): (domain: string) => void {
+/** 'float': every card wobbles on its own clock (round 6-8). 'web': one physical web (round 9). */
+type Motion = 'float' | 'web';
+
+export function mountOrbits(host: HTMLElement, motion: Motion = 'float'): (domain: string) => void {
     host.innerHTML = `<div class="vi-web vj-web vk-web" aria-label="Projects on rings by period, the most recent closest to the centre; threads join similar projects. Hover or focus a project to preview it; select it to open its page.">
 <svg><g class="orbits"></g><g class="threads"></g><g class="pulses"></g><g class="silks"></g><g class="labels"></g></svg>
 ${nowHtml()}
@@ -194,7 +201,11 @@ ${PROJECTS.map(cardHtml).join('')}
             hold: false,
             x: star.x,
             y: star.y,
-            delay: 0
+            delay: 0,
+            ox: 0,
+            oy: 0,
+            vx: 0,
+            vy: 0
         }));
 
         // Orbits: one loop per period through its cards; wide gaps get points on the ideal ellipse so the loop stays round
@@ -302,6 +313,14 @@ ${PROJECTS.map(cardHtml).join('')}
             if (dir) {
                 th.pluckAt = t;
                 th.pluckDir = dir;
+                if (motion === 'web') {
+                    // The pluck shakes the two cards it holds, sideways to the thread
+                    const len = Math.hypot(th.b.x - th.a.x, th.b.y - th.a.y) || 1;
+                    for (const c of [th.a, th.b]) {
+                        c.vx += (-(th.b.y - th.a.y) / len) * dir * 28;
+                        c.vy += ((th.b.x - th.a.x) / len) * dir * 28;
+                    }
+                }
             }
         }
     });
@@ -344,6 +363,12 @@ ${PROJECTS.map(cardHtml).join('')}
             p.dot.remove();
             p.th.path.classList.remove('live');
             flash(to);
+            if (motion === 'web') {
+                // The signal lands with a small push along its path; the springs carry it to the neighbours
+                const len = Math.hypot(to.x - p.from.x, to.y - p.from.y) || 1;
+                to.vx += ((to.x - p.from.x) / len) * 34;
+                to.vy += ((to.y - p.from.y) / len) * 34;
+            }
             const next = threads.filter((th) => th !== p.th && (th.a === to || th.b === to));
             if (p.hops > 0 && !opened && next.length)
                 fire(to, next[Math.floor(Math.random() * next.length)], t + 120, p.hops - 1);
@@ -400,6 +425,70 @@ ${PROJECTS.map(cardHtml).join('')}
         spinneret.style.opacity = active && near.size ? '1' : '0';
     };
 
+    // Living web: rest springs + a slow breeze crossing the whole board + threads as soft springs between cards.
+    // Every movement has a cause; neighbours move together.
+    const K = 6, // pull back to rest
+        DAMP = 2.4,
+        LINK = 3; // thread springs: linked cards share their motion
+    const physics = (dt: number, t: number) => {
+        const h = Math.min(dt, 34) / 1000,
+            s = t / 1000;
+        const fx = new Map<Card, number>(),
+            fy = new Map<Card, number>();
+        for (const c of cards) {
+            const x = c.star.x,
+                y = c.star.y;
+            // Breeze: two long travelling waves (wavelengths of ~1.3-3 k px), so nearby cards lean the same way
+            fx.set(
+                c,
+                35 * Math.sin(0.0042 * x - 0.0026 * y + 0.42 * s) +
+                    13 * Math.sin(0.0019 * x + 0.0047 * y + 0.27 * s + 1.3) -
+                    K * c.ox -
+                    DAMP * c.vx
+            );
+            fy.set(
+                c,
+                27 * Math.cos(0.0035 * x + 0.0039 * y + 0.36 * s) +
+                    10 * Math.sin(-0.0024 * x + 0.0051 * y + 0.23 * s + 0.7) -
+                    K * c.oy -
+                    DAMP * c.vy
+            );
+        }
+        for (const th of threads) {
+            const dx = (th.b.ox - th.a.ox) * LINK,
+                dy = (th.b.oy - th.a.oy) * LINK;
+            fx.set(th.a, fx.get(th.a)! + dx);
+            fy.set(th.a, fy.get(th.a)! + dy);
+            fx.set(th.b, fx.get(th.b)! - dx);
+            fy.set(th.b, fy.get(th.b)! - dy);
+        }
+        // The cursor's silk tugs its cards a little toward the cursor
+        for (const sl of silks) {
+            if (!sl.target || sl.grow < 0.3) continue;
+            const c = sl.target,
+                dx = smooth.x - c.x,
+                dy = smooth.y - c.y,
+                d = Math.hypot(dx, dy) || 1,
+                f = 22 * Math.max(0, 1 - d / SILK_REACH);
+            fx.set(c, fx.get(c)! + (dx / d) * f);
+            fy.set(c, fy.get(c)! + (dy / d) * f);
+        }
+        for (const c of cards) {
+            if (c.hold) {
+                c.vx = c.vy = 0; // the hovered card stays exactly where it was
+            } else {
+                c.vx += fx.get(c)! * h;
+                c.vy += fy.get(c)! * h;
+                c.ox += c.vx * h;
+                c.oy += c.vy * h;
+            }
+            c.x = c.star.x + c.ox;
+            c.y = c.star.y + c.oy;
+            c.el.style.setProperty('--x', `${c.x}px`);
+            c.el.style.setProperty('--y', `${c.y}px`);
+        }
+    };
+
     let last = performance.now();
     const frame = (t: number) => {
         if (!web.isConnected) return;
@@ -407,16 +496,18 @@ ${PROJECTS.map(cardHtml).join('')}
         last = t;
         if (visible) {
             const frozen = reduceMotion();
-            for (const c of cards) {
-                c.speed += ((c.hold || frozen ? 0 : 1) - c.speed) * 0.08;
-                c.clock += dt * c.speed;
-                const k = c.clock / 1000,
-                    ph = c.star.phase;
-                c.x = c.star.x + Math.sin(k * 0.68 + ph) * 8 + Math.sin(k * 0.41 + ph * 1.7) * 4;
-                c.y = c.star.y + Math.cos(k * 0.55 + ph) * 6 + Math.sin(k * 0.39 + ph * 0.6) * 3;
-                c.el.style.setProperty('--x', `${c.x}px`);
-                c.el.style.setProperty('--y', `${c.y}px`);
-            }
+            if (motion === 'web' && !frozen) physics(dt, t);
+            else
+                for (const c of cards) {
+                    c.speed += ((c.hold || frozen ? 0 : 1) - c.speed) * 0.08;
+                    c.clock += dt * c.speed;
+                    const k = c.clock / 1000,
+                        ph = c.star.phase;
+                    c.x = c.star.x + Math.sin(k * 0.68 + ph) * 8 + Math.sin(k * 0.41 + ph * 1.7) * 4;
+                    c.y = c.star.y + Math.cos(k * 0.55 + ph) * 6 + Math.sin(k * 0.39 + ph * 0.6) * 3;
+                    c.el.style.setProperty('--x', `${c.x}px`);
+                    c.el.style.setProperty('--y', `${c.y}px`);
+                }
             for (const o of orbits) if (o.order.length > 2) o.path.setAttribute('d', loop(o.order)); // the loops follow their drifting cards
             for (const th of threads) {
                 const age = (t - th.pluckAt) / 1000;
@@ -507,3 +598,4 @@ ${PROJECTS.map(cardHtml).join('')}
 }
 
 export const variantK = (root: HTMLElement) => variantF(root, (host) => mountOrbits(host), 'Web', true);
+export const variantL = (root: HTMLElement) => variantF(root, (host) => mountOrbits(host, 'web'), 'Web', true);

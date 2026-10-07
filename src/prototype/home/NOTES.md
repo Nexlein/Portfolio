@@ -117,6 +117,17 @@ go. One thought at a time: a pulse walks 2-4 hops through similar projects, ligh
 reaches, then rests 1.8-3.4 s. Hover sends one signal to each similar project (no loop). Boot once at 35 % visible: Now, then
 each loop draws and its cards appear inside out, then the web threads. Card subline = two main skills (the loop says the year). |
 
+## Round 9
+
+Question from the owner: keep the random floating or switch to something else?
+
+| L | Round 9 · living web | K with one physical web instead of 17 independent wobbles. Each card sits on a spring to its rest
+position; a slow breeze (two long travelling waves, wavelengths ~1.3-3k px) leans neighbouring cards the same way; the similarity
+threads are soft springs, so linked cards share their motion. Energy comes from events: a signal landing pushes its card along
+its path and the push ripples to neighbours, a pluck shakes the two cards it holds, the cursor's silk tugs its cards a few px.
+The hovered card stays exactly still. Measured over 6 s: motion correlation of cards < 300 px apart 0.52 (K's random float:
+-0.21), travel 5-15 px per card; hovered card 0 px. Reduced motion: static. |
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the
