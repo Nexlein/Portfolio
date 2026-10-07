@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PROJECTS, type ProjectEntry } from './projects.js';
+import { PROJECTS, type ProjectEntry } from './projects';
 
 // Keys look like '../../public/projects/arcade/arcade.mp4'; map them to their public URL.
 const publicFiles = new Set(

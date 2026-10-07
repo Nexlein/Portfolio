@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { en } from './en.js';
-import { fr } from './fr.js';
-import { PROJECTS } from '../data/projects.js';
+import { en } from './en';
+import { fr } from './fr';
+import { PROJECTS } from '@/data/projects';
 
 const dictionaries = { en, fr };
 
