@@ -23,20 +23,21 @@ npm run dev
 
 ## Scripts
 
-| Script                  | Description                             |
-| ----------------------- | --------------------------------------- |
-| `npm run dev`           | Start the Vite dev server               |
-| `npm run build`         | Typecheck and build to `dist/`          |
-| `npm run preview`       | Serve the production build locally      |
-| `npm run typecheck`     | Run `tsc --noEmit`                      |
-| `npm test`              | Run Vitest                              |
-| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)    |
-| `npm run lint:fix`      | Lint and autofix                        |
-| `npm run media:posters` | Generate missing video posters (ffmpeg) |
-| `npm run media:video`   | Re-encode a video for the web (ffmpeg)  |
-| `npm run audit`         | Dependency audit (`audit-ci.jsonc`)     |
-| `npm run format`        | Format all files with Prettier          |
-| `npm run format:check`  | Check formatting without writing        |
+| Script                  | Description                                         |
+| ----------------------- | --------------------------------------------------- |
+| `npm run dev`           | Start the Vite dev server                           |
+| `npm run build`         | Typecheck and build to `dist/`                      |
+| `npm run preview`       | Serve the production build locally                  |
+| `npm run typecheck`     | Run `tsc --noEmit`                                  |
+| `npm test`              | Run Vitest                                          |
+| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                |
+| `npm run lint:fix`      | Lint and autofix                                    |
+| `npm run media:posters` | Generate missing video posters (ffmpeg)             |
+| `npm run media:og`      | Generate missing per-project social images (ffmpeg) |
+| `npm run media:video`   | Re-encode a video for the web (ffmpeg)              |
+| `npm run audit`         | Dependency audit (`audit-ci.jsonc`)                 |
+| `npm run format`        | Format all files with Prettier                      |
+| `npm run format:check`  | Check formatting without writing                    |
 
 ## Project structure
 
@@ -79,15 +80,21 @@ npm run test:e2e   # builds, then runs Playwright (first time: npx playwright in
 
 ## Languages (EN / FR)
 
-Every page exists in both languages, with its own URL: `/cv.html` and `/fr/cv.html`. The `i18nPages` plugin (`vite-plugins/i18n-pages.ts`) renders each built page once per language: text from `src/i18n/{en,fr}.ts`, `<html lang>`, title, description, Open Graph tags, canonical URL and `hreflang` alternates. Search engines and link previews (which don't run JavaScript) see real French pages. The dev server renders `/fr/*` on the fly.
+Every page exists in both languages, with its own URL: `/cv.html` and `/fr/cv.html`. The `sitePages` plugin (`vite-plugins/pages.ts`) renders each page once per language: text from `src/i18n/{en,fr}.ts`, `<html lang>`, title, description, Open Graph tags, canonical URL and `hreflang` alternates. Search engines and link previews (which don't run JavaScript) see real French pages. The dev server renders `/fr/*` on the fly.
 
 - The URL decides the language. The EN/FR toggle opens the same page in the other language and remembers the choice.
 - First visit from a French browser to an English page: an inline script redirects to the French page before first paint. Shared `/fr/` links always stay French, and a remembered choice wins.
 - Page titles and descriptions live under `meta.*` in the dictionaries; runtime content (cards, modal) uses `i18n.t()`.
 
+## Project pages
+
+Every project in `src/data/projects.ts` gets its own page, `/projects/<id>.html` and `/fr/projects/<id>.html`, rendered at build time from `project.html` (`src/pages/project/render.ts`). The project modal links to it. Adding a project adds its page, sitemap entry and structured data automatically; it only needs a social image: run `npm run media:og` (creates `public/projects/<id>/og.jpg`, 1200×630).
+
+All pages come from one list in `vite-plugins/pages.ts` (`PAGES`): path, template, title, description, social image and JSON-LD per page, rendered in every language. `sitemap.xml` is generated from the same list.
+
 ## SEO and social previews
 
-Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and `public/sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
+Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
 
 When adding a page, give it these tags and a sitemap entry; `src/pages/seo.test.ts` fails until you do.
 
@@ -138,6 +145,6 @@ Because of the CSP:
 - **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build; then browser tests and Lighthouse on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: fails on high/critical advisories. Accepted exceptions live in `audit-ci.jsonc`, each with a reason.
-- **Lighthouse** (CI job after the build): audits every page in `dist/`. Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
+- **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `lighthouserc.json`). Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
