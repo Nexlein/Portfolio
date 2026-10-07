@@ -8,18 +8,25 @@
         "preview": "vite preview",
         "typecheck": "tsc --noEmit",
         "test": "vitest run --passWithNoTests",
-        "prepare": "husky",
+        "lint": "oxlint && stylelint \"src/**/*.css\"",
+        "lint:fix": "oxlint --fix && stylelint \"src/**/*.css\" --fix",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "audit": "audit-ci --config audit-ci.jsonc",
+        "prepare": "husky"
     },
     "keywords": [],
     "author": "Nielsen Combe-Bracciale",
     "license": "ISC",
     "type": "module",
     "devDependencies": {
+        "audit-ci": "^7.1.0",
         "husky": "^9.1.7",
         "lint-staged": "^17.6.0",
+        "oxlint": "^1.87.0",
         "prettier": "^3.9.9",
+        "stylelint": "^17.16.0",
+        "stylelint-config-standard": "^40.0.0",
         "typescript": "^7.0.2",
         "vite": "^8.3.2",
         "vitest": "^5.0.3"
