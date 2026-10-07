@@ -79,6 +79,24 @@ main skill; when unfolded, its legs light and name the skills at their tips. Hov
 to stay on screen. Tap to unfold on touch, focus to unfold with keyboard, click/Enter opens the project page, Escape closes.
 Layout keeps round 5 meaning (direction = similarity, distance = time); quiet centre without lines; animation pauses off-screen. |
 
+## Round 6 feedback (owner)
+
+- Floating animation is better; the in-place opening animation is cool. Keep both.
+- Missed the links between projects from earlier rounds; maybe threads that stick to the cursor when it enters the field.
+- The centre has no interest any more: remove it or give it a reason to exist.
+- The random-dot spider legs look weird.
+
+Choices made before building round 7: web + frame threads, cursor silk to the 2-3 nearest cards, a "Now" hub, subtle pluck.
+
+## Round 7
+
+| J | Round 7 · silk | A real web instead of random wall dots: each project is tied to its 2 most similar projects (deduplicated),
+cards near a wall tie to the frame, slanted outward like a web's radial threads. Threads are quadratic curves that sag a little
+and follow the drifting cards. The cursor crossing a thread plucks it (damped vibration, ~0.6 s). In empty space the cursor spins
+elastic silk to its 3 nearest cards (within 340 px), a new target shoots a fresh thread. Hover unfolds as in round 6, lights the
+card's similarity threads and badges the similar cards with their score. Centre = "Now" (current job, period, school year) with
+faint time rings around it, so "closer = more recent" reads. Reduced motion: no drift, no pluck, instant silk. |
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the

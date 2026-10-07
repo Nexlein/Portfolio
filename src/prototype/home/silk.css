@@ -1,0 +1,141 @@
+/* PROTOTYPE — Round 7 "silk": web threads, cursor silk, "Now" hub. Builds on web.css (.vi-web, .vi-card). */
+/* stylelint-disable no-descending-specificity -- prototype */
+.vj-web .ring {
+    fill: none;
+    stroke: var(--line);
+    stroke-dasharray: 2 8;
+    opacity: 0.7;
+}
+
+/* Silk: thin, sagging, muted until it means something */
+.vj-web .thread {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.8;
+    stroke-opacity: 0.36;
+    stroke-linecap: round;
+    transition:
+        stroke 220ms,
+        stroke-opacity 220ms;
+}
+
+.vj-web .thread.frame {
+    stroke-opacity: 0.22;
+}
+
+.vj-web .thread.hot {
+    stroke: var(--signal);
+    stroke-opacity: 0.95;
+    stroke-width: 1.1;
+}
+
+.vj-web.focus .thread:not(.hot) {
+    stroke-opacity: 0.08;
+}
+
+.vj-web .vi-card[data-score]::after {
+    content: attr(data-score);
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--signal);
+    color: #10131c;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+/* Cursor silk */
+.vj-web .silk {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 0.9;
+    stroke-linecap: round;
+    transition: opacity 180ms;
+}
+
+.vj-web .spinneret {
+    fill: var(--signal);
+    transition: opacity 180ms;
+}
+
+/* Similar projects stay lit while one is unfolded */
+.vj-web.focus .vi-card.near:not(.open) {
+    opacity: 1;
+    border-color: color-mix(in sRGB, var(--signal) 60%, var(--line));
+}
+
+/* The centre: what's happening now */
+.vj-now {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    width: 300px;
+    text-align: center;
+    translate: -50% -50%;
+    pointer-events: none;
+    transition: opacity 200ms;
+}
+
+.vj-now .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+    color: var(--signal);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.vj-now .live {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--signal);
+    animation: vj-live 2.4s ease-out infinite;
+}
+
+.vj-now strong {
+    font-size: 1.08rem;
+    line-height: 1.25;
+}
+
+.vj-now .line {
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.vj-now .sub {
+    color: var(--muted);
+    font-size: 10.5px;
+}
+
+.vj-web.focus .vj-now {
+    opacity: 0.35;
+}
+
+.vj-web .skills {
+    font-size: 10.5px;
+    color: var(--signal);
+}
+
+@keyframes vj-live {
+    from {
+        box-shadow: 0 0 0 0 color-mix(in sRGB, var(--signal) 55%, transparent);
+    }
+
+    to {
+        box-shadow: 0 0 0 10px transparent;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vj-now .live {
+        animation: none;
+    }
+}
