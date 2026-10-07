@@ -208,6 +208,10 @@
     margin-bottom: 12px;
 }
 
+.mb-4 {
+    margin-bottom: 4px;
+}
+
 .text-12px-color-text-muted-1 {
     color: var(--text-muted);
     display: block;
