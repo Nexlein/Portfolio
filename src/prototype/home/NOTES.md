@@ -22,6 +22,20 @@ Theme toggle on the bar (defaults to the system setting).
 | D | Round 2 · projects grid | A's identity + playable hero (click adds walls), B's curve in A's style, C's branches inside sections (project domains, hire vs freelance). Projects as media cards. |
 | E | Round 2 · featured + list | Same page; projects as one featured project (video playing) + compact rows. |
 
+## Round 2 feedback (owner)
+
+- Prefers the list of projects over cards.
+- Dislikes one big + the rest small: wants all small, opening big on hover or click.
+- Hero and curve feel too big.
+- Misses the branch style (C).
+- Idea: projects as a chart / neural-network-like system of small floating cards.
+
+## Round 3
+
+| F | Round 3 · network | Compact hero with a "now / open to" status. "What brings you here?" branch tree under the hero (jumps to and opens sections). Slim curve. Projects as a neural network: layers Tek1 → Tek2 → Personal, edges = shared technologies (C/C++ counts as C and C++, RL = reinforcement learning), small floating nodes coloured by domain, hover lights the links + preview, click opens it big, occasional forward-pass pulse. Network freezes while pointed at or focused (moving targets are hard to hit). List view toggle: every project small, one opens big (exclusive details). Phones default to the list. Hire / freelance as a branch tree. |
+
+Notes for the real build: the curve needs a vertical layout on phones; domain colours already go through data-domain (no inline styles, CSP-ready).
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the

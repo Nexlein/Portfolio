@@ -1,0 +1,462 @@
+/* PROTOTYPE — Round 3: compact hero, branch trees back, projects as a neural network (+ list view). */
+
+/* Builds on round2.css (.vr tokens, curve, offer, tags) — the root element carries both .vr and .vf. */
+/* stylelint-disable no-descending-specificity -- prototype */
+.vf {
+    --d-ai: #f4b23e;
+    --d-architecture: #6f8cff;
+    --d-systems: #34c3b0;
+    --d-graphical: #e86fae;
+    --d-devops: #a98bff;
+}
+
+[data-theme='light'] .vf {
+    --d-ai: #b86e00;
+    --d-architecture: #3a5ccc;
+    --d-systems: #0f8a7b;
+    --d-graphical: #c23f84;
+    --d-devops: #6a4fd6;
+}
+
+/* Domain colour for dots, nodes and list items (data-domain, no inline style: CSP-ready) */
+.vf [data-domain='ai'] {
+    --dot: var(--d-ai);
+}
+
+.vf [data-domain='architecture'] {
+    --dot: var(--d-architecture);
+}
+
+.vf [data-domain='systems'] {
+    --dot: var(--d-systems);
+}
+
+.vf [data-domain='graphical'] {
+    --dot: var(--d-graphical);
+}
+
+.vf [data-domain='devops'] {
+    --dot: var(--d-devops);
+}
+
+/* ── Compact hero ──────────────────────────────────────── */
+.vf .vr-hero {
+    height: 54vh;
+    min-height: 420px;
+}
+
+.vf .vr-thesis h1 {
+    font-size: clamp(2.1rem, 4.6vw, 3.9rem);
+}
+
+.vf-status {
+    position: absolute;
+    right: 32px;
+    bottom: 40px;
+    z-index: 2;
+    display: grid;
+    gap: 6px;
+    text-align: right;
+    pointer-events: none;
+}
+
+.vf-status strong {
+    font-size: 1.05rem;
+}
+
+.vf-live {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--d-systems);
+    box-shadow: 0 0 0 4px color-mix(in sRGB, var(--d-systems) 25%, transparent);
+}
+
+.vf .vr-section {
+    padding-top: 64px;
+}
+
+/* ── Branch tree (C's look) ────────────────────────────── */
+.vf-tree {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 36px 32px 0;
+}
+
+.vf-tree-q {
+    margin: 0;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.15rem;
+}
+
+.vf-tree-links {
+    height: 46px;
+}
+
+.vf-tree-links svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.vf-tree-links path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 2;
+    transition:
+        stroke 220ms,
+        stroke-width 220ms;
+}
+
+.vf-tree-links path.on {
+    stroke: var(--signal);
+    stroke-width: 3;
+}
+
+.vf-tree-nodes {
+    display: grid;
+    grid-template-columns: repeat(var(--n), 1fr);
+    gap: 14px;
+}
+
+.vf-tree-nodes button {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 14px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    transition:
+        border-color 200ms,
+        opacity 200ms;
+}
+
+.vf-tree-nodes button strong {
+    display: block;
+    margin-bottom: 2px;
+}
+
+.vf-tree-nodes button:hover,
+.vf-tree-nodes button:focus-visible {
+    border-color: var(--signal);
+}
+
+.vf-tree-nodes button[aria-pressed='true'] {
+    border-color: var(--signal);
+}
+
+.vf-tree.has-choice .vf-tree-nodes button[aria-pressed='false'] {
+    opacity: 0.5;
+}
+
+/* ── Slim curve ────────────────────────────────────────── */
+.vf .vr-chart {
+    max-height: 230px;
+}
+
+/* ── Work: view toggle + domain chips ─────────────────── */
+.vf-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.vf-domain-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: var(--dot);
+}
+
+/* ── Neural network view ───────────────────────────────── */
+.vf-net {
+    position: relative;
+    height: 640px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0) 0 0 / 22px 22px,
+        var(--surface);
+    overflow: hidden;
+}
+
+.vf-net svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.vf-net .edge {
+    fill: none;
+    stroke: var(--muted);
+    stroke-opacity: 0.28;
+    transition:
+        stroke 200ms,
+        stroke-opacity 200ms;
+}
+
+.vf-net .edge.hot {
+    stroke: var(--signal);
+    stroke-opacity: 0.95;
+}
+
+.vf-net.focus .edge:not(.hot) {
+    stroke-opacity: 0.08;
+}
+
+.vf-net .pulse {
+    fill: var(--signal);
+}
+
+.vf-layer-label {
+    position: absolute;
+    top: 14px;
+    transform: translateX(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.vf-node {
+    all: unset;
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px 7px 9px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--bg);
+    font-size: 0.88rem;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+    translate: -50% -50%;
+    transition:
+        border-color 160ms,
+        opacity 160ms,
+        box-shadow 160ms;
+}
+
+.vf-node::before {
+    content: '';
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--dot);
+}
+
+.vf-node:hover,
+.vf-node:focus-visible,
+.vf-node.selected {
+    border-color: var(--dot);
+    box-shadow: 0 0 0 3px color-mix(in sRGB, var(--dot) 30%, transparent);
+}
+
+.vf-net.focus .vf-node:not(.near) {
+    opacity: 0.35;
+}
+
+.vf-net.dim-domain .vf-node:not(.in-domain) {
+    opacity: 0.25;
+}
+
+/* Preview that grows out of the hovered node (absolute: no layout shift) */
+.vf-peek {
+    position: absolute;
+    z-index: 5;
+    width: 300px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg);
+    box-shadow: 0 18px 40px rgb(0 0 0 / 35%);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+    transition:
+        opacity 160ms,
+        transform 160ms;
+}
+
+.vf-peek.on {
+    opacity: 1;
+    transform: none;
+}
+
+.vf-peek .vr-media {
+    aspect-ratio: 16 / 9;
+}
+
+.vf-peek div.txt {
+    padding: 12px 14px 14px;
+}
+
+.vf-peek p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+/* ── Opened project (big) ──────────────────────────────── */
+.vf-detail:empty {
+    display: none;
+}
+
+.vf-detail {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 28px;
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+    animation: vf-open 240ms ease;
+}
+
+.vf-detail .vr-media {
+    border-radius: 12px;
+}
+
+.vf-detail h3 {
+    margin: 6px 0 10px;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.vf-detail p {
+    margin: 0 0 14px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.vf-detail > div {
+    position: relative;
+    padding-right: 72px; /* room for Close */
+}
+
+.vf-item .vf-detail > div {
+    padding-right: 0;
+}
+
+.vf-close {
+    all: unset;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
+@keyframes vf-open {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* ── List view: all small, one opens big ──────────────── */
+.vf-list {
+    display: grid;
+    gap: 6px;
+}
+
+.vf-item {
+    border: 1px solid transparent;
+    border-radius: 14px;
+    transition: border-color 160ms;
+}
+
+.vf-item[open] {
+    border-color: var(--line);
+    background: var(--surface);
+}
+
+.vf-item summary {
+    display: grid;
+    grid-template-columns: 14px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 14px;
+    list-style: none;
+    cursor: pointer;
+}
+
+.vf-item summary::-webkit-details-marker {
+    display: none;
+}
+
+.vf-item summary::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--dot);
+}
+
+.vf-item summary:hover {
+    background: var(--surface);
+    border-radius: 14px;
+}
+
+.vf-item summary strong {
+    font-size: 1.05rem;
+}
+
+.vf-item summary .one {
+    margin-left: 10px;
+    color: var(--muted);
+}
+
+.vf-item .vf-detail {
+    margin: 0 14px 14px;
+    animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vf-detail,
+    .vf-peek {
+        animation: none;
+        transition: none;
+    }
+}
+
+@media (width <= 760px) {
+    .vf-status {
+        display: none;
+    }
+
+    .vf-tree-nodes {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .vf-tree-links {
+        display: none;
+    }
+
+    .vf-detail {
+        grid-template-columns: 1fr;
+    }
+
+    .vf-item summary .one {
+        display: none;
+    }
+}

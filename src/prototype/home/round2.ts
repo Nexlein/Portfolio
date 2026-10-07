@@ -17,7 +17,7 @@ const DOMAINS: { id: Domain; label: string }[] = [
     { id: 'graphical', label: 'Graphics & sims' },
     { id: 'devops', label: 'DevOps' }
 ];
-const DOMAIN_LABEL = Object.fromEntries(DOMAINS.map((d) => [d.id, d.label]));
+export const DOMAIN_LABEL = Object.fromEntries(DOMAINS.map((d) => [d.id, d.label]));
 
 /** Prototype-only dates for the curve (same as variant B). */
 const WHEN: Record<string, number> = {
@@ -39,8 +39,8 @@ const SHORT: Record<string, string> = {
     epitech: 'Master, expected'
 };
 
-const oneLiner = (p: ProjectEntry) => `${p.description.en.split('. ')[0].replace(/\.$/, '')}.`;
-const still = (p: ProjectEntry) =>
+export const oneLiner = (p: ProjectEntry) => `${p.description.en.split('. ')[0].replace(/\.$/, '')}.`;
+export const still = (p: ProjectEntry) =>
     p.media.type === 'video'
         ? videoPoster(p.media.src)
         : p.media.type === 'image'
@@ -48,17 +48,17 @@ const still = (p: ProjectEntry) =>
           : p.media.images[0].src;
 
 /** Poster always; a video plays on hover (D) or straight away (featured). */
-function media(p: ProjectEntry, autoplay = false): string {
+export function media(p: ProjectEntry, autoplay = false): string {
     if (p.media.type !== 'video') return `<div class="vr-media"><img src="${still(p)}" alt="" loading="lazy" /></div>`;
     return `<div class="vr-media"><video muted loop playsinline preload="none" poster="${still(p)}" ${autoplay ? 'autoplay' : 'data-hover'} src="${p.media.src}"></video></div>`;
 }
 
-const tags = (p: ProjectEntry, n = 4) =>
+export const tags = (p: ProjectEntry, n = 4) =>
     `<div class="vr-tags">${p.tags
         .slice(0, n)
         .map((t) => `<span>${t}</span>`)
         .join('')}</div>`;
-const metaLine = (p: ProjectEntry) =>
+export const metaLine = (p: ProjectEntry) =>
     `<div class="vr-meta mono"><span>${DOMAIN_LABEL[p.category]}</span><span>${p.year ?? 'Tek2'}</span></div>`;
 
 function grid(list: ProjectEntry[]): string {
@@ -88,9 +88,8 @@ function featured(list: ProjectEntry[]): string {
         .join('')}</div>`;
 }
 
-function curve(): string {
+export function curve(H = 330): string {
     const W = 1120,
-        H = 330,
         X0 = 2020,
         X1 = 2030;
     const x = (year: number) => 40 + ((year - X0) / (X1 - X0)) * (W - 80);
@@ -128,7 +127,7 @@ ${points
     .join('')}</svg>`;
 }
 
-function offer(id: 'full-time' | 'freelance'): string {
+export function offer(id: 'full-time' | 'freelance'): string {
     const o = OFFERS.find((x) => x.id === id)!;
     return `<div class="vr-offer"><div><h3>${o.title.en}</h3><p class="mono">${o.summary.en}</p>
 <a class="vr-cta" href="mailto:nielsen.combe-bracciale@epitech.eu">Email me</a><a class="vr-cta ghost" href="/cv.pdf">CV (PDF)</a></div>
