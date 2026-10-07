@@ -79,7 +79,7 @@ export function variantA(root: HTMLElement): void {
 }
 
 /** Value iteration on a grid with walls; the goal (reward) is the cursor cell. Arrows show the greedy policy. */
-function policyField(canvas: HTMLCanvasElement): void {
+export function policyField(canvas: HTMLCanvasElement): void {
     const ctx = canvas.getContext('2d')!;
     const CELL = 30;
     const GAMMA = 0.95;
@@ -104,7 +104,7 @@ function policyField(canvas: HTMLCanvasElement): void {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const readColors = () => {
-        const s = getComputedStyle(canvas.closest('.va')!);
+        const s = getComputedStyle(canvas.parentElement!); // CSS variables of whichever page hosts the field
         colors = {
             line: s.getPropertyValue('--line'),
             cold: s.getPropertyValue('--cold'),
@@ -220,6 +220,20 @@ function policyField(canvas: HTMLCanvasElement): void {
         pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
     });
     canvas.addEventListener('pointerleave', () => (pointer = null));
+    // Click toggles a wall: the agent re-plans around it on the next sweeps
+    canvas.addEventListener('pointerdown', (e) => {
+        const r = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - r.left) / CELL),
+            y = Math.floor((e.clientY - r.top) / CELL);
+        if (x === goal.x && y === goal.y) return;
+        const i = y * cols + x;
+        wall[i] = wall[i] ? 0 : 1;
+        V[i] = 0;
+        if (reduce) {
+            for (let k = 0; k < cols + rows; k++) sweep();
+            draw();
+        }
+    });
     window.addEventListener('resize', () => {
         resize();
         readColors();

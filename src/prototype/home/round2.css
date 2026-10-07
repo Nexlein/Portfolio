@@ -1,0 +1,463 @@
+/* PROTOTYPE — Round 2: A's identity + B's data-viz + C's branches. Fonts come from variant-a.css. */
+/* stylelint-disable no-descending-specificity -- prototype */
+.vr {
+    --bg: #0d1324;
+    --surface: #151d33;
+    --raised: #1b2541;
+    --ink: #e7eaf3;
+    --muted: #8c95b0;
+    --line: #253052;
+    --signal: #f4b23e;
+    --cold: #3a5ccc;
+
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Schibsted Grotesk', sans-serif;
+}
+
+[data-theme='light'] .vr {
+    --bg: #eef1f7;
+    --surface: #fff;
+    --raised: #f6f8fc;
+    --ink: #111a30;
+    --muted: #5b6582;
+    --line: #cdd4e4;
+    --signal: #b86e00;
+    --cold: #3a5ccc;
+}
+
+.vr .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+/* ── Top + hero (same field as A, playable) ───────────── */
+.vr-top {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    padding: 22px 32px;
+}
+
+.vr-top a {
+    margin-left: 22px;
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.vr-top a:hover {
+    color: var(--signal);
+}
+
+.vr-hero {
+    position: relative;
+    height: 80vh;
+    min-height: 520px;
+    overflow: hidden;
+}
+
+.vr-hero canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+.vr-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--bg) 8%, transparent 55%);
+}
+
+.vr-thesis {
+    position: absolute;
+    left: 32px;
+    bottom: 36px;
+    z-index: 2;
+    max-width: 780px;
+    pointer-events: none;
+}
+
+.vr-thesis h1 {
+    margin: 0 0 14px;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 5.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+}
+
+.vr-thesis h1 em {
+    font-style: normal;
+    color: var(--signal);
+}
+
+/* ── Sections ──────────────────────────────────────────── */
+.vr-section {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 88px 32px 0;
+}
+
+.vr-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px 24px;
+    margin-bottom: 28px;
+}
+
+.vr-head h2 {
+    margin: 0;
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+/* ── Branch selector (C's idea, used inside a section) ─── */
+.vr-branches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.vr-branches button {
+    all: unset;
+    cursor: pointer;
+    padding: 8px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 0.92rem;
+}
+
+.vr-branches button span {
+    margin-left: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.vr-branches button:hover,
+.vr-branches button:focus-visible {
+    border-color: var(--signal);
+}
+
+.vr-branches button[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+}
+
+.vr-branches button[aria-pressed='true'] span {
+    color: var(--bg);
+}
+
+/* ── Learning curve (B's idea, A's look) ──────────────── */
+.vr-chart {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.vr-chart .grid line {
+    stroke: var(--line);
+}
+
+.vr-chart text {
+    fill: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+}
+
+.vr-chart .run {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+}
+
+.vr-chart .projection {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 2;
+    stroke-dasharray: 5 6;
+}
+
+.vr-chart .cp {
+    opacity: 0;
+}
+
+.vr-chart .cp circle {
+    fill: var(--bg);
+    stroke: var(--signal);
+    stroke-width: 2.5;
+}
+
+.vr-chart .cp .title {
+    fill: var(--ink);
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.vr-chart.drawn .run {
+    transition: stroke-dashoffset 2.2s cubic-bezier(0.3, 0.7, 0.2, 1);
+    stroke-dashoffset: 0;
+}
+
+.vr-chart.drawn .cp {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vr-chart .run {
+        stroke-dashoffset: 0;
+    }
+
+    .vr-chart .cp {
+        opacity: 1;
+    }
+}
+
+/* ── Projects: shared ──────────────────────────────────── */
+.vr-media {
+    position: relative;
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 16 / 10;
+}
+
+.vr-media img,
+.vr-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.vr-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.vr-tags span {
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.vr-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+/* ── Projects D: grid ──────────────────────────────────── */
+.vr-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+}
+
+.vr-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    color: inherit;
+    text-decoration: none;
+    transition:
+        border-color 160ms,
+        transform 160ms;
+}
+
+.vr-card:hover {
+    border-color: var(--signal);
+    transform: translateY(-3px);
+}
+
+.vr-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 18px 18px;
+}
+
+.vr-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.vr-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+/* ── Projects E: featured + list ──────────────────────── */
+.vr-featured {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 28px;
+    align-items: center;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+}
+
+.vr-featured .vr-media {
+    border-radius: 12px;
+}
+
+.vr-featured h3 {
+    margin: 6px 0 12px;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.vr-featured p {
+    margin: 0 0 16px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.vr-open {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--signal);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.vr-rows {
+    margin-top: 18px;
+}
+
+.vr-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 12px;
+    border-radius: 12px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.vr-row:hover {
+    background: var(--surface);
+}
+
+.vr-row .vr-media {
+    border-radius: 8px;
+}
+
+.vr-row h4 {
+    margin: 0 0 4px;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.vr-row p {
+    margin: 0;
+    color: var(--muted);
+}
+
+/* ── Availability ──────────────────────────────────────── */
+.vr-offer {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 40px;
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+}
+
+.vr-offer h3 {
+    margin: 0 0 8px;
+    font-size: 1.8rem;
+    font-weight: 800;
+}
+
+.vr-offer dl {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    gap: 14px 18px;
+    margin: 0;
+}
+
+.vr-offer dd {
+    margin: 0;
+}
+
+.vr-cta {
+    display: inline-block;
+    margin: 18px 10px 0 0;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: var(--signal);
+    color: #10131c;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.vr-cta.ghost {
+    background: none;
+    color: var(--ink);
+    border: 1px solid var(--line);
+}
+
+.vr-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 88px 32px 140px;
+}
+
+.vr-contact a {
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 1.6rem;
+    text-decoration: none;
+    border-bottom: 2px solid var(--signal);
+}
+
+@media (width <= 760px) {
+    .vr-featured,
+    .vr-offer,
+    .vr-offer dl {
+        grid-template-columns: 1fr;
+    }
+
+    .vr-row {
+        grid-template-columns: 88px 1fr;
+    }
+
+    .vr-row .mono {
+        display: none;
+    }
+}
