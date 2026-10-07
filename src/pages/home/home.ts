@@ -43,8 +43,10 @@ async function bootstrap(): Promise<void> {
         });
     }
 
-    // Expose for console debugging
-    window.__portfolio = { projectManager, scrollObserver, navShadow };
+    // Expose for console debugging (dev server only)
+    if (import.meta.env.DEV) {
+        window.__portfolio = { projectManager, scrollObserver, navShadow };
+    }
 }
 
 declare global {

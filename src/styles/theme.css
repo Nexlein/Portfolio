@@ -4,27 +4,25 @@
     --bg-base: #080a0f;
     --bg-surface: #0d1117;
     --bg-elevated: #161b27;
-    --bg-hover: rgba(255, 255, 255, 0.04);
+    --bg-hover: rgb(255 255 255 / 4%);
 
     /* Borders */
-    --border: rgba(255, 255, 255, 0.07);
-    --border-hover: rgba(255, 255, 255, 0.14);
+    --border: rgb(255 255 255 / 7%);
+    --border-hover: rgb(255 255 255 / 14%);
 
     /* Text */
     --text-primary: #f0f4f8;
     --text-muted: #6b7a99;
     --text-dim: #3a4560;
+
     /* Accents */
     --clr-accent-1: #34d399;
-    --clr-accent-1-soft: rgba(52, 211, 153, 0.08);
-
+    --clr-accent-1-soft: rgb(52 211 153 / 8%);
     --clr-accent-2: #22d3ee;
-    --clr-accent-2-soft: rgba(34, 211, 238, 0.08);
-
+    --clr-accent-2-soft: rgb(34 211 238 / 8%);
     --clr-accent-3: #f472b6;
-    --clr-accent-3-soft: rgba(244, 114, 182, 0.08);
-
-    --clr-danger-glow: rgba(248, 113, 113, 0.18);
+    --clr-accent-3-soft: rgb(244 114 182 / 8%);
+    --clr-danger-glow: rgb(248 113 113 / 18%);
 
     /* Typography */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -69,16 +67,20 @@ h4 {
     letter-spacing: -0.02em;
     line-height: 1.2;
 }
+
 p {
     line-height: 1.65;
 }
+
 ul {
     list-style: none;
 }
+
 button {
     cursor: pointer;
     font-family: inherit;
 }
+
 input {
     font-family: inherit;
 }

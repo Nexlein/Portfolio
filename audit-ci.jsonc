@@ -1,0 +1,10 @@
+{
+    "$schema": "https://github.com/IBM/audit-ci/raw/main/docs/schema.json",
+    "high": true,
+    "allowlist": [
+        // braces: stack exhaustion on deeply nested glob patterns. No patched release exists.
+        // Pulled in by stylelint -> micromatch. Only our own lint globs reach it, at dev/CI time;
+        // nothing ships to the site. Remove once braces publishes a fix.
+        "GHSA-vfj7-8cjw-p6xm"
+    ]
+}
