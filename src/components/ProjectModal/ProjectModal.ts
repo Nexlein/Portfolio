@@ -1,6 +1,4 @@
 /**
- * src/core/ProjectModal.ts
- *
  * Opens the project detail modal when a project card is clicked.
  * Reads directly from PROJECTS data — no DOM scraping.
  */

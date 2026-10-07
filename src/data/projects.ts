@@ -1,6 +1,4 @@
 /**
- * src/data/projects.ts
- *
  * Single source of truth for all portfolio projects.
  * To add a project: append one ProjectEntry object to the array below.
  * The UI is generated automatically from this data at boot time.
