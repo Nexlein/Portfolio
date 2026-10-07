@@ -1,6 +1,7 @@
-import type { ProjectMedia } from '@/data/projects';
-import { Icons } from '@/ui/icons';
-import { prefersReducedMotion, videoPoster, videoType } from '@/ui/video';
+// Relative imports (no '@/' alias): the build also renders this markup from Node (vite-plugins/pages.ts)
+import type { ProjectMedia } from '../../data/projects.ts';
+import { Icons } from '../../ui/icons.ts';
+import { prefersReducedMotion, videoPoster, videoType } from '../../ui/video.ts';
 
 export function buildModalMediaHtml(media: ProjectMedia): string {
     switch (media.type) {

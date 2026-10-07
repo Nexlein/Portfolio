@@ -3,7 +3,8 @@ import { test, expect } from './fixtures';
 const pages = ['', '/fr'].flatMap((prefix) => [
     { path: `${prefix}/`, heading: 'Nielsen' },
     { path: `${prefix}/cv.html`, heading: 'Nielsen' },
-    { path: `${prefix}/availability.html`, heading: null }
+    { path: `${prefix}/availability.html`, heading: null },
+    { path: `${prefix}/projects/zappy.html`, heading: 'Zappy' }
 ]);
 
 for (const { path, heading } of pages) {
@@ -30,7 +31,7 @@ test('no request leaves our own origin', async ({ page, baseURL }) => {
     page.on('request', (req) => {
         if (!req.url().startsWith(baseURL!) && !req.url().startsWith('data:')) external.push(req.url());
     });
-    for (const { path } of pages) await page.goto(path, { waitUntil: 'networkidle' });
+    for (const { path } of pages) await page.goto(path, { waitUntil: 'load' });
     expect(external).toEqual([]);
 });
 

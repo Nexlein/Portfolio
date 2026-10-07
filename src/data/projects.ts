@@ -34,6 +34,11 @@ export interface ProjectEntry {
     media: ProjectMedia;
 }
 
+/** URL of a project's own page (default language). */
+export function projectPath(id: string): string {
+    return `/projects/${id}.html`;
+}
+
 export const PROJECTS: ProjectEntry[] = [
     {
         id: 'arcade',

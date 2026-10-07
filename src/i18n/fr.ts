@@ -130,7 +130,11 @@ export const fr = {
     },
     modal: {
         github: 'Voir sur GitHub',
-        trySim: 'Essayer'
+        trySim: 'Essayer',
+        page: 'Ouvrir la page du projet'
+    },
+    projectPage: {
+        back: 'Tous les projets'
     },
     cv: {
         controls: {

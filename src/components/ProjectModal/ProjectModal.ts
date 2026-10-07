@@ -2,7 +2,8 @@
  * Project detail modal. Filled from a ProjectEntry, so nothing is scraped from the cards.
  */
 
-import type { ProjectEntry } from '@/data/projects';
+import { projectPath, type ProjectEntry } from '@/data/projects';
+import { localizedPath } from '@/core/translate';
 import { i18n } from '@/core/i18n';
 import { Icons } from '@/ui/icons';
 import { buildModalMediaHtml } from './media';
@@ -15,6 +16,7 @@ export class ProjectModal {
     private readonly titleEl: HTMLElement;
     private readonly descEl: HTMLElement;
     private readonly githubEl: HTMLAnchorElement;
+    private readonly pageEl: HTMLAnchorElement;
 
     constructor() {
         this.backdrop = document.getElementById('project-modal-backdrop') as HTMLElement;
@@ -23,6 +25,7 @@ export class ProjectModal {
         this.titleEl = document.getElementById('modal-title') as HTMLElement;
         this.descEl = document.getElementById('modal-desc') as HTMLElement;
         this.githubEl = document.getElementById('modal-github') as HTMLAnchorElement;
+        this.pageEl = document.getElementById('modal-page') as HTMLAnchorElement;
 
         this.bindClose();
     }
@@ -48,6 +51,7 @@ export class ProjectModal {
 
     open(project: ProjectEntry): void {
         this.titleEl.textContent = project.title;
+        this.pageEl.href = localizedPath(projectPath(project.id), i18n.getLang());
         this.descEl.innerHTML = i18n.t(`projects_desc.${project.id}`);
 
         this.tagsEl.innerHTML = project.tags.map((t: string) => `<span class="project-tag">${t}</span>`).join('');
