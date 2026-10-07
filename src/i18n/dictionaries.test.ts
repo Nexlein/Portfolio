@@ -38,7 +38,7 @@ describe('translation dictionaries', () => {
     });
 
     it('finds data-i18n keys to check', () => {
-        expect(usedKeys.size).toBeGreaterThan(50);
+        expect(usedKeys.size).toBeGreaterThan(30);
     });
 
     it.each([...usedKeys])('data-i18n key "%s" exists in both languages', (key) => {

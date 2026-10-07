@@ -42,14 +42,11 @@ export const en = {
         journey: 'Journey',
         projects: 'Projects',
         availability: 'Availability',
-        contact: 'Contact',
-        email: 'Email Me',
-        linkedin: 'LinkedIn'
+        contact: 'Contact'
     },
     home: {
         tag: 'Open to opportunities',
         bio: 'I build AI systems that decide and learn. My work spans autonomous decision architectures, real-time simulation engines, and high-performance C++.<br><br>Currently studying at Epitech with a focus on applied artificial intelligence.',
-        explore: 'Explore AI Lab',
         projects: 'View Projects',
         viewcv: 'View CV',
         footerTitle: "Let's Build Something.",
@@ -60,30 +57,7 @@ export const en = {
     journey: {
         eyebrow: 'My Journey',
         title: 'Experience & Education',
-        sub: 'A timeline of my academic background, professional experience, and continuous learning.',
-        degreeDate: 'Expected 2029',
-        degreeTitle: "Master's Degree in Information Technology",
-        degreeDesc:
-            'Intensive 5-year project-based curriculum focusing on advanced software engineering, system architecture, and C++.',
-        certDate: '2026',
-        certTitle: 'Google Cloud & Generative AI Certifications',
-        certDesc:
-            'Certified in <strong>Google Cloud Computing Foundations</strong> and <strong>Generative AI Leader</strong>. Solidified expertise in modern cloud infrastructure and AI deployment.',
-        hackDate: '2025 - 2026',
-        hackTitle: 'Hackathons & Cybersecurity',
-        hackDesc:
-            'Competed in two Generative AI Hackathons to build innovative LLM tools, and two Cycom cybersecurity CTF events.',
-        internDate: 'Sept - Dec 2025',
-        internTitle: 'Full-Stack & AI Developer Intern',
-        internDesc:
-            'Developed Razor components and managed databases via Entity Framework. Engineered an internal Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and Ollama to securely query enterprise data.',
-        biaDate: '2020 - 2021',
-        biaTitle: 'Aeronautics & First Aid',
-        biaDesc: 'Obtained the BIA (Aeronautics Initiation Certificate) and the PSC (First Aid) certification.',
-        highschoolDate: '2024',
-        highschoolTitle: 'High School Graduation & Epitech Admission',
-        highschoolDesc:
-            "Specialized in Mathematics and Computer Science. Successfully passed the intensive 5-week Epitech C Programming 'Piscine' bootcamp."
+        sub: 'A timeline of my academic background, professional experience, and continuous learning.'
     },
     projects: {
         eyebrow: 'Software Engineering',
@@ -103,33 +77,12 @@ export const en = {
         tag: 'Available Now',
         title: "What I'm Looking For",
         bio: 'I am an Epitech Tek3 student actively seeking professional opportunities to apply my skills in AI, backend architecture, and high-performance software development.',
-        fullTime: {
-            title: 'Full-Time Internship',
-            desc: 'Mandatory Epitech Tek3 placement (Full-time)',
-            l1Lbl: 'Timeline & Rhythm',
-            l1Val: 'March 29 to Aug. 27.<br /><span class="text-muted-sm">At least 4 months (5 days/week).</span>',
-            l2Lbl: 'Contract Type',
-            l2Val: 'Internship, CDD, or CDI.<br /><span class="text-muted-sm">Full-time placement.</span>',
-            l3Lbl: 'Recruiter Info',
-            l3Val: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).<br /><span class="text-muted-sm">No school fees covered by the company.<br />Seeking competitive compensation.</span>'
-        },
-        freelance: {
-            title: 'Freelance Missions',
-            desc: 'B2B project-based collaboration',
-            l1Lbl: 'Scope & Availability',
-            l1Val: 'Backend APIs, AI integration.<br /><span class="text-muted-sm">Flexible hours, async delivery.</span>',
-            l2Lbl: 'Status',
-            l2Val: 'Freelancer (Auto-entrepreneur)<br /><span class="text-muted-sm">No payroll taxes for the client.</span>',
-            l3Lbl: 'Rates',
-            l3Val: 'Daily Rate or Fixed Price.<br /><span class="text-muted-sm">Quotation provided upon request.</span>'
-        },
         footer: "Interested? Let's connect.",
         footerBtnEmail: 'Email Me',
         footerBtnLinkedin: 'LinkedIn'
     },
     modal: {
         github: 'View on GitHub',
-        trySim: 'Try',
         page: 'Open project page'
     },
     projectPage: {
@@ -155,65 +108,8 @@ export const en = {
             ai: 'AI & Data Science',
             education: 'Education & Certs'
         },
-        expertise: {
-            arch: 'Architecture',
-            languages: 'Languages',
-            aiData: 'AI & Data',
-            devops: 'DevOps & Arch'
-        },
         links: {
             linkedin: 'LinkedIn Profile'
-        },
-        exp: {
-            issanka: {
-                title: 'AI Developer (Part-Time)',
-                date: 'Sept 2026 - Feb 2027',
-                desc1: 'Building a SaaS platform from scratch integrating AI-driven workflows and RAG architectures.',
-                desc2: 'Developing conversational AI agents and modernizing the technical web architecture.'
-            },
-            climb: {
-                title: 'Full-Stack & AI Developer Intern',
-                date: 'Sept - Dec 2025',
-                desc1: 'Engineered an internal AI Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and local Ollama LLMs.',
-                desc2: 'Developed Razor components and managed databases with Entity Framework.'
-            },
-            hack: {
-                title: 'Hackathons & Cybersecurity',
-                date: '2025 - 2026',
-                desc1: 'Competed in 2 Generative AI Hackathons (building innovative LLM tools).',
-                desc2: 'Participated in 2 Cycom events (Cybersecurity talks and CTFs).'
-            }
-        },
-        proj: {
-            zappy: { desc: 'Multiplayer autonomous AI network game. Handled concurrent socket connections and state.' },
-            arcade: { desc: '3D math rendering engine and modular gaming architecture.' },
-            secured: { desc: 'Hash Table library with custom cryptographic hashing.' },
-            plazza: { desc: 'Multi-process, multi-threaded pizzeria simulation exploring IPC and mutex coordination.' },
-            airacing: {
-                desc: 'RL agent (PPO) navigating a custom kinematic physics environment with raycast sensors.'
-            },
-            persona: { desc: 'Self-hosted AI personalized news digest workflow.' },
-            blackjack: {
-                desc: 'Deep RL agent (Maskable PPO) learning optimal Blackjack strategy in a custom environment.'
-            }
-        },
-        edu: {
-            epitech: {
-                date: 'Expected 2029',
-                desc: "Master's Degree in Information Technology. Intensive focus on advanced software engineering."
-            },
-            gc: {
-                date: '2026',
-                desc: 'Cloud Computing Foundations & Generative AI Leader Certifications.'
-            },
-            highschool: {
-                date: '2024',
-                desc: 'Baccalaureate (Specialization: Mathematics & Computer Science).'
-            },
-            other: {
-                title: 'Additional',
-                desc: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent).'
-            }
         }
     }
 };

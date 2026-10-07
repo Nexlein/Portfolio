@@ -14,6 +14,7 @@ import {
     translateTree,
     type Lang
 } from '../src/core/translate.ts';
+import { renderContent } from '../src/pages/content/render.ts';
 import { fillProjectPage, projectDescription } from '../src/pages/project/render.ts';
 
 /** One page of the site, in every language. */
@@ -41,7 +42,8 @@ const fixedPage = (path: string, template: string, key: string, jsonLd?: PageSpe
     description: (lang) => lookup(lang, `meta.${key}.description`),
     image: DEFAULT_IMAGE,
     imageAlt: (lang) => lookup(lang, 'meta.imageAlt'),
-    jsonLd
+    jsonLd,
+    fill: renderContent // data-render blocks from src/data/profile.ts
 });
 
 /** Every page of the site. Adding a project to src/data/projects.ts adds its page here. */
@@ -195,9 +197,8 @@ export function sitePages(): Plugin {
                     res.end(sitemap());
                     return;
                 }
-                const match = pageForPath(path);
-                // Default-language fixed pages are served by Vite itself (with HMR)
-                if (!match || (match.lang === DEFAULT_LANG && match.page.template !== 'project.html')) return next();
+                const match = pageForPath(path === '/index.html' ? '/' : path);
+                if (!match) return next();
 
                 const source = readFileSync(resolve(server.config.root, match.page.template), 'utf8');
                 server
