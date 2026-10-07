@@ -67,6 +67,12 @@ Conventions:
 2. Add a `ProjectEntry` to `src/data/projects.ts`.
 3. Add its translation keys to both `src/i18n/en.ts` and `src/i18n/fr.ts`.
 
+## SEO and social previews
+
+Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and `public/sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
+
+When adding a page, give it these tags and a sitemap entry; `src/pages/seo.test.ts` fails until you do.
+
 ## Tests
 
 Vitest, colocated as `*.test.ts` next to the code they cover. DOM tests opt into happy-dom with a `// @vitest-environment happy-dom` header.
@@ -76,6 +82,7 @@ Vitest, colocated as `*.test.ts` next to the code they cover. DOM tests opt into
 - `src/core/i18n.test.ts`: lookup, fallback, language persistence, DOM re-translation.
 - `src/components/ProjectModal/media.test.ts`: video/image/gallery markup.
 - `src/components/ProjectGrid/filter.test.ts`: year/category filtering, category fallback, pagination.
+- `src/pages/seo.test.ts`: every page has a description, canonical URL, social preview tags, and a sitemap entry.
 
 ## Quality checks
 
@@ -83,5 +90,6 @@ Vitest, colocated as `*.test.ts` next to the code they cover. DOM tests opt into
 - **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: fails on high/critical advisories. Accepted exceptions live in `audit-ci.jsonc`, each with a reason.
+- **Lighthouse** (CI job after the build): audits every page in `dist/`. Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
