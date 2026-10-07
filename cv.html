@@ -16,15 +16,6 @@
 
         <link rel="stylesheet" href="/src/pages/cv/cv.css" />
         <script type="module" src="/src/pages/cv/cv.ts"></script>
-        <script>
-            (function () {
-                var lang = localStorage.getItem('lang');
-                if (!lang) lang = navigator.language.startsWith('fr') ? 'fr' : 'en';
-                if (lang === 'fr') {
-                    document.write('<style>html:not(.i18n-ready) body { visibility: hidden; }</style>');
-                }
-            })();
-        </script>
     </head>
     <body>
         <!-- Floating Controls -->
