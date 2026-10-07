@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Window } from 'happy-dom';
 import type { Plugin } from 'vite';
-import { DEFAULT_LANG, LANGS, localizedPath, lookup, translateTree, type Lang } from '../src/core/translate';
+import { DEFAULT_LANG, LANGS, localizedPath, lookup, translateTree, type Lang } from '../src/core/translate.ts';
 
 export const SITE = 'https://nexlein.vercel.app';
 

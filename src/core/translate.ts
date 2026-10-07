@@ -3,8 +3,8 @@
  * (vite-plugins/i18n-pages.ts, which pre-renders the French pages).
  * No side effects and no '@/' imports, so Node can load this file from vite.config.ts.
  */
-import { en } from '../i18n/en';
-import { fr } from '../i18n/fr';
+import { en } from '../i18n/en.ts';
+import { fr } from '../i18n/fr.ts';
 
 export type Lang = 'en' | 'fr';
 

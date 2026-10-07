@@ -2,8 +2,8 @@
 import { defineConfig } from 'vite';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { sharedHead } from './vite-plugins/shared-head';
-import { i18nPages } from './vite-plugins/i18n-pages';
+import { sharedHead } from './vite-plugins/shared-head.ts';
+import { i18nPages } from './vite-plugins/i18n-pages.ts';
 
 // Serve `vite preview` with the same security headers as production, so CSP issues show up locally and in e2e tests
 const vercel = JSON.parse(readFileSync(resolve(import.meta.dirname, 'vercel.json'), 'utf8'));
