@@ -13,6 +13,8 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "audit": "audit-ci --config audit-ci.jsonc",
+        "media:posters": "bash scripts/make-posters.sh",
+        "media:video": "bash scripts/optimize-video.sh",
         "prepare": "husky"
     },
     "keywords": [],

@@ -52,17 +52,17 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'gallery',
             images: [
-                { src: '/projects/raytracer/demo.png', alt: 'Demo' },
-                { src: '/projects/raytracer/fractals.png', alt: 'Fractals' },
-                { src: '/projects/raytracer/glassBall.png', alt: 'Glass Ball' },
-                { src: '/projects/raytracer/graphCylinder.png', alt: 'Graph Cylinder' },
-                { src: '/projects/raytracer/hourglass.png', alt: 'Hourglass' },
-                { src: '/projects/raytracer/iceCream.png', alt: 'Ice Cream' },
-                { src: '/projects/raytracer/mirror.png', alt: 'Mirror Room' },
-                { src: '/projects/raytracer/mobiusStrip.png', alt: 'Mobius Strip' },
-                { src: '/projects/raytracer/pointLight.png', alt: 'Point Light' },
-                { src: '/projects/raytracer/tangleCube.png', alt: 'Tangle Cube' },
-                { src: '/projects/raytracer/random.png', alt: 'Random shapes' }
+                { src: '/projects/raytracer/demo.webp', alt: 'Demo' },
+                { src: '/projects/raytracer/fractals.webp', alt: 'Fractals' },
+                { src: '/projects/raytracer/glassBall.webp', alt: 'Glass Ball' },
+                { src: '/projects/raytracer/graphCylinder.webp', alt: 'Graph Cylinder' },
+                { src: '/projects/raytracer/hourglass.webp', alt: 'Hourglass' },
+                { src: '/projects/raytracer/iceCream.webp', alt: 'Ice Cream' },
+                { src: '/projects/raytracer/mirror.webp', alt: 'Mirror Room' },
+                { src: '/projects/raytracer/mobiusStrip.webp', alt: 'Mobius Strip' },
+                { src: '/projects/raytracer/pointLight.webp', alt: 'Point Light' },
+                { src: '/projects/raytracer/tangleCube.webp', alt: 'Tangle Cube' },
+                { src: '/projects/raytracer/random.webp', alt: 'Random shapes' }
             ]
         }
     },
@@ -82,7 +82,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/Cvrie',
         media: {
             type: 'image',
-            src: '/projects/cvrie/cvrie.jpg',
+            src: '/projects/cvrie/cvrie.webp',
             alt: 'Abstract visualization of Machine Learning clusters and neural networks'
         }
     },
@@ -113,7 +113,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/Persona',
         media: {
             type: 'image',
-            src: '/projects/persona/persona.jpg',
+            src: '/projects/persona/persona.webp',
             alt: 'Abstract dataflow network representing an automated AI newsletter system'
         }
     },
@@ -125,7 +125,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/Codename',
         media: {
             type: 'image',
-            src: '/projects/codename/codename.jpg',
+            src: '/projects/codename/codename.webp',
             alt: 'Diagram illustrating a prompt input passing through an AI Security Firewall'
         }
     },
@@ -137,7 +137,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/MyMarvin',
         media: {
             type: 'image',
-            src: '/projects/mymarvin/mymarvin.jpg',
+            src: '/projects/mymarvin/mymarvin.webp',
             alt: 'Architecture diagram showing Jenkins automation via Docker and JCasC'
         }
     },
@@ -149,7 +149,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/Octopus',
         media: {
             type: 'image',
-            src: '/projects/octopus/octopus.jpg',
+            src: '/projects/octopus/octopus.webp',
             alt: 'Diagram showing Ansible automation deploying to multiple virtual machines'
         }
     },
@@ -161,7 +161,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/NanoTekSpice',
         media: {
             type: 'image',
-            src: '/projects/nanotekspice/nanotekspice.jpg',
+            src: '/projects/nanotekspice/nanotekspice.webp',
             alt: 'Vibrant 3D glowing representation of a microchip and electronic circuit board'
         }
     },
@@ -186,7 +186,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/Tardis',
         media: {
             type: 'image',
-            src: '/projects/tardis/tardis.png',
+            src: '/projects/tardis/tardis.webp',
             alt: 'Screenshot of the Tardis data analytics dashboard'
         }
     },
@@ -211,7 +211,7 @@ export const PROJECTS: ProjectEntry[] = [
         github: 'https://github.com/Nexlein/Secured',
         media: {
             type: 'image',
-            src: '/projects/secured/secured.jpg',
+            src: '/projects/secured/secured.webp',
             alt: 'Holographic 3D visualization of a hash table data structure and digital vault'
         }
     },
