@@ -64,6 +64,21 @@ orbit rings. Depth layers (near = bigger/brighter), mouse parallax by depth, slo
 hover instead of freezing). Hover = nearest neighbours with similarity badges (embedding-projector style), preview in the opposite
 corner. Legend explains the reading rule. References: TensorFlow Embedding Projector, WizMap, orbit/parallax card layouts. |
 
+## Round 5 feedback (owner)
+
+Getting better. Wants: hover = opening animation of the card in place (not a preview elsewhere); projects linked by X legs to
+random points on the background ("spider legs on a wall") rather than to the centre; no cursor parallax, always a little smooth
+float, only the hovered project stops.
+
+## Round 6
+
+| I | Round 6 · spider web | Cards float constantly (two layered waves per axis, ~9-16 s periods, per-card clock); only the hovered card
+eases to a full stop (measured 0 px vs ~7.6 px/1.5 s for others). Each card hangs on 2-4 legs to seeded wall points, one leg per
+main skill; when unfolded, its legs light and name the skills at their tips. Hover intent 120 ms, then the card unfolds in place
+(width + 0fr→1fr grid row, staggered media/text), downward or upward near the bottom so the title stays under the cursor, shifted
+to stay on screen. Tap to unfold on touch, focus to unfold with keyboard, click/Enter opens the project page, Escape closes.
+Layout keeps round 5 meaning (direction = similarity, distance = time); quiet centre without lines; animation pauses off-screen. |
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the

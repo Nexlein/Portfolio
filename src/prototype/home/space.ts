@@ -5,7 +5,7 @@ import { PROJECTS, type ProjectEntry } from '@/data/projects';
 import { metaLine, oneLiner, still } from './round2';
 import { detail, variantF } from './round3';
 
-const ICONS: Record<ProjectEntry['category'], string> = {
+export const ICONS: Record<ProjectEntry['category'], string> = {
     ai: '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M8 6h8M7 8l4 8M17 8l-4 8"/>',
     architecture: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
     systems: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/>',
@@ -15,7 +15,7 @@ const ICONS: Record<ProjectEntry['category'], string> = {
 
 /** Orbit per period: recent work closest to the centre. */
 const RING: Record<string, number> = { Personal: 0.4, Tek2: 0.68, Tek1: 0.94 };
-const yearOf = (p: ProjectEntry) => p.year ?? 'Tek2';
+export const yearOf = (p: ProjectEntry) => p.year ?? 'Tek2';
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function skillSet(p: ProjectEntry): Set<string> {
@@ -61,7 +61,7 @@ function mds(items: ProjectEntry[]): [number, number][] {
 }
 
 /** The 3 most similar projects (an embedding projector's nearest neighbours). */
-function neighbours(p: ProjectEntry): { q: ProjectEntry; s: number }[] {
+export function neighbours(p: ProjectEntry): { q: ProjectEntry; s: number }[] {
     const scored = PROJECTS.filter((q) => q !== p).map((q) => ({ q, s: similarity(p, q) }));
     const top: { q: ProjectEntry; s: number }[] = [];
     for (let k = 0; k < 3; k++) {
@@ -72,7 +72,7 @@ function neighbours(p: ProjectEntry): { q: ProjectEntry; s: number }[] {
     return top;
 }
 
-interface Star {
+export interface Star {
     p: ProjectEntry;
     x: number; // resting position
     y: number;
@@ -80,7 +80,7 @@ interface Star {
     phase: number;
 }
 
-function layout(W: number, H: number): Star[] {
+export function layout(W: number, H: number): Star[] {
     const coords = mds(PROJECTS);
     const cx = W / 2,
         cy = H / 2,
