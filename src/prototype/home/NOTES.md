@@ -51,6 +51,19 @@ force layout (no overlaps, verified), float gently, freeze while pointed at/focu
 Hover a card: its skills light + preview. Hover a pin: every project using it lights. Pulses flow pin → card. Click opens big.
 Thread style toggle to compare: Synapse (soft curves) vs Spider (thin straight). |
 
+## Round 4 feedback (owner)
+
+Prefers spider threads. Cards don't feel free-floating in space; wants smoother motion; maybe everything around an element in
+the centre. Asked for Claude's own idea (minimal, cool, AI-developer vibe). Not convinced yet.
+
+## Round 5
+
+| H | Round 5 · latent space | Centre = the owner ("trained on 17 projects"), spider threads to every project. Direction = similarity (classical MDS on
+Jaccard skill overlap, spread evenly round the circle keeping order), distance = time (Personal closest, Tek1 outermost) with faint
+orbit rings. Depth layers (near = bigger/brighter), mouse parallax by depth, slow layered-sine drift with eased speed (slows on
+hover instead of freezing). Hover = nearest neighbours with similarity badges (embedding-projector style), preview in the opposite
+corner. Legend explains the reading rule. References: TensorFlow Embedding Projector, WizMap, orbit/parallax card layouts. |
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the

@@ -1,0 +1,224 @@
+/* PROTOTYPE — Round 5 "Latent space": you at the centre, spider threads, depth layers. Uses .vr/.vf tokens. */
+/* stylelint-disable no-descending-specificity -- prototype */
+.vh-space {
+    position: relative;
+    height: max(720px, 92vh);
+    overflow: hidden;
+    background: radial-gradient(
+        ellipse at center,
+        color-mix(in sRGB, var(--surface) 70%, transparent),
+        transparent 70%
+    );
+}
+
+.vh-space > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.vh-space .rings ellipse {
+    fill: none;
+    stroke: var(--line);
+    stroke-dasharray: 2 7;
+}
+
+/* Spider threads from the core to every project */
+.vh-space .ray {
+    stroke: var(--muted);
+    stroke-width: 0.7;
+    stroke-opacity: 0.32;
+    transition:
+        stroke 180ms,
+        stroke-opacity 180ms;
+}
+
+.vh-space .ray.hot {
+    stroke: var(--signal);
+    stroke-opacity: 0.9;
+}
+
+.vh-space.focus .ray:not(.hot) {
+    stroke-opacity: 0.08;
+}
+
+.vh-space .nn-link {
+    stroke: var(--signal);
+    stroke-width: 0.9;
+    stroke-dasharray: 3 4;
+}
+
+.vh-card[data-score]::after {
+    content: attr(data-score);
+    position: absolute;
+    top: -11px;
+    right: 10px;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: var(--signal);
+    color: #10131c;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.vh-legend {
+    position: absolute;
+    left: 24px;
+    bottom: 22px;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.vh-legend .you {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--signal);
+}
+
+/* The core: you */
+.vh-core {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 0;
+    height: 0;
+}
+
+.vh-core .dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 6px color-mix(in sRGB, var(--signal) 18%, transparent);
+}
+
+.vh-core .orbit {
+    position: absolute;
+    width: 74px;
+    height: 74px;
+    border: 1px dashed color-mix(in sRGB, var(--signal) 55%, transparent);
+    border-radius: 50%;
+    animation: vh-spin 40s linear infinite;
+}
+
+.vh-core .label {
+    position: absolute;
+    top: 46px;
+    width: 220px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+@keyframes vh-spin {
+    to {
+        rotate: 360deg;
+    }
+}
+
+/* Cards float at a depth: near ones bigger and brighter, far ones softer */
+.vh-card {
+    all: unset;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: calc(2 + round(var(--depth, 0.5) * 10));
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 190px;
+    padding: 8px 12px 8px 8px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: color-mix(in sRGB, var(--bg) 82%, transparent);
+    backdrop-filter: blur(8px);
+    opacity: calc(0.62 + var(--depth, 0.5) * 0.38);
+    cursor: pointer;
+    will-change: transform;
+    transition:
+        border-color 180ms,
+        opacity 180ms,
+        box-shadow 180ms;
+}
+
+.vh-card .ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    color: var(--dot);
+    background: color-mix(in sRGB, var(--dot) 14%, transparent);
+}
+
+.vh-card .ico svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.vh-card .txt {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.vh-card strong {
+    font-size: 0.93rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vh-card .mono {
+    font-size: 10.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vh-card:hover,
+.vh-card:focus-visible,
+.vh-card.lit,
+.vh-card.selected {
+    opacity: 1;
+    border-color: var(--dot);
+    box-shadow: 0 0 0 3px color-mix(in sRGB, var(--dot) 25%, transparent);
+}
+
+.vh-card.nn {
+    opacity: 1;
+    border-color: color-mix(in sRGB, var(--signal) 60%, var(--line));
+}
+
+.vh-space.focus .vh-card:not(.lit, .nn) {
+    opacity: 0.22;
+}
+
+.vh-space.dim-domain .vh-card:not(.in-domain) {
+    opacity: 0.15;
+}
+
+.vh-peek {
+    z-index: 30;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vh-core .orbit {
+        animation: none;
+    }
+}
