@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import vercel from '../../vercel.json';
-import { LANGUAGE_GUARD_SCRIPT, LANGUAGE_GUARD_STYLE } from '../../vite-plugins/shared-head';
+import { LANGUAGE_REDIRECT_SCRIPT } from '../../vite-plugins/shared-head';
 
 const siteHeaders = Object.fromEntries(
     vercel.headers.find((rule) => rule.source === '/(.*)')!.headers.map((h) => [h.key, h.value])
@@ -19,12 +19,9 @@ async function sha256(text: string): Promise<string> {
 }
 
 describe('Content-Security-Policy', () => {
-    it('allows the inline language guard script by hash', async () => {
-        expect(csp['script-src']).toEqual(["'self'", await sha256(LANGUAGE_GUARD_SCRIPT)]);
-    });
-
-    it('allows the inline language guard style by hash', async () => {
-        expect(csp['style-src']).toEqual(["'self'", await sha256(LANGUAGE_GUARD_STYLE)]);
+    it('allows the inline language redirect script by hash, and nothing else inline', async () => {
+        expect(csp['script-src']).toEqual(["'self'", await sha256(LANGUAGE_REDIRECT_SCRIPT)]);
+        expect(csp['style-src']).toEqual(["'self'"]);
     });
 
     it('never allows unsafe-inline or unsafe-eval', () => {

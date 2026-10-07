@@ -10,5 +10,13 @@
         "browser": true,
         "builtin": true
     },
-    "rules": {}
+    "rules": {},
+    "overrides": [
+        {
+            "files": ["e2e/**"],
+            "rules": {
+                "no-await-in-loop": "off"
+            }
+        }
+    ]
 }

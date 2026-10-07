@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url><loc>https://nexlein.vercel.app/</loc></url>
-    <url><loc>https://nexlein.vercel.app/availability.html</loc></url>
-    <url><loc>https://nexlein.vercel.app/cv.html</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://nexlein.vercel.app/</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://nexlein.vercel.app/" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://nexlein.vercel.app/fr/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://nexlein.vercel.app/" />
+    </url>
+    <url>
+        <loc>https://nexlein.vercel.app/fr/</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://nexlein.vercel.app/" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://nexlein.vercel.app/fr/" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://nexlein.vercel.app/" />
+    </url>
+    <url>
+        <loc>https://nexlein.vercel.app/availability.html</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://nexlein.vercel.app/availability.html" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://nexlein.vercel.app/fr/availability.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://nexlein.vercel.app/availability.html" />
+    </url>
+    <url>
+        <loc>https://nexlein.vercel.app/fr/availability.html</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://nexlein.vercel.app/availability.html" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://nexlein.vercel.app/fr/availability.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://nexlein.vercel.app/availability.html" />
+    </url>
+    <url>
+        <loc>https://nexlein.vercel.app/cv.html</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://nexlein.vercel.app/cv.html" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://nexlein.vercel.app/fr/cv.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://nexlein.vercel.app/cv.html" />
+    </url>
+    <url>
+        <loc>https://nexlein.vercel.app/fr/cv.html</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://nexlein.vercel.app/cv.html" />
+        <xhtml:link rel="alternate" hreflang="fr" href="https://nexlein.vercel.app/fr/cv.html" />
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://nexlein.vercel.app/cv.html" />
+    </url>
 </urlset>

@@ -32,8 +32,10 @@ describe.each(Object.entries(pages).map(([file, html]) => [file.replace('../../'
         expect(meta(html, 'name', 'twitter:card')).toBe('summary_large_image');
     });
 
-    it('is listed in the sitemap', () => {
+    it('is listed in the sitemap in every language', () => {
         expect(sitemap).toContain(`<loc>${SITE}${path}</loc>`);
+        expect(sitemap).toContain(`<loc>${SITE}/fr${path}</loc>`);
+        expect(sitemap).toContain(`hreflang="fr" href="${SITE}/fr${path}"`);
     });
 });
 
