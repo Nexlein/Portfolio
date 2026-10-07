@@ -1,5 +1,5 @@
-import { ProjectMedia } from '@/data/projects';
-import { Icons } from '@/utils/Icons';
+import type { ProjectMedia } from '@/data/projects';
+import { Icons } from '@/ui/icons';
 
 export function buildModalMediaHtml(media: ProjectMedia): string {
     switch (media.type) {
