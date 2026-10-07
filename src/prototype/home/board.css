@@ -1,0 +1,207 @@
+/* PROTOTYPE — Round 4 board: full-width scattered cards hanging from skill pins. Uses .vr/.vf tokens. */
+/* stylelint-disable no-descending-specificity -- prototype */
+
+/* Break out of the section's max-width to use the whole screen */
+.vf-work.vg-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+}
+
+.vg-board {
+    position: relative;
+    height: max(680px, 88vh);
+    background: radial-gradient(circle at 1px 1px, color-mix(in sRGB, var(--line) 70%, transparent) 1px, transparent 0)
+        0 0 / 26px 26px;
+    mask-image: linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent);
+    overflow: hidden;
+}
+
+.vg-board > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* ── Threads ───────────────────────────────────────────── */
+.vg-board .thread {
+    fill: none;
+    stroke: var(--muted);
+    transition:
+        stroke 180ms,
+        stroke-opacity 180ms;
+}
+
+.vg-board[data-threads='synapse'] .thread {
+    stroke-width: 1.6;
+    stroke-opacity: 0.32;
+    stroke-linecap: round;
+}
+
+.vg-board[data-threads='spider'] .thread {
+    stroke-width: 0.8;
+    stroke-opacity: 0.5;
+}
+
+.vg-board .thread.hot {
+    stroke: var(--signal);
+    stroke-opacity: 1;
+}
+
+.vg-board[data-threads='synapse'] .thread.hot {
+    stroke-width: 2.4;
+    filter: drop-shadow(0 0 4px color-mix(in sRGB, var(--signal) 60%, transparent));
+}
+
+.vg-board.focus .thread:not(.hot) {
+    stroke-opacity: 0.07;
+}
+
+.vg-board .pulse {
+    fill: var(--signal);
+}
+
+/* ── Skill pins ────────────────────────────────────────── */
+.vg-pin {
+    all: unset;
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    translate: -50% -50%;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: default;
+    transition:
+        color 160ms,
+        opacity 160ms;
+}
+
+.vg-pin .ring {
+    width: 9px;
+    height: 9px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    background: var(--bg);
+}
+
+.vg-pin:hover,
+.vg-pin:focus-visible,
+.vg-pin.lit {
+    color: var(--signal);
+}
+
+.vg-pin:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* ── Cards ─────────────────────────────────────────────── */
+.vg-card {
+    all: unset;
+    box-sizing: border-box; /* the layout assumes the 196px card includes its padding */
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    width: 196px;
+    padding: 9px 12px 9px 9px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: color-mix(in sRGB, var(--surface) 92%, transparent);
+    backdrop-filter: blur(6px);
+    translate: -50% -50%;
+    cursor: pointer;
+    transition:
+        border-color 160ms,
+        opacity 160ms,
+        box-shadow 160ms;
+}
+
+.vg-card .ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    color: var(--dot);
+    background: color-mix(in sRGB, var(--dot) 14%, transparent);
+}
+
+.vg-card .ico svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.vg-card .txt {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.vg-card strong {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vg-card .mono {
+    font-size: 10.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vg-card:hover,
+.vg-card:focus-visible,
+.vg-card.lit,
+.vg-card.selected {
+    border-color: var(--dot);
+    box-shadow: 0 0 0 3px color-mix(in sRGB, var(--dot) 25%, transparent);
+}
+
+.vg-board.focus .vg-card:not(.lit),
+.vg-board.focus .vg-pin:not(.lit) {
+    opacity: 0.3;
+}
+
+.vg-board.dim-domain .vg-card:not(.in-domain) {
+    opacity: 0.2;
+}
+
+/* Preview (reuses .vf-peek look) */
+.vg-peek {
+    z-index: 6;
+}
+
+/* Thread style switch (prototype comparison) */
+.vg-threads-toggle {
+    position: absolute;
+    right: 24px;
+    top: 34px;
+    z-index: 7;
+}
+
+@media (width <= 760px) {
+    .vg-board {
+        height: 900px;
+    }
+
+    .vg-card {
+        width: 160px;
+    }
+}

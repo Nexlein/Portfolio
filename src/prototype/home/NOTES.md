@@ -36,6 +36,21 @@ Theme toggle on the bar (defaults to the system setting).
 
 Notes for the real build: the curve needs a vertical layout on phones; domain colours already go through data-domain (no inline styles, CSP-ready).
 
+## Round 3 feedback (owner)
+
+Better, but wants cards placed freely (random-looking) across the whole space, not in a box, gently floating,
+a bit more than just the name, held by "spider" links to points or other projects, evoking a circuit board / AI neural system.
+Discussion answers: threads "AI brain" or minimal spider (both interesting) · anchors = skill pins · cards minimal and clean,
+maybe an icon · behaviours: hover lights links, pulses on threads, click opens big (no drag).
+
+## Round 4
+
+| G | Round 4 · skill board | Full-width board. Skill pins (technologies used by 2+ projects; Gymnasium/SB3 folded into RL; "Infra & CI"
+concept pin for MyMarvin + Octopus) at designed positions, related skills as neighbours. Cards hang from their skills via a seeded
+force layout (no overlaps, verified), float gently, freeze while pointed at/focused. Card = domain line icon + title + year · first tag.
+Hover a card: its skills light + preview. Hover a pin: every project using it lights. Pulses flow pin → card. Click opens big.
+Thread style toggle to compare: Synapse (soft curves) vs Spider (thin straight). |
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the

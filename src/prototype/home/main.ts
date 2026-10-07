@@ -6,6 +6,7 @@ import { variantB } from './variant-b';
 import { variantC } from './variant-c';
 import { variantD, variantE } from './round2';
 import { variantF } from './round3';
+import { variantG } from './board';
 
 const VARIANTS: Variant[] = [
     { key: 'A', name: 'Policy field', mount: variantA },
@@ -13,10 +14,11 @@ const VARIANTS: Variant[] = [
     { key: 'C', name: 'Decision tree', mount: variantC },
     { key: 'D', name: 'Round 2 · projects grid', mount: variantD },
     { key: 'E', name: 'Round 2 · featured + list', mount: variantE },
-    { key: 'F', name: 'Round 3 · network', mount: variantF }
+    { key: 'F', name: 'Round 3 · network', mount: variantF },
+    { key: 'G', name: 'Round 4 · skill board', mount: variantG }
 ];
 
-const key = new URLSearchParams(location.search).get('variant')?.toUpperCase() ?? 'F';
+const key = new URLSearchParams(location.search).get('variant')?.toUpperCase() ?? 'G';
 const current = VARIANTS.find((v) => v.key === key) ?? VARIANTS[0];
 const app = document.getElementById('app')!;
 

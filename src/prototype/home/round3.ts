@@ -47,7 +47,7 @@ function edges(): Edge[] {
     return out;
 }
 
-function detail(p: ProjectEntry, closable: boolean): string {
+export function detail(p: ProjectEntry, closable: boolean): string {
     return `${media(p, true)}<div>${closable ? '<button type="button" class="vf-close">Close</button>' : ''}${metaLine(p)}
 <h3>${p.title}</h3><p>${p.description.en}</p>${tags(p, 6)}<a class="vr-open" href="/projects/${p.id}.html">Open the project page →</a></div>`;
 }
@@ -268,7 +268,15 @@ function mountList(host: HTMLElement): (domain: string) => void {
 
 /* ── Page ────────────────────────────────────────────────── */
 
-export function variantF(root: HTMLElement): void {
+/** Mounts the main projects view into `host` and returns its domain filter. */
+export type WorkView = (host: HTMLElement, detailHost: HTMLElement) => (domain: string) => void;
+
+export function variantF(
+    root: HTMLElement,
+    mainView: WorkView = mountNetwork,
+    mainLabel = 'Network',
+    fullBleed = false
+): void {
     const now = EXPERIENCES[0];
     const domains = ['all', ...new Set(PROJECTS.map((p) => p.category))];
     root.innerHTML = `
@@ -293,7 +301,7 @@ export function variantF(root: HTMLElement): void {
   <section class="vr-section" id="path"><div class="vr-head"><h2>The run so far</h2><span class="mono">every checkpoint shipped or earned</span></div>${curve(250)}</section>
 
   <section class="vr-section" id="work"><div class="vr-head"><h2>Work</h2><div class="vf-tools">
-    <div class="vr-branches" data-group="view"><button type="button" data-id="network" aria-pressed="true">Network</button><button type="button" data-id="list" aria-pressed="false">List</button></div>
+    <div class="vr-branches" data-group="view"><button type="button" data-id="network" aria-pressed="true">${mainLabel}</button><button type="button" data-id="list" aria-pressed="false">List</button></div>
     <div class="vr-branches" data-group="domain">${domains
         .map(
             (d) =>
@@ -322,26 +330,29 @@ export function variantF(root: HTMLElement): void {
     let filter: (domain: string) => void = noop;
     const showView = () => {
         detailHost.innerHTML = '';
-        filter = view === 'network' ? mountNetwork(work, detailHost) : mountList(work);
+        // Size the container first: the board measures itself when it mounts
+        work.classList.toggle('vg-bleed', fullBleed && view === 'network');
+        filter = view === 'network' ? mainView(work, detailHost) : mountList(work);
         filter(domain);
         root.querySelectorAll('[data-group="view"] button').forEach((b) =>
             b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.id === view))
         );
     };
     showView();
-    root.querySelectorAll<HTMLElement>('.vr-branches').forEach((group) =>
-        group.addEventListener('click', (e) => {
-            const btn = (e.target as HTMLElement).closest('button');
-            if (!btn) return;
-            group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-            if (group.dataset.group === 'view') {
-                view = btn.dataset.id as 'network' | 'list';
-                showView();
-            } else {
-                domain = btn.dataset.id!;
-                filter(domain);
-            }
-        })
+    root.querySelectorAll<HTMLElement>('.vr-branches[data-group="view"], .vr-branches[data-group="domain"]').forEach(
+        (group) =>
+            group.addEventListener('click', (e) => {
+                const btn = (e.target as HTMLElement).closest('button');
+                if (!btn) return;
+                group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+                if (group.dataset.group === 'view') {
+                    view = btn.dataset.id as 'network' | 'list';
+                    showView();
+                } else {
+                    domain = btn.dataset.id!;
+                    filter(domain);
+                }
+            })
     );
 
     // Offers tree
