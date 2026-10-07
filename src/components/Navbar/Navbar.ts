@@ -33,7 +33,7 @@ class NavbarComponent {
         return `
         <div class="topnav-inner">
           <a href="${base}#home" class="topnav-brand" aria-label="Back to top">
-            <img class="brand-icon" src="/favicon.jpg" alt="Nexlein Logo" />
+            <img class="brand-icon" src="/brand-icon.webp" width="28" height="28" alt="Nexlein Logo" />
             <span class="brand-name">Nexlein</span>
           </a>
 

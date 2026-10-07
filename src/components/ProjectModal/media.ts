@@ -1,12 +1,14 @@
 import type { ProjectMedia } from '@/data/projects';
 import { Icons } from '@/ui/icons';
+import { prefersReducedMotion, videoPoster, videoType } from '@/ui/video';
 
 export function buildModalMediaHtml(media: ProjectMedia): string {
     switch (media.type) {
-        case 'video':
-            const ext = media.src.split('.').pop()?.toLowerCase();
-            const typeStr = ext === 'webm' ? 'video/webm' : 'video/mp4';
-            return `<video autoplay loop muted playsinline preload="auto"><source src="${media.src}" type="${typeStr}"></video>`;
+        case 'video': {
+            // With reduced motion, show controls instead of autoplaying
+            const playback = prefersReducedMotion() ? 'controls' : 'autoplay';
+            return `<video ${playback} loop muted playsinline preload="auto" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
+        }
         case 'image':
             return `<img src="${media.src}" alt="${media.alt}" loading="lazy">`;
         case 'gallery':
