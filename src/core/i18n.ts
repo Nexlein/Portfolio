@@ -1,81 +1,40 @@
-import { en } from '@/i18n/en';
-import { fr } from '@/i18n/fr';
+import { lookup, localizedPath, translateTree, type Lang } from './translate';
 
-type Lang = 'en' | 'fr';
+export type { Lang };
 
-type Dictionary = typeof en;
-
+/**
+ * Each page is built once per language (vite-plugins/i18n-pages.ts) and its <html lang>
+ * says which one. Switching language navigates to the other page instead of rewriting
+ * the DOM, so every language has its own URL for search engines and link previews.
+ */
 class I18nService {
-    private currentLang: Lang = 'en';
-    private dictionaries: Record<Lang, Dictionary> = { en, fr };
-    private listeners: (() => void)[] = [];
-
-    constructor() {
-        const stored = localStorage.getItem('lang') as Lang;
-        if (stored && (stored === 'en' || stored === 'fr')) {
-            this.currentLang = stored;
-        } else {
-            const browserLang = navigator.language.slice(0, 2);
-            this.currentLang = browserLang === 'fr' ? 'fr' : 'en';
-        }
-        document.documentElement.lang = this.currentLang;
-
-        // Listen to localStorage changes (e.g. from iframe or other tabs)
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'lang' && (e.newValue === 'en' || e.newValue === 'fr')) {
-                this.currentLang = e.newValue as Lang;
-                document.documentElement.lang = this.currentLang;
-                translateDOM();
-                this.notifyListeners();
-            }
-        });
-    }
+    private readonly lang: Lang = document.documentElement.lang === 'fr' ? 'fr' : 'en';
 
     getLang(): Lang {
-        return this.currentLang;
+        return this.lang;
     }
 
-    setLang(lang: Lang) {
-        if (this.currentLang === lang) return;
-        this.currentLang = lang;
-        localStorage.setItem('lang', lang);
-        document.documentElement.lang = lang;
-        translateDOM();
-        this.notifyListeners();
-    }
-
-    // Lookup a key like 'home.heroTitle'
+    /** Translate a dotted key ('modal.github') in the page's language. */
     t(key: string): string {
-        const parts = key.split('.');
-        let obj: unknown = this.dictionaries[this.currentLang];
-        for (const p of parts) {
-            if (obj && typeof obj === 'object') {
-                obj = (obj as Record<string, unknown>)[p];
-            } else {
-                return key;
-            }
+        return lookup(this.lang, key);
+    }
+
+    /** Remember the choice (it disables the first-visit redirect) and open the page in that language. */
+    switchTo(lang: Lang): void {
+        if (lang === this.lang) return;
+        try {
+            localStorage.setItem('lang', lang);
+        } catch {
+            // Storage blocked: the switch still works, it just isn't remembered
         }
-        return typeof obj === 'string' ? obj : key;
+        const { pathname, search, hash } = window.location;
+        window.location.assign(localizedPath(pathname, lang) + search + hash);
     }
-
-    subscribe(fn: () => void) {
-        this.listeners.push(fn);
-    }
-
-    private notifyListeners() {
-        this.listeners.forEach((fn) => fn());
-    }
-}
-
-export function translateDOM(root: HTMLElement | Document = document) {
-    const elements = root.querySelectorAll<HTMLElement>('[data-i18n]');
-    elements.forEach((el) => {
-        const key = el.getAttribute('data-i18n');
-        if (key) {
-            el.innerHTML = i18n.t(key);
-        }
-    });
-    document.documentElement.classList.add('i18n-ready');
 }
 
 export const i18n = new I18nService();
+
+/** Translate content injected at runtime (navbar, cards); static HTML arrives translated. */
+export function translateDOM(root: ParentNode = document): void {
+    translateTree(root, i18n.getLang());
+}

@@ -1,47 +1,50 @@
 // @vitest-environment happy-dom
-import { afterEach, describe, expect, it } from 'vitest';
-import { i18n, translateDOM } from './i18n';
-import { en } from '@/i18n/en';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { fr } from '@/i18n/fr';
 
-describe('i18n', () => {
+/** The service reads <html lang> once, at import: load a fresh copy per page language. */
+async function loadOnPage(lang: string, path = '/') {
+    document.documentElement.lang = lang;
+    window.history.replaceState(null, '', path);
+    vi.resetModules();
+    return import('./i18n');
+}
+
+describe('i18n service', () => {
     afterEach(() => {
-        i18n.setLang('en');
+        vi.restoreAllMocks();
+        localStorage.clear();
         document.body.innerHTML = '';
     });
 
-    it('resolves nested keys in the current language', () => {
-        i18n.setLang('en');
-        expect(i18n.t('modal.github')).toBe(en.modal.github);
-        i18n.setLang('fr');
+    it("takes the page's language from <html lang>", async () => {
+        expect((await loadOnPage('fr')).i18n.getLang()).toBe('fr');
+        expect((await loadOnPage('en')).i18n.getLang()).toBe('en');
+        expect((await loadOnPage('')).i18n.getLang()).toBe('en');
+    });
+
+    it('translates keys and injected content in that language', async () => {
+        const { i18n, translateDOM } = await loadOnPage('fr');
         expect(i18n.t('modal.github')).toBe(fr.modal.github);
-    });
 
-    it('falls back to the key when it does not resolve to a string', () => {
-        expect(i18n.t('does.not.exist')).toBe('does.not.exist');
-        expect(i18n.t('modal')).toBe('modal');
-        expect(i18n.t('modal.github.deeper')).toBe('modal.github.deeper');
-    });
-
-    it('persists the language and updates <html lang>', () => {
-        i18n.setLang('fr');
-        expect(i18n.getLang()).toBe('fr');
-        expect(localStorage.getItem('lang')).toBe('fr');
-        expect(document.documentElement.lang).toBe('fr');
-    });
-
-    it('re-translates the DOM and notifies subscribers on change', () => {
         document.body.innerHTML = '<a data-i18n="modal.github"></a>';
         translateDOM();
-        expect(document.querySelector('a')?.innerHTML).toBe(en.modal.github);
+        expect(document.querySelector('a')!.innerHTML).toBe(fr.modal.github);
+    });
 
-        let calls = 0;
-        i18n.subscribe(() => calls++);
-        i18n.setLang('fr');
-        expect(document.querySelector('a')?.innerHTML).toBe(fr.modal.github);
-        expect(calls).toBe(1);
+    it('switching remembers the choice and opens the same page in the other language', async () => {
+        const { i18n } = await loadOnPage('en', '/cv.html?x=1#top');
+        const assign = vi.spyOn(window.location, 'assign').mockImplementation(() => {});
 
-        i18n.setLang('fr');
-        expect(calls).toBe(1);
+        i18n.switchTo('fr');
+        expect(localStorage.getItem('lang')).toBe('fr');
+        expect(assign).toHaveBeenCalledWith('/fr/cv.html?x=1#top');
+    });
+
+    it('does nothing when switching to the current language', async () => {
+        const { i18n } = await loadOnPage('fr', '/fr/');
+        const assign = vi.spyOn(window.location, 'assign').mockImplementation(() => {});
+        i18n.switchTo('fr');
+        expect(assign).not.toHaveBeenCalled();
     });
 });

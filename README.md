@@ -77,9 +77,17 @@ Playwright (`e2e/`) runs desktop and mobile Chromium against the production buil
 npm run test:e2e   # builds, then runs Playwright (first time: npx playwright install chromium)
 ```
 
+## Languages (EN / FR)
+
+Every page exists in both languages, with its own URL: `/cv.html` and `/fr/cv.html`. The `i18nPages` plugin (`vite-plugins/i18n-pages.ts`) renders each built page once per language: text from `src/i18n/{en,fr}.ts`, `<html lang>`, title, description, Open Graph tags, canonical URL and `hreflang` alternates. Search engines and link previews (which don't run JavaScript) see real French pages. The dev server renders `/fr/*` on the fly.
+
+- The URL decides the language. The EN/FR toggle opens the same page in the other language and remembers the choice.
+- First visit from a French browser to an English page: an inline script redirects to the French page before first paint. Shared `/fr/` links always stay French, and a remembered choice wins.
+- Page titles and descriptions live under `meta.*` in the dictionaries; runtime content (cards, modal) uses `i18n.t()`.
+
 ## SEO and social previews
 
-Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and `public/sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
+Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and `public/sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
 
 When adding a page, give it these tags and a sitemap entry; `src/pages/seo.test.ts` fails until you do.
 
@@ -121,7 +129,7 @@ To turn it on: Vercel dashboard → Project → Analytics → Enable.
 Because of the CSP:
 
 - No inline `style="…"` attributes, inline event handlers or inline `<script>` in the HTML pages (`src/pages/headers.test.ts` enforces it). Use classes and modules.
-- The only inline code is the language guard in `vite-plugins/shared-head.ts`, allowed by its sha256 hash. Editing it changes the hash: update `vercel.json` (the test prints the expected value).
+- The only inline code is the language redirect in `vite-plugins/shared-head.ts`, allowed by its sha256 hash. Editing it changes the hash: update `vercel.json` (the test prints the expected value).
 - New third-party origins (analytics, embeds, CDNs) must be added to the matching CSP directive.
 
 ## Quality checks

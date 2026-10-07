@@ -1,4 +1,22 @@
 export const en = {
+    meta: {
+        imageAlt: 'Nielsen Combe-Bracciale, AI and software developer portfolio',
+        home: {
+            title: 'Nexlein — AI & Software Developer',
+            description:
+                'Portfolio of Nielsen Combe-Bracciale (Nexlein) — Epitech student and AI systems developer building real-time simulations, decision engines, and C++ architectures.'
+        },
+        cv: {
+            title: 'Nielsen Combe-Bracciale — CV',
+            description:
+                'CV of Nielsen Combe-Bracciale, AI systems architect and C++ developer: autonomous decision systems, real-time simulation engines and high-performance engineering.'
+        },
+        availability: {
+            title: 'Nexlein — Availability',
+            description:
+                "Nielsen Combe-Bracciale's availability: Epitech Tek3 full-time internship and freelance missions in AI integration and backend development."
+        }
+    },
     projects_desc: {
         arcade: `Modular gaming architecture. Dynamically loads game libraries (Pacman, Nibbler) and graphics backends (SDL2, SFML, ncurses) at runtime via shared objects.`,
         raytracer: `3D rendering engine built from scratch. Computes lighting, shadows, and reflections by tracing light paths mathematically through a scene definition.`,

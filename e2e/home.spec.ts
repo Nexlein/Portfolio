@@ -117,29 +117,60 @@ test.describe('videos', () => {
 });
 
 test.describe('language', () => {
-    test('switches to French, translates the page and remembers the choice', async ({ page, isMobile }) => {
-        await page.goto('/');
-        if (isMobile) await page.locator('#mobile-menu-btn').click(); // the toggle lives in the mobile menu
-        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-        await expect(page.locator('[data-i18n="projects.title"]')).toHaveText(en.projects.title);
+    const projectsTitle = '[data-i18n="projects.title"]';
 
+    test('the toggle opens the same page in the other language and remembers it', async ({ page, isMobile }) => {
+        await page.goto('/?project=arcade');
+        await page.keyboard.press('Escape');
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+        await expect(page.locator(projectsTitle)).toHaveText(en.projects.title);
+
+        if (isMobile) await page.locator('#mobile-menu-btn').click(); // the toggle lives in the mobile menu
         await page.locator('#nav-lang-btn').click();
+        await expect(page).toHaveURL(/\/fr\/\?project=arcade$/);
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
-        await expect(page.locator('[data-i18n="projects.title"]')).toHaveText(fr.projects.title);
+        await expect(page).toHaveTitle(fr.meta.home.title);
+        await expect(page.locator(projectsTitle)).toHaveText(fr.projects.title);
+        await expect(page.locator('#modal-desc')).toHaveText(fr.projects_desc.arcade); // runtime content too
 
         await page.reload();
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
-        await expect(page.locator('[data-i18n="projects.title"]')).toHaveText(fr.projects.title);
+        expect(await page.evaluate(() => localStorage.getItem('lang'))).toBe('fr');
     });
 
-    test('French browsers get French on first visit', async ({ browser }) => {
+    test('French browsers are sent to the French page on their first visit', async ({ browser }) => {
         const context = await browser.newContext({ locale: 'fr-FR' });
         const page = await context.newPage();
-        await page.goto('/');
+        await page.goto('/availability.html');
+        await expect(page).toHaveURL(/\/fr\/availability\.html$/);
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
-        await expect(page.locator('[data-i18n="projects.title"]')).toHaveText(fr.projects.title);
         await expect(page.locator('body')).toBeVisible();
         await context.close();
+    });
+
+    test('a chosen language beats the browser language', async ({ browser }) => {
+        const context = await browser.newContext({ locale: 'fr-FR' });
+        await context.addInitScript(() => localStorage.setItem('lang', 'en'));
+        const page = await context.newPage();
+        await page.goto('/');
+        await expect(page).toHaveURL(/\/$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+        await context.close();
+    });
+
+    test('a shared French link stays French for English browsers', async ({ page }) => {
+        await page.goto('/fr/cv.html');
+        await expect(page).toHaveURL(/\/fr\/cv\.html$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
+        await expect(page.locator('[data-i18n="cv.controls.print"]')).toHaveText(fr.cv.controls.print);
+    });
+
+    test('the French home page embeds the French CV', async ({ page }) => {
+        await page.goto('/fr/');
+        await page.locator('#hero-cv-link').click();
+        const cv = page.frameLocator('#cv-iframe');
+        await expect(cv.locator('html')).toHaveAttribute('lang', 'fr');
+        await expect(cv.locator('[data-i18n="cv.controls.print"]')).toHaveText(fr.cv.controls.print);
     });
 });
 

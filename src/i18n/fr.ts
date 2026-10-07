@@ -1,4 +1,22 @@
 export const fr = {
+    meta: {
+        imageAlt: 'Portfolio de Nielsen Combe-Bracciale, développeur IA et logiciel',
+        home: {
+            title: 'Nexlein — Développeur IA & Logiciel',
+            description:
+                "Portfolio de Nielsen Combe-Bracciale (Nexlein), étudiant à Epitech et développeur de systèmes d'IA : simulations temps réel, moteurs de décision et architectures C++."
+        },
+        cv: {
+            title: 'Nielsen Combe-Bracciale — CV',
+            description:
+                "CV de Nielsen Combe-Bracciale, architecte de systèmes d'IA et développeur C++ : systèmes de décision autonomes, moteurs de simulation temps réel et ingénierie haute performance."
+        },
+        availability: {
+            title: 'Nexlein — Disponibilités',
+            description:
+                "Disponibilités de Nielsen Combe-Bracciale : stage de fin d'études Epitech (Tek3) à temps plein et missions freelance en intégration d'IA et développement backend."
+        }
+    },
     projects_desc: {
         arcade: `Architecture de jeu modulaire. Charge dynamiquement des bibliothèques de jeux (Pacman, Nibbler) et des moteurs graphiques (SDL2, SFML, ncurses) à l'exécution via des objets partagés.`,
         raytracer: `Moteur de rendu 3D codé de zéro. Calcule l'éclairage, les ombres et les reflets en traçant mathématiquement le chemin de la lumière à travers la définition d'une scène.`,

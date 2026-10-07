@@ -19,7 +19,6 @@ export class ProjectGrid {
         this.projects = projects;
         this.onSelect = onSelect;
         this.bindEvents();
-        this.render();
     }
 
     render(): void {
