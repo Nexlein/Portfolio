@@ -106,6 +106,12 @@ Card videos load nothing until they scroll into view (`preload="none"` + an Inte
 
 Fonts are self-hosted with Fontsource (latin subset), so pages make no third-party requests.
 
+## Analytics
+
+[Vercel Web Analytics](https://vercel.com/docs/analytics): cookie-free page views, so no consent banner. `src/core/analytics.ts` loads Vercel's same-origin script only in builds made on Vercel (`IS_VERCEL_BUILD`, from the `VERCEL` env var); local and CI builds never load it. The CV page skips counting when it is embedded in the home page's iframe.
+
+To turn it on: Vercel dashboard → Project → Analytics → Enable.
+
 ## Security headers
 
 `vercel.json` sets the production headers: a strict Content-Security-Policy (our own origin only, no `unsafe-inline`), `nosniff`, `SAMEORIGIN` framing (the home page frames the CV), a strict referrer policy and a restrictive `Permissions-Policy`. Hashed files in `/assets/` are cached for a year; project media for a day.

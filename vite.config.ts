@@ -14,6 +14,8 @@ const securityHeaders: Record<string, string> = Object.fromEntries(
 
 export default defineConfig({
     plugins: [sharedHead()],
+    // Vercel sets VERCEL=1 during its builds: only those deployments serve the analytics script
+    define: { IS_VERCEL_BUILD: JSON.stringify(process.env.VERCEL === '1') },
     preview: { headers: securityHeaders },
     test: {
         include: ['src/**/*.test.ts'] // e2e/ holds Playwright browser tests
