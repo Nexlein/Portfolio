@@ -41,3 +41,29 @@ jobs:
 
             - name: Build
               run: npm run build
+
+            - uses: actions/upload-artifact@v7
+              with:
+                  name: dist
+                  path: dist
+                  retention-days: 7
+
+    lighthouse:
+        name: Lighthouse
+        needs: check
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - uses: actions/checkout@v7
+
+            - uses: actions/download-artifact@v8
+              with:
+                  name: dist
+                  path: dist
+
+            # Audits every page in dist/: accessibility, best practices and SEO must stay >= 95,
+            # performance below 80 only warns (shared CI runners make it noisy).
+            - uses: treosh/lighthouse-ci-action@v12
+              with:
+                  configPath: ./lighthouserc.json
+                  uploadArtifacts: true
