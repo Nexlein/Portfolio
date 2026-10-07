@@ -40,16 +40,26 @@ npm run dev
 
 ```
 src/
-├── components/   UI components (Navbar, modals, project views), one folder each
-├── core/         App services: project rendering, scroll observer, i18n engine
-├── data/         projects.ts, the single source of truth for project entries
-├── i18n/         Translation dictionaries (en, fr)
-├── pages/        Per-page entry scripts and styles
-├── styles/       Global theme, base styles and utilities
-└── utils/        Shared helpers (SVG icons)
+├── components/       One folder per UI feature; internals stay inside it
+│   ├── CvModal/      CV iframe modal
+│   ├── Navbar/       Injected nav bar + scroll behaviours (shadow, scroll spy)
+│   ├── ProjectGrid/  Filters, "show more", cards; pure filter logic in filter.ts
+│   └── ProjectModal/ Project detail modal, media markup, gallery
+├── core/             App-wide services (i18n)
+├── data/             projects.ts, the single source of truth for project entries
+├── i18n/             Translation dictionaries (en, fr)
+├── pages/            Per-page entry scripts and styles (home, cv, availability)
+├── styles/           Global theme, base styles and utilities
+└── ui/               Shared UI primitives (SVG icons)
 public/
-└── projects/     Project media (images, videos), one folder per project id
+└── projects/         Project media (images, videos), one folder per project id
 ```
+
+Conventions:
+
+- Import across folders with the `@/` alias (`@/core/i18n`), within a folder with `./`.
+- HTML pages stay at the repo root so their URLs (`/cv.html`, `/availability.html`) don't change.
+- Tags every page needs in `<head>` (favicon, language guard) are injected by the `sharedHead` plugin in `vite.config.ts`.
 
 ## Adding a project
 
@@ -64,7 +74,8 @@ Vitest, colocated as `*.test.ts` next to the code they cover. DOM tests opt into
 - `src/i18n/dictionaries.test.ts`: en/fr key parity, no empty strings, every `data-i18n` key used in HTML/TS exists, every project has a description.
 - `src/data/projects.test.ts`: unique ids, media files exist in `public/`, alt text present, GitHub URLs valid, each category has a filter button.
 - `src/core/i18n.test.ts`: lookup, fallback, language persistence, DOM re-translation.
-- `src/components/ModalMediaRenderer/ModalMediaRenderer.test.ts`: video/image/gallery markup.
+- `src/components/ProjectModal/media.test.ts`: video/image/gallery markup.
+- `src/components/ProjectGrid/filter.test.ts`: year/category filtering, category fallback, pagination.
 
 ## Quality checks
 

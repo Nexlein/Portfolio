@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildModalMediaHtml } from './ModalMediaRenderer.js';
+import { buildModalMediaHtml } from './media';
 
 describe('buildModalMediaHtml', () => {
     it('renders an mp4 video', () => {

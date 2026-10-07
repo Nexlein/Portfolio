@@ -1,13 +1,8 @@
-import { i18n, translateDOM } from '../../core/i18n.js';
+import { translateDOM } from '@/core/i18n';
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Initial translation pass
+    // Later language changes (here or in the parent page via the storage event) re-translate on their own
     translateDOM();
-
-    // Listen to i18n changes
-    i18n.subscribe(() => {
-        translateDOM();
-    });
 
     const printBtn = document.getElementById('cv-print-btn');
     if (printBtn) {

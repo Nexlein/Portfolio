@@ -1,61 +1,34 @@
 /**
  * Home page entry point.
  *
- * To add a new project:
- *  Add a ProjectEntry in src/data/projects.ts  ← that's it.
+ * To add a new project, add a ProjectEntry in src/data/projects.ts.
  */
 
-import { PROJECTS } from '../../data/projects.js';
-import { ProjectManager } from '../../core/ProjectManager.js';
-import { ScrollObserver } from '../../core/ScrollObserver.js';
-import { NavShadow } from '../../components/NavShadow/NavShadow.js';
-import { ProjectModal } from '../../components/ProjectModal/ProjectModal.js';
-import { CvModal } from '../../components/CvModal/CvModal.js';
-import { injectNavbar } from '../../components/Navbar/Navbar.js';
-import { i18n, translateDOM } from '../../core/i18n.js';
+import { PROJECTS } from '@/data/projects';
+import { i18n, translateDOM } from '@/core/i18n';
+import { injectNavbar } from '@/components/Navbar/Navbar';
+import { initNavShadow, initScrollSpy } from '@/components/Navbar/scroll';
+import { initCvModal } from '@/components/CvModal/CvModal';
+import { ProjectGrid } from '@/components/ProjectGrid/ProjectGrid';
+import { ProjectModal } from '@/components/ProjectModal/ProjectModal';
 
-// ── Boot ───────────────────────────────────────────────────────────────────────
-async function bootstrap(): Promise<void> {
+function bootstrap(): void {
     injectNavbar('home');
-    new CvModal();
-    new ProjectModal(PROJECTS); // attach modal
+    initNavShadow();
+    initScrollSpy();
+    initCvModal();
 
-    // Hand off to the UI controllers
-    const projectManager = new ProjectManager(PROJECTS);
-    const scrollObserver = new ScrollObserver();
-    const navShadow = new NavShadow();
+    const modal = new ProjectModal();
+    const grid = new ProjectGrid(PROJECTS, (project) => modal.open(project));
 
     translateDOM();
-    i18n.subscribe(() => {
-        projectManager.render();
-    });
+    i18n.subscribe(() => grid.render());
 
-    // Handle ?project= auto-open
-    const urlParams = new URLSearchParams(window.location.search);
-    const projectId = urlParams.get('project');
-    if (projectId) {
-        requestAnimationFrame(() => {
-            const card = document.querySelector(`.project-card[data-project-id="${projectId}"]`) as HTMLElement;
-            if (card) {
-                document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-                card.click();
-            }
-        });
-    }
-
-    // Expose for console debugging (dev server only)
-    if (import.meta.env.DEV) {
-        window.__portfolio = { projectManager, scrollObserver, navShadow };
-    }
-}
-
-declare global {
-    interface Window {
-        __portfolio: {
-            projectManager: ProjectManager;
-            scrollObserver: ScrollObserver;
-            navShadow: NavShadow;
-        };
+    // Deep link: /?project=<id> opens that project's modal
+    const linked = PROJECTS.find((p) => p.id === new URLSearchParams(window.location.search).get('project'));
+    if (linked) {
+        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+        modal.open(linked);
     }
 }
 

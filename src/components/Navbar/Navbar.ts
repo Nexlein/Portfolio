@@ -1,4 +1,4 @@
-import { i18n } from '../../core/i18n.js';
+import { i18n } from '@/core/i18n';
 
 function updateLangBtn(): void {
     const langEn = document.querySelector('.lang-en') as HTMLElement;
