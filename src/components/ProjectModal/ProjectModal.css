@@ -3,9 +3,9 @@
     position: fixed;
     inset: 0;
     z-index: 2147483647; /* Absolute top layer */
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(6px);
+    background: rgb(0 0 0 / 75%);
     -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,6 +59,7 @@
         border-color var(--t-fast),
         transform var(--t-fast);
 }
+
 .modal-close:hover {
     color: var(--text-primary);
     border-color: var(--border-hover);
@@ -68,10 +69,12 @@
     .modal-close:hover {
         transform: scale(1.1);
     }
+
     .modal-close:active {
         transform: scale(var(--scale-press));
     }
 }
+
 .modal-close svg {
     width: 16px;
     height: 16px;
@@ -90,6 +93,7 @@
     background: #000;
     overflow: hidden;
 }
+
 .modal-media img,
 .modal-media video {
     width: 100%;
@@ -108,6 +112,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .modal-gallery img {
     position: absolute;
     inset: 0;
@@ -118,6 +123,7 @@
     transition: opacity 300ms var(--ease-in-out);
     pointer-events: none;
 }
+
 .modal-gallery img.active {
     opacity: 1;
     pointer-events: auto;
@@ -130,9 +136,9 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgb(0 0 0 / 40%);
     backdrop-filter: blur(4px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(255 255 255 / 10%);
     color: white;
     display: flex;
     align-items: center;
@@ -143,24 +149,29 @@
         transform var(--t-fast);
     z-index: 5;
 }
+
 .gallery-nav-btn:hover {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgb(0 0 0 / 70%);
 }
 
 @media (hover: hover) and (pointer: fine) {
     .gallery-nav-btn:hover {
         transform: translateY(-50%) scale(1.1);
     }
+
     .gallery-nav-btn:active {
         transform: translateY(-50%) scale(var(--scale-press));
     }
 }
+
 .gallery-nav-btn.prev {
     left: 16px;
 }
+
 .gallery-nav-btn.next {
     right: 16px;
 }
+
 .gallery-nav-btn svg {
     width: 20px;
     height: 20px;
@@ -174,25 +185,28 @@
     display: flex;
     gap: 8px;
     z-index: 5;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgb(0 0 0 / 40%);
     padding: 6px 10px;
     border-radius: 12px;
     backdrop-filter: blur(4px);
 }
+
 .gallery-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgb(255 255 255 / 30%);
     cursor: pointer;
     transition:
         background var(--t-fast),
         transform var(--t-fast);
 }
+
 .gallery-dot:hover {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgb(255 255 255 / 60%);
     transform: scale(1.2);
 }
+
 .gallery-dot.active {
     background: #fff;
     transform: scale(1.2);
@@ -248,6 +262,7 @@
     cursor: pointer;
     font-family: inherit;
 }
+
 .modal-github:hover {
     opacity: 0.88;
 }
@@ -257,26 +272,30 @@
         transform: scale(var(--scale-press));
     }
 }
+
 .modal-github svg {
     width: 15px;
     height: 15px;
 }
+
 .modal-github[style*='display:none'] {
     display: none !important;
 }
 
 /* Responsive — stack on small screens */
-@media (max-width: 640px) {
+@media (width <= 640px) {
     #project-modal {
         max-height: 95vh;
         border-radius: 16px 16px 0 0;
         margin-top: auto;
         margin-bottom: 0;
     }
+
     .modal-inner {
         grid-template-columns: 1fr;
         grid-template-rows: 240px 1fr;
     }
+
     .modal-info {
         padding: 24px 20px;
     }

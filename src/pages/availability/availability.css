@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    background: rgba(30, 41, 59, 0.4);
+    background: rgb(30 41 59 / 40%);
     backdrop-filter: blur(12px);
     transition:
         transform 0.2s ease,
@@ -65,9 +65,11 @@
 .lbl-part-time {
     color: var(--clr-accent-1);
 }
+
 .lbl-full-time {
     color: var(--clr-accent-2);
 }
+
 .lbl-freelance {
     color: var(--clr-accent-3);
 }
