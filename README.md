@@ -57,6 +57,15 @@ public/
 2. Add a `ProjectEntry` to `src/data/projects.ts`.
 3. Add its translation keys to both `src/i18n/en.ts` and `src/i18n/fr.ts`.
 
+## Tests
+
+Vitest, colocated as `*.test.ts` next to the code they cover. DOM tests opt into happy-dom with a `// @vitest-environment happy-dom` header.
+
+- `src/i18n/dictionaries.test.ts`: en/fr key parity, no empty strings, every `data-i18n` key used in HTML/TS exists, every project has a description.
+- `src/data/projects.test.ts`: unique ids, media files exist in `public/`, alt text present, GitHub URLs valid, each category has a filter button.
+- `src/core/i18n.test.ts`: lookup, fallback, language persistence, DOM re-translation.
+- `src/components/ModalMediaRenderer/ModalMediaRenderer.test.ts`: video/image/gallery markup.
+
 ## Quality checks
 
 - **Pre-commit** (Husky + lint-staged): Oxlint/Stylelint autofix and Prettier on staged files, then typecheck and tests.
