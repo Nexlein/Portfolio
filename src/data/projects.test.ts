@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from './projects';
 import { videoPoster } from '@/ui/video';
+import { LANGS } from '@/core/translate';
 
 // Keys look like '../../public/projects/arcade/arcade.mp4'; map them to their public URL.
 const publicFiles = new Set(
@@ -43,6 +44,10 @@ describe('PROJECTS data', () => {
 
         it.each(posterPaths(project))('poster %s exists (npm run media:posters)', (src) => {
             expect(publicFiles).toContain(src);
+        });
+
+        it('has a description in every language', () => {
+            for (const lang of LANGS) expect(project.description[lang].trim().length, lang).toBeGreaterThan(40);
         });
 
         it('has alt text on every image', () => {

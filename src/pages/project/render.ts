@@ -18,7 +18,7 @@ const CATEGORY_LABEL: Record<ProjectEntry['category'], string> = {
 
 /** Plain-text description (dictionaries may contain inline HTML) for meta tags and JSON-LD. */
 export function projectDescription(project: ProjectEntry, lang: Lang): string {
-    return lookup(lang, `projects_desc.${project.id}`)
+    return project.description[lang]
         .replace(/<[^>]+>/g, '')
         .replace(/\s+/g, ' ')
         .trim();
@@ -36,7 +36,7 @@ export function fillProjectPage(document: Document, project: ProjectEntry, lang:
 
     document.body.dataset.projectId = project.id;
     $('project-title').textContent = project.title;
-    $('project-desc').innerHTML = lookup(lang, `projects_desc.${project.id}`);
+    $('project-desc').innerHTML = project.description[lang];
 
     const year = project.year ?? 'Tek2';
     const yearLabel = year === 'Personal' ? lookup(lang, 'projects.filterPersonal') : year;

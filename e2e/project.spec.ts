@@ -1,18 +1,15 @@
 import { test, expect } from './fixtures';
 import { PROJECTS } from '../src/data/projects';
-import { en } from '../src/i18n/en';
-import { fr } from '../src/i18n/fr';
 
 const video = PROJECTS.find((p) => p.media.type === 'video' && p.github)!;
 const gallery = PROJECTS.find((p) => p.media.type === 'gallery')!;
-const descKey = (id: string) => id as keyof typeof en.projects_desc;
 
 test.describe('project page', () => {
     test('renders the project, plays its video and links to GitHub', async ({ page }) => {
         await page.goto(`/projects/${video.id}.html`);
         await expect(page).toHaveTitle(`${video.title} — Nexlein`);
         await expect(page.locator('h1')).toHaveText(video.title);
-        await expect(page.locator('#project-desc')).toHaveText(en.projects_desc[descKey(video.id)]);
+        await expect(page.locator('#project-desc')).toHaveText(video.description.en);
         await expect(page.locator('#project-github')).toHaveAttribute('href', video.github);
         await expect(page.locator('#project-media video')).toHaveJSProperty('paused', false);
     });
@@ -46,7 +43,7 @@ test.describe('project page', () => {
     test('exists in French, and the toggle switches to the English page', async ({ page, isMobile }) => {
         await page.goto(`/fr/projects/${video.id}.html`);
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
-        await expect(page.locator('#project-desc')).toHaveText(fr.projects_desc[descKey(video.id)]);
+        await expect(page.locator('#project-desc')).toHaveText(video.description.fr);
         await expect(page.locator('#project-back')).toHaveAttribute('href', '/fr/#projects');
 
         if (isMobile) await page.locator('#mobile-menu-btn').click();

@@ -3,7 +3,16 @@ import type { ProjectEntry } from '@/data/projects';
 import { filterProjects } from './filter';
 
 function project(id: string, category: ProjectEntry['category'], year?: ProjectEntry['year']): ProjectEntry {
-    return { id, title: id, tags: [], category, year, github: '', media: { type: 'video', src: '' } };
+    return {
+        id,
+        title: id,
+        description: { en: '', fr: '' },
+        tags: [],
+        category,
+        year,
+        github: '',
+        media: { type: 'video', src: '' }
+    };
 }
 
 const projects = [

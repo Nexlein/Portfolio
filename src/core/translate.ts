@@ -9,6 +9,9 @@ import { fr } from '../i18n/fr.ts';
 export type Lang = 'en' | 'fr';
 
 export const LANGS: readonly Lang[] = ['en', 'fr'];
+
+/** Text in every language. A missing language is a type error. */
+export type Text = Record<Lang, string>;
 export const DEFAULT_LANG: Lang = 'en';
 
 const dictionaries: Record<Lang, typeof en> = { en, fr };

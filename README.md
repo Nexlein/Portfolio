@@ -49,7 +49,7 @@ src/
 │   ├── ProjectGrid/  Filters, "show more", cards; pure filter logic in filter.ts
 │   └── ProjectModal/ Project detail modal, media markup, gallery
 ├── core/             App-wide services (i18n)
-├── data/             projects.ts, the single source of truth for project entries
+├── data/             Site content: profile.ts (experience, education, skills, offers) and projects.ts
 ├── i18n/             Translation dictionaries (en, fr)
 ├── pages/            Per-page entry scripts and styles (home, cv, availability)
 ├── styles/           Global theme, base styles and utilities
@@ -85,6 +85,17 @@ Every page exists in both languages, with its own URL: `/cv.html` and `/fr/cv.ht
 - The URL decides the language. The EN/FR toggle opens the same page in the other language and remembers the choice.
 - First visit from a French browser to an English page: an inline script redirects to the French page before first paint. Shared `/fr/` links always stay French, and a remembered choice wins.
 - Page titles and descriptions live under `meta.*` in the dictionaries; runtime content (cards, modal) uses `i18n.t()`.
+
+## Content
+
+Facts live in data files, written once with English and French side by side (`{ en, fr }`, a missing language is a type error):
+
+- `src/data/profile.ts`: experiences, education, skills, the projects the CV highlights, availability offers, and the home timeline order (`TIMELINE`).
+- `src/data/projects.ts`: projects.
+
+Templates mark where content goes with `data-render="<block>"` (home timeline, CV sections, availability cards); `src/pages/content/render.ts` fills them at build time, so crawlers and the CV PDF see real text. `src/i18n/{en,fr}.ts` only holds interface text (navigation, headings, buttons). Text may use `<strong>`/`<br>`, never CSS classes.
+
+To add a job: append it to `EXPERIENCES` and its id to `TIMELINE`. It appears on the home timeline, the CV and the CV PDF.
 
 ## Project pages
 

@@ -23,7 +23,7 @@ function renderCard(p: ProjectEntry): string {
                 ${p.tags.map((tag: string) => `<span class="project-tag">${tag}</span>`).join('')}
             </div>
             <h3>${p.title}</h3>
-            <p>${i18n.t(`projects_desc.${p.id}`)}</p>
+            <p>${p.description[i18n.getLang()]}</p>
             ${renderGithubLink(p.github, p.id)}
         </div>
     </article>`;
