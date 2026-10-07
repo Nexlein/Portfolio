@@ -1,0 +1,190 @@
+/* PROTOTYPE — Round 10 "neural map": synapses, hidden neurons, spreading activation. Builds on web.css + silk.css. */
+/* stylelint-disable no-descending-specificity -- prototype */
+
+/* Period layers */
+.vm-web .layer {
+    fill: none;
+    stroke: var(--muted);
+    stroke-opacity: 0.32;
+    stroke-width: 1;
+    stroke-dasharray: 1 6;
+    stroke-linecap: round;
+    opacity: 0;
+}
+
+.vm-web .layer-plate {
+    fill: var(--bg);
+    opacity: 0;
+}
+
+.vm-web .layer-label {
+    fill: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-anchor: middle;
+    opacity: 0;
+}
+
+/* Hidden neurons and their wiring: a faint latent layer, lit by signals and by the cursor (--a) */
+.vm-web .neuron {
+    --a: 0;
+
+    fill: color-mix(in sRGB, var(--signal) calc(var(--a) * 100%), var(--muted));
+    fill-opacity: calc(0.35 + var(--a) * 0.65);
+    opacity: 0;
+}
+
+.vm-web .wire {
+    --a: 0;
+
+    stroke: color-mix(in sRGB, var(--signal) calc(var(--a) * 100%), var(--muted));
+    stroke-width: 0.6;
+    stroke-opacity: calc(0.1 + var(--a) * 0.5);
+    opacity: 0;
+}
+
+/* Synapses: width and brightness = similarity weight (--w) */
+.vm-web .syn {
+    --w: 0.3;
+
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: calc(0.5px + var(--w) * 2.4px);
+    stroke-opacity: calc(0.16 + var(--w) * 0.55);
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+        stroke 600ms,
+        stroke-opacity 600ms;
+}
+
+.vm-web .syn.live {
+    stroke: var(--signal);
+    stroke-opacity: 0.7;
+    transition-duration: 120ms;
+}
+
+.vm-web .syn.hot {
+    stroke: var(--signal);
+    stroke-opacity: 0.95;
+    transition-duration: 220ms;
+}
+
+.vm-web .port {
+    fill: var(--bg);
+    stroke: var(--muted);
+    stroke-width: 1;
+    opacity: 0;
+    transition:
+        fill 220ms,
+        stroke 220ms;
+}
+
+.vm-web .port.hot {
+    fill: var(--signal);
+    stroke: var(--signal);
+}
+
+.vm-web.focus .syn:not(.hot) {
+    stroke-opacity: 0.06;
+}
+
+.vm-web.focus .port:not(.hot),
+.vm-web.focus .wire,
+.vm-web.focus .neuron {
+    opacity: 0.25;
+}
+
+/* Signals: a short comet */
+.vm-web .sig-head {
+    fill: var(--signal);
+    filter: drop-shadow(0 0 4px var(--signal));
+}
+
+.vm-web .sig-tail {
+    stroke: var(--signal);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+/* Attention from the cursor */
+.vm-web .attn-line {
+    stroke: var(--signal);
+    stroke-width: 0.8;
+    stroke-dasharray: 2 5;
+    stroke-linecap: round;
+    transition: opacity 200ms;
+}
+
+/* Activation glow on projects (--act) */
+.vm-web .vi-card:not(.open, .near) {
+    --act: 0;
+
+    border-color: color-mix(in sRGB, var(--signal) calc(var(--act) * 100%), var(--line));
+    box-shadow: 0 0 calc(var(--act) * 26px) color-mix(in sRGB, var(--signal) calc(var(--act) * 40%), transparent);
+}
+
+/* Boot: hidden until first view, then each part in its turn (--d) */
+.vm-web.booted :is(.layer, .layer-plate, .layer-label, .port, .wire) {
+    opacity: 1;
+}
+
+.vm-web.booted .neuron {
+    opacity: 1;
+}
+
+.vm-web.booted .syn {
+    stroke-dashoffset: 0;
+}
+
+.vm-web:not(.booted) .vi-card,
+.vm-web:not(.booted) .vj-now {
+    opacity: 0;
+    scale: 0.94;
+}
+
+.vm-web.booting :is(.layer, .layer-plate, .layer-label, .port) {
+    transition: opacity 600ms var(--d);
+}
+
+.vm-web.booting .neuron {
+    transition: opacity 900ms var(--d);
+}
+
+.vm-web.booting .wire {
+    transition: opacity 1200ms 300ms;
+}
+
+.vm-web.booting .syn {
+    transition: stroke-dashoffset 700ms ease-out var(--d);
+}
+
+.vm-web.booting .vi-card {
+    transition:
+        opacity 450ms ease-out var(--d),
+        scale 600ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--d);
+}
+
+.vm-web.booting .vj-now {
+    transition:
+        opacity 500ms ease-out,
+        scale 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.vm-web .vj-now .live {
+    animation-duration: 3.2s;
+}
+
+.vm-web.focus .layer,
+.vm-web.focus .layer-label {
+    opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vm-web .syn {
+        stroke-dashoffset: 0;
+        transition: none;
+    }
+}

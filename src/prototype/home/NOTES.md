@@ -128,6 +128,20 @@ its path and the push ripples to neighbours, a pluck shakes the two cards it hol
 The hovered card stays exactly still. Measured over 6 s: motion correlation of cards < 300 px apart 0.52 (K's random float:
 -0.21), travel 5-15 px per card; hovered card 0 px. Reduced motion: static. |
 
+## Round 9 feedback (owner)
+
+- Too much spider vibe; wants an "AI brain graph" vibe.
+
+## Round 10
+
+| M | Round 10 · neural map | L's layout and living motion, restyled as a neural network. Spider cues removed: sagging silk,
+pluck, cursor silk and spinneret, silk loops. Synapses are gentle arcs (no gravity) whose width and brightness are the
+similarity weight, plugged into small ports on the card edges. A latent layer of 72 faint hidden neurons, sparsely wired
+(2 nearest + a nearby project), fills the space. Spreading activation: a thought starts at one project and spreads to all its
+neighbours at 0.62x per step until under 0.3 (comet signals, cards glow with their activation, hidden neurons near a signal
+light up), every 3-4.8 s. The cursor is an input: hidden neurons around it light up, dashed attention lines reach the 3 nearest
+projects, which lean slightly toward it. Periods are faint dotted layers with labels. Hover activates the neighbours once. |
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the
