@@ -1,11 +1,28 @@
-import { describe, expect, it } from 'vitest';
+// @vitest-environment happy-dom
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { buildModalMediaHtml } from './media';
 
+function mockReducedMotion(reduce: boolean) {
+    vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: reduce } as MediaQueryList);
+}
+
 describe('buildModalMediaHtml', () => {
-    it('renders an mp4 video', () => {
+    afterEach(() => vi.restoreAllMocks());
+
+    it('renders an autoplaying, muted mp4 video with its poster', () => {
+        mockReducedMotion(false);
         const html = buildModalMediaHtml({ type: 'video', src: '/a/demo.mp4' });
         expect(html).toContain('<source src="/a/demo.mp4" type="video/mp4">');
-        expect(html).toContain('muted');
+        expect(html).toContain('poster="/a/demo.poster.webp"');
+        expect(html).toMatch(/<video autoplay [^>]*muted/);
+        expect(html).not.toContain('controls');
+    });
+
+    it('shows controls instead of autoplaying with reduced motion', () => {
+        mockReducedMotion(true);
+        const html = buildModalMediaHtml({ type: 'video', src: '/a/demo.mp4' });
+        expect(html).toContain('<video controls ');
+        expect(html).not.toContain('autoplay');
     });
 
     it('detects webm by extension, case-insensitively', () => {

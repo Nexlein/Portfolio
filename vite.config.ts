@@ -18,7 +18,12 @@ function sharedHead(): Plugin {
 })();`;
 
     const tags: HtmlTagDescriptor[] = [
-        { tag: 'link', attrs: { rel: 'icon', type: 'image/jpeg', href: '/favicon.jpg' }, injectTo: 'head' },
+        {
+            tag: 'link',
+            attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' },
+            injectTo: 'head'
+        },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }, injectTo: 'head' },
         {
             tag: 'style',
             children: 'html.i18n-pending:not(.i18n-ready) body { visibility: hidden; }',

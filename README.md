@@ -23,18 +23,20 @@ npm run dev
 
 ## Scripts
 
-| Script                 | Description                          |
-| ---------------------- | ------------------------------------ |
-| `npm run dev`          | Start the Vite dev server            |
-| `npm run build`        | Typecheck and build to `dist/`       |
-| `npm run preview`      | Serve the production build locally   |
-| `npm run typecheck`    | Run `tsc --noEmit`                   |
-| `npm test`             | Run Vitest                           |
-| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint) |
-| `npm run lint:fix`     | Lint and autofix                     |
-| `npm run audit`        | Dependency audit (`audit-ci.jsonc`)  |
-| `npm run format`       | Format all files with Prettier       |
-| `npm run format:check` | Check formatting without writing     |
+| Script                  | Description                             |
+| ----------------------- | --------------------------------------- |
+| `npm run dev`           | Start the Vite dev server               |
+| `npm run build`         | Typecheck and build to `dist/`          |
+| `npm run preview`       | Serve the production build locally      |
+| `npm run typecheck`     | Run `tsc --noEmit`                      |
+| `npm test`              | Run Vitest                              |
+| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)    |
+| `npm run lint:fix`      | Lint and autofix                        |
+| `npm run media:posters` | Generate missing video posters (ffmpeg) |
+| `npm run media:video`   | Re-encode a video for the web (ffmpeg)  |
+| `npm run audit`         | Dependency audit (`audit-ci.jsonc`)     |
+| `npm run format`        | Format all files with Prettier          |
+| `npm run format:check`  | Check formatting without writing        |
 
 ## Project structure
 
@@ -83,6 +85,18 @@ Vitest, colocated as `*.test.ts` next to the code they cover. DOM tests opt into
 - `src/components/ProjectModal/media.test.ts`: video/image/gallery markup.
 - `src/components/ProjectGrid/filter.test.ts`: year/category filtering, category fallback, pagination.
 - `src/pages/seo.test.ts`: every page has a description, canonical URL, social preview tags, and a sitemap entry.
+
+## Media
+
+Project media lives in `public/projects/<id>/` and must be web-ready (a test enforces the formats):
+
+- **Images**: WebP, at most 1200px on the long side (`ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_ratio=decrease" -quality 80 out.webp`).
+- **Videos**: H.264 MP4 without audio, at most 960px wide, `faststart`. Run `npm run media:video -- public/projects/<id>/<name>.mp4` to re-encode in place.
+- **Posters**: every video needs `<name>.poster.webp`. Run `npm run media:posters` to generate missing ones.
+
+Card videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion`, cards keep their poster and the modal shows controls instead of autoplaying.
+
+Fonts are self-hosted with Fontsource (latin subset), so pages make no third-party requests.
 
 ## Quality checks
 
