@@ -5,14 +5,14 @@
  *  Add a ProjectEntry in src/data/projects.ts  ← that's it.
  */
 
-import { PROJECTS } from '../../data/projects.js';
-import { ProjectManager } from '../../core/ProjectManager.js';
-import { ScrollObserver } from '../../core/ScrollObserver.js';
-import { NavShadow } from '../../components/NavShadow/NavShadow.js';
-import { ProjectModal } from '../../components/ProjectModal/ProjectModal.js';
-import { CvModal } from '../../components/CvModal/CvModal.js';
-import { injectNavbar } from '../../components/Navbar/Navbar.js';
-import { i18n, translateDOM } from '../../core/i18n.js';
+import { PROJECTS } from '@/data/projects';
+import { ProjectManager } from '@/core/ProjectManager';
+import { ScrollObserver } from '@/core/ScrollObserver';
+import { NavShadow } from '@/components/NavShadow/NavShadow';
+import { ProjectModal } from '@/components/ProjectModal/ProjectModal';
+import { CvModal } from '@/components/CvModal/CvModal';
+import { injectNavbar } from '@/components/Navbar/Navbar';
+import { i18n, translateDOM } from '@/core/i18n';
 
 // ── Boot ───────────────────────────────────────────────────────────────────────
 async function bootstrap(): Promise<void> {

@@ -3,11 +3,11 @@
  * Reads directly from PROJECTS data — no DOM scraping.
  */
 
-import { ProjectEntry } from '../../data/projects.js';
+import { ProjectEntry } from '@/data/projects';
 
-import { buildModalMediaHtml } from '../ModalMediaRenderer/ModalMediaRenderer.js';
-import { bindModalGallery } from '../ModalGallery/ModalGallery.js';
-import { i18n } from '../../core/i18n.js';
+import { buildModalMediaHtml } from '@/components/ModalMediaRenderer/ModalMediaRenderer';
+import { bindModalGallery } from '@/components/ModalGallery/ModalGallery';
+import { i18n } from '@/core/i18n';
 
 export class ProjectModal {
     private readonly backdrop: HTMLElement;
