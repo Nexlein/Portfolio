@@ -235,3 +235,14 @@ html[lang='fr'] .nav-lang-toggle .lang-fr {
         text-align: center;
     }
 }
+
+/* Scroll marker watched by initNavShadow(): the nav gets its shadow once this leaves the viewport */
+#nav-sentinel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    pointer-events: none;
+    visibility: hidden;
+}
