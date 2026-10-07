@@ -1,12 +1,14 @@
 import type { ProjectEntry, ProjectMedia } from '@/data/projects';
 import { i18n, translateDOM } from '@/core/i18n';
 import { Icons } from '@/ui/icons';
+import { playVideosWhenVisible, videoPoster, videoType } from '@/ui/video';
 import { projectYear } from './filter';
 
 export function renderProjectCards(projects: ProjectEntry[]): void {
     const grid = document.getElementById('projects-grid');
     if (grid) {
         grid.innerHTML = projects.map((p) => renderCard(p)).join('');
+        playVideosWhenVisible(grid);
     }
     // Translate injected HTML
     translateDOM();
@@ -30,12 +32,10 @@ function renderCard(p: ProjectEntry): string {
 function renderMedia(media: ProjectMedia): string {
     switch (media.type) {
         case 'video':
-            const ext = media.src.split('.').pop()?.toLowerCase();
-            const typeStr = ext === 'webm' ? 'video/webm' : 'video/mp4';
             return /* html */ `
             <div class="project-media">
-                <video autoplay loop muted playsinline preload="metadata" class="media-fit">
-                    <source src="${media.src}" type="${typeStr}">
+                <video loop muted playsinline preload="none" poster="${videoPoster(media.src)}" class="media-fit">
+                    <source src="${media.src}" type="${videoType(media.src)}">
                 </video>
             </div>`;
         case 'image':

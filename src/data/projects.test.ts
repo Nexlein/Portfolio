@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from './projects';
+import { videoPoster } from '@/ui/video';
 
 // Keys look like '../../public/projects/arcade/arcade.mp4'; map them to their public URL.
 const publicFiles = new Set(
@@ -15,6 +16,10 @@ function mediaPaths(project: ProjectEntry): string[] {
     return media.type === 'gallery' ? media.images.map((img) => img.src) : [media.src];
 }
 
+function posterPaths(project: ProjectEntry): string[] {
+    return project.media.type === 'video' ? [videoPoster(project.media.src)] : [];
+}
+
 describe('PROJECTS data', () => {
     it('has unique ids', () => {
         const ids = PROJECTS.map((p) => p.id);
@@ -27,6 +32,16 @@ describe('PROJECTS data', () => {
 
     describe.each(PROJECTS.map((p) => [p.id, p] as const))('%s', (_id, project) => {
         it.each(mediaPaths(project))('media %s exists in public/', (src) => {
+            expect(publicFiles).toContain(src);
+        });
+
+        it('uses web formats (WebP images, MP4 videos)', () => {
+            for (const src of mediaPaths(project)) {
+                expect(src).toMatch(project.media.type === 'video' ? /\.mp4$/ : /\.webp$/);
+            }
+        });
+
+        it.each(posterPaths(project))('poster %s exists (npm run media:posters)', (src) => {
             expect(publicFiles).toContain(src);
         });
 
