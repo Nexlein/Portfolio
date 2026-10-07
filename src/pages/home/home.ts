@@ -1,5 +1,5 @@
 /**
- * src/main.ts — Application entry point.
+ * Home page entry point.
  *
  * To add a new project:
  *  Add a ProjectEntry in src/data/projects.ts  ← that's it.
