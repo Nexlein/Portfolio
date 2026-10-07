@@ -1,5 +1,15 @@
 import { i18n } from '../../core/i18n.js';
 
+function updateLangBtn(): void {
+    const langEn = document.querySelector('.lang-en') as HTMLElement;
+    const langFr = document.querySelector('.lang-fr') as HTMLElement;
+    if (langEn && langFr) {
+        const current = i18n.getLang();
+        langEn.style.color = current === 'en' ? 'var(--text-primary)' : 'var(--text-muted)';
+        langFr.style.color = current === 'fr' ? 'var(--text-primary)' : 'var(--text-muted)';
+    }
+}
+
 class NavbarComponent {
     private readonly activeSection: 'home' | 'availability';
 
@@ -53,15 +63,6 @@ class NavbarComponent {
     }
 
     private bindLanguageToggle(): void {
-        const updateLangBtn = () => {
-            const langEn = document.querySelector('.lang-en') as HTMLElement;
-            const langFr = document.querySelector('.lang-fr') as HTMLElement;
-            if (langEn && langFr) {
-                const current = i18n.getLang();
-                langEn.style.color = current === 'en' ? 'var(--text-primary)' : 'var(--text-muted)';
-                langFr.style.color = current === 'fr' ? 'var(--text-primary)' : 'var(--text-muted)';
-            }
-        };
         updateLangBtn();
 
         const langBtn = document.getElementById('nav-lang-btn');

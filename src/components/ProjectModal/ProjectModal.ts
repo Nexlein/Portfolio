@@ -5,8 +5,8 @@
 
 import { ProjectEntry } from '../../data/projects.js';
 
-import { ModalMediaRenderer } from '../ModalMediaRenderer/ModalMediaRenderer.js';
-import { ModalGallery } from '../ModalGallery/ModalGallery.js';
+import { buildModalMediaHtml } from '../ModalMediaRenderer/ModalMediaRenderer.js';
+import { bindModalGallery } from '../ModalGallery/ModalGallery.js';
 import { i18n } from '../../core/i18n.js';
 
 export class ProjectModal {
@@ -85,10 +85,10 @@ export class ProjectModal {
 
         this.tagsEl.innerHTML = project.tags.map((t: string) => `<span class="project-tag">${t}</span>`).join('');
 
-        this.mediaEl.innerHTML = ModalMediaRenderer.buildHtml(project.media);
+        this.mediaEl.innerHTML = buildModalMediaHtml(project.media);
 
         if (project.media.type === 'gallery') {
-            ModalGallery.bind(this.mediaEl, project.media.images.length);
+            bindModalGallery(this.mediaEl, project.media.images.length);
         }
 
         if (project.github) {
