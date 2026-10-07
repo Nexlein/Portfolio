@@ -142,7 +142,15 @@ neighbours at 0.62x per step until under 0.3 (comet signals, cards glow with the
 light up), every 3-4.8 s. The cursor is an input: hidden neurons around it light up, dashed attention lines reach the 3 nearest
 projects, which lean slightly toward it. Periods are faint dotted layers with labels. Hover activates the neighbours once. |
 
-**Verdict:** _(to fill in: winner, and what to borrow from the others)_
+## Round 10 feedback (owner)
+
+- "Best one so far", keep it; may add small twists later.
+
+**Verdict (2026-10-08):** M, the neural map, for the projects section. Keep: synapses weighted by similarity with ports,
+hidden-neuron layer, spreading activation (one thought at a time, comet signals, activation glow), cursor as input (lit
+neurons + attention lines + slight lean), dotted period layers with labels, round 9 living motion (breeze + springs; only
+the hovered card stops), in-place unfold with similarity badges, "Now" centre, one-time boot sequence. Rest of the page
+(hero, branches, curve, hire tree) still to settle; phones need their own layout (list with synapse lines).
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the
 `src/prototype/**` lint override once the decision is folded into the real pages.
