@@ -102,6 +102,21 @@ Round 7 follow-up: threads no longer run off the board edges. One elliptical rim
 two threads for the outermost). Activation pulses wander along the similarity threads, sometimes cascade to the next one, and
 flash the card they reach; an unfolded card fires along all its own threads (a "forward pass").
 
+## Round 7 feedback (owner)
+
+- Very cool. Threads going through the border to nothing should go: give the impression of a circular shape round the centre.
+- Then: free hand to improve anything, even dropping things asked for earlier.
+
+## Round 8
+
+| K | Round 8 · orbits | Critique of J: six motion systems at once (drift, wandering pulses, card flashes, repeated bursts, silk,
+pluck), and lines that meant nothing (rim spokes, dashed rings). K keeps only meaningful lines and one thing moving at a time.
+Each period (personal, tek 2, tek 1) is a silk loop strung through its own cards, redrawn each frame so it follows them, and
+labelled in its widest gap: the circular shape is the timeline, so the rim, spokes, dashed rings and "closer = recent" legend
+go. One thought at a time: a pulse walks 2-4 hops through similar projects, lighting the thread it travels and the card it
+reaches, then rests 1.8-3.4 s. Hover sends one signal to each similar project (no loop). Boot once at 35 % visible: Now, then
+each loop draws and its cards appear inside out, then the web threads. Card subline = two main skills (the loop says the year). |
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the

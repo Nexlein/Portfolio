@@ -1,0 +1,110 @@
+/* PROTOTYPE — Round 8 "orbits": period loops, one-thought pulses, boot sequence. Builds on web.css + silk.css. */
+/* stylelint-disable no-descending-specificity -- prototype */
+
+/* Period loops: the timeline as silk */
+.vk-web .orbit {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.8;
+    stroke-opacity: 0.3;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+}
+
+.vk-web .orbit-plate {
+    fill: var(--bg);
+    opacity: 0;
+}
+
+.vk-web .orbit-label {
+    fill: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-anchor: middle;
+    opacity: 0;
+}
+
+/* Web threads start undrawn too */
+.vk-web .thread {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+        stroke 700ms,
+        stroke-opacity 700ms;
+}
+
+.vk-web .thread.live {
+    stroke: var(--signal);
+    stroke-opacity: 0.75;
+    transition-duration: 150ms;
+}
+
+.vk-web .thread.hot {
+    transition-duration: 220ms;
+}
+
+.vk-web.booted .orbit,
+.vk-web.booted .thread {
+    stroke-dashoffset: 0;
+}
+
+.vk-web.booted .orbit-plate,
+.vk-web.booted .orbit-label {
+    opacity: 1;
+}
+
+.vk-web:not(.booted) .vi-card,
+.vk-web:not(.booted) .vj-now {
+    opacity: 0;
+    scale: 0.94;
+}
+
+/* Boot: everything waits for its turn (--d), then the class goes and normal transitions return */
+.vk-web.booting .orbit {
+    transition: stroke-dashoffset 1100ms cubic-bezier(0.3, 0.7, 0.2, 1) var(--d);
+}
+
+.vk-web.booting .thread {
+    transition: stroke-dashoffset 700ms ease-out var(--d);
+}
+
+.vk-web.booting .orbit-plate,
+.vk-web.booting .orbit-label {
+    transition: opacity 500ms var(--d);
+}
+
+.vk-web.booting .vi-card {
+    transition:
+        opacity 450ms ease-out var(--d),
+        scale 600ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--d);
+}
+
+.vk-web.booting .vj-now {
+    transition:
+        opacity 500ms ease-out,
+        scale 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* A signal reaching a card: a brief glow, no layout change */
+.vk-web .vi-card.fire {
+    border-color: var(--signal);
+    box-shadow: 0 0 0 3px color-mix(in sRGB, var(--signal) 22%, transparent);
+}
+
+.vk-web .vj-now .live {
+    animation-duration: 3.2s;
+}
+
+.vk-web.focus .orbit,
+.vk-web.focus .orbit-label {
+    opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vk-web .orbit,
+    .vk-web .thread {
+        stroke-dashoffset: 0;
+        transition: none;
+    }
+}

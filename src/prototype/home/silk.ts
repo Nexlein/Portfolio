@@ -305,13 +305,14 @@ ${PROJECTS.map(cardHtml).join('')}
     let pulses: Pulse[] = [],
         nextIdle = 0,
         nextBurst = 0;
+    let born: Pulse[] = []; // spawned during the update pass, merged after it
     const sims = () => threads.filter((th) => th.kind === 'sim');
     const fire = (from: Card, th: Thread, t: number) => {
-        if (pulses.length >= 16) return;
+        if (pulses.length + born.length >= 16) return;
         const to = th.a === from ? th.b! : th.a;
         const dot = el('circle', 'pulse', pulsesG);
         dot.setAttribute('r', '2.3');
-        pulses.push({ th, from, t0: t, dur: 450 + Math.hypot(to.x - from.x, to.y - from.y) * 2.6, dot });
+        born.push({ th, from, t0: t, dur: 450 + Math.hypot(to.x - from.x, to.y - from.y) * 2.6, dot });
     };
     const drawPulses = (t: number) => {
         if (opened && t > nextBurst) {
@@ -344,6 +345,8 @@ ${PROJECTS.map(cardHtml).join('')}
             p.dot.setAttribute('cy', pt.y.toFixed(1));
             return true;
         });
+        pulses.push(...born);
+        born = [];
     };
 
     // Cursor silk: up to 3 threads to the nearest cards; a new target makes the thread shoot out again
