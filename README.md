@@ -61,7 +61,7 @@ Conventions:
 
 - Import across folders with the `@/` alias (`@/core/i18n`), within a folder with `./`.
 - HTML pages stay at the repo root so their URLs (`/cv.html`, `/availability.html`) don't change.
-- Tags every page needs in `<head>` (favicon, language guard) are injected by the `sharedHead` plugin in `vite.config.ts`.
+- Tags every page needs in `<head>` (favicon, language guard) are injected by the `sharedHead` plugin in `vite-plugins/shared-head.ts`.
 
 ## Adding a project
 
@@ -97,6 +97,18 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 Card videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion`, cards keep their poster and the modal shows controls instead of autoplaying.
 
 Fonts are self-hosted with Fontsource (latin subset), so pages make no third-party requests.
+
+## Security headers
+
+`vercel.json` sets the production headers: a strict Content-Security-Policy (our own origin only, no `unsafe-inline`), `nosniff`, `SAMEORIGIN` framing (the home page frames the CV), a strict referrer policy and a restrictive `Permissions-Policy`. Hashed files in `/assets/` are cached for a year; project media for a day.
+
+`npm run preview` serves the build with the same headers, so CSP problems show up locally.
+
+Because of the CSP:
+
+- No inline `style="…"` attributes, inline event handlers or inline `<script>` in the HTML pages (`src/pages/headers.test.ts` enforces it). Use classes and modules.
+- The only inline code is the language guard in `vite-plugins/shared-head.ts`, allowed by its sha256 hash. Editing it changes the hash: update `vercel.json` (the test prints the expected value).
+- New third-party origins (analytics, embeds, CDNs) must be added to the matching CSP directive.
 
 ## Quality checks
 

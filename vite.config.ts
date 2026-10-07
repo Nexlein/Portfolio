@@ -1,42 +1,19 @@
-import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite';
+import { defineConfig } from 'vite';
+import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { sharedHead } from './vite-plugins/shared-head';
 
-/**
- * Inject the <head> tags every page needs, so they live in one place.
- *
- * The inline script runs before first paint: it sets <html lang> from the saved or browser
- * language and, for French, hides the body until translateDOM() adds `.i18n-ready`, so
- * visitors never see the English source text flash.
- */
-function sharedHead(): Plugin {
-    const languageGuard = `(function () {
-    var lang;
-    try { lang = localStorage.getItem('lang'); } catch (e) {}
-    if (lang !== 'en' && lang !== 'fr') lang = navigator.language.slice(0, 2) === 'fr' ? 'fr' : 'en';
-    document.documentElement.lang = lang;
-    if (lang === 'fr') document.documentElement.classList.add('i18n-pending');
-})();`;
-
-    const tags: HtmlTagDescriptor[] = [
-        {
-            tag: 'link',
-            attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' },
-            injectTo: 'head'
-        },
-        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }, injectTo: 'head' },
-        {
-            tag: 'style',
-            children: 'html.i18n-pending:not(.i18n-ready) body { visibility: hidden; }',
-            injectTo: 'head'
-        },
-        { tag: 'script', children: languageGuard, injectTo: 'head' }
-    ];
-
-    return { name: 'shared-head', transformIndexHtml: () => tags };
-}
+// Serve `vite preview` with the same security headers as production, so CSP issues show up locally and in e2e tests
+const vercel = JSON.parse(readFileSync(resolve(import.meta.dirname, 'vercel.json'), 'utf8'));
+const securityHeaders: Record<string, string> = Object.fromEntries(
+    vercel.headers
+        .find((rule: { source: string }) => rule.source === '/(.*)')
+        .headers.map((h: { key: string; value: string }) => [h.key, h.value])
+);
 
 export default defineConfig({
     plugins: [sharedHead()],
+    preview: { headers: securityHeaders },
     resolve: {
         alias: { '@': resolve(import.meta.dirname, 'src') }
     },
