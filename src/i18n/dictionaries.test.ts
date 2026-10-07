@@ -19,7 +19,7 @@ const flat = { en: flatten(en), fr: flatten(fr) };
 // Every static data-i18n key used in the HTML pages and in TS templates.
 const sources = {
     ...import.meta.glob<string>('../../*.html', { query: '?raw', import: 'default', eager: true }),
-    ...import.meta.glob<string>('../**/*.ts', { query: '?raw', import: 'default', eager: true })
+    ...import.meta.glob<string>(['../**/*.ts', '!../**/*.test.ts'], { query: '?raw', import: 'default', eager: true })
 };
 const usedKeys = new Set(
     Object.values(sources).flatMap((src) => [...src.matchAll(/data-i18n="([^"$]+)"/g)].map((m) => m[1]))

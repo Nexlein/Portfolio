@@ -1,10 +1,10 @@
 import { test, expect } from './fixtures';
 
-const pages = [
-    { path: '/', heading: 'Nielsen' },
-    { path: '/cv.html', heading: 'Nielsen' },
-    { path: '/availability.html', heading: null }
-];
+const pages = ['', '/fr'].flatMap((prefix) => [
+    { path: `${prefix}/`, heading: 'Nielsen' },
+    { path: `${prefix}/cv.html`, heading: 'Nielsen' },
+    { path: `${prefix}/availability.html`, heading: null }
+]);
 
 for (const { path, heading } of pages) {
     test(`${path} loads with production headers, fonts and no errors`, async ({ page }) => {
@@ -13,7 +13,7 @@ for (const { path, heading } of pages) {
         expect(response?.headers()['content-security-policy']).toContain("default-src 'self'");
 
         await expect(page).toHaveTitle(/\S/);
-        await expect(page.locator('html')).toHaveClass(/i18n-ready/);
+        await expect(page.locator('html')).toHaveAttribute('lang', path.startsWith('/fr/') ? 'fr' : 'en');
         if (heading) await expect(page.locator('h1').first()).toContainText(heading);
 
         const fontsLoaded = await page.evaluate(async () => {

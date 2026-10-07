@@ -1,15 +1,5 @@
 import { i18n } from '@/core/i18n';
 
-function updateLangBtn(): void {
-    const langEn = document.querySelector('.lang-en') as HTMLElement;
-    const langFr = document.querySelector('.lang-fr') as HTMLElement;
-    if (langEn && langFr) {
-        const current = i18n.getLang();
-        langEn.style.color = current === 'en' ? 'var(--text-primary)' : 'var(--text-muted)';
-        langFr.style.color = current === 'fr' ? 'var(--text-primary)' : 'var(--text-muted)';
-    }
-}
-
 class NavbarComponent {
     private readonly activeSection: 'home' | 'availability';
 
@@ -62,17 +52,11 @@ class NavbarComponent {
         this.bindMobileMenu();
     }
 
+    /** The active language is highlighted by CSS (html[lang]); clicking opens the page in the other one. */
     private bindLanguageToggle(): void {
-        updateLangBtn();
-
-        const langBtn = document.getElementById('nav-lang-btn');
-        if (langBtn) {
-            langBtn.addEventListener('click', () => {
-                const next = i18n.getLang() === 'en' ? 'fr' : 'en';
-                i18n.setLang(next);
-                updateLangBtn();
-            });
-        }
+        document.getElementById('nav-lang-btn')?.addEventListener('click', () => {
+            i18n.switchTo(i18n.getLang() === 'en' ? 'fr' : 'en');
+        });
     }
 
     private bindMobileMenu(): void {
