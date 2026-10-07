@@ -1,0 +1,256 @@
+/* PROTOTYPE — Variant B "Learning curve". Cool paper + teal; Recursive (casual for voice, mono for data). */
+/* stylelint-disable no-descending-specificity -- prototype */
+@import '@fontsource-variable/recursive/full.css';
+
+.vb {
+    --bg: #0f1418;
+    --surface: #161e24;
+    --ink: #e4eaee;
+    --muted: #8696a3;
+    --grid: #22303a;
+    --curve: #35d0be;
+
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Recursive Variable', sans-serif;
+    font-variation-settings:
+        'CASL' 0,
+        'MONO' 0;
+}
+
+[data-theme='light'] .vb {
+    --bg: #f3f5f7;
+    --surface: #fff;
+    --ink: #182028;
+    --muted: #66717e;
+    --grid: #d9dfe5;
+    --curve: #0b8f83;
+}
+
+.vb .data {
+    font-variation-settings:
+        'CASL' 0,
+        'MONO' 1;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.vb-wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+.vb-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 28px 0 8px;
+}
+
+.vb-head h1 {
+    margin: 0;
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    font-weight: 800;
+    font-variation-settings:
+        'CASL' 1,
+        'MONO' 0;
+    letter-spacing: -0.02em;
+}
+
+.vb-lede {
+    max-width: 640px;
+    margin: 6px 0 0;
+    font-size: 1.15rem;
+    font-variation-settings:
+        'CASL' 0.6,
+        'MONO' 0;
+    color: var(--muted);
+}
+
+.vb-chart {
+    width: 100%;
+    height: auto;
+    margin: 18px 0 8px;
+    overflow: visible;
+}
+
+.vb-chart .grid line {
+    stroke: var(--grid);
+}
+
+.vb-chart text {
+    fill: var(--muted);
+    font-family: 'Recursive Variable', monospace;
+    font-variation-settings:
+        'CASL' 0,
+        'MONO' 1;
+    font-size: 11px;
+}
+
+.vb-chart .run {
+    fill: none;
+    stroke: var(--curve);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 2000;
+    stroke-dashoffset: 2000;
+    animation: vb-draw 2.2s cubic-bezier(0.3, 0.7, 0.2, 1) 0.2s forwards;
+}
+
+.vb-chart .projection {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 2;
+    stroke-dasharray: 5 6;
+}
+
+.vb-chart .cp circle {
+    fill: var(--bg);
+    stroke: var(--curve);
+    stroke-width: 2.5;
+}
+
+.vb-chart .cp .title {
+    fill: var(--ink);
+    font-family: 'Recursive Variable', sans-serif;
+    font-variation-settings:
+        'CASL' 0.5,
+        'MONO' 0;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.vb-chart .cp {
+    opacity: 0;
+    animation: vb-fade 0.4s ease forwards;
+}
+
+@keyframes vb-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes vb-fade {
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vb-chart .run {
+        animation: none;
+        stroke-dashoffset: 0;
+    }
+
+    .vb-chart .cp {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+.vb-section {
+    padding: 64px 0 24px;
+}
+
+.vb-section > h2 {
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+    font-variation-settings:
+        'CASL' 1,
+        'MONO' 0;
+}
+
+.vb-epoch {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 24px;
+    padding: 22px 0;
+    border-top: 1px solid var(--grid);
+}
+
+.vb-epoch-label {
+    font-variation-settings:
+        'CASL' 0,
+        'MONO' 1;
+    font-size: 13px;
+    color: var(--curve);
+}
+
+.vb-runs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px 28px;
+}
+
+.vb-runs a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.vb-runs h3 {
+    margin: 0 0 4px;
+    font-size: 1.05rem;
+}
+
+.vb-runs a:hover h3 {
+    color: var(--curve);
+}
+
+.vb-runs p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.vb-deploy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+}
+
+.vb-deploy > div {
+    padding: 22px;
+    background: var(--surface);
+    border: 1px solid var(--grid);
+    border-radius: 14px;
+}
+
+.vb-deploy h3 {
+    margin: 0 0 10px;
+}
+
+.vb-deploy dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 14px;
+    margin: 0;
+}
+
+.vb-deploy dd {
+    margin: 0;
+}
+
+.vb-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    padding: 36px 0 120px;
+}
+
+.vb-links a {
+    color: var(--curve);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+@media (width <= 760px) {
+    .vb-epoch,
+    .vb-deploy {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,230 @@
+/* PROTOTYPE — Variant A "Policy field". Ink blue + signal amber; Schibsted Grotesk + IBM Plex Mono. */
+/* stylelint-disable no-descending-specificity -- prototype */
+@import '@fontsource/schibsted-grotesk/latin-400.css';
+@import '@fontsource/schibsted-grotesk/latin-800.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+.va {
+    --bg: #0d1324;
+    --surface: #151d33;
+    --ink: #e7eaf3;
+    --muted: #8c95b0;
+    --line: #253052;
+    --signal: #f4b23e;
+    --cold: #3a5ccc;
+
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Schibsted Grotesk', sans-serif;
+}
+
+[data-theme='light'] .va {
+    --bg: #eef1f7;
+    --surface: #fff;
+    --ink: #111a30;
+    --muted: #5b6582;
+    --line: #cdd4e4;
+    --signal: #b86e00;
+    --cold: #3a5ccc;
+}
+
+.va .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+.va-top {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    padding: 22px 32px;
+}
+
+.va-top a {
+    color: var(--ink);
+    text-decoration: none;
+    margin-left: 22px;
+}
+
+.va-top a:hover {
+    color: var(--signal);
+}
+
+.va-hero {
+    position: relative;
+    height: 82vh;
+    min-height: 520px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+}
+
+.va-hero::after {
+    /* fade the field behind the headline so the text stays readable */
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to top, var(--bg) 8%, transparent 55%);
+}
+
+.va-hero canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+}
+
+.va-thesis {
+    position: absolute;
+    left: 32px;
+    bottom: 36px;
+    z-index: 2;
+    max-width: 760px;
+    pointer-events: none;
+}
+
+.va-thesis h1 {
+    margin: 0 0 14px;
+    font-weight: 800;
+    font-size: clamp(2.4rem, 6vw, 5.2rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+}
+
+.va-thesis h1 em {
+    font-style: normal;
+    color: var(--signal);
+}
+
+.va-section {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 32px;
+    padding: 72px 32px;
+    border-bottom: 1px solid var(--line);
+}
+
+.va-section > h2 {
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+}
+
+.va-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.va-table th {
+    text-align: left;
+    padding: 0 0 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.va-table td {
+    padding: 14px 16px 14px 0;
+    border-top: 1px solid var(--line);
+    vertical-align: top;
+}
+
+.va-table tr[data-preview] {
+    cursor: pointer;
+}
+
+.va-table tr[data-preview]:hover td {
+    background: var(--surface);
+}
+
+.va-table .title {
+    font-weight: 800;
+    font-size: 1.15rem;
+}
+
+.va-preview {
+    position: fixed;
+    z-index: 50;
+    width: 280px;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 120ms;
+}
+
+.va-path {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    row-gap: 22px;
+    margin: 0;
+}
+
+.va-path dt {
+    padding-top: 3px;
+}
+
+.va-path dd {
+    margin: 0;
+}
+
+.va-path strong {
+    font-size: 1.05rem;
+}
+
+.va-offers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+}
+
+.va-offers h3 {
+    margin: 0 0 6px;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.va-offers p {
+    margin: 0 0 6px;
+}
+
+.va-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    padding: 56px 32px 120px;
+}
+
+.va-contact a {
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 1.6rem;
+    text-decoration: none;
+    border-bottom: 2px solid var(--signal);
+}
+
+@media (width <= 760px) {
+    .va-section,
+    .va-offers,
+    .va-path {
+        grid-template-columns: 1fr;
+    }
+
+    .va-table .hide-sm {
+        display: none;
+    }
+}

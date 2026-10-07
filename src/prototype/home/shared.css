@@ -1,0 +1,46 @@
+/* PROTOTYPE — switcher bar only. Each variant owns its whole look (scoped under .va / .vb / .vc). */
+.proto-bar {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 999px;
+    background: #ff2e88;
+    color: #fff;
+    font:
+        600 13px/1 system-ui,
+        sans-serif;
+    box-shadow: 0 6px 24px rgb(0 0 0 / 35%);
+}
+
+.proto-bar button {
+    all: unset;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+.proto-bar button:hover,
+.proto-bar button:focus-visible {
+    background: rgb(255 255 255 / 20%);
+}
+
+.proto-label {
+    padding: 0 6px;
+    white-space: nowrap;
+}
+
+.proto-sep {
+    width: 1px;
+    height: 16px;
+    background: rgb(255 255 255 / 40%);
+}
+
+body {
+    margin: 0;
+}

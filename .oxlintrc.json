@@ -17,6 +17,12 @@
             "rules": {
                 "no-await-in-loop": "off"
             }
+        },
+        {
+            "files": ["src/prototype/**"],
+            "rules": {
+                "import/no-unassigned-import": "off"
+            }
         }
     ]
 }

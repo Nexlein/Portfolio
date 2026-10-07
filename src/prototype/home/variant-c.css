@@ -1,0 +1,260 @@
+/* PROTOTYPE — Variant C "Decision tree". Violet path on dusk/lavender; Familjen Grotesk + JetBrains Mono. */
+@import '@fontsource/familjen-grotesk/latin-400.css';
+@import '@fontsource/familjen-grotesk/latin-700.css';
+
+.vc {
+    --bg: #14121c;
+    --node: #1e1b2b;
+    --ink: #eceaf4;
+    --muted: #9893ad;
+    --line: #2c2840;
+    --path: #9c8cff;
+
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Familjen Grotesk', sans-serif;
+}
+
+[data-theme='light'] .vc {
+    --bg: #f2f1f6;
+    --node: #fff;
+    --ink: #1a1726;
+    --muted: #615c78;
+    --line: #d6d3e3;
+    --path: #5b45e0;
+}
+
+.vc .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.vc-col {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 64px 24px 140px;
+}
+
+.vc-root {
+    text-align: center;
+}
+
+.vc-root h1 {
+    margin: 10px 0 12px;
+    font-size: clamp(2.2rem, 5.5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+.vc-root p {
+    max-width: 560px;
+    margin: 0 auto;
+    font-size: 1.15rem;
+    color: var(--muted);
+}
+
+.vc-question {
+    margin: 34px 0 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.vc-tree {
+    position: relative;
+    height: 70px;
+}
+
+.vc-tree svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.vc-tree path {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 2;
+    transition:
+        stroke 250ms,
+        stroke-width 250ms;
+}
+
+.vc-tree path.on {
+    stroke: var(--path);
+    stroke-width: 3;
+}
+
+.vc-branches {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.vc-branches button {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    padding: 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    background: var(--node);
+    text-align: left;
+    transition:
+        border-color 200ms,
+        opacity 200ms,
+        transform 200ms;
+}
+
+.vc-branches button strong {
+    display: block;
+    font-size: 1.05rem;
+}
+
+.vc-branches button:hover,
+.vc-branches button:focus-visible {
+    border-color: var(--path);
+}
+
+.vc-branches button[aria-pressed='true'] {
+    border-color: var(--path);
+    transform: translateY(-2px);
+}
+
+.vc-has-choice .vc-branches button[aria-pressed='false'] {
+    opacity: 0.45;
+}
+
+.vc-leaf {
+    margin-top: 34px;
+    padding-top: 30px;
+    border-top: 2px solid var(--path);
+    animation: vc-in 300ms ease;
+}
+
+@keyframes vc-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-leaf {
+        animation: none;
+    }
+}
+
+.vc-leaf h2 {
+    margin: 0 0 18px;
+    font-size: 1.7rem;
+}
+
+.vc-rows {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 12px 20px;
+    margin: 0 0 24px;
+}
+
+.vc-rows dd {
+    margin: 0;
+}
+
+.vc-cta {
+    display: inline-block;
+    margin-right: 12px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: var(--path);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.vc-cta.ghost {
+    background: none;
+    color: var(--ink);
+    border: 1.5px solid var(--line);
+}
+
+.vc-projects {
+    display: grid;
+    gap: 14px;
+}
+
+.vc-project {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 14px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.vc-project:hover {
+    background: var(--node);
+}
+
+.vc-project img {
+    width: 132px;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.vc-project h3 {
+    margin: 0 0 4px;
+}
+
+.vc-project p {
+    margin: 0 0 4px;
+    color: var(--muted);
+}
+
+.vc-path {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-left: 2px solid var(--path);
+}
+
+.vc-path li {
+    position: relative;
+    padding: 0 0 22px 22px;
+}
+
+.vc-path li::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--path);
+}
+
+.vc-path p {
+    margin: 4px 0 0;
+    color: var(--muted);
+}
+
+@media (width <= 760px) {
+    .vc-branches,
+    .vc-rows {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .vc-tree {
+        display: none;
+    }
+}
