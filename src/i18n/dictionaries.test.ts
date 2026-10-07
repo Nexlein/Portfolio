@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { en } from './en';
 import { fr } from './fr';
-import { PROJECTS } from '@/data/projects';
 
 const dictionaries = { en, fr };
 
@@ -44,10 +43,5 @@ describe('translation dictionaries', () => {
     it.each([...usedKeys])('data-i18n key "%s" exists in both languages', (key) => {
         expect(flat.en).toHaveProperty([key]);
         expect(flat.fr).toHaveProperty([key]);
-    });
-
-    it('every project has a description and no description is orphaned', () => {
-        const ids = new Set(PROJECTS.map((p) => p.id));
-        expect(new Set(Object.keys(en.projects_desc))).toEqual(ids);
     });
 });

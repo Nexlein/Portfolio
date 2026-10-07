@@ -4,10 +4,9 @@
  * UI words (buttons, headings) stay in src/i18n; facts live here.
  * Text may contain inline <strong>/<br>, but never CSS classes: styling belongs to the templates.
  */
-import type { Lang } from '../core/translate.ts';
+import type { Text } from '../core/translate.ts';
 
-/** Text in every language. A missing language is a type error. */
-export type Text = Record<Lang, string>;
+export type { Text };
 
 export interface Experience {
     id: string;

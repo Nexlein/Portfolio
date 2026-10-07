@@ -48,9 +48,7 @@ test.describe('project modal', () => {
 
         await expect(page.locator(modal)).toBeVisible();
         await expect(page.locator('#modal-title')).toHaveText(first.title);
-        await expect(page.locator('#modal-desc')).toHaveText(
-            en.projects_desc[first.id as keyof typeof en.projects_desc]
-        );
+        await expect(page.locator('#modal-desc')).toHaveText(first.description.en);
 
         await page.keyboard.press('Escape');
         await expect(page.locator(modal)).toBeHidden();
@@ -131,7 +129,7 @@ test.describe('language', () => {
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
         await expect(page).toHaveTitle(fr.meta.home.title);
         await expect(page.locator(projectsTitle)).toHaveText(fr.projects.title);
-        await expect(page.locator('#modal-desc')).toHaveText(fr.projects_desc.arcade); // runtime content too
+        await expect(page.locator('#modal-desc')).toHaveText(PROJECTS.find((p) => p.id === 'arcade')!.description.fr); // runtime content too
 
         await page.reload();
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');

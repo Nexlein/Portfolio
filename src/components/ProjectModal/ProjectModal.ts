@@ -52,7 +52,7 @@ export class ProjectModal {
     open(project: ProjectEntry): void {
         this.titleEl.textContent = project.title;
         this.pageEl.href = localizedPath(projectPath(project.id), i18n.getLang());
-        this.descEl.innerHTML = i18n.t(`projects_desc.${project.id}`);
+        this.descEl.innerHTML = project.description[i18n.getLang()];
 
         this.tagsEl.innerHTML = project.tags.map((t: string) => `<span class="project-tag">${t}</span>`).join('');
 
