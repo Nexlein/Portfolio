@@ -97,6 +97,11 @@ elastic silk to its 3 nearest cards (within 340 px), a new target shoots a fresh
 card's similarity threads and badges the similar cards with their score. Centre = "Now" (current job, period, school year) with
 faint time rings around it, so "closer = more recent" reads. Reduced motion: no drift, no pluck, instant silk. |
 
+Round 7 follow-up: threads no longer run off the board edges. One elliptical rim (about 1.75:1) closes the web around
+"Now", cards are kept inside it (`layout(W, H, fit)`), and outer cards tie to the rim along their radial direction (a V of
+two threads for the outermost). Activation pulses wander along the similarity threads, sometimes cascade to the next one, and
+flash the card they reach; an unfolded card fires along all its own threads (a "forward pass").
+
 **Verdict:** _(to fill in: winner, and what to borrow from the others)_
 
 Delete this folder, `prototype-home.html`, the `prototype` npm script, the prototype fonts and the

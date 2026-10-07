@@ -1,5 +1,6 @@
 // PROTOTYPE — Round 7 (J) "silk": a real web. Inner threads join each project to its 2 most similar ones,
-// outer cards tie to the board's frame, threads sag like silk and get plucked when the cursor crosses them.
+// outer cards tie to a circular frame around "Now", threads sag like silk and get plucked when the cursor crosses them.
+// Activation pulses travel along the threads (and cascade), like signals in a network.
 // The cursor spins silk to its nearest cards (like a nearest-neighbour query). The centre is "Now":
 // recent work sits closest to it, older work further out.
 import './web.css';
@@ -38,16 +39,21 @@ interface Thread {
     path: SVGPathElement;
     pluckAt: number;
     pluckDir: number;
+    off: number; // current pluck offset, so pulses ride the vibrating thread
+}
+
+interface Pulse {
+    th: Thread;
+    from: Card;
+    t0: number;
+    dur: number;
+    dot: SVGCircleElement;
 }
 
 interface Silk {
     target: Card | null;
     grow: number;
     path: SVGPathElement;
-}
-
-function seeded(seed: number): () => number {
-    return () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 }
 
 function el<K extends keyof SVGElementTagNameMap>(tag: K, cls: string, parent: Element): SVGElementTagNameMap[K] {
@@ -65,30 +71,53 @@ function crossing(p1: Pt, p2: Pt, a: Pt, b: Pt): number {
     return d1 * d2 < 0 && side(p1, p2, a) * side(p1, p2, b) < 0 ? Math.sign(d2) : 0;
 }
 
-/** Quadratic silk from a to b: sags under gravity, plus a sideways offset (pluck). */
-function silk(a: Pt, b: Pt, sag: number, off = 0): string {
+/** Control point of a silk thread from a to b: sags under gravity, plus a sideways offset (pluck). */
+function control(a: Pt, b: Pt, sag: number, off: number): Pt {
     const dx = b.x - a.x,
         dy = b.y - a.y,
         len = Math.hypot(dx, dy) || 1;
-    const cx = (a.x + b.x) / 2 + (-dy / len) * off,
-        cy = (a.y + b.y) / 2 + len * sag + (dx / len) * off;
-    return `M${a.x.toFixed(1)} ${a.y.toFixed(1)}Q${cx.toFixed(1)} ${cy.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+    return { x: (a.x + b.x) / 2 + (-dy / len) * off, y: (a.y + b.y) / 2 + len * sag + (dx / len) * off };
 }
 
-/** Frame anchors: a card close to a wall ties to it, slanted away from the centre like a web's radial threads. */
-function frameAnchors(star: Star, i: number, W: number, H: number): Pt[] {
-    const rnd = seeded(131 + i * 17);
-    const cx = W / 2,
-        cy = H / 2,
-        reach = 260;
-    const slant = (v: number, c: number, max: number) =>
-        Math.min(max - 8, Math.max(8, v + (v - c) * 0.45 + (rnd() - 0.5) * 60));
-    const out: Pt[] = [];
-    if (star.x < reach) out.push({ x: -2, y: slant(star.y, cy, H) });
-    if (W - star.x < reach) out.push({ x: W + 2, y: slant(star.y, cy, H) });
-    if (star.y < reach * 0.8) out.push({ x: slant(star.x, cx, W), y: -2 });
-    if (H - star.y < reach * 0.8) out.push({ x: slant(star.x, cx, W), y: H + 2 });
-    return out.slice(0, 2);
+function silk(a: Pt, b: Pt, sag: number, off = 0): string {
+    const c = control(a, b, sag, off);
+    return `M${a.x.toFixed(1)} ${a.y.toFixed(1)}Q${c.x.toFixed(1)} ${c.y.toFixed(1)} ${b.x.toFixed(1)} ${b.y.toFixed(1)}`;
+}
+
+/** Point at u (0..1) along the same quadratic. */
+function along(a: Pt, b: Pt, sag: number, off: number, u: number): Pt {
+    const c = control(a, b, sag, off),
+        v = 1 - u;
+    return { x: v * v * a.x + 2 * u * v * c.x + u * u * b.x, y: v * v * a.y + 2 * u * v * c.y + u * u * b.y };
+}
+
+const sagOf = (th: Thread) => (th.kind === 'sim' ? 0.07 : 0.02);
+
+interface Frame {
+    cx: number;
+    cy: number;
+    rx: number;
+    ry: number;
+}
+
+/** Circular frame around the centre (an ellipse filling the board): the web's outer thread. */
+const frameOf = (W: number, H: number): Frame => {
+    const ry = H / 2 - 26;
+    return { cx: W / 2, cy: H / 2, rx: Math.min(W / 2 - 22, ry * 1.75), ry };
+};
+
+/** Where card centres may sit: inside the frame with room for the card itself (190 × 52). */
+const innerOf = (f: Frame) => ({ rx: f.rx - 125, ry: f.ry - 44 });
+
+/** Outer cards tie to the frame along their radial direction; the outermost ring gets a V of two threads. */
+function frameAnchors(star: Star, f: Frame): Pt[] {
+    const nx = (star.x - f.cx) / f.rx,
+        ny = (star.y - f.cy) / f.ry,
+        norm = Math.hypot(nx, ny);
+    if (norm < 0.5) return [];
+    const theta = Math.atan2(ny, nx);
+    const at = (a: number) => ({ x: f.cx + Math.cos(a) * f.rx, y: f.cy + Math.sin(a) * f.ry });
+    return norm > 0.68 ? [at(theta - 0.14), at(theta + 0.14)] : [at(theta)];
 }
 
 function cardHtml(p: ProjectEntry): string {
@@ -116,7 +145,7 @@ function nowHtml(): string {
 
 export function mountSilk(host: HTMLElement): (domain: string) => void {
     host.innerHTML = `<div class="vi-web vj-web" aria-label="Projects on a web: threads join similar projects, recent work sits near the centre. Hover or focus a project to unfold it; select it to open its page.">
-<svg><g class="rings"></g><g class="threads"></g><g class="silks"></g></svg>
+<svg><g class="rings"></g><g class="threads"></g><g class="pulses"></g><g class="silks"></g></svg>
 ${nowHtml()}
 ${PROJECTS.map(cardHtml).join('')}
 <p class="vi-legend mono">closer to the centre = more recent · threads join similar projects · hover to unfold</p></div>`;
@@ -126,6 +155,7 @@ ${PROJECTS.map(cardHtml).join('')}
     const ringsG = svg.querySelector('.rings')!;
     const threadsG = svg.querySelector('.threads')!;
     const silksG = svg.querySelector('.silks')!;
+    const pulsesG = svg.querySelector('.pulses')!;
     const now = web.querySelector<HTMLElement>('.vj-now')!;
     const els = [...web.querySelectorAll<HTMLAnchorElement>('.vi-card')];
 
@@ -142,9 +172,13 @@ ${PROJECTS.map(cardHtml).join('')}
     const build = () => {
         const W = web.clientWidth,
             H = web.clientHeight;
-        const stars = layout(W, H);
+        const f = frameOf(W, H),
+            inner = innerOf(f);
+        const stars = layout(W, H, inner);
         threadsG.innerHTML = '';
         ringsG.innerHTML = '';
+        pulsesG.innerHTML = '';
+        pulses = [];
         cards = stars.map((star, i) => ({
             star,
             el: els.find((c) => c.dataset.id === star.p.id)!,
@@ -172,12 +206,18 @@ ${PROJECTS.map(cardHtml).join('')}
                     s,
                     path: el('path', 'thread', threadsG),
                     pluckAt: -1e9,
-                    pluckDir: 0
+                    pluckDir: 0,
+                    off: 0
                 });
             }
-        // Frame: outer cards tie to the walls
-        cards.forEach((c, i) => {
-            for (const anchor of frameAnchors(c.star, i, W, H))
+        // Frame: one ellipse round the whole web, outer cards tie to it
+        const rim = el('ellipse', 'thread rim', threadsG);
+        rim.setAttribute('cx', String(f.cx));
+        rim.setAttribute('cy', String(f.cy));
+        rim.setAttribute('rx', String(f.rx));
+        rim.setAttribute('ry', String(f.ry));
+        cards.forEach((c) => {
+            for (const anchor of frameAnchors(c.star, f))
                 threads.push({
                     kind: 'frame',
                     a: c,
@@ -186,7 +226,8 @@ ${PROJECTS.map(cardHtml).join('')}
                     s: 0,
                     path: el('path', 'thread frame', threadsG),
                     pluckAt: -1e9,
-                    pluckDir: 0
+                    pluckDir: 0,
+                    off: 0
                 });
         });
 
@@ -195,8 +236,8 @@ ${PROJECTS.map(cardHtml).join('')}
             const e = el('ellipse', 'ring', ringsG);
             e.setAttribute('cx', String(W / 2));
             e.setAttribute('cy', String(H / 2));
-            e.setAttribute('rx', String(W * 0.44 * r));
-            e.setAttribute('ry', String(H * 0.47 * r));
+            e.setAttribute('rx', String(inner.rx * r));
+            e.setAttribute('ry', String(inner.ry * r));
         }
         now.style.left = `${W / 2}px`;
         now.style.top = `${H / 2}px`;
@@ -251,12 +292,58 @@ ${PROJECTS.map(cardHtml).join('')}
             for (const th of threads) {
                 const age = (t - th.pluckAt) / 1000;
                 // Pluck: a damped vibration, gone in ~0.6 s
-                const off = age < 0.7 ? th.pluckDir * 7 * Math.sin(age * Math.PI * 2 * 5.5) * Math.exp(-age / 0.17) : 0;
-                th.path.setAttribute('d', silk(th.a, th.b ?? th.anchor, th.kind === 'sim' ? 0.07 : 0.035, off));
+                th.off = age < 0.7 ? th.pluckDir * 7 * Math.sin(age * Math.PI * 2 * 5.5) * Math.exp(-age / 0.17) : 0;
+                th.path.setAttribute('d', silk(th.a, th.b ?? th.anchor, sagOf(th), th.off));
             }
+            if (!frozen) drawPulses(t);
             drawSilk(frozen);
         }
         requestAnimationFrame(frame);
+    };
+
+    // Activation pulses: idle ones wander and sometimes cascade; an unfolded card fires along its own threads
+    let pulses: Pulse[] = [],
+        nextIdle = 0,
+        nextBurst = 0;
+    const sims = () => threads.filter((th) => th.kind === 'sim');
+    const fire = (from: Card, th: Thread, t: number) => {
+        if (pulses.length >= 16) return;
+        const to = th.a === from ? th.b! : th.a;
+        const dot = el('circle', 'pulse', pulsesG);
+        dot.setAttribute('r', '2.3');
+        pulses.push({ th, from, t0: t, dur: 450 + Math.hypot(to.x - from.x, to.y - from.y) * 2.6, dot });
+    };
+    const drawPulses = (t: number) => {
+        if (opened && t > nextBurst) {
+            for (const th of sims()) if (th.a === opened || th.b === opened) fire(opened, th, t);
+            nextBurst = t + 900;
+        } else if (!opened && t > nextIdle) {
+            const all = sims(),
+                th = all[Math.floor(Math.random() * all.length)];
+            fire(Math.random() < 0.5 ? th.a : th.b!, th, t);
+            nextIdle = t + 500 + Math.random() * 700;
+        }
+        pulses = pulses.filter((p) => {
+            const u = (t - p.t0) / p.dur;
+            const to = p.th.a === p.from ? p.th.b! : p.th.a;
+            if (u >= 1) {
+                p.dot.remove();
+                to.el.classList.remove('fire');
+                void to.el.offsetWidth; // restart the flash
+                to.el.classList.add('fire');
+                // Cascade: the signal sometimes carries on through the next thread
+                if (!opened && Math.random() < 0.45) {
+                    const next = sims().filter((th) => th !== p.th && (th.a === to || th.b === to));
+                    if (next.length) fire(to, next[Math.floor(Math.random() * next.length)], t);
+                }
+                return false;
+            }
+            const e = 1 - (1 - u) ** 2; // ease out, like a signal slowing into the next node
+            const pt = along(p.th.a, p.th.b!, sagOf(p.th), p.th.off, p.th.a === p.from ? e : 1 - e);
+            p.dot.setAttribute('cx', pt.x.toFixed(1));
+            p.dot.setAttribute('cy', pt.y.toFixed(1));
+            return true;
+        });
     };
 
     // Cursor silk: up to 3 threads to the nearest cards; a new target makes the thread shoot out again
@@ -331,6 +418,7 @@ ${PROJECTS.map(cardHtml).join('')}
         c.el.classList.add('open');
         web.classList.add('focus');
         mark(c, true);
+        nextBurst = 0;
     };
     const close = (c: Card) => {
         c.hold = false;

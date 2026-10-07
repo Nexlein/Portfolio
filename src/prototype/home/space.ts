@@ -80,12 +80,13 @@ export interface Star {
     phase: number;
 }
 
-export function layout(W: number, H: number): Star[] {
+/** Lay the projects out round the centre. With `fit`, cards stay inside that ellipse instead of the board's rectangle. */
+export function layout(W: number, H: number, fit?: { rx: number; ry: number }): Star[] {
     const coords = mds(PROJECTS);
     const cx = W / 2,
         cy = H / 2,
-        rx = W * 0.44,
-        ry = H * 0.47;
+        rx = fit ? fit.rx : W * 0.44,
+        ry = fit ? fit.ry : H * 0.47;
     // Similar projects share a direction; spread directions round the full circle while keeping their order
     const raw = coords.map(([x, y]) => Math.atan2(y, x));
     const rank = raw.map((a, i) => raw.filter((b, j) => b < a || (b === a && j < i)).length);
@@ -126,6 +127,13 @@ export function layout(W: number, H: number): Star[] {
         for (const s of stars) {
             s.x = Math.min(W - CW / 2 - 16, Math.max(CW / 2 + 16, s.x));
             s.y = Math.min(H - CH / 2 - 24, Math.max(CH / 2 + 24, s.y));
+            if (fit) {
+                const n = Math.hypot((s.x - cx) / rx, (s.y - cy) / ry);
+                if (n > 1) {
+                    s.x = cx + (s.x - cx) / n;
+                    s.y = cy + (s.y - cy) / n;
+                }
+            }
             // keep clear of the core
             const dx = s.x - cx,
                 dy = s.y - cy,

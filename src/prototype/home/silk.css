@@ -47,6 +47,28 @@
     font-weight: 500;
 }
 
+/* Circular frame round the web */
+.vj-web .thread.rim {
+    stroke-opacity: 0.3;
+}
+
+/* Activation pulses and the flash when one reaches a card */
+.vj-web .pulse {
+    fill: var(--signal);
+    filter: drop-shadow(0 0 3px var(--signal));
+}
+
+.vj-web .vi-card.fire {
+    animation: vj-fire 650ms ease-out;
+}
+
+@keyframes vj-fire {
+    from {
+        border-color: var(--signal);
+        box-shadow: 0 0 0 3px color-mix(in sRGB, var(--signal) 30%, transparent);
+    }
+}
+
 /* Cursor silk */
 .vj-web .silk {
     fill: none;
