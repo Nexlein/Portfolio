@@ -1,5 +1,5 @@
-import { ProjectEntry, ProjectMedia } from '../../data/projects.js';
-import { i18n, translateDOM } from '../../core/i18n.js';
+import { ProjectEntry, ProjectMedia } from '@/data/projects';
+import { i18n, translateDOM } from '@/core/i18n';
 
 export function renderProjectGrid(projects: ProjectEntry[]): void {
     const grid = document.getElementById('projects-grid');

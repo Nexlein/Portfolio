@@ -1,5 +1,5 @@
-import { ProjectEntry } from '../data/projects.js';
-import { renderProjectGrid } from '../components/ProjectView/ProjectView.js';
+import { ProjectEntry } from '@/data/projects';
+import { renderProjectGrid } from '@/components/ProjectView/ProjectView';
 
 export class ProjectManager {
     private projects: ProjectEntry[];

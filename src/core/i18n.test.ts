@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
 import { afterEach, describe, expect, it } from 'vitest';
-import { i18n, translateDOM } from './i18n.js';
-import { en } from '../i18n/en.js';
-import { fr } from '../i18n/fr.js';
+import { i18n, translateDOM } from './i18n';
+import { en } from '@/i18n/en';
+import { fr } from '@/i18n/fr';
 
 describe('i18n', () => {
     afterEach(() => {

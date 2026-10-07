@@ -32,6 +32,9 @@ function sharedHead(): Plugin {
 
 export default defineConfig({
     plugins: [sharedHead()],
+    resolve: {
+        alias: { '@': resolve(import.meta.dirname, 'src') }
+    },
     build: {
         rollupOptions: {
             input: {

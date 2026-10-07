@@ -1,4 +1,4 @@
-import { i18n, translateDOM } from '../../core/i18n.js';
+import { i18n, translateDOM } from '@/core/i18n';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Initial translation pass

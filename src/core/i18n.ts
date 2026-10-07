@@ -1,5 +1,5 @@
-import { en } from '../i18n/en.js';
-import { fr } from '../i18n/fr.js';
+import { en } from '@/i18n/en';
+import { fr } from '@/i18n/fr';
 
 type Lang = 'en' | 'fr';
 
