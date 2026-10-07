@@ -12,7 +12,7 @@
 
     /* Text */
     --text-primary: #f0f4f8;
-    --text-muted: #6b7a99;
+    --text-muted: #7785a1; /* 4.6:1 on --bg-elevated (WCAG AA) */
     --text-dim: #3a4560;
 
     /* Accents */
@@ -31,8 +31,10 @@
     /* Transitions & Animation */
     --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-    --t-fast: 150ms var(--ease-out);
-    --t-normal: 250ms var(--ease-out);
+    --d-fast: 150ms;
+    --d-normal: 250ms;
+    --t-fast: var(--d-fast) var(--ease-out);
+    --t-normal: var(--d-normal) var(--ease-out);
 
     /* Interactive States */
     --scale-press: 0.97;

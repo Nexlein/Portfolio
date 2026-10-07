@@ -10,13 +10,18 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
+    visibility: hidden; /* keeps the closed modal out of tab order and the accessibility tree */
     pointer-events: none;
-    transition: opacity var(--t-normal);
+    transition:
+        opacity var(--t-normal),
+        visibility 0s linear var(--d-normal); /* hide only after the fade-out */
 }
 
 .modal-backdrop.show {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    transition: opacity var(--t-normal);
 }
 
 .modal-window {
