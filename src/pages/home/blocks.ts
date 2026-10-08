@@ -1,0 +1,114 @@
+/**
+ * Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the
+ * matching data-render names). Everything a visitor reads is in the HTML; scripts only add motion and interaction.
+ * Relative imports only: rendered from Node.
+ */
+import { EXPERIENCES, NOW, OFFERS } from '../../data/profile.ts';
+import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
+import { OWNER } from '../../core/site.ts';
+import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { domainIcon } from '../../ui/icons.ts';
+import { videoPoster } from '../../ui/video.ts';
+import { numbers, pathChart } from '../../components/Charts/render.ts';
+import { thisMonth } from '../../components/Charts/data.ts';
+import { pickShown } from '../../components/NeuralMap/graph.ts';
+
+/** Most projects the map shows at once (the rest rotate in). */
+export const MAP_MAX = 24;
+
+const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
+
+export const still = (p: ProjectEntry) =>
+    p.media.type === 'video'
+        ? videoPoster(p.media.src)
+        : p.media.type === 'image'
+          ? p.media.src
+          : p.media.images[0].src;
+
+/** First sentence of the description. */
+const oneLiner = (p: ProjectEntry, lang: Lang) => `${p.description[lang].split('. ')[0].replace(/\.$/, '')}.`;
+
+const domainName = (lang: Lang, d: string) => t(lang, `domains.${d}`);
+
+export function availability(lang: Lang): string {
+    return NOW.availability[lang];
+}
+
+export function featured(lang: Lang): string {
+    return PROJECTS.filter((p) => p.featured)
+        .map(
+            (p) => `<a class="feature surface reveal" href="${localizedPath(projectPath(p.id), lang)}">
+<span class="feature-media"><img src="${still(p)}" alt="" loading="lazy" width="640" height="400" /></span>
+<span class="feature-body"><span class="eyebrow">${domainName(lang, p.category)}</span><strong>${p.title}</strong>
+<span class="feature-line">${oneLiner(p, lang)}</span><span class="mono">${p.tags.slice(0, 4).join(' · ')}</span>
+<span class="link">${t(lang, 'featured.open')} <span aria-hidden="true">›</span></span></span></a>`
+        )
+        .join('');
+}
+
+/** "17 projects. / One network." as two masked lines. */
+export function workTitle(lang: Lang): string {
+    return `<span class="line"><span>${t(lang, 'work.title1').replace('{n}', String(PROJECTS.length))}</span></span><span class="line"><span class="recede">${t(lang, 'work.title2')}</span></span>`;
+}
+
+/** One button per domain present in the data, in a stable order. */
+export function domainQuery(lang: Lang): string {
+    const used = new Set(PROJECTS.map((p) => p.category as string));
+    return ['ai', 'systems', 'architecture', 'graphical', 'devops']
+        .filter((d) => used.has(d))
+        .map((d) => `<button type="button" data-domain="${d}">${domainName(lang, d)}</button>`)
+        .join('');
+}
+
+/** Every project, as a plain list: phones, no JavaScript, search engines, and "See all" under the map. */
+export function projectList(lang: Lang): string {
+    return PROJECTS.map(
+        (
+            p
+        ) => `<li><a href="${localizedPath(projectPath(p.id), lang)}" data-domain="${p.category}"><span class="list-ico">${domainIcon(p.category)}</span>
+<span class="list-txt"><strong>${p.title}</strong><span>${oneLiner(p, lang)}</span></span><span class="list-chev" aria-hidden="true">›</span></a></li>`
+    ).join('');
+}
+
+/** "Showing 24 of 40, the rest rotate in." — only when the map cannot hold everything. */
+export function mapMore(lang: Lang): string {
+    const { shown } = pickShown(PROJECTS, MAP_MAX);
+    if (shown.length === PROJECTS.length) return '';
+    return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all" aria-expanded="false">${t(lang, 'work.seeAll')}</button>`;
+}
+
+export function experience(lang: Lang): string {
+    return EXPERIENCES.map(
+        (
+            e
+        ) => `<li><span class="exp-when">${e.period[lang]}</span><span class="exp-what"><strong>${e.title[lang]}${e.org ? ` · ${e.org}` : ''}</strong>
+<span>${e.summary[lang].split('. ')[0].replace(/\.$/, '')}.</span></span></li>`
+    ).join('');
+}
+
+export const pathBlock = (lang: Lang) => pathChart(lang, PROJECTS, thisMonth());
+
+export const numbersBlock = (lang: Lang) => numbers(lang, PROJECTS, thisMonth());
+
+/** The two ways to work together. Pay details stay on the CV and the availability page. */
+export function hire(lang: Lang): string {
+    return OFFERS.map(
+        (o) => `<article class="tile surface reveal">
+<p class="eyebrow">${t(lang, `hire.${o.id}`)}</p><h3>${o.title[lang]}</h3><p class="tile-lede">${o.summary[lang]}</p>
+<dl>${o.rows
+            .filter((r) => r.label.en !== 'Recruiter Info')
+            .map((r) => `<div><dt>${r.label[lang]}</dt><dd>${r.value[lang]}</dd></div>`)
+            .join('')}</dl>
+<a class="link" href="mailto:${OWNER.email}">${t(lang, `hire.cta.${o.id}`)} <span aria-hidden="true">›</span></a>
+</article>`
+    ).join('');
+}
+
+/** Copy email, LinkedIn, CV. */
+export function contact(lang: Lang): string {
+    return `<button type="button" class="btn copy-email" data-email="${OWNER.email}">${t(lang, 'hire.copy')}</button>
+<a class="link" href="${OWNER.linkedin}">LinkedIn <span aria-hidden="true">›</span></a>
+<a class="link" href="${localizedPath('/cv.html', lang)}">CV <span aria-hidden="true">›</span></a>`;
+}
+
+export const email = () => OWNER.email;

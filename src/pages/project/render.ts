@@ -44,7 +44,7 @@ export function fillProjectPage(document: Document, project: ProjectEntry, lang:
 
     $('project-tags').innerHTML = project.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('');
     $('project-media').innerHTML = mediaHtml(project);
-    $('project-back').setAttribute('href', `${localizedPath('/', lang)}#projects`);
+    $('project-back').setAttribute('href', `${localizedPath('/', lang)}#work`);
 
     const github = $('project-github');
     if (project.github) {

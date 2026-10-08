@@ -1,0 +1,81 @@
+/*
+ * Design tokens of the redesign. Every colour the pages use comes from here; a theme is one block keyed on
+ * html[data-theme] (set before first paint by the head script, see vite-plugins/shared-head.ts).
+ * Adding a theme: one block below + one entry in src/components/Nav/themes.ts.
+ */
+@import '@fontsource/schibsted-grotesk/latin-400.css';
+@import '@fontsource/schibsted-grotesk/latin-500.css';
+@import '@fontsource/schibsted-grotesk/latin-600.css';
+@import '@fontsource/schibsted-grotesk/latin-700.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+/* Midnight (default): near-black with a blue cast, Apple greys, amber for what is active */
+:root {
+    --bg: #05070d;
+    --surface: #0f131c;
+    --raised: #161b26;
+    --ink: #f5f5f7;
+    --muted: #8e93a0;
+    --line: #1e2431;
+    --hair: rgb(255 255 255 / 8%);
+    --signal: #f5a524;
+    --cold: #3a5ccc;
+    --pos: #2fbf71;
+    --shadow: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 10px 30px rgb(0 0 0 / 35%);
+    --shadow-lift: 0 24px 50px rgb(0 0 0 / 22%);
+
+    /* Domains (charts and map only) */
+    --d-ai: var(--signal);
+    --d-systems: #34c3b0;
+    --d-architecture: #6f8cff;
+    --d-graphical: #e86fae;
+    --d-devops: #a98bff;
+
+    /* Chart series: the first (most used) is the accent */
+    --c0: var(--signal);
+    --c1: #6f8cff;
+    --c2: #3a4a6b;
+    --c3: #5d6474;
+    --c4: #34c3b0;
+
+    /* Type */
+    --font-sans: 'Schibsted Grotesk', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    /* Motion: strong ease-out for UI, ease-in-out for things moving on screen */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+    /* Layout */
+    --max: 1080px;
+    --gutter: 20px;
+    --nav-h: 52px;
+
+    color-scheme: dark;
+}
+
+/* Daylight */
+:root[data-theme='daylight'] {
+    --bg: #fbfbfd;
+    --surface: #fff;
+    --raised: #f5f5f7;
+    --ink: #1d1d1f;
+    --muted: #6e6e73;
+    --line: #e3e3e8;
+    --hair: rgb(0 0 0 / 8%);
+    --signal: #a35c00; /* 5:1 on white: amber text stays readable */
+    --pos: #17834a;
+    --shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 10px 30px rgb(0 0 0 / 6%);
+    --shadow-lift: 0 24px 50px rgb(0 0 0 / 10%);
+    --d-systems: #0f8a7b;
+    --d-architecture: #3a5ccc;
+    --d-graphical: #c23f84;
+    --d-devops: #6a4fd6;
+    --c1: #3a5ccc;
+    --c2: #b9c3da;
+    --c3: #a1a6b3;
+    --c4: #0f8a7b;
+
+    color-scheme: light;
+}

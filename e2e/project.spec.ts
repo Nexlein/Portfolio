@@ -22,11 +22,11 @@ test.describe('project page', () => {
         await expect(active).toHaveAttribute('data-idx', '1');
     });
 
-    test('the back link returns to the project grid', async ({ page }) => {
+    test('the back link returns to the projects on the home page', async ({ page }) => {
         await page.goto(`/projects/${video.id}.html`);
         await page.locator('#project-back').click();
-        await expect(page).toHaveURL(/\/#projects$/);
-        await expect(page.locator('.project-card').first()).toBeVisible();
+        await expect(page).toHaveURL(/\/#work$/);
+        await expect(page.locator('#work h2')).toBeVisible();
     });
 
     test('the navbar works from a nested page', async ({ page, isMobile }) => {
@@ -44,7 +44,7 @@ test.describe('project page', () => {
         await page.goto(`/fr/projects/${video.id}.html`);
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
         await expect(page.locator('#project-desc')).toHaveText(video.description.fr);
-        await expect(page.locator('#project-back')).toHaveAttribute('href', '/fr/#projects');
+        await expect(page.locator('#project-back')).toHaveAttribute('href', '/fr/#work');
 
         if (isMobile) await page.locator('#mobile-menu-btn').click();
         await page.locator('#nav-lang-btn').click();
@@ -53,16 +53,16 @@ test.describe('project page', () => {
     });
 });
 
-test.describe('modal', () => {
-    test('links to the project page in the current language', async ({ page }) => {
+test.describe('from the home page', () => {
+    test('project links open the page in the current language', async ({ page }) => {
         for (const [home, prefix] of [
             ['/', ''],
             ['/fr/', '/fr']
         ]) {
-            await page.goto(`${home}?project=${video.id}`);
-            await page.locator('#modal-page').click();
-            await expect(page).toHaveURL(new RegExp(`${prefix}/projects/${video.id}\\.html$`));
-            await expect(page.locator('h1')).toHaveText(video.title);
+            await page.goto(home);
+            await page.locator(`.feature[href$="/projects/${PROJECTS.find((p) => p.featured)!.id}.html"]`).click();
+            await expect(page).toHaveURL(new RegExp(`${prefix}/projects/[\\w-]+\\.html$`));
+            await expect(page.locator('h1')).toBeVisible();
         }
     });
 });

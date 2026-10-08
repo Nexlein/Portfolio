@@ -17,6 +17,26 @@ export const en = {
                 "Nielsen Combe-Bracciale's availability: Epitech Tek3 full-time internship and freelance missions in AI integration and backend development."
         }
     },
+    site: {
+        nav: {
+            label: 'Main navigation',
+            work: 'Work',
+            path: 'Path',
+            numbers: 'Numbers',
+            hire: 'Hire',
+            cv: 'CV',
+            language: 'Language',
+            theme: 'Choose a theme'
+        },
+        themes: {
+            midnight: 'Midnight',
+            daylight: 'Daylight'
+        },
+        footer: {
+            email: 'Email',
+            source: 'View the source'
+        }
+    },
     navbar: {
         home: 'Home',
         journey: 'Journey',
@@ -25,19 +45,112 @@ export const en = {
         contact: 'Contact'
     },
     home: {
-        tag: 'Open to opportunities',
-        bio: 'I build AI systems that decide and learn. My work spans autonomous decision architectures, real-time simulation engines, and high-performance C++.<br><br>Currently studying at Epitech with a focus on applied artificial intelligence.',
-        projects: 'View Projects',
-        viewcv: 'View CV',
-        footerTitle: "Let's Build Something.",
-        footerDesc:
-            'I am currently open to new opportunities. Check my availability to see if our timelines align, or reach out directly.',
-        footerBtn: 'Check Availability'
-    },
-    journey: {
-        eyebrow: 'My Journey',
-        title: 'Experience & Education',
-        sub: 'A timeline of my academic background, professional experience, and continuous learning.'
+        hero: {
+            role: 'AI &amp; C++ engineer · Epitech',
+            title1: 'Software that learns.',
+            title2: 'And decides.',
+            lede: 'I build reinforcement-learning agents, simulations and the systems that run them. Currently an AI developer at Issanka.',
+            work: 'See the work',
+            hire: 'Hire me',
+            switch: 'Show another simulation',
+            sims: {
+                valueIteration: {
+                    name: 'Value iteration',
+                    hint: 'Live value iteration. Your cursor is the reward. Click to place a wall.'
+                },
+                flocking: {
+                    name: 'Flocking agents',
+                    hint: 'Live flocking agents. They chase your cursor. Click to scare them.'
+                },
+                descent: {
+                    name: 'Gradient descent',
+                    hint: 'Live gradient descent. Your cursor is the minimum. Click to add a hill.'
+                }
+            }
+        },
+        featured: {
+            title1: 'Selected work.',
+            title2: 'Three to start with.',
+            open: 'Open project'
+        },
+        work: {
+            title1: '{n} projects.',
+            title2: 'One network.',
+            sub: 'Projects connect where they share skills.',
+            subDesk: 'Hover one to see what it lights up, or ask the network.',
+            ask: 'Light up a domain',
+            mapLabel:
+                'Projects as a network: the most recent closest to the centre, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.',
+            more: 'Showing {shown} of {n}, the rest rotate in.',
+            seeAll: 'See all projects',
+            hideAll: 'Hide the list',
+            now: 'Now',
+            open: 'Open project',
+            similar: '{s} similar',
+            periods: {
+                Tek1: 'tek 1 · 2024–25',
+                Tek2: 'tek 2 · 2025–26',
+                Personal: 'personal · 2026'
+            }
+        },
+        domains: {
+            ai: 'AI &amp; RL',
+            systems: 'Systems',
+            architecture: 'Architecture',
+            graphical: 'Graphics &amp; sims',
+            devops: 'DevOps'
+        },
+        domainsShort: {
+            ai: 'AI &amp; RL',
+            systems: 'Systems',
+            architecture: 'Architecture',
+            graphical: 'Graphics',
+            devops: 'DevOps'
+        },
+        path: {
+            title1: 'The path so far.',
+            title2: 'Every checkpoint earned.',
+            symbol: 'Skills · toolbox index',
+            delta: 'past 12 months',
+            range: 'Time range',
+            aria: 'Distinct skills over time: {n} today.',
+            skills: '{n} skills',
+            shipped: '{p} started'
+        },
+        numbers: {
+            title1: 'By the numbers.',
+            title2: 'Computed, not claimed.',
+            sub: 'Every chart below is calculated from the projects themselves.',
+            view: 'View',
+            other: 'Other',
+            infra: 'Infra / no-code',
+            projects: 'projects',
+            coverage: 'Coverage',
+            domains: '{n} domains',
+            periods: 'Periods',
+            byPeriod: '{n} projects, by period',
+            languages: 'Languages',
+            languagesTitle: 'Main language, by period',
+            growth: 'Growth',
+            growthTitle: 'New skills, by period',
+            mostUsed: 'Most used',
+            distinct: '{n} distinct skills',
+            thisYear: 'This year',
+            newSkills: '{n} new skills in 12 months'
+        },
+        hire: {
+            title1: 'Two ways to work together.',
+            title2: 'Internship or freelance.',
+            'full-time': 'Internship',
+            freelance: 'Freelance',
+            cta: {
+                'full-time': 'Discuss an internship',
+                freelance: 'Ask for a quote'
+            },
+            talk: 'Either way, the fastest is an email.',
+            copy: 'Copy email',
+            copied: 'Email copied'
+        }
     },
     projects: {
         eyebrow: 'Software Engineering',

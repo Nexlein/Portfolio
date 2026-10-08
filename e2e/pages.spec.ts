@@ -1,13 +1,14 @@
 import { test, expect } from './fixtures';
 
+// The redesigned home uses Schibsted Grotesk; the other pages move to it as they are redesigned
 const pages = ['', '/fr'].flatMap((prefix) => [
-    { path: `${prefix}/`, heading: 'Nielsen' },
-    { path: `${prefix}/cv.html`, heading: 'Nielsen' },
-    { path: `${prefix}/availability.html`, heading: null },
-    { path: `${prefix}/projects/zappy.html`, heading: 'Zappy' }
+    { path: `${prefix}/`, heading: prefix ? 'apprend' : 'learns', font: 'Schibsted Grotesk' },
+    { path: `${prefix}/cv.html`, heading: 'Nielsen', font: 'Inter' },
+    { path: `${prefix}/availability.html`, heading: null, font: 'Inter' },
+    { path: `${prefix}/projects/zappy.html`, heading: 'Zappy', font: 'Inter' }
 ]);
 
-for (const { path, heading } of pages) {
+for (const { path, heading, font } of pages) {
     test(`${path} loads with production headers, fonts and no errors`, async ({ page }) => {
         const response = await page.goto(path);
         expect(response?.status()).toBe(200);
@@ -17,10 +18,10 @@ for (const { path, heading } of pages) {
         await expect(page.locator('html')).toHaveAttribute('lang', path.startsWith('/fr/') ? 'fr' : 'en');
         if (heading) await expect(page.locator('h1').first()).toContainText(heading);
 
-        const fontsLoaded = await page.evaluate(async () => {
+        const fontsLoaded = await page.evaluate(async (family) => {
             await document.fonts.ready;
-            return document.fonts.check('16px Inter');
-        });
+            return document.fonts.check(`16px "${family}"`);
+        }, font);
         expect(fontsLoaded).toBe(true);
         // The fixture fails the test on console errors or CSP violations
     });

@@ -6,5 +6,7 @@ export const OWNER = {
     alias: 'Nexlein',
     github: 'https://github.com/Nexlein',
     linkedin: 'https://www.linkedin.com/in/nielsen-combebracciale/',
+    email: 'nielsen.combe-bracciale@epitech.eu',
+    source: 'https://github.com/Nexlein/Portfolio',
     school: 'Epitech'
 } as const;
