@@ -4,6 +4,7 @@
 import './premium.css';
 import './round12.css';
 import './round13.css';
+import './round14.css';
 import {
     clusters,
     countUp,
@@ -92,7 +93,7 @@ function card(faces: string[], wide = false): string {
     return `<article class="vo-card${wide ? ' wide' : ''}"><div class="vo-faces">${faces.join('')}</div>${dots}</article>`;
 }
 
-function bento(r13: boolean): string {
+function bento(r13: boolean, r14 = false): string {
     const n = distinctSkills(),
         domains = new Set(PROJECTS.map((p) => p.category)).size,
         fresh = learnedThisYear();
@@ -101,7 +102,7 @@ function bento(r13: boolean): string {
   ${card([face('Coverage', `${count(domains)} domains`, radar(), true), ...more(face('Periods', `${count(PROJECTS.length)} projects, by period`, donut()))])}
   ${card([face('Languages', 'Main language, by period', stacked(), true), ...more(face('Growth', 'New skills, by period', newSkills()))])}
   ${card([face('Most used', `${count(n)} distinct skills`, topSkills(), true), ...more(face('This year', `${count(fresh.count)} new skills in 12 months`, fresh.html))])}
-  ${card([face('Clusters', 'Projects placed by shared skills: close points have more in common', clusters(), true)], true)}
+  ${r14 ? '' : card([face('Clusters', 'Projects placed by shared skills: close points have more in common', clusters(), true)], true)}
 </div>`;
 }
 
@@ -149,16 +150,22 @@ function experience(): string {
 export const variantN = (root: HTMLElement) => mountPremium(root, 11);
 export const variantO = (root: HTMLElement) => mountPremium(root, 12);
 export const variantP = (root: HTMLElement) => mountPremium(root, 13);
+export const variantQ = (root: HTMLElement) => mountPremium(root, 14);
 
-function mountPremium(root: HTMLElement, level: 11 | 12 | 13): void {
+function mountPremium(root: HTMLElement, level: 11 | 12 | 13 | 14): void {
     const r12 = level >= 12,
-        r13 = level === 13;
+        r13 = level >= 13,
+        r14 = level === 14;
+    const talk = `<div class="vn-actions"><button type="button" class="vn-btn vp-copy" data-email="nielsen.combe-bracciale@epitech.eu">Copy email</button>
+      <a class="vn-link" href="https://www.linkedin.com/in/nielsen-combebracciale/">LinkedIn <span aria-hidden="true">›</span></a>
+      <a class="vn-link" href="/cv.pdf">CV <span aria-hidden="true">›</span></a></div>
+      <p class="vp-mail mono">nielsen.combe-bracciale@epitech.eu</p>`;
     if (r13) stress();
     const sim = r13 ? Math.floor(Math.random() * SIMS.length) : 0;
     const used = new Set<string>(PROJECTS.map((p) => p.category));
     const domains = ['ai', 'systems', 'architecture', 'graphical', 'devops'].filter((d) => used.has(d));
     root.innerHTML = `
-<div class="vn${r12 ? ' vo' : ''}">
+<div class="vn${r12 ? ' vo' : ''}${r14 ? ' vq' : ''}">
   <header class="vn-nav"><a class="vn-name" href="#top">Nielsen<span class="vp-last"> Combe-Bracciale</span></a>
     <nav>${r12 ? '<span class="vo-ind" aria-hidden="true"></span>' : ''}<a href="#work">Work</a><a href="#path">Path</a>${r12 ? '<a href="#numbers">Numbers</a>' : ''}<a href="#hire">Hire</a>${r13 ? '<span class="vp-lang"><a aria-current="true">EN</a><a href="/fr/">FR</a></span>' : ''}${
         r12
@@ -207,26 +214,28 @@ ${
 ${
     r12
         ? `  <section class="vn-section" id="numbers">
-    <div class="vn-head vn-reveal"><h2>By the numbers.<br /><span>Computed, not claimed.</span></h2>
+    <div class="vn-head vn-reveal"><h2${r14 ? ' class="vq-sm"' : ''}>By the numbers.<br /><span>Computed, not claimed.</span></h2>
       <p>Every chart below is calculated from the projects themselves.</p></div>
-    ${bento(r13)}
+    ${bento(r13, r14)}
   </section>`
         : ''
 }
 
   <section class="vn-section" id="hire">
-    <div class="vn-head vn-reveal"><h2>Two ways<br /><span>to work together.</span></h2></div>
+    <div class="vn-head vn-reveal">${r14 ? '<h2 class="vq-sm">Two ways to work together.<br /><span>Internship or freelance.</span></h2>' : '<h2>Two ways<br /><span>to work together.</span></h2>'}</div>
     <div class="vn-tiles vn-reveal">${tiles(r13)}</div>
+    ${r14 ? `<div class="vq-talk vn-reveal"><p>Either way, the fastest is an email.</p>${talk}</div>` : ''}
   </section>
 ${
     r13
-        ? `  <section class="vn-section vp-talk" id="contact">
+        ? `${
+              r14
+                  ? ''
+                  : `  <section class="vn-section vp-talk" id="contact">
     <div class="vn-head vn-reveal"><h2>Let's talk.<br /><span>Internship or freelance.</span></h2>
-      <div class="vn-actions"><button type="button" class="vn-btn vp-copy" data-email="nielsen.combe-bracciale@epitech.eu">Copy email</button>
-      <a class="vn-link" href="https://www.linkedin.com/in/nielsen-combebracciale/">LinkedIn <span aria-hidden="true">›</span></a>
-      <a class="vn-link" href="/cv.pdf">CV <span aria-hidden="true">›</span></a></div>
-      <p class="vp-mail mono">nielsen.combe-bracciale@epitech.eu</p></div>
-  </section>
+      ${talk}</div>
+  </section>`
+          }
   <div class="vp-toast" role="status" aria-live="polite"></div>`
         : ''
 }
@@ -262,7 +271,7 @@ ${
     );
     root.querySelectorAll('.vn-reveal, .vn-path').forEach((n) => io.observe(n));
     if (r12) motion(root);
-    if (r13) living(root, sim);
+    if (r13) living(root, sim, r14);
 }
 
 /** Round 12: chart path, bento reveals, headline lines, hero parallax, nav indicator, spotlight, theme picker. */
@@ -391,7 +400,7 @@ const showFace = (c: HTMLElement, i: number) => {
 };
 
 /** Round 13: hero simulations, featured gallery, rotating bento faces, see all, copy email. */
-function living(root: HTMLElement, first: number): void {
+function living(root: HTMLElement, first: number, calmer: boolean): void {
     const calm = reduceMotion();
 
     // Hero: another simulation on demand (a random one on load)
@@ -421,7 +430,7 @@ function living(root: HTMLElement, first: number): void {
         gdots = [...root.querySelectorAll<HTMLButtonElement>('.vp-gdots button')],
         play = root.querySelector<HTMLButtonElement>('.vp-play')!;
     let at = 0,
-        paused = calm;
+        paused = calm || calmer; // round 14: no autoplay
     const setActive = (i: number) => {
         at = i;
         slides.forEach((s, k) => s.classList.toggle('active', k === i));
@@ -492,7 +501,7 @@ function living(root: HTMLElement, first: number): void {
         }
         setTimeout(nextFace, 10000 / Math.max(1, faced.length));
     };
-    setTimeout(nextFace, 6000);
+    if (!calmer) setTimeout(nextFace, 6000); // round 14: faces change on click only
 
     // See all: on desktop the full list opens under the map
     root.querySelector('.vp-more button')?.addEventListener('click', (e) => {

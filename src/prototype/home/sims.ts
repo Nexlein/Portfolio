@@ -34,7 +34,17 @@ function setup(canvas: HTMLCanvasElement) {
     window.addEventListener('resize', size);
     read();
     size();
-    return { ctx, colors, pointer: () => pointer, W: () => canvas.clientWidth, H: () => canvas.clientHeight };
+    // Off-screen, the simulation stops computing (battery, phones)
+    let seen = true;
+    new IntersectionObserver(([e]) => (seen = e.isIntersecting)).observe(canvas);
+    return {
+        ctx,
+        colors,
+        pointer: () => pointer,
+        W: () => canvas.clientWidth,
+        H: () => canvas.clientHeight,
+        seen: () => seen
+    };
 }
 
 /** When nobody points, a slow wandering target keeps the scene alive. */
@@ -45,7 +55,7 @@ const wander = (t: number, W: number, H: number) => ({
 
 // ── Flocking: separation, alignment, cohesion; the cursor is food, a click scares them ──
 function boids(canvas: HTMLCanvasElement): void {
-    const { ctx, colors, pointer, W, H } = setup(canvas);
+    const { ctx, colors, pointer, W, H, seen } = setup(canvas);
     const N = 200;
     const b = Array.from({ length: N }, () => ({
         x: Math.random() * W(),
@@ -136,7 +146,7 @@ function boids(canvas: HTMLCanvasElement): void {
     if (reduce()) return draw(step());
     const frame = () => {
         if (!canvas.isConnected) return;
-        draw(step());
+        if (seen()) draw(step());
         requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);
@@ -144,7 +154,7 @@ function boids(canvas: HTMLCanvasElement): void {
 
 // ── Gradient descent: the cursor is the minimum of a bumpy loss; a click adds a hill ──
 function descent(canvas: HTMLCanvasElement): void {
-    const { ctx, colors, pointer, W, H } = setup(canvas);
+    const { ctx, colors, pointer, W, H, seen } = setup(canvas);
     const hills = Array.from({ length: 7 }, () => ({
         x: Math.random() * W(),
         y: Math.random() * H(),
@@ -214,7 +224,7 @@ function descent(canvas: HTMLCanvasElement): void {
     if (reduce()) return draw();
     const frame = () => {
         if (!canvas.isConnected) return;
-        draw();
+        if (seen()) draw();
         requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);

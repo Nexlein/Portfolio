@@ -1,0 +1,101 @@
+/* PROTOTYPE — Round 14: calmer. Same content as round 13, fewer things moving on their own. */
+/* stylelint-disable no-descending-specificity -- prototype */
+
+/* Secondary sections speak a little lower */
+.vq h2.vq-sm {
+    font-size: clamp(28px, 3.4vw, 44px);
+    letter-spacing: -0.03em;
+}
+
+/* Selected work: three cards side by side, no slideshow (swipe on phones) */
+.vq .vp-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: var(--max);
+    margin-inline: auto;
+    padding: 4px 20px 8px;
+    overflow: visible;
+}
+
+.vq .vp-slide {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    opacity: 1;
+    scale: 1;
+    transition:
+        transform 260ms var(--ease-out),
+        box-shadow 260ms ease;
+}
+
+.vq .vp-slide .media {
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+}
+
+.vq .vp-slide .body {
+    padding: 24px 26px 26px;
+}
+
+.vq .vp-slide strong {
+    font-size: 24px;
+}
+
+.vq .vp-slide .lede {
+    font-size: 15px;
+}
+
+.vq .vp-controls,
+.vq .vp-progress {
+    display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .vq .vp-slide:hover {
+        transform: translateY(-4px);
+        box-shadow:
+            var(--shadow),
+            0 24px 50px rgb(0 0 0 / 22%);
+    }
+
+    .vq .vp-slide:hover .media img {
+        scale: 1.03;
+    }
+}
+
+@media (width <= 900px) {
+    .vq .vp-gallery {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+
+    .vq .vp-slide {
+        flex: 0 0 82vw;
+    }
+}
+
+/* One beating dot is enough: the availability pill keeps it, the chart's "now" stays still */
+.vq .vo-plot .now-ring {
+    display: none;
+}
+
+/* Hire and contact in one place */
+.vq-talk {
+    margin-top: 56px;
+    text-align: center;
+}
+
+.vq-talk > p:first-child {
+    margin: 0;
+    color: var(--muted);
+    font-size: 17px;
+}
+
+.vq-talk .vn-actions {
+    margin-top: 22px;
+}
+
+/* Faces only change on click now: the countdown has nothing to count */
+.vq .vo-card.next .vo-dots button::after {
+    display: none;
+}

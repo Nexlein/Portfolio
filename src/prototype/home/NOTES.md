@@ -199,6 +199,16 @@ bar and a Pause button (WCAG 2.2.2), paused on hover, focus, touch and off-scree
 simulations (value iteration, flocking agents, gradient descent), random on load, "↻" to switch. Reduced motion: no auto
 changes, manual controls only. |
 
+## Round 14
+
+Critique of P (owner asked for an honest opinion): slightly too much. Eight things moved on their own (hero sim, two extra
+pulsing dots, autoplay gallery, map, chart faces, counters, spotlight). Rule: one signature (map + hero sim), the rest quiet.
+
+| Q | Round 14 · calmer | P with: chart faces change on click only (no auto turn); Selected work = three cards side by side
+(swipe on phones), no autoplay, no controls; the path's "now" point no longer beats (only the availability dot does); the
+Clusters chart removed (it repeated the map; its slot is for GitHub activity later); Hire and "Let's talk" merged (cards, then
+copy email); smaller headlines for the secondary sections (Numbers, Hire); hero simulations stop computing off-screen. |
+
 **Verdict (2026-10-08):** M, the neural map, for the projects section. Keep: synapses weighted by similarity with ports,
 hidden-neuron layer, spreading activation (one thought at a time, comet signals, activation glow), cursor as input (lit
 neurons + attention lines + slight lean), dotted period layers with labels, round 9 living motion (breeze + springs; only

@@ -250,9 +250,12 @@ export function policyField(canvas: HTMLCanvasElement): void {
         return;
     }
 
-    let t = 0;
+    let t = 0,
+        seen = true;
+    new IntersectionObserver(([e]) => (seen = e.isIntersecting)).observe(canvas);
     const frame = () => {
         if (!canvas.isConnected) return; // swapped for another simulation
+        if (!seen) return void requestAnimationFrame(frame); // off-screen: no work
         t += 0.004;
         if (pointer) setGoal(pointer.x, pointer.y);
         else
