@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
 import { outputFile, PAGES, renderPage, sitemap, type PageSpec } from '../../vite-plugins/pages';
-import { LANGUAGE_REDIRECT_SCRIPT } from '../../vite-plugins/shared-head';
+import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
 import { PROJECTS } from '@/data/projects';
 import { SITE } from '@/core/site';
 import { LANGS, localizedPath, lookup, type Lang } from '@/core/translate';
@@ -13,10 +13,7 @@ const publicFiles = new Set(
 
 function render(page: PageSpec, lang: Lang): Document {
     // The real build renders Vite's output, which already contains the injected redirect script
-    const html = sources[`../../${page.template}`].replace(
-        '</head>',
-        `<script>${LANGUAGE_REDIRECT_SCRIPT}</script></head>`
-    );
+    const html = sources[`../../${page.template}`].replace('</head>', `<script>${HEAD_SCRIPT}</script></head>`);
     return new DOMParser().parseFromString(renderPage(html, page, lang), 'text/html');
 }
 
@@ -72,7 +69,7 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
 
         it('keeps the only executable inline script byte-identical (its CSP hash must match)', () => {
             const scripts = [...doc.querySelectorAll('script:not([src]):not([type="application/ld+json"])')];
-            expect(scripts.map((s) => s.textContent)).toEqual([LANGUAGE_REDIRECT_SCRIPT]);
+            expect(scripts.map((s) => s.textContent)).toEqual([HEAD_SCRIPT]);
         });
 
         if (page.jsonLd)

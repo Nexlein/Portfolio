@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import vercel from '../../vercel.json';
-import { LANGUAGE_REDIRECT_SCRIPT } from '../../vite-plugins/shared-head';
+import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
 
 const siteHeaders = Object.fromEntries(
     vercel.headers.find((rule) => rule.source === '/(.*)')!.headers.map((h) => [h.key, h.value])
@@ -19,8 +19,8 @@ async function sha256(text: string): Promise<string> {
 }
 
 describe('Content-Security-Policy', () => {
-    it('allows the inline language redirect script by hash, and nothing else inline', async () => {
-        expect(csp['script-src']).toEqual(["'self'", await sha256(LANGUAGE_REDIRECT_SCRIPT)]);
+    it('allows the inline head script (theme + language) by hash, and nothing else inline', async () => {
+        expect(csp['script-src']).toEqual(["'self'", await sha256(HEAD_SCRIPT)]);
         expect(csp['style-src']).toEqual(["'self'"]);
     });
 

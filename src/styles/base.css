@@ -1,0 +1,220 @@
+/* Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals). */
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img,
+svg,
+canvas,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+button {
+    font: inherit;
+    color: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.mono {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+}
+
+/* ── Headlines: big, tight, two-tone (the second line recedes) ── */
+.display,
+.headline {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+}
+
+.display {
+    font-size: clamp(46px, 7.4vw, 96px);
+}
+
+.headline {
+    font-size: clamp(36px, 5vw, 64px);
+}
+
+.headline.small {
+    font-size: clamp(28px, 3.4vw, 44px);
+    letter-spacing: -0.03em;
+}
+
+.recede {
+    color: var(--muted);
+}
+
+/* Lines slide up from behind a mask when their section is revealed (JS wraps each line in .line) */
+.line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+}
+
+.line > span {
+    display: inline-block;
+    transition: translate 900ms var(--ease-out);
+}
+
+.js .line > span {
+    translate: 0 105%;
+}
+
+.line:nth-child(2) > span {
+    transition-delay: 90ms;
+}
+
+.js .reveal.in .line > span {
+    translate: 0 0;
+}
+
+.eyebrow {
+    margin: 0 0 14px;
+    color: var(--signal);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.lede {
+    max-width: 34em;
+    margin: 22px auto 0;
+    color: var(--muted);
+    font-size: clamp(17px, 1.6vw, 21px);
+    line-height: 1.45;
+}
+
+/* ── Actions ── */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+        transform 160ms var(--ease-out),
+        opacity 160ms ease;
+}
+
+.link {
+    display: inline-flex;
+    gap: 4px;
+    color: var(--signal);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.btn:active,
+.press:active {
+    transform: scale(0.97);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    margin-top: 34px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+        opacity: 0.88;
+    }
+
+    .link:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+/* ── Sections ── */
+.section {
+    padding: clamp(96px, 14vh, 160px) 0 0;
+    scroll-margin-top: var(--nav-h);
+}
+
+.section-head {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    text-align: center;
+}
+
+.wrap {
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+
+/* Things that arrive as you scroll: a short rise and fade, once */
+.reveal {
+    transition:
+        opacity 700ms var(--ease-out),
+        translate 700ms var(--ease-out);
+}
+
+.js .reveal:not(.in) {
+    opacity: 0;
+    translate: 0 16px;
+}
+
+/* Cards share one surface */
+.surface {
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .line > span {
+        translate: none;
+        transition: opacity 200ms ease;
+    }
+}
