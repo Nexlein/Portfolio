@@ -10,6 +10,7 @@ function project(id: string, category: ProjectEntry['category'], year?: ProjectE
         tags: [],
         category,
         year,
+        date: '2026-01',
         github: '',
         media: { type: 'video', src: '' }
     };

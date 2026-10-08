@@ -27,6 +27,10 @@ describe('PROJECTS data', () => {
         expect(new Set(ids).size).toBe(ids.length);
     });
 
+    it('features exactly three projects (the "Selected work" row)', () => {
+        expect(PROJECTS.filter((p) => p.featured)).toHaveLength(3);
+    });
+
     it('finds public files to check against', () => {
         expect(publicFiles.size).toBeGreaterThan(0);
     });
@@ -55,6 +59,11 @@ describe('PROJECTS data', () => {
             const alts =
                 media.type === 'gallery' ? media.images.map((i) => i.alt) : media.type === 'image' ? [media.alt] : [];
             for (const alt of alts) expect(alt.trim()).not.toBe('');
+        });
+
+        it('has a start month that is a real, past month', () => {
+            expect(project.date).toMatch(/^\d{4}-(0[1-9]|1[0-2])$/);
+            expect(new Date(`${project.date}-01`).getTime()).toBeLessThanOrEqual(Date.now());
         });
 
         it('links to GitHub or hides the link', () => {

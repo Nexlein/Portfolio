@@ -34,6 +34,10 @@ export interface ProjectEntry {
     tags: string[];
     category: ProjectCategory;
     year?: 'Tek1' | 'Tek2' | 'Personal';
+    /** Month the project started, 'YYYY-MM' (first commit). Drives the path chart and "learned this year". */
+    date: string;
+    /** Shown in "Selected work" and always on the map. */
+    featured?: true;
     github: string; // full URL or '' to hide the link
     media: ProjectMedia;
 }
@@ -53,6 +57,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'OOP', 'Dynamic Loading'],
         category: 'graphical',
+        date: '2026-03',
         github: 'https://github.com/Nexlein/Arcade',
         media: { type: 'video', src: '/projects/arcade/arcade.mp4' }
     },
@@ -65,6 +70,8 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'Graphics', 'Maths'],
         category: 'graphical',
+        date: '2026-04',
+        featured: true,
         github: 'https://github.com/Nexlein/Raytracer',
         media: {
             type: 'gallery',
@@ -92,6 +99,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'Concurrency', 'IPC'],
         category: 'architecture',
+        date: '2026-05',
         github: 'https://github.com/Nexlein/Plazza',
         media: { type: 'video', src: '/projects/plazza/plazza-optimized.mp4' }
     },
@@ -104,6 +112,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Python', 'Machine Learning', 'Data Science'],
         category: 'ai',
+        date: '2026-01', // TODO(owner): imported repo, confirm the month
         github: 'https://github.com/Nexlein/Cvrie',
         media: {
             type: 'image',
@@ -120,6 +129,8 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Python', 'PyTorch', 'RL', 'DQN'],
         category: 'ai',
+        date: '2026-04',
+        featured: true,
         github: 'https://github.com/Nexlein/StartTrek',
         media: { type: 'video', src: '/projects/starttrek/starttrek.mp4' }
     },
@@ -132,6 +143,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C/C++', 'Network', 'FSM', 'Utility AI', 'Game Dev'],
         category: 'architecture',
+        date: '2026-05',
         github: 'https://github.com/Nexlein/Zappy',
         media: {
             type: 'video',
@@ -147,6 +159,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['N8N', 'Python', 'Mistral AI', 'Supabase', 'Docker'],
         category: 'ai',
+        date: '2026-01', // TODO(owner): imported repo, confirm the month
         github: 'https://github.com/Nexlein/Persona',
         media: {
             type: 'image',
@@ -163,6 +176,8 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Security', 'Python', 'LLM', 'Prompt Engineering'],
         category: 'ai',
+        date: '2026-01', // TODO(owner): imported repo, confirm the month
+        featured: true,
         github: 'https://github.com/Nexlein/Codename',
         media: {
             type: 'image',
@@ -179,6 +194,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Jenkins', 'Docker', 'CI/CD', 'Groovy', 'YAML'],
         category: 'devops',
+        date: '2026-03',
         github: 'https://github.com/Nexlein/MyMarvin',
         media: {
             type: 'image',
@@ -195,6 +211,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Ansible', 'Vagrant', 'IaC', 'PostgreSQL', 'Redis'],
         category: 'devops',
+        date: '2026-01', // TODO(owner): imported repo, confirm the month
         github: 'https://github.com/Nexlein/Octopus',
         media: {
             type: 'image',
@@ -211,6 +228,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'OOP', 'Simulation', 'Algorithms', 'Architecture'],
         category: 'architecture',
+        date: '2026-01', // TODO(owner): imported repo, confirm the month
         github: 'https://github.com/Nexlein/NanoTekSpice',
         media: {
             type: 'image',
@@ -228,6 +246,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C', 'CSFML', 'Graphics', 'Simulation', 'Algorithms'],
         category: 'graphical',
         year: 'Tek1',
+        date: '2025-03',
         github: 'https://github.com/Nexlein/Myradar',
         media: {
             type: 'video',
@@ -244,6 +263,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Data Science', 'Analytics', 'Dashboard', 'Python'],
         category: 'ai',
         year: 'Tek1',
+        date: '2025-06',
         github: 'https://github.com/Nexlein/Tardis',
         media: {
             type: 'image',
@@ -261,6 +281,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C', 'ncurses', 'Unix', 'System Programming', 'Terminal'],
         category: 'systems',
         year: 'Tek1',
+        date: '2025-03',
         github: 'https://github.com/Nexlein/Mytop',
         media: {
             type: 'video',
@@ -277,6 +298,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C', 'Data Structures', 'Algorithms', 'Security', 'Library'],
         category: 'systems',
         year: 'Tek1',
+        date: '2025-03',
         github: 'https://github.com/Nexlein/Secured',
         media: {
             type: 'image',
@@ -294,6 +316,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Python', 'Reinforcement Learning', 'Stable-Baselines3', 'Textual', 'Gymnasium'],
         category: 'ai',
         year: 'Personal',
+        date: '2026-07',
         github: 'https://github.com/Nexlein/blackjack-ai',
         media: {
             type: 'video',
@@ -310,6 +333,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Python', 'Reinforcement Learning', 'Stable-Baselines3', 'Gymnasium', 'Pygame'],
         category: 'ai',
         year: 'Personal',
+        date: '2026-08',
         github: 'https://github.com/Nexlein/AI-Racing',
         media: {
             type: 'video',

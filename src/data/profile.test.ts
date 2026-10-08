@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CV_PROJECTS, EDUCATION, EXPERIENCES, OFFERS, SKILLS, TIMELINE, type Text } from './profile';
+import { CHECKPOINTS, CV_PROJECTS, EDUCATION, EXPERIENCES, NOW, OFFERS, SKILLS, TIMELINE, type Text } from './profile';
 import { PROJECTS } from './projects';
 import { LANGS } from '@/core/translate';
 
@@ -10,7 +10,7 @@ function texts(value: unknown, path = ''): [string, Text][] {
     return Object.entries(value).flatMap(([k, v]) => texts(v, path ? `${path}.${k}` : k));
 }
 
-const all = texts({ EXPERIENCES, EDUCATION, SKILLS, CV_PROJECTS, OFFERS });
+const all = texts({ EXPERIENCES, EDUCATION, SKILLS, CV_PROJECTS, OFFERS, CHECKPOINTS, NOW });
 
 describe('profile data', () => {
     it('finds text to check', () => {
@@ -30,6 +30,15 @@ describe('profile data', () => {
         expect(new Set(ids).size).toBe(ids.length);
         expect(TIMELINE).toHaveLength(ids.length);
         expect(new Set(TIMELINE)).toEqual(new Set(ids));
+    });
+
+    it('dates every checkpoint, oldest first, and points it at a real entry', () => {
+        const ids = new Set([...EXPERIENCES, ...EDUCATION].map((e) => e.id));
+        CHECKPOINTS.forEach((c, i) => {
+            expect(c.date).toMatch(/^\d{4}-(0[1-9]|1[0-2])$/);
+            expect(ids).toContain(c.id);
+            if (i) expect(c.date >= CHECKPOINTS[i - 1].date).toBe(true);
+        });
     });
 
     it('only highlights projects that exist on the CV', () => {
