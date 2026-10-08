@@ -160,6 +160,25 @@ restyled with glass cards, hairlines, monochrome icons. Phones get a plain list.
 drawing in on view, ending on an amber "now" (vertical on phones). Hire: two large tiles from OFFERS. Reveal on scroll with a
 strong ease-out; press scale 0.97; hovers gated to fine pointers. |
 
+## Round 11 feedback (owner)
+
+- Loves the direction; dark blue + orange is a keeper.
+- Likes the new path but misses the chart: wants ETF / investment-style charts and AI data charts (clusters, candles, pie,
+  radar, stacked, box plots...).
+- Wants more scroll and hover animation.
+- Idea: a theme picker instead of light/dark, with many themes later (GitHub, Christmas...).
+- Decisions: path = chart with checkpoint markers; real data only (candles/box plots wait for GitHub activity);
+  first themes = Midnight + Daylight, picker built to take more.
+
+## Round 12
+
+| O | Round 12 · charts & motion | N plus: path as a "toolbox index" performance chart (cumulative distinct skills from
+projects and experiences, approximate dates by school year), ticker header with the 12-month delta, 1Y/2Y/Max range, checkpoint
+markers, hover crosshair + tooltip, draw-in on view. "By the numbers" bento: radar (projects per domain), stacked bars (main
+language per period), top skills bars, clusters (MDS of skill similarity, de-overlapped, names on hover). Motion: headline lines
+slide up from a mask, hero field recedes and words lift on scroll, nav pill slides to the hovered link and follows the section
+in view, cards and tiles lift with a cursor spotlight, count-ups. Theme picker in the nav (swatches, data-driven). |
+
 **Verdict (2026-10-08):** M, the neural map, for the projects section. Keep: synapses weighted by similarity with ports,
 hidden-neuron layer, spreading activation (one thought at a time, comet signals, activation glow), cursor as input (lit
 neurons + attention lines + slight lean), dotted period layers with labels, round 9 living motion (breeze + springs; only

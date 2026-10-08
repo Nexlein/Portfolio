@@ -1,0 +1,798 @@
+/* PROTOTYPE — Round 12: chart path, "By the numbers" bento, motion layer, theme picker. On top of premium.css (.vn.vo). */
+/* stylelint-disable no-descending-specificity -- prototype */
+.vo {
+    --pos: #2fbf71;
+    --c-ai: var(--signal);
+    --c-systems: #34c3b0;
+    --c-architecture: #6f8cff;
+    --c-graphical: #e86fae;
+    --c-devops: #a98bff;
+    --l0: #3a4a6b;
+    --l1: #6f8cff;
+    --l2: var(--signal);
+    --l3: #5d6474;
+}
+
+[data-theme='light'] .vo {
+    --pos: #1a8f50;
+    --c-systems: #0f8a7b;
+    --c-architecture: #3a5ccc;
+    --c-graphical: #c23f84;
+    --c-devops: #6a4fd6;
+    --l0: #b9c3da;
+    --l1: #3a5ccc;
+    --l3: #a1a6b3;
+}
+
+/* ── Headlines: lines slide up from behind a mask ─────────────────── */
+.vo :is(h1, h2) .ln {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em; /* keep descenders inside the mask */
+    color: var(--ink);
+}
+
+.vo :is(h1, h2) .ln > span {
+    display: inline-block;
+    color: var(--ink);
+    translate: 0 105%;
+    transition: translate 900ms var(--ease-out);
+}
+
+.vo :is(h1, h2) .ln > span > span {
+    color: var(--muted);
+}
+
+.vo :is(h1, h2) .ln:nth-child(2) > span {
+    transition-delay: 90ms;
+}
+
+.vo .vn-reveal.in :is(h1, h2) .ln > span {
+    translate: 0 0;
+}
+
+/* ── Nav: sliding pill, active section, theme picker ──────────────── */
+.vo .vn-nav nav {
+    position: relative;
+}
+
+.vo-ind {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 30px;
+    margin-top: -15px;
+    border-radius: 999px;
+    background: var(--raised);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        transform 280ms var(--ease-out),
+        width 280ms var(--ease-out),
+        opacity 200ms ease;
+}
+
+.vo .vn-nav nav a,
+.vo-themes {
+    position: relative;
+}
+
+.vo .vn-nav nav a.on {
+    color: var(--ink);
+}
+
+.vo-theme-btn {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid var(--hair);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out);
+}
+
+.vo-theme-btn:active {
+    transform: scale(0.94);
+}
+
+.vo-theme-btn .sw {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--bg) 0 50%, var(--signal) 50% 100%);
+    box-shadow: 0 0 0 1px var(--hair);
+}
+
+.vo-pop {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    display: grid;
+    gap: 2px;
+    min-width: 170px;
+    padding: 6px;
+    border-radius: 14px;
+    background: color-mix(in sRGB, var(--surface) 88%, transparent);
+    backdrop-filter: saturate(1.6) blur(20px);
+    border: 1px solid var(--hair);
+    box-shadow: 0 18px 40px rgb(0 0 0 / 30%);
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+    transform-origin: top right;
+    pointer-events: none;
+    transition:
+        opacity 160ms ease-out,
+        transform 160ms var(--ease-out);
+}
+
+.vo-themes.open .vo-pop {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+}
+
+.vo-pop button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.vo-pop button[aria-checked='true'] {
+    background: var(--raised);
+}
+
+.vo-pop .sw2 {
+    display: flex;
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px var(--hair);
+}
+
+.vo-pop .sw2 i {
+    width: 11px;
+    height: 20px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .vo-pop button:hover {
+        background: var(--raised);
+    }
+}
+
+/* ── Path chart ──────────────────────────────────────────────────── */
+.vo-path {
+    max-width: var(--max);
+    margin: 64px auto 0;
+    padding: 28px 28px 18px;
+    border-radius: 28px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+}
+
+.vo-ticker {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.vo-sym {
+    margin: 0;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.vo-big {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 6px 0 0;
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+.vo-delta {
+    color: var(--pos);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.vo-range {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+    background: var(--raised);
+}
+
+.vo-range button {
+    padding: 6px 14px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition:
+        color 160ms ease,
+        background-color 160ms ease;
+}
+
+.vo-range button[aria-pressed='true'] {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 18%);
+}
+
+.vo-plot {
+    position: relative;
+    margin-top: 10px;
+}
+
+.vo-plot svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.vo-plot .grid line {
+    stroke: var(--hair);
+}
+
+.vo-plot text {
+    fill: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+}
+
+.vo-plot .yr {
+    text-anchor: middle;
+}
+
+.vo-plot .mark line {
+    stroke: var(--muted);
+    stroke-opacity: 0.35;
+    stroke-dasharray: 2 4;
+}
+
+.vo-plot .mark text {
+    fill: var(--ink);
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-size: 12px;
+    text-anchor: middle;
+}
+
+.vo-plot .mark circle {
+    fill: var(--bg);
+    stroke: var(--signal);
+    stroke-width: 1.5;
+}
+
+.vo-plot .s0 {
+    stop-color: var(--signal);
+    stop-opacity: 0.28;
+}
+
+.vo-plot .s1 {
+    stop-color: var(--signal);
+    stop-opacity: 0;
+}
+
+.vo-plot .area {
+    fill: url('#vo-fill');
+    opacity: 0;
+}
+
+.vo-plot .line {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+}
+
+.vo-plot .now {
+    fill: var(--signal);
+    opacity: 0;
+}
+
+.vo-plot .marks {
+    opacity: 0;
+}
+
+.vo-path.in.drawn .line {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1600ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.vo-path.in.drawn :is(.area, .now, .marks) {
+    opacity: 1;
+    transition: opacity 700ms ease-out 900ms;
+}
+
+.vo-plot .cx {
+    stroke: var(--muted);
+    stroke-dasharray: 3 3;
+}
+
+.vo-plot .cd {
+    fill: var(--signal);
+    stroke: var(--bg);
+    stroke-width: 2;
+}
+
+.vo-plot .hit {
+    fill: transparent;
+    cursor: crosshair;
+}
+
+.vo-tip {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    gap: 2px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: color-mix(in sRGB, var(--raised) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--hair);
+    box-shadow: 0 10px 24px rgb(0 0 0 / 25%);
+    font-size: 13px;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, calc(-100% - 14px));
+}
+
+.vo-tip[hidden] {
+    display: none;
+}
+
+.vo-tip span:last-child {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* ── Bento ───────────────────────────────────────────────────────── */
+.vo-bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: var(--max);
+    margin: 64px auto 0;
+    padding: 0 20px;
+}
+
+.vo-card {
+    --mx: 50%;
+    --my: 50%;
+
+    position: relative;
+    overflow: hidden;
+    padding: 26px;
+    border-radius: 24px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    translate: 0 24px;
+    transition:
+        opacity 700ms var(--ease-out),
+        translate 700ms var(--ease-out),
+        transform 260ms var(--ease-out),
+        box-shadow 260ms ease;
+}
+
+.vo-card.wide {
+    grid-column: 1 / -1;
+}
+
+.vo-card:nth-child(2) {
+    transition-delay: 80ms, 80ms, 0ms, 0ms;
+}
+
+.vo-card:nth-child(3) {
+    transition-delay: 160ms, 160ms, 0ms, 0ms;
+}
+
+.vo-card.in {
+    opacity: 1;
+    translate: 0 0;
+}
+
+.vo-k {
+    margin: 0;
+    color: var(--signal);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.vo-v {
+    margin: 4px 0 16px;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+}
+
+.vo-card svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.vo-card text {
+    fill: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+}
+
+/* Radar */
+.vo-radar text {
+    font-size: 13px;
+}
+
+.vo-radar .ring {
+    fill: none;
+    stroke: var(--hair);
+}
+
+.vo-radar .spoke {
+    stroke: var(--hair);
+}
+
+.vo-radar .shape {
+    fill: color-mix(in sRGB, var(--signal) 22%, transparent);
+    stroke: var(--signal);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    transform-box: view-box;
+    transform-origin: 130px 130px;
+    scale: 0.4;
+    opacity: 0;
+    transition:
+        scale 1100ms var(--ease-out) 200ms,
+        opacity 600ms ease 200ms;
+}
+
+.vo-radar .pt {
+    fill: var(--signal);
+    opacity: 0;
+    transition: opacity 400ms ease 900ms;
+}
+
+.vo-card.in .vo-radar .shape {
+    scale: 1;
+    opacity: 1;
+}
+
+.vo-card.in .vo-radar .pt {
+    opacity: 1;
+}
+
+/* Stacked bars */
+.vo-stack text {
+    text-anchor: middle;
+}
+
+.vo-stack .bar {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    scale: 1 0;
+    transition: scale 900ms var(--ease-out);
+}
+
+.vo-stack .bar:nth-child(2) {
+    transition-delay: 100ms;
+}
+
+.vo-stack .bar:nth-child(3) {
+    transition-delay: 200ms;
+}
+
+.vo-card.in .vo-stack .bar {
+    scale: 1;
+}
+
+.vo-stack .l0,
+.vo-key .l0 {
+    fill: var(--l0);
+    background: var(--l0);
+}
+
+.vo-stack .l1,
+.vo-key .l1 {
+    fill: var(--l1);
+    background: var(--l1);
+}
+
+.vo-stack .l2,
+.vo-key .l2 {
+    fill: var(--l2);
+    background: var(--l2);
+}
+
+.vo-stack .l3,
+.vo-key .l3 {
+    fill: var(--l3);
+    background: var(--l3);
+}
+
+.vo-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.vo-key li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vo-key span {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+}
+
+/* Top skills */
+.vo-bars {
+    display: grid;
+    gap: 11px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.vo-bars li {
+    display: grid;
+    grid-template-columns: 9em 1fr 1.5em;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.vo-bars .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vo-bars .track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--raised);
+}
+
+.vo-bars .fill {
+    --w: 0;
+
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    background: var(--signal);
+    transform-origin: left;
+    scale: var(--w) 1;
+    transition: scale 900ms var(--ease-out) calc(var(--i, 0) * 70ms);
+}
+
+.vo-bars .n {
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-align: right;
+}
+
+/* Clusters */
+.vo-scatter .pt {
+    outline: none;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    scale: 0.6;
+    transition:
+        opacity 500ms ease-out,
+        scale 600ms var(--ease-out);
+}
+
+.vo-card.in .vo-scatter .pt {
+    opacity: 1;
+    scale: 1;
+}
+
+.vo-scatter circle {
+    fill: var(--c);
+    fill-opacity: 0.85;
+}
+
+.vo-scatter text {
+    fill: var(--ink);
+    font-family: 'Schibsted Grotesk', sans-serif;
+    font-size: 15px;
+    opacity: 0;
+    transition: opacity 160ms ease;
+    pointer-events: none;
+}
+
+.vo-scatter .halo {
+    fill: transparent;
+    stroke: var(--c);
+    stroke-opacity: 0;
+    transition: stroke-opacity 160ms ease;
+}
+
+.vo-scatter .pt:is(:hover, :focus-visible) text {
+    opacity: 1;
+}
+
+.vo-scatter .pt:is(:hover, :focus-visible) .halo {
+    stroke-opacity: 0.6;
+}
+
+.vo-key .dom {
+    border-radius: 50%;
+    background: var(--c);
+}
+
+.vo-key .dom[data-domain='ai'] {
+    --c: var(--c-ai);
+}
+
+.vo-key .dom[data-domain='systems'] {
+    --c: var(--c-systems);
+}
+
+.vo-key .dom[data-domain='architecture'] {
+    --c: var(--c-architecture);
+}
+
+.vo-key .dom[data-domain='graphical'] {
+    --c: var(--c-graphical);
+}
+
+.vo-key .dom[data-domain='devops'] {
+    --c: var(--c-devops);
+}
+
+.vo-scatter .pt[data-domain='ai'] {
+    --c: var(--c-ai);
+}
+
+.vo-scatter .pt[data-domain='systems'] {
+    --c: var(--c-systems);
+}
+
+.vo-scatter .pt[data-domain='architecture'] {
+    --c: var(--c-architecture);
+}
+
+.vo-scatter .pt[data-domain='graphical'] {
+    --c: var(--c-graphical);
+}
+
+.vo-scatter .pt[data-domain='devops'] {
+    --c: var(--c-devops);
+}
+
+/* ── Hover: lift + spotlight (fine pointers only) ─────────────────── */
+.vo .vn-tile {
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform 260ms var(--ease-out),
+        box-shadow 260ms ease;
+}
+
+.vo :is(.vo-card, .vn-tile)::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        420px circle at var(--mx, 50%) var(--my, 50%),
+        color-mix(in sRGB, var(--signal) 9%, transparent),
+        transparent 60%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .vo :is(.vo-card.in, .vn-tile):hover {
+        transform: translateY(-4px);
+        box-shadow:
+            var(--shadow),
+            0 24px 50px rgb(0 0 0 / 22%);
+    }
+
+    .vo :is(.vo-card, .vn-tile):hover::before {
+        opacity: 1;
+    }
+
+    .vo .vn-list a:hover {
+        background: var(--raised);
+    }
+}
+
+.vo .vn-hero canvas,
+.vo .vn-hero-copy {
+    will-change: transform;
+}
+
+@media (width <= 900px) {
+    .vo-bento {
+        grid-template-columns: 1fr;
+    }
+
+    .vo-path {
+        margin-inline: 12px;
+        padding: 20px 14px 12px;
+    }
+
+    .vo-big {
+        font-size: 34px;
+    }
+
+    .vo .vn-nav nav a:not(.vn-pill),
+    .vo-ind {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vo :is(h1, h2) .ln > span,
+    .vo-card,
+    .vo-radar .shape,
+    .vo-stack .bar,
+    .vo-scatter .pt,
+    .vo-bars .fill {
+        translate: none;
+        scale: none;
+        transition: none;
+    }
+
+    .vo-card,
+    .vo-radar .shape,
+    .vo-radar .pt,
+    .vo-scatter .pt {
+        opacity: 1;
+    }
+
+    .vo-plot .line {
+        stroke-dashoffset: 0;
+    }
+
+    .vo-plot :is(.area, .now, .marks) {
+        opacity: 1;
+    }
+
+    .vo-bars .fill {
+        scale: var(--w) 1;
+    }
+}

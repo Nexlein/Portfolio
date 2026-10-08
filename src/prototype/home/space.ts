@@ -38,7 +38,7 @@ function similarity(a: ProjectEntry, b: ProjectEntry): number {
 }
 
 /** Classical MDS: 2D coordinates whose distances approximate 1 - similarity. */
-function mds(items: ProjectEntry[]): [number, number][] {
+export function mds(items: ProjectEntry[]): [number, number][] {
     const n = items.length;
     const d2 = items.map((a) => items.map((b) => (1 - similarity(a, b)) ** 2));
     const rowMean = d2.map((r) => r.reduce((s, v) => s + v, 0) / n);
