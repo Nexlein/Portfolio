@@ -1,16 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from './projects';
 import { videoPoster } from '@/ui/video';
-import { LANGS } from '@/core/translate';
+import { LANGS, lookup } from '@/core/translate';
+import { domainQuery } from '@/pages/home/blocks';
 
 // Keys look like '../../public/projects/arcade/arcade.mp4'; map them to their public URL.
 const publicFiles = new Set(
     Object.keys(import.meta.glob('../../public/**/*')).map((path) => path.replace('../../public', ''))
 );
-
-const indexHtml = import.meta.glob<string>('../../index.html', { query: '?raw', import: 'default', eager: true })[
-    '../../index.html'
-];
 
 function mediaPaths(project: ProjectEntry): string[] {
     const { media } = project;
@@ -70,8 +67,9 @@ describe('PROJECTS data', () => {
             if (project.github) expect(project.github).toMatch(/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/);
         });
 
-        it('has a category filter button on the home page', () => {
-            expect(indexHtml).toContain(`data-filter="${project.category}"`);
+        it('has a domain name in every language and a button to light it up on the map', () => {
+            for (const lang of LANGS) expect(lookup(lang, `home.domains.${project.category}`)).not.toMatch(/^home\./);
+            expect(domainQuery('en')).toContain(`data-domain="${project.category}"`);
         });
     });
 });

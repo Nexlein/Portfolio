@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
 import { BLOCKS, renderContent } from './render';
-import { EDUCATION, EXPERIENCES, OFFERS, SKILLS, TIMELINE } from '@/data/profile';
+import { EDUCATION, EXPERIENCES, OFFERS, SKILLS } from '@/data/profile';
 import { LANGS } from '@/core/translate';
 
 const templates = import.meta.glob<string>('../../../*.html', { query: '?raw', import: 'default', eager: true });
@@ -26,14 +26,6 @@ describe('content blocks', () => {
     });
 
     describe.each(LANGS)('in %s', (lang) => {
-        it('renders the whole timeline in order, with the organization when known', () => {
-            const items = render('timeline', lang).querySelectorAll('.timeline-item');
-            expect(items).toHaveLength(TIMELINE.length);
-            const issanka = EXPERIENCES.find((e) => e.id === TIMELINE[0])!;
-            expect(items[0].querySelector('.timeline-title')!.textContent).toContain(issanka.title[lang]);
-            expect(items[0].querySelector('.highlight')!.textContent).toBe(`@ ${issanka.org}`);
-        });
-
         it('renders every CV experience with its bullets', () => {
             const root = render('cv-experience', lang);
             expect(root.querySelectorAll(':scope > div')).toHaveLength(EXPERIENCES.length);

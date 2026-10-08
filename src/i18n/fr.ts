@@ -17,6 +17,26 @@ export const fr = {
                 "Disponibilités de Nielsen Combe-Bracciale : stage de fin d'études Epitech (Tek3) à temps plein et missions freelance en intégration d'IA et développement backend."
         }
     },
+    site: {
+        nav: {
+            label: 'Navigation principale',
+            work: 'Projets',
+            path: 'Parcours',
+            numbers: 'Chiffres',
+            hire: 'Recruter',
+            cv: 'CV',
+            language: 'Langue',
+            theme: 'Choisir un thème'
+        },
+        themes: {
+            midnight: 'Minuit',
+            daylight: 'Plein jour'
+        },
+        footer: {
+            email: 'E-mail',
+            source: 'Voir le code source'
+        }
+    },
     navbar: {
         home: 'Accueil',
         journey: 'Parcours',
@@ -25,19 +45,112 @@ export const fr = {
         contact: 'Contact'
     },
     home: {
-        tag: "À l'écoute d'opportunités",
-        bio: "Je conçois des systèmes d'IA capables de décider et d'apprendre. Mon travail englobe les architectures de décision autonomes, les moteurs de simulation en temps réel et le C++ haute performance.<br><br>Actuellement étudiant à Epitech avec une spécialisation en intelligence artificielle.",
-        projects: 'Voir les Projets',
-        viewcv: 'Voir le CV',
-        footerTitle: 'Construisons ensemble.',
-        footerDesc:
-            'Je suis actuellement ouvert à de nouvelles opportunités. Vérifiez ma disponibilité pour voir si nos calendriers correspondent, ou contactez-moi directement.',
-        footerBtn: 'Vérifier ma Disponibilité'
-    },
-    journey: {
-        eyebrow: 'Mon Parcours',
-        title: 'Expérience & Formation',
-        sub: 'Une chronologie de mon parcours académique, de mon expérience professionnelle et de mon apprentissage continu.'
+        hero: {
+            role: 'Ingénieur IA &amp; C++ · Epitech',
+            title1: 'Du logiciel qui apprend.',
+            title2: 'Et qui décide.',
+            lede: "Je conçois des agents d'apprentissage par renforcement, des simulations et les systèmes qui les font tourner. Actuellement développeur IA chez Issanka.",
+            work: 'Voir les projets',
+            hire: 'Me recruter',
+            switch: 'Changer de simulation',
+            sims: {
+                valueIteration: {
+                    name: 'Itération de valeur',
+                    hint: 'Itération de valeur en direct. Votre curseur est la récompense. Cliquez pour poser un mur.'
+                },
+                flocking: {
+                    name: 'Agents en essaim',
+                    hint: 'Essaim en direct. Les agents suivent votre curseur. Cliquez pour les disperser.'
+                },
+                descent: {
+                    name: 'Descente de gradient',
+                    hint: 'Descente de gradient en direct. Votre curseur est le minimum. Cliquez pour ajouter une colline.'
+                }
+            }
+        },
+        featured: {
+            title1: 'Projets choisis.',
+            title2: 'Trois pour commencer.',
+            open: 'Voir le projet'
+        },
+        work: {
+            title1: '{n} projets.',
+            title2: 'Un seul réseau.',
+            sub: 'Les projets se relient quand ils partagent des compétences.',
+            subDesk: "Survolez-en un pour voir ce qu'il active, ou interrogez le réseau.",
+            ask: 'Activer un domaine',
+            mapLabel:
+                "Les projets sous forme de réseau : les plus récents au centre, les liens relient les projets qui partagent des compétences (plus clair = plus proches). Survolez ou sélectionnez un projet pour l'aperçu ; validez pour ouvrir sa page.",
+            more: '{shown} projets affichés sur {n}, les autres apparaissent à tour de rôle.',
+            seeAll: 'Voir tous les projets',
+            hideAll: 'Masquer la liste',
+            now: 'En ce moment',
+            open: 'Voir le projet',
+            similar: '{s} de proximité',
+            periods: {
+                Tek1: 'tek 1 · 2024–25',
+                Tek2: 'tek 2 · 2025–26',
+                Personal: 'perso · 2026'
+            }
+        },
+        domains: {
+            ai: 'IA &amp; RL',
+            systems: 'Systèmes',
+            architecture: 'Architecture',
+            graphical: 'Graphisme &amp; simulations',
+            devops: 'DevOps'
+        },
+        domainsShort: {
+            ai: 'IA &amp; RL',
+            systems: 'Systèmes',
+            architecture: 'Architecture',
+            graphical: 'Graphisme',
+            devops: 'DevOps'
+        },
+        path: {
+            title1: 'Le parcours.',
+            title2: 'Chaque étape méritée.',
+            symbol: 'Compétences · indice de la boîte à outils',
+            delta: 'sur 12 mois',
+            range: 'Période',
+            aria: "Compétences distinctes au fil du temps : {n} aujourd'hui.",
+            skills: '{n} compétences',
+            shipped: '{p} démarré'
+        },
+        numbers: {
+            title1: 'En chiffres.',
+            title2: 'Calculés, pas déclarés.',
+            sub: 'Chaque graphique ci-dessous est calculé à partir des projets eux-mêmes.',
+            view: 'Vue',
+            other: 'Autres',
+            infra: 'Infra / no-code',
+            projects: 'projets',
+            coverage: 'Couverture',
+            domains: '{n} domaines',
+            periods: 'Périodes',
+            byPeriod: '{n} projets, par période',
+            languages: 'Langages',
+            languagesTitle: 'Langage principal, par période',
+            growth: 'Progression',
+            growthTitle: 'Nouvelles compétences, par période',
+            mostUsed: 'Les plus utilisées',
+            distinct: '{n} compétences distinctes',
+            thisYear: 'Cette année',
+            newSkills: '{n} nouvelles compétences en 12 mois'
+        },
+        hire: {
+            title1: 'Deux façons de travailler ensemble.',
+            title2: 'Stage ou freelance.',
+            'full-time': 'Stage',
+            freelance: 'Freelance',
+            cta: {
+                'full-time': "Parler d'un stage",
+                freelance: 'Demander un devis'
+            },
+            talk: 'Dans les deux cas, le plus rapide est un e-mail.',
+            copy: "Copier l'e-mail",
+            copied: 'E-mail copié'
+        }
     },
     projects: {
         eyebrow: 'Ingénierie Logicielle',

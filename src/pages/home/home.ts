@@ -1,37 +1,95 @@
 /**
- * Home page entry point.
+ * Home page. Everything is in the HTML already (rendered at build time in every language); this adds the motion
+ * and the interactions: nav, hero simulation, the project map on large screens, chart interactions, reveals.
  *
- * To add a new project, add a ProjectEntry in src/data/projects.ts.
+ * To add a project, add a ProjectEntry in src/data/projects.ts: the list, the map, the charts and the counts follow.
  */
-
-import { PROJECTS } from '@/data/projects';
-import { translateDOM } from '@/core/i18n';
 import { initAnalytics } from '@/core/analytics';
-import { injectNavbar } from '@/components/Navbar/Navbar';
-import { initNavShadow, initScrollSpy } from '@/components/Navbar/scroll';
-import { initCvModal } from '@/components/CvModal/CvModal';
-import { ProjectGrid } from '@/components/ProjectGrid/ProjectGrid';
-import { ProjectModal } from '@/components/ProjectModal/ProjectModal';
+import { i18n } from '@/core/i18n';
+import { localizedPath } from '@/core/translate';
+import { PROJECTS, projectPath } from '@/data/projects';
+import { initNav } from '@/components/Nav/Nav';
+import { initHero } from '@/components/Hero/Hero';
+import { mountNeuralMap } from '@/components/NeuralMap/NeuralMap';
+import { initNumbers, initPathChart, initReveals } from '@/components/Charts/Charts';
+import { MAP_MAX } from './blocks';
 
-function bootstrap(): void {
-    initAnalytics();
-    injectNavbar('home');
-    initNavShadow();
-    initScrollSpy();
-    initCvModal();
+/** The map needs room: below this width the plain list is the better view. */
+const MAP_MIN_WIDTH = 900;
 
-    const modal = new ProjectModal();
-    const grid = new ProjectGrid(PROJECTS, (project) => modal.open(project));
-    grid.render();
+function initWork(): void {
+    const section = document.querySelector<HTMLElement>('.work');
+    const host = section?.querySelector<HTMLElement>('.map-host');
+    if (!section || !host || innerWidth <= MAP_MIN_WIDTH) return;
+    section.classList.add('has-map');
+    const map = mountNeuralMap(host, MAP_MAX);
 
-    translateDOM();
+    section.querySelectorAll<HTMLButtonElement>('.query button').forEach((b) =>
+        b.addEventListener('click', () => {
+            map.query(b.dataset.domain!);
+            host.scrollIntoView({
+                behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+                block: 'center'
+            });
+        })
+    );
 
-    // Deep link: /?project=<id> opens that project's modal
-    const linked = PROJECTS.find((p) => p.id === new URLSearchParams(window.location.search).get('project'));
-    if (linked) {
-        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-        modal.open(linked);
-    }
+    const list = section.querySelector<HTMLElement>('.project-list')!;
+    section.querySelector<HTMLButtonElement>('.see-all')?.addEventListener('click', (e) => {
+        const button = e.currentTarget as HTMLButtonElement;
+        const open = list.classList.toggle('open');
+        button.setAttribute('aria-expanded', String(open));
+        button.textContent = i18n.t(open ? 'home.work.hideAll' : 'home.work.seeAll');
+    });
 }
 
-window.addEventListener('DOMContentLoaded', bootstrap);
+/** Copy the email address, and say so; if the clipboard is blocked, show the address instead. */
+function initCopyEmail(): void {
+    const toast = document.querySelector<HTMLElement>('.toast')!;
+    let timer = 0;
+    document.querySelectorAll<HTMLButtonElement>('.copy-email').forEach((b) =>
+        b.addEventListener('click', async () => {
+            let message = i18n.t('home.hire.copied');
+            try {
+                await navigator.clipboard.writeText(b.dataset.email!);
+            } catch {
+                message = b.dataset.email!;
+            }
+            toast.textContent = message;
+            toast.classList.add('on');
+            clearTimeout(timer);
+            timer = window.setTimeout(() => toast.classList.remove('on'), 1800);
+        })
+    );
+}
+
+/** A soft light follows the cursor across cards. */
+function initSpotlight(): void {
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    document.querySelectorAll<HTMLElement>('.feature, .tile, .chart-card').forEach((card) => {
+        card.classList.add('spot');
+        card.addEventListener('pointermove', (e) => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--my', `${e.clientY - r.top}px`);
+        });
+    });
+}
+
+function bootstrap(): void {
+    // Old links (/?project=<id>) opened a modal; projects now have their own page
+    const linked = PROJECTS.find((p) => p.id === new URLSearchParams(location.search).get('project'));
+    if (linked) return location.replace(localizedPath(projectPath(linked.id), i18n.getLang()));
+
+    initAnalytics();
+    initNav();
+    initHero();
+    initWork();
+    initPathChart();
+    initNumbers();
+    initReveals();
+    initCopyEmail();
+    initSpotlight();
+}
+
+bootstrap();

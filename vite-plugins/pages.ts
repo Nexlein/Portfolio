@@ -43,7 +43,7 @@ const fixedPage = (path: string, template: string, key: string, jsonLd?: PageSpe
     image: DEFAULT_IMAGE,
     imageAlt: (lang) => lookup(lang, 'meta.imageAlt'),
     jsonLd,
-    fill: renderContent // data-render blocks from src/data/profile.ts
+    fill: (document, lang) => renderContent(document, lang, path) // data-render blocks (profile, nav, charts...)
 });
 
 /** Every page of the site. Adding a project to src/data/projects.ts adds its page here. */

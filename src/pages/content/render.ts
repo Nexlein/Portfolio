@@ -1,14 +1,18 @@
 /**
- * Render src/data/profile.ts into the pages at build time (home timeline, CV, availability).
+ * Render the site's data into the pages at build time (home, CV, availability, nav and footer everywhere).
  * Templates mark where content goes with data-render="<block>"; entries are appended there.
  * Relative imports only: vite-plugins/pages.ts runs this from Node, without the '@/' alias.
  */
-import { CV_PROJECTS, EDUCATION, EXPERIENCES, OFFERS, SKILLS, TIMELINE } from '../../data/profile.ts';
-import type { Education, Experience, Offer, Text } from '../../data/profile.ts';
+import { CV_PROJECTS, EDUCATION, EXPERIENCES, OFFERS, SKILLS } from '../../data/profile.ts';
+import type { Offer, Text } from '../../data/profile.ts';
 import { PROJECTS } from '../../data/projects.ts';
 import type { Lang } from '../../core/translate.ts';
+import { renderNav } from '../../components/Nav/render.ts';
+import { renderFooter } from '../../components/Footer/render.ts';
+import * as home from '../home/blocks.ts';
 
-type Block = (lang: Lang) => string;
+/** `path` is the page being rendered, in the default language ('/', '/cv.html'). */
+type Block = (lang: Lang, path: string) => string;
 
 const tags = (items: string[], cls = '') =>
     `<div class="${cls}">${items.map((t) => (cls === 'tags' ? `<span class="tag">${t}</span>` : `<span>${t}</span>`)).join('')}</div>`;
@@ -16,16 +20,6 @@ const tags = (items: string[], cls = '') =>
 /** Spacing class on every entry but the last, as in the original markup. */
 const spaced = <T>(items: T[], cls: string, render: (item: T) => string) =>
     items.map((item, i) => `<div${i < items.length - 1 ? ` class="${cls}"` : ''}>${render(item)}</div>`).join('');
-
-function timelineItem(entry: Experience | Education, lang: Lang): string {
-    const org = 'org' in entry && entry.org ? ` <span class="highlight">@ ${entry.org}</span>` : '';
-    const entryTags = 'tags' in entry && entry.tags ? tags(entry.tags, 'tags') : '';
-    return `<div class="timeline-item"><div class="timeline-marker"></div><div class="timeline-content">
-<div class="timeline-date">${entry.period[lang]}</div>
-<h3 class="timeline-title">${entry.title[lang]}${org}</h3>
-<p class="timeline-desc">${entry.summary[lang]}</p>${entryTags}
-</div></div>`;
-}
 
 const OFFER_ICONS: Record<Offer['id'], string> = {
     'full-time': '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>',
@@ -46,12 +40,26 @@ function offerCard(offer: Offer, lang: Lang): string {
 <div class="flex-col-gap">${rows}</div></div>`;
 }
 
-const byId = new Map<string, Experience | Education>([...EXPERIENCES, ...EDUCATION].map((e) => [e.id, e]));
 const text = (t: Text, lang: Lang) => t[lang];
 
 /** Every block a template can ask for. */
 export const BLOCKS: Record<string, Block> = {
-    timeline: (lang) => TIMELINE.map((id) => timelineItem(byId.get(id)!, lang)).join(''),
+    nav: (lang, path) => renderNav(lang, path),
+    footer: (lang) => renderFooter(lang),
+
+    // Home (src/pages/home/blocks.ts)
+    availability: home.availability,
+    featured: home.featured,
+    'work-title': home.workTitle,
+    'domain-query': home.domainQuery,
+    'project-list': home.projectList,
+    'map-more': home.mapMore,
+    'path-chart': home.pathBlock,
+    experience: home.experience,
+    numbers: home.numbersBlock,
+    hire: home.hire,
+    contact: home.contact,
+    email: home.email,
 
     'cv-experience': (lang) =>
         EXPERIENCES.map(
@@ -92,11 +100,11 @@ ${exp.org ? `<div class="text-13px-color-accent-blue">${exp.org}</div>` : ''}
 };
 
 /** Append every [data-render] block of the page, in `lang`. Unknown blocks are an error, not a silent gap. */
-export function renderContent(document: Document, lang: Lang): void {
+export function renderContent(document: Document, lang: Lang, path = '/'): void {
     document.querySelectorAll<HTMLElement>('[data-render]').forEach((el) => {
         const name = el.getAttribute('data-render')!;
         const block = BLOCKS[name];
         if (!block) throw new Error(`Unknown data-render block "${name}"`);
-        el.insertAdjacentHTML('beforeend', block(lang));
+        el.insertAdjacentHTML('beforeend', block(lang, path));
     });
 }

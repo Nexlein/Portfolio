@@ -97,9 +97,7 @@ describe('project pages', () => {
             expect(doc.getElementById('project-title')!.textContent).toBe(project.title);
             expect(doc.querySelectorAll('#project-tags .project-tag')).toHaveLength(project.tags.length);
             expect(doc.querySelector('#project-media video, #project-media img')).not.toBeNull();
-            expect(doc.getElementById('project-back')!.getAttribute('href')).toBe(
-                `${localizedPath('/', lang)}#projects`
-            );
+            expect(doc.getElementById('project-back')!.getAttribute('href')).toBe(`${localizedPath('/', lang)}#work`);
             const github = doc.getElementById('project-github');
             if (project.github) expect(github!.getAttribute('href')).toBe(project.github);
             else expect(github).toBeNull();

@@ -40,8 +40,8 @@ class NavbarComponent {
 
           <nav class="topnav-links" id="topnav-links" aria-label="Main navigation">
             <a href="${base}#home"     class="nav-link ${active('home')}" data-section="home" data-i18n="navbar.home">Home</a>
-            <a href="${base}#parcours" class="nav-link" data-section="parcours" data-i18n="navbar.journey">Journey</a>
-            <a href="${base}#projects" class="nav-link ${active('projects')}" data-section="projects" data-i18n="navbar.projects">Projects</a>
+            <a href="${base}#path" class="nav-link" data-section="parcours" data-i18n="navbar.journey">Journey</a>
+            <a href="${base}#work" class="nav-link ${active('projects')}" data-section="projects" data-i18n="navbar.projects">Projects</a>
             <a href="${availability}" class="nav-link ${active('availability')}" data-section="availability" data-i18n="navbar.availability">Availability</a>
             
             <button id="nav-lang-btn" class="nav-lang-toggle" aria-label="Toggle language">
