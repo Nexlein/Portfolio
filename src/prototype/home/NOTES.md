@@ -146,6 +146,20 @@ projects, which lean slightly toward it. Periods are faint dotted layers with la
 
 - "Best one so far", keep it; may add small twists later.
 
+## Round 11
+
+Owner brief: AI brain map, minimalist, premium, Apple-like; "What brings you here?" disliked; later wish: several hero
+simulations (random on load or switchable).
+
+| N | Round 11 · premium | Whole page rebuilt around M. Near-black with a blue cast (light: #fbfbfd), Apple greys for text,
+amber only for activity and actions; Schibsted Grotesk 700 with tight tracking, two-tone headlines (second line muted).
+Frosted 52 px sticky nav with a CV pill. Hero: centred headline over the value-iteration field (40 % opacity, calm radial
+behind the words), one filled button + one chevron link. "What brings you here?" removed. Work: "17 projects. One network."
+with a segmented control that asks the network (fires activation from a domain's projects instead of filtering); map
+restyled with glass cards, hairlines, monochrome icons. Phones get a plain list. Path: one horizontal axon of 7 checkpoints
+drawing in on view, ending on an amber "now" (vertical on phones). Hire: two large tiles from OFFERS. Reveal on scroll with a
+strong ease-out; press scale 0.97; hovers gated to fine pointers. |
+
 **Verdict (2026-10-08):** M, the neural map, for the projects section. Keep: synapses weighted by similarity with ports,
 hidden-neuron layer, spreading activation (one thought at a time, comet signals, activation glow), cursor as input (lit
 neurons + attention lines + slight lean), dotted period layers with labels, round 9 living motion (breeze + springs; only

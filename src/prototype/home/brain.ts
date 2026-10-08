@@ -170,6 +170,7 @@ ${PROJECTS.map(cardHtml).join('')}
     const build = () => {
         const W = web.clientWidth,
             H = web.clientHeight;
+        if (W < 400) return; // hidden (phones get a list instead)
         const cx = W / 2,
             cy = H / 2;
         const ryF = H / 2 - 26;
@@ -602,6 +603,16 @@ ${PROJECTS.map(cardHtml).join('')}
     });
     window.addEventListener('keydown', (e) => e.key === 'Escape' && opened && close(opened));
     document.addEventListener('pointerdown', (e) => opened && !opened.el.contains(e.target as Node) && close(opened));
+
+    // Query from outside (round 11): light up every project of a domain and let the activation spread
+    host.addEventListener('nm-query', (e) => {
+        const domain = (e as CustomEvent<string>).detail,
+            t = performance.now();
+        nextThought = t + 4000;
+        cards
+            .filter((c) => c.star.p.category === domain)
+            .forEach((c, i) => (reduceMotion() ? (c.act = 1) : spread(c, t + i * 140, 0.95, new Set())));
+    });
 
     build();
     window.addEventListener('resize', build);

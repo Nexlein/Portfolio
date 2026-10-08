@@ -1,0 +1,624 @@
+/* PROTOTYPE — Round 11 "premium": Apple-like page around the neural map. Restyles brain.css/web.css from the root. */
+/* stylelint-disable no-descending-specificity -- prototype */
+@import '@fontsource/schibsted-grotesk/latin-400.css';
+@import '@fontsource/schibsted-grotesk/latin-500.css';
+@import '@fontsource/schibsted-grotesk/latin-700.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+.vn {
+    /* Near-black with a blue cast, Apple greys for text, amber only where something is active */
+    --bg: #05070d;
+    --surface: #0f131c;
+    --raised: #161b26;
+    --ink: #f5f5f7;
+    --muted: #8e93a0;
+    --line: #1e2431;
+    --signal: #f5a524;
+    --cold: #3a5ccc;
+    --hair: rgb(255 255 255 / 8%);
+    --shadow: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 10px 30px rgb(0 0 0 / 35%);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --max: 1080px;
+
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Schibsted Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+[data-theme='light'] .vn {
+    --bg: #fbfbfd;
+    --surface: #fff;
+    --raised: #f5f5f7;
+    --ink: #1d1d1f;
+    --muted: #6e6e73;
+    --line: #e3e3e8;
+    --signal: #c26d00;
+    --hair: rgb(0 0 0 / 8%);
+    --shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 10px 30px rgb(0 0 0 / 6%);
+}
+
+.vn a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.vn .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+}
+
+/* Monochrome icons: colour is kept for activity only */
+.vn [data-domain] {
+    --dot: var(--muted);
+}
+
+/* ── Nav: thin, frosted ─────────────────────────────── */
+.vn-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    padding: 0 max(20px, calc(50% - var(--max) / 2));
+    background: color-mix(in sRGB, var(--bg) 72%, transparent);
+    backdrop-filter: saturate(1.8) blur(20px);
+    border-bottom: 1px solid var(--hair);
+    font-size: 13px;
+}
+
+.vn-name {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.vn-nav nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.vn-nav nav a:not(.vn-pill) {
+    color: var(--muted);
+    transition: color 160ms ease;
+}
+
+.vn-pill {
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--bg) !important;
+    font-weight: 500;
+}
+
+/* ── Buttons ────────────────────────────────────────── */
+.vn-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--bg) !important;
+    font-weight: 500;
+    font-size: 15px;
+    transition:
+        transform 160ms var(--ease-out),
+        opacity 160ms ease;
+}
+
+.vn-link {
+    display: inline-flex;
+    gap: 4px;
+    color: var(--signal) !important;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.vn-btn:active,
+.vn-pill:active,
+.vn-query button:active {
+    transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .vn-nav nav a:not(.vn-pill):hover {
+        color: var(--ink);
+    }
+
+    .vn-btn:hover {
+        opacity: 0.88;
+    }
+
+    .vn-link:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+}
+
+.vn :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+/* ── Type ───────────────────────────────────────────── */
+.vn-eyebrow {
+    margin: 0 0 14px;
+    color: var(--signal);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.vn h1,
+.vn h2 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+}
+
+.vn h1 {
+    font-size: clamp(46px, 7.4vw, 96px);
+}
+
+.vn h2 {
+    font-size: clamp(36px, 5vw, 64px);
+}
+
+/* Two-tone headlines: the second line recedes */
+.vn h1 span,
+.vn h2 span {
+    color: var(--muted);
+}
+
+.vn-lede,
+.vn-head p {
+    max-width: 34em;
+    margin: 22px auto 0;
+    color: var(--muted);
+    font-size: clamp(17px, 1.6vw, 21px);
+    line-height: 1.45;
+}
+
+/* ── Hero ───────────────────────────────────────────── */
+.vn-hero {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: calc(100vh - 52px);
+    overflow: hidden;
+    text-align: center;
+}
+
+.vn-hero canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+}
+
+/* The field stays live at the edges and calms down behind the words */
+.vn-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 46% 40% at 50% 50%, var(--bg) 30%, transparent 100%);
+    pointer-events: none;
+}
+
+.vn-hero-copy {
+    position: relative;
+    z-index: 1;
+    padding: 0 20px;
+}
+
+.vn-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    margin-top: 34px;
+}
+
+.vn-hint {
+    position: absolute;
+    bottom: 26px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* ── Sections ───────────────────────────────────────── */
+.vn-section {
+    padding: clamp(96px, 14vh, 160px) 0 0;
+}
+
+.vn-head {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+/* Query: a segmented control that asks the network */
+.vn-query {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 30px;
+    padding: 3px;
+    border-radius: 999px;
+    background: var(--raised);
+    border: 1px solid var(--hair);
+}
+
+.vn-query button {
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+        color 160ms ease,
+        background-color 160ms ease,
+        transform 160ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .vn-query button:hover {
+        color: var(--ink);
+        background: var(--surface);
+    }
+}
+
+/* ── Map, restyled: glass cards, hairlines, monochrome until activated ── */
+.vn-map {
+    margin-top: 24px;
+}
+
+.vn .vi-legend {
+    display: none;
+}
+
+.vn .vi-card {
+    border-radius: 14px;
+    border-color: var(--hair);
+    background: color-mix(in sRGB, var(--surface) 78%, transparent);
+    backdrop-filter: saturate(1.6) blur(18px);
+    cursor: pointer;
+}
+
+.vn .vm-web .vi-card:not(.open, .near) {
+    box-shadow:
+        var(--shadow),
+        0 0 calc(var(--act) * 26px) color-mix(in sRGB, var(--signal) calc(var(--act) * 40%), transparent);
+}
+
+.vn .vi-card .ico {
+    background: var(--raised);
+    color: var(--ink);
+}
+
+.vn .vi-card.open {
+    border-color: color-mix(in sRGB, var(--signal) 55%, var(--hair));
+    box-shadow:
+        0 0 0 4px color-mix(in sRGB, var(--signal) 14%, transparent),
+        0 30px 60px rgb(0 0 0 / 40%);
+}
+
+.vn .vj-now strong {
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+}
+
+/* Phones: the network does not fit, a clean list does */
+.vn-list {
+    display: none;
+    max-width: 560px;
+    margin: 32px auto 0;
+    padding: 0 20px;
+    list-style: none;
+}
+
+.vn-list a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--hair);
+}
+
+.vn-list .ico {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--raised);
+}
+
+.vn-list svg,
+.vn .vi-card .ico svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.vn-list .txt {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.vn-list .txt span {
+    color: var(--muted);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vn-list .chev {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 20px;
+}
+
+@media (width <= 760px) {
+    .vn-map {
+        display: none;
+    }
+
+    .vn-list {
+        display: block;
+    }
+
+    .vn-query,
+    .vn-desk {
+        display: none;
+    }
+
+    .vn-nav nav a:not(.vn-pill) {
+        display: none;
+    }
+}
+
+/* ── Path: one axon from the first checkpoint to now ── */
+.vn-path {
+    --n: 7;
+
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--n), 1fr);
+    max-width: var(--max);
+    margin: 72px auto 0;
+    padding: 0 20px;
+    list-style: none;
+}
+
+.vn-path::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    right: 20px;
+    height: 1px;
+    background: linear-gradient(to right, var(--line), var(--signal));
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 1400ms var(--ease-out);
+}
+
+.vn-path.in::before {
+    transform: scaleX(1);
+}
+
+.vn-path li {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding-right: 12px;
+    opacity: 0;
+    translate: 0 8px;
+    transition:
+        opacity 500ms var(--ease-out),
+        translate 500ms var(--ease-out);
+}
+
+.vn-path.in li {
+    opacity: 1;
+    translate: 0 0;
+}
+
+.vn-path li:nth-child(2) {
+    transition-delay: 120ms;
+}
+
+.vn-path li:nth-child(3) {
+    transition-delay: 240ms;
+}
+
+.vn-path li:nth-child(4) {
+    transition-delay: 360ms;
+}
+
+.vn-path li:nth-child(5) {
+    transition-delay: 480ms;
+}
+
+.vn-path li:nth-child(6) {
+    transition-delay: 600ms;
+}
+
+.vn-path li:nth-child(7) {
+    transition-delay: 720ms;
+}
+
+.vn-path .dot {
+    width: 11px;
+    height: 11px;
+    margin-bottom: 14px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--muted);
+}
+
+.vn-path .when {
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+}
+
+.vn-path .what {
+    font-size: 15px;
+    line-height: 1.3;
+}
+
+.vn-path .now .dot {
+    background: var(--signal);
+    border-color: var(--signal);
+    box-shadow: 0 0 0 6px color-mix(in sRGB, var(--signal) 18%, transparent);
+}
+
+.vn-path .now .what {
+    font-weight: 600;
+}
+
+@media (width <= 760px) {
+    .vn-path {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        padding-left: 44px;
+    }
+
+    .vn-path::before {
+        inset: 0 auto 0 25px;
+        width: 1px;
+        height: auto;
+        background: linear-gradient(to bottom, var(--line), var(--signal));
+        transform-origin: top;
+        transform: scaleY(0);
+    }
+
+    .vn-path.in::before {
+        transform: scaleY(1);
+    }
+
+    .vn-path .dot {
+        position: absolute;
+        left: -24px;
+        top: 3px;
+    }
+}
+
+/* ── Hire: two tiles ────────────────────────────────── */
+.vn-tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    max-width: var(--max);
+    margin: 64px auto 0;
+    padding: 0 20px;
+}
+
+.vn-tile {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    border-radius: 28px;
+    background: var(--surface);
+    border: 1px solid var(--hair);
+    box-shadow: var(--shadow);
+}
+
+.vn-tile h3 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -0.025em;
+}
+
+.vn-tile-lede {
+    margin: 8px 0 28px;
+    color: var(--muted);
+}
+
+.vn-tile dl {
+    display: grid;
+    gap: 16px;
+    margin: 0 0 32px;
+}
+
+.vn-tile dt {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.vn-tile dd {
+    margin: 2px 0 0;
+    font-size: 16px;
+}
+
+.vn-tile .vn-link {
+    margin-top: auto;
+}
+
+/* ── Reveal ─────────────────────────────────────────── */
+.vn-reveal {
+    opacity: 0;
+    translate: 0 16px;
+    transition:
+        opacity 700ms var(--ease-out),
+        translate 700ms var(--ease-out);
+}
+
+.vn-reveal.in {
+    opacity: 1;
+    translate: 0 0;
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.vn-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    max-width: var(--max);
+    margin: 140px auto 0;
+    padding: 24px 20px 96px;
+    border-top: 1px solid var(--hair);
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.vn-foot nav {
+    display: flex;
+    gap: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vn-reveal,
+    .vn-path li,
+    .vn-path::before {
+        transition: none;
+    }
+}
