@@ -201,11 +201,10 @@ export const CHECKPOINTS: Checkpoint[] = [
     },
     { id: 'epitech', date: '2024-09', label: { en: 'Epitech, year 1', fr: 'Epitech, 1re année' } },
     { id: 'climb2c', date: '2025-09', label: { en: 'Full-stack & AI intern', fr: 'Stage full-stack & IA' } },
-    // TODO(owner): confirm the months of the next two
-    { id: 'hackathons', date: '2026-01', label: { en: 'Hackathons', fr: 'Hackathons' } },
+    { id: 'hackathons', date: '2026-05', label: { en: 'GenAI hackathon', fr: 'Hackathon IA générative' } },
     {
         id: 'google-cloud',
-        date: '2026-04',
+        date: '2026-06',
         label: { en: 'Google Cloud certified', fr: 'Certifié Google Cloud' },
         skills: ['Google Cloud', 'Generative AI']
     },
