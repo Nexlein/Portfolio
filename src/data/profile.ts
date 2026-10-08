@@ -187,16 +187,28 @@ export interface Checkpoint {
     /** 'YYYY-MM' */
     date: string;
     label: Text;
+    /** Skills it brought, on top of the entry's own tags (path chart). */
+    skills?: string[];
 }
 
 /** Path chart checkpoints, oldest first. */
 export const CHECKPOINTS: Checkpoint[] = [
-    { id: 'high-school', date: '2024-07', label: { en: 'Baccalauréat + C Piscine', fr: 'Bac + Piscine C' } },
+    {
+        id: 'high-school',
+        date: '2024-07',
+        label: { en: 'Baccalauréat + C Piscine', fr: 'Bac + Piscine C' },
+        skills: ['C']
+    },
     { id: 'epitech', date: '2024-09', label: { en: 'Epitech, year 1', fr: 'Epitech, 1re année' } },
     { id: 'climb2c', date: '2025-09', label: { en: 'Full-stack & AI intern', fr: 'Stage full-stack & IA' } },
     // TODO(owner): confirm the months of the next two
     { id: 'hackathons', date: '2026-01', label: { en: 'Hackathons', fr: 'Hackathons' } },
-    { id: 'google-cloud', date: '2026-04', label: { en: 'Google Cloud certified', fr: 'Certifié Google Cloud' } },
+    {
+        id: 'google-cloud',
+        date: '2026-04',
+        label: { en: 'Google Cloud certified', fr: 'Certifié Google Cloud' },
+        skills: ['Google Cloud', 'Generative AI']
+    },
     { id: 'issanka', date: '2026-09', label: { en: 'AI developer, Issanka', fr: 'Développeur IA, Issanka' } }
 ];
 

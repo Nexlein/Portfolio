@@ -218,3 +218,45 @@ button {
         transition: opacity 200ms ease;
     }
 }
+
+/* Segmented control: a row of options in a pill (path range, ask the network) */
+.segmented {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+    padding: 3px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--raised);
+}
+
+.segmented button {
+    padding: 7px 15px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+        color 160ms ease,
+        background-color 160ms ease,
+        transform 160ms var(--ease-out);
+}
+
+.segmented button:active {
+    transform: scale(0.97);
+}
+
+.segmented button[aria-pressed='true'] {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 18%);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .segmented button:hover {
+        color: var(--ink);
+    }
+}
