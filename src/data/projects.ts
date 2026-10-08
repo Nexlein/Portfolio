@@ -34,7 +34,7 @@ export interface ProjectEntry {
     tags: string[];
     category: ProjectCategory;
     year?: 'Tek1' | 'Tek2' | 'Personal';
-    /** Month the project started, 'YYYY-MM' (first commit). Drives the path chart and "learned this year". */
+    /** Month the project started, 'YYYY-MM'. Drives the path chart and "learned this year". */
     date: string;
     /** Shown in "Selected work" and always on the map. */
     featured?: true;
@@ -112,7 +112,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Python', 'Machine Learning', 'Data Science'],
         category: 'ai',
-        date: '2026-01', // TODO(owner): imported repo, confirm the month
+        date: '2026-02',
         github: 'https://github.com/Nexlein/Cvrie',
         media: {
             type: 'image',
@@ -159,7 +159,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['N8N', 'Python', 'Mistral AI', 'Supabase', 'Docker'],
         category: 'ai',
-        date: '2026-01', // TODO(owner): imported repo, confirm the month
+        date: '2026-05',
         github: 'https://github.com/Nexlein/Persona',
         media: {
             type: 'image',
@@ -176,7 +176,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Security', 'Python', 'LLM', 'Prompt Engineering'],
         category: 'ai',
-        date: '2026-01', // TODO(owner): imported repo, confirm the month
+        date: '2026-03',
         featured: true,
         github: 'https://github.com/Nexlein/Codename',
         media: {
@@ -211,7 +211,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Ansible', 'Vagrant', 'IaC', 'PostgreSQL', 'Redis'],
         category: 'devops',
-        date: '2026-01', // TODO(owner): imported repo, confirm the month
+        date: '2026-05',
         github: 'https://github.com/Nexlein/Octopus',
         media: {
             type: 'image',
@@ -228,7 +228,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'OOP', 'Simulation', 'Algorithms', 'Architecture'],
         category: 'architecture',
-        date: '2026-01', // TODO(owner): imported repo, confirm the month
+        date: '2026-02',
         github: 'https://github.com/Nexlein/NanoTekSpice',
         media: {
             type: 'image',
