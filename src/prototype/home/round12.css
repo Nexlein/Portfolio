@@ -480,12 +480,12 @@
     transition: opacity 400ms ease 900ms;
 }
 
-.vo-card.in .vo-radar .shape {
+.vo-card.in .show .vo-radar .shape {
     scale: 1;
     opacity: 1;
 }
 
-.vo-card.in .vo-radar .pt {
+.vo-card.in .show .vo-radar .pt {
     opacity: 1;
 }
 
@@ -509,7 +509,7 @@
     transition-delay: 200ms;
 }
 
-.vo-card.in .vo-stack .bar {
+.vo-card.in .show .vo-stack .bar {
     scale: 1;
 }
 
@@ -621,7 +621,7 @@
         scale 600ms var(--ease-out);
 }
 
-.vo-card.in .vo-scatter .pt {
+.vo-card.in .show .vo-scatter .pt {
     opacity: 1;
     scale: 1;
 }

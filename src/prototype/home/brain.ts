@@ -12,7 +12,7 @@ import { EXPERIENCES } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { oneLiner, still } from './round2';
 import { variantF } from './round3';
-import { ICONS, layout, neighbours, yearOf, type Star } from './space';
+import { ICONS, layout, neighbours, similarity, yearOf, type Star } from './space';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -138,7 +138,26 @@ function nowHtml(): string {
 </div>`;
 }
 
-export function mountBrain(host: HTMLElement): (domain: string) => void {
+export interface BrainOptions {
+    /** Most projects shown at once; the rest rotate in (round 13). */
+    max?: number;
+    /** Always shown. */
+    featured?: string[];
+}
+
+const RECENT = ['Personal', 'Tek2', 'Tek1'];
+
+export function mountBrain(host: HTMLElement, opts: BrainOptions = {}): (domain: string) => void {
+    const max = opts.max ?? Infinity,
+        featured = new Set(opts.featured ?? []);
+    // Visible set: featured first, then the most recent; the rest wait in `hidden` and rotate in
+    const ranked = [
+        ...PROJECTS.filter((p) => featured.has(p.id)),
+        ...RECENT.flatMap((y) => PROJECTS.filter((p) => !featured.has(p.id) && yearOf(p) === y))
+    ];
+    const shown = ranked.slice(0, max),
+        hidden = ranked.slice(max);
+    host.dataset.shown = String(shown.length);
     host.innerHTML = `<div class="vi-web vj-web vm-web" aria-label="Projects as a network: the most recent closest to the centre, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.">
 <svg><g class="layers"></g><g class="wires"></g><g class="neurons"></g><g class="syns"></g><g class="signals"></g><g class="attn"></g><g class="labels"></g></svg>
 ${nowHtml()}
@@ -159,6 +178,8 @@ ${PROJECTS.map(cardHtml).join('')}
     ].map(g);
     const now = web.querySelector<HTMLElement>('.vj-now')!;
     const els = [...web.querySelectorAll<HTMLAnchorElement>('.vi-card')];
+    const elOf = (p: ProjectEntry) => els.find((c) => c.dataset.id === p.id)!;
+    for (const p of hidden) elOf(p).classList.add('off');
 
     let cards: Card[] = [],
         syns: Synapse[] = [],
@@ -166,6 +187,43 @@ ${PROJECTS.map(cardHtml).join('')}
         wires: Wire[] = [],
         signals: Signal[] = [];
     const attn = Array.from({ length: 3 }, () => el('line', 'attn-line', attnG));
+
+    // Synapses: each shown project to its 2 most similar shown projects, deduplicated. Rebuilt when a project rotates in.
+    const wire = (fresh?: Card) => {
+        const byId = new Map(cards.map((c) => [c.star.p.id, c]));
+        const seen = new Set<string>();
+        for (const sy of syns) for (const n of [sy.path, sy.pa, sy.pb]) n.remove();
+        syns = [];
+        const pool = cards.map((c) => c.star.p);
+        for (const c of cards)
+            for (const { q, s } of neighbours(c.star.p, pool).slice(0, 2)) {
+                const key = c.star.p.id < q.id ? `${c.star.p.id}|${q.id}` : `${q.id}|${c.star.p.id}`;
+                if (seen.has(key)) continue;
+                seen.add(key);
+                const b = byId.get(q.id)!;
+                const path = el('path', 'syn', synsG);
+                path.setAttribute('pathLength', '1');
+                path.style.setProperty('--w', String(s));
+                path.style.setProperty('--d', `${Math.max(c.delay, b.delay) + 250}ms`);
+                const pa = el('circle', 'port', synsG),
+                    pb = el('circle', 'port', synsG);
+                for (const pt of [pa, pb]) {
+                    pt.setAttribute('r', '2.2');
+                    pt.style.setProperty('--d', `${Math.max(c.delay, b.delay) + 250}ms`);
+                }
+                if (fresh && (c === fresh || b === fresh)) path.classList.add('grow');
+                syns.push({
+                    a: c,
+                    b,
+                    s,
+                    bend: (syns.length % 2 ? 1 : -1) * 0.12,
+                    path,
+                    pa,
+                    pb,
+                    geo: { p: c, q: b, c }
+                });
+            }
+    };
 
     const build = () => {
         const W = web.clientWidth,
@@ -175,12 +233,12 @@ ${PROJECTS.map(cardHtml).join('')}
             cy = H / 2;
         const ryF = H / 2 - 26;
         const inner = { rx: Math.min(W / 2 - 22, ryF * 1.75) - 125, ry: ryF - 44 };
-        const stars = layout(W, H, inner);
+        const stars = layout(W, H, inner, shown);
         for (const grp of [layersG, wiresG, neuronsG, synsG, signalsG, labelsG]) grp.innerHTML = '';
         signals = [];
         cards = stars.map((star) => ({
             star,
-            el: els.find((c) => c.dataset.id === star.p.id)!,
+            el: elOf(star.p),
             hold: false,
             delay: 0,
             x: star.x,
@@ -229,37 +287,7 @@ ${PROJECTS.map(cardHtml).join('')}
         });
         cards.forEach((c) => c.el.style.setProperty('--d', `${c.delay}ms`));
 
-        // Synapses: each project to its 2 most similar, deduplicated
-        const byId = new Map(cards.map((c) => [c.star.p.id, c]));
-        const seen = new Set<string>();
-        syns = [];
-        for (const c of cards)
-            for (const { q, s } of neighbours(c.star.p).slice(0, 2)) {
-                const key = c.star.p.id < q.id ? `${c.star.p.id}|${q.id}` : `${q.id}|${c.star.p.id}`;
-                if (seen.has(key)) continue;
-                seen.add(key);
-                const b = byId.get(q.id)!;
-                const path = el('path', 'syn', synsG);
-                path.setAttribute('pathLength', '1');
-                path.style.setProperty('--w', String(s));
-                path.style.setProperty('--d', `${Math.max(c.delay, b.delay) + 250}ms`);
-                const pa = el('circle', 'port', synsG),
-                    pb = el('circle', 'port', synsG);
-                for (const pt of [pa, pb]) {
-                    pt.setAttribute('r', '2.2');
-                    pt.style.setProperty('--d', `${Math.max(c.delay, b.delay) + 250}ms`);
-                }
-                syns.push({
-                    a: c,
-                    b,
-                    s,
-                    bend: (syns.length % 2 ? 1 : -1) * 0.12,
-                    path,
-                    pa,
-                    pb,
-                    geo: { p: c, q: b, c }
-                });
-            }
+        wire();
 
         // Hidden neurons: seeded, inside the outer layer, clear of cards and of "Now"
         const rnd = seeded(4242);
@@ -528,6 +556,7 @@ ${PROJECTS.map(cardHtml).join('')}
                 sy.pb.setAttribute('cy', f1(q.y));
             }
             if (!frozen) signalStep(t);
+            rotate(t);
             drawAttention();
             for (const c of cards) {
                 c.act *= decay;
@@ -606,13 +635,66 @@ ${PROJECTS.map(cardHtml).join('')}
 
     // Query from outside (round 11): light up every project of a domain and let the activation spread
     host.addEventListener('nm-query', (e) => {
-        const domain = (e as CustomEvent<string>).detail,
-            t = performance.now();
-        nextThought = t + 4000;
-        cards
-            .filter((c) => c.star.p.category === domain)
-            .forEach((c, i) => (reduceMotion() ? (c.act = 1) : spread(c, t + i * 140, 0.95, new Set())));
+        const domain = (e as CustomEvent<string>).detail;
+        // Hidden projects of that domain are called in first, replacing the least related shown ones
+        const calls = hidden.filter((p) => p.category === domain).slice(0, 2);
+        calls.forEach((p, i) => {
+            const out = cards
+                .filter((c) => c.star.p.category !== domain && !featured.has(c.star.p.id) && c !== opened)
+                .reduce<Card | null>((a, c) => (!a || similarity(c.star.p, p) > similarity(a.star.p, p) ? c : a), null);
+            if (out) setTimeout(() => swap(out, p), i * 300);
+        });
+        setTimeout(
+            () => {
+                const t = performance.now();
+                nextThought = t + 4000;
+                cards
+                    .filter((c) => c.star.p.category === domain)
+                    .forEach((c, i) => (reduceMotion() ? (c.act = 1) : spread(c, t + i * 140, 0.95, new Set())));
+            },
+            calls.length ? 700 : 0
+        );
     });
+
+    // Neurogenesis: every ~8 s one shown project leaves and a related hidden one takes its place.
+    // Paused while the pointer is on the map, while a card is open, off-screen and with reduced motion.
+    function swap(out: Card, inP: ProjectEntry): void {
+        const outP = out.star.p,
+            inEl = elOf(inP);
+        out.el.classList.add('leaving');
+        setTimeout(() => {
+            out.el.classList.add('off');
+            out.el.classList.remove('leaving');
+            hidden.splice(hidden.indexOf(inP), 1);
+            hidden.push(outP);
+            shown.splice(shown.indexOf(outP), 1, inP);
+            out.star.p = inP;
+            out.el = inEl;
+            inEl.style.setProperty('--x', `${out.x}px`);
+            inEl.style.setProperty('--y', `${out.y}px`);
+            inEl.classList.add('entering');
+            inEl.classList.remove('off');
+            void inEl.offsetWidth;
+            inEl.classList.remove('entering');
+            for (const sg of signals) for (const n of [sg.head, sg.tail]) n.remove();
+            signals = [];
+            wire(out);
+            out.act = 0.8; // the newcomer arrives lit
+        }, 450);
+    }
+    let nextSwap = 0;
+    const rotate = (t: number) => {
+        if (!hidden.length || opened || pointer || reduceMotion() || t < Math.max(nextSwap, bootEnd + 4000)) return;
+        nextSwap = t + 8000;
+        const pool = cards.filter((c) => !featured.has(c.star.p.id) && c.act < 0.3);
+        if (!pool.length) return;
+        const out = pool[Math.floor(Math.random() * pool.length)];
+        const score = (q: ProjectEntry) => similarity(out.star.p, q) + (yearOf(q) === yearOf(out.star.p) ? 0.5 : 0);
+        swap(
+            out,
+            hidden.reduce((a, q) => (score(q) > score(a) ? q : a))
+        );
+    };
 
     build();
     window.addEventListener('resize', build);

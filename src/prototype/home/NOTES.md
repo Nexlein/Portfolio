@@ -179,6 +179,26 @@ language per period), top skills bars, clusters (MDS of skill similarity, de-ove
 slide up from a mask, hero field recedes and words lift on scroll, nav pill slides to the hovered link and follows the section
 in view, cards and tiles lift with a cursor spotlight, count-ups. Theme picker in the nav (swatches, data-driven). |
 
+## Round 12 feedback (owner)
+
+- Very clean, has everything liked. Asked what to add / remove / change, whether it stays clean with more data, and to make
+  it more living (carousels, cards changing face, moving parts) instead of replacing content. Then: do all the suggestions.
+
+## Round 13
+
+| P | Round 13 · living page | O plus every suggestion from that discussion. Fields: availability pill in the hero, experience
+lines under the path chart, featured gallery (StartTrek, Raytracer, Codename), "Let's talk." with copy email + toast, EN/FR
+switch, "View the source" in the footer, pay row removed from the internship tile, "Tooling" renamed "Infra / no-code".
+Scale: the map shows at most 24 (featured + most recent) with "Showing 24 of N · See all"; checkpoint labels take the first
+free row or stay a dot with a tooltip; radar caps at 7 axes + Other; languages = top 3 + Other + Infra; `?stress` loads 40
+projects (24 shown, 0 overlapping cards, rotation verified). Living: the map renews a node every ~8 s with the most similar
+hidden project (same period first), its synapses growing in; asking the network calls hidden projects of that domain in;
+bento cards have two faces (radar/donut, languages/new skills per period, top skills/learned this year) taking turns every
+~10 s, one card at a time, with dots and a countdown on the next card; featured gallery autoplays every 6 s with a progress
+bar and a Pause button (WCAG 2.2.2), paused on hover, focus, touch and off-screen; the path's "now" point beats; three hero
+simulations (value iteration, flocking agents, gradient descent), random on load, "↻" to switch. Reduced motion: no auto
+changes, manual controls only. |
+
 **Verdict (2026-10-08):** M, the neural map, for the projects section. Keep: synapses weighted by similarity with ports,
 hidden-neuron layer, spreading activation (one thought at a time, comet signals, activation glow), cursor as input (lit
 neurons + attention lines + slight lean), dotted period layers with labels, round 9 living motion (breeze + springs; only

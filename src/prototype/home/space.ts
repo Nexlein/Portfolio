@@ -30,7 +30,7 @@ function skillSet(p: ProjectEntry): Set<string> {
 }
 
 /** Jaccard similarity of two projects' skills (0..1). */
-function similarity(a: ProjectEntry, b: ProjectEntry): number {
+export function similarity(a: ProjectEntry, b: ProjectEntry): number {
     const sa = skillSet(a),
         sb = skillSet(b);
     const inter = [...sa].filter((t) => sb.has(t)).length;
@@ -61,8 +61,8 @@ export function mds(items: ProjectEntry[]): [number, number][] {
 }
 
 /** The 3 most similar projects (an embedding projector's nearest neighbours). */
-export function neighbours(p: ProjectEntry): { q: ProjectEntry; s: number }[] {
-    const scored = PROJECTS.filter((q) => q !== p).map((q) => ({ q, s: similarity(p, q) }));
+export function neighbours(p: ProjectEntry, pool: ProjectEntry[] = PROJECTS): { q: ProjectEntry; s: number }[] {
+    const scored = pool.filter((q) => q !== p).map((q) => ({ q, s: similarity(p, q) }));
     const top: { q: ProjectEntry; s: number }[] = [];
     for (let k = 0; k < 3; k++) {
         const best = scored.reduce((a, b) => (b.s > a.s && !top.includes(b) ? b : a), { q: p, s: -1 });
@@ -81,8 +81,13 @@ export interface Star {
 }
 
 /** Lay the projects out round the centre. With `fit`, cards stay inside that ellipse instead of the board's rectangle. */
-export function layout(W: number, H: number, fit?: { rx: number; ry: number }): Star[] {
-    const coords = mds(PROJECTS);
+export function layout(
+    W: number,
+    H: number,
+    fit?: { rx: number; ry: number },
+    items: ProjectEntry[] = PROJECTS
+): Star[] {
+    const coords = mds(items);
     const cx = W / 2,
         cy = H / 2,
         rx = fit ? fit.rx : W * 0.44,
@@ -90,7 +95,7 @@ export function layout(W: number, H: number, fit?: { rx: number; ry: number }): 
     // Similar projects share a direction; spread directions round the full circle while keeping their order
     const raw = coords.map(([x, y]) => Math.atan2(y, x));
     const rank = raw.map((a, i) => raw.filter((b, j) => b < a || (b === a && j < i)).length);
-    const stars: Star[] = PROJECTS.map((p, i) => {
+    const stars: Star[] = items.map((p, i) => {
         const even = -Math.PI + (2 * Math.PI * (rank[i] + 0.5)) / raw.length;
         const angle = even * 0.7 + raw[i] * 0.3;
         const r = RING[yearOf(p)];

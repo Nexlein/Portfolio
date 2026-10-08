@@ -137,20 +137,26 @@ export function mountPathChart(host: HTMLElement): void {
             ticks: number[] = [];
         for (let v = 0; v <= total; v += step) ticks.push(v);
         const shown = marks.filter((m) => m.t >= t0);
+        const rowsEnd = [-Infinity, -Infinity, -Infinity];
         svg.innerHTML = `<defs><linearGradient id="vo-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="s0" /><stop offset="1" class="s1" /></linearGradient></defs>
 <g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}
 ${years.map((yr) => `<text class="yr" x="${f1(x(yr))}" y="${H - 8}">${yr}</text>`).join('')}</g>
 <g class="marks">${shown
-            .map((m, i) => {
+            .map((m) => {
                 const mx = x(m.t),
-                    row = i % 3;
-                return `<g class="mark"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(y(valueAt(points, m.t)))}" />
-<text x="${f1(mx)}" y="${12 + row * 22}">${m.label}</text><circle cx="${f1(mx)}" cy="${f1(y(valueAt(points, m.t)))}" r="3.5" /></g>`;
+                    my = y(valueAt(points, m.t)),
+                    half = m.label.length * 3.3 + 8;
+                // First free row; when all three are taken the checkpoint keeps its dot and a tooltip only
+                const row = rowsEnd.findIndex((end) => mx - half > end);
+                if (row < 0) return `<circle cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${m.label}</title></circle>`;
+                rowsEnd[row] = mx + half;
+                return `<g class="mark"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" />
+<text x="${f1(mx)}" y="${12 + row * 22}">${m.label}</text><circle cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
             })
             .join('')}</g>
 <path class="area" d="${line}L${f1(x(NOW))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
 <path class="line" pathLength="1" d="${line}" />
-<circle class="now" cx="${f1(x(NOW))}" cy="${f1(y(total))}" r="4.5" />
+<circle class="now-ring" cx="${f1(x(NOW))}" cy="${f1(y(total))}" r="4.5" /><circle class="now" cx="${f1(x(NOW))}" cy="${f1(y(total))}" r="4.5" />
 <g class="cross" style="display:none"><line class="cx" y1="${T - 10}" y2="${H - B}" /><circle class="cd" r="4.5" /></g>
 <rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}" />`;
         const cross = svg.querySelector<SVGGElement>('.cross')!;
@@ -193,10 +199,17 @@ ${years.map((yr) => `<text class="yr" x="${f1(x(yr))}" y="${H - 8}">${yr}</text>
 }
 
 // ── Bento: radar, stacked bars, clusters, top skills ────────────────────────
-const DOMAINS = ['ai', 'systems', 'architecture', 'graphical', 'devops'] as const;
+const ORDER = ['ai', 'systems', 'architecture', 'graphical', 'devops'];
+const label = (d: string) => (d === 'other' ? 'Other' : (DOMAIN_LABEL[d] ?? d));
 
 export function radar(): string {
-    const counts = DOMAINS.map((d) => PROJECTS.filter((p) => p.category === d).length);
+    // Up to 7 axes; anything beyond becomes "Other" so the shape stays readable
+    const used = [...new Set(PROJECTS.map((p) => p.category as string))];
+    const ranked = [...ORDER.filter((d) => used.includes(d)), ...used.filter((d) => !ORDER.includes(d))];
+    const DOMAINS = ranked.length > 7 ? [...ranked.slice(0, 6), 'other'] : ranked;
+    const counts = DOMAINS.map(
+        (d) => PROJECTS.filter((p) => (d === 'other' ? !DOMAINS.includes(p.category) : p.category === d)).length
+    );
     const max = Math.max(...counts),
         C = 130,
         Rr = 96;
@@ -208,7 +221,7 @@ export function radar(): string {
         DOMAINS.map((_, i) => at(i, r(i)))
             .map(([px, py]) => `${f1(px)},${f1(py)}`)
             .join(' ');
-    return `<svg class="vo-radar" viewBox="-70 0 400 260" role="img" aria-label="Projects per domain: ${DOMAINS.map((d, i) => `${DOMAIN_LABEL[d]} ${counts[i]}`).join(', ')}">
+    return `<svg class="vo-radar" viewBox="-110 0 480 260" role="img" aria-label="Projects per domain: ${DOMAINS.map((d, i) => `${label(d)} ${counts[i]}`).join(', ')}">
 ${[0.25, 0.5, 0.75, 1].map((k) => `<polygon class="ring" points="${poly(() => Rr * k)}" />`).join('')}
 ${DOMAINS.map((_, i) => {
     const [px, py] = at(i, Rr);
@@ -218,48 +231,129 @@ ${DOMAINS.map((_, i) => {
 ${DOMAINS.map((d, i) => {
     const [px, py] = at(i, Rr * (counts[i] / max));
     const [lx, ly] = at(i, Rr + 18);
-    return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3"><title>${DOMAIN_LABEL[d]}: ${counts[i]}</title></circle>
-<text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${lx < C - 10 ? 'end' : lx > C + 10 ? 'start' : 'middle'}">${DOMAIN_LABEL[d]} · ${counts[i]}</text>`;
+    return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3"><title>${label(d)}: ${counts[i]}</title></circle>
+<text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${lx < C - 10 ? 'end' : lx > C + 10 ? 'start' : 'middle'}">${label(d)} · ${counts[i]}</text>`;
 }).join('')}</svg>`;
 }
 
+const LANGUAGES = new Set(['C', 'C++', 'Python', 'TypeScript', 'JavaScript', 'Rust', 'Go', 'Java', 'C#']);
+const INFRA = 'Infra / no-code';
+const PERIOD_ORDER = ['Tek1', 'Tek2', 'Tek3', 'Tek4', 'Tek5', 'Personal'];
+const PERIOD_NAME: Record<string, string> = { Personal: 'personal' };
+const periodName = (y: string) => PERIOD_NAME[y] ?? y.replace('Tek', 'tek ');
+
 function language(p: ProjectEntry): string {
     for (const t of p.tags) {
-        if (t === 'C/C++' || t === 'C++') return 'C++';
-        if (t === 'C' || t === 'Python') return t;
+        if (t === 'C/C++') return 'C++';
+        if (LANGUAGES.has(t)) return t;
     }
-    return 'Tooling';
+    return INFRA;
 }
 
+/** Periods present in the data, in time order. */
+const periods = () => PERIOD_ORDER.filter((y) => PROJECTS.some((p) => yearOf(p) === y));
+
 export function stacked(): string {
-    const periods = ['Tek1', 'Tek2', 'Personal'],
-        names: Record<string, string> = { Tek1: 'tek 1', Tek2: 'tek 2', Personal: 'personal' };
-    const langs = ['C', 'C++', 'Python', 'Tooling'];
-    const data = periods.map((per) =>
-        langs.map((l) => PROJECTS.filter((p) => yearOf(p) === per && language(p) === l).length)
+    const pers = periods();
+    // Top 3 languages keep their colour, the rest become "Other", projects without a language are "Infra / no-code"
+    const tally = new Map<string, number>();
+    for (const p of PROJECTS) if (language(p) !== INFRA) tally.set(language(p), (tally.get(language(p)) ?? 0) + 1);
+    const top: string[] = [];
+    for (let k = 0; k < 3 && tally.size; k++) {
+        const best = [...tally].reduce((a, e) => (e[1] > a[1] ? e : a));
+        top.push(best[0]);
+        tally.delete(best[0]);
+    }
+    const langs = [...top, ...(tally.size ? ['Other'] : []), INFRA];
+    const bucket = (p: ProjectEntry) =>
+        language(p) === INFRA ? INFRA : top.includes(language(p)) ? language(p) : 'Other';
+    const data = pers.map((per) =>
+        langs.map((l) => PROJECTS.filter((p) => yearOf(p) === per && bucket(p) === l).length)
     );
-    const max = Math.max(...data.map((r) => r.reduce((a, b) => a + b, 0)));
+    const max = Math.max(...data.map((r) => r.reduce((x, y) => x + y, 0)));
     const W = 300,
         H = 220,
-        bw = 54,
+        bw = Math.min(54, (W - 60) / pers.length - 20),
         base = H - 28;
     const bars = data
         .map((row, i) => {
             let acc = 0;
-            const bx = 30 + i * ((W - 60) / periods.length) + 12;
+            const bx = 30 + i * ((W - 60) / pers.length) + ((W - 60) / pers.length - bw) / 2;
             return `<g class="bar">${row
                 .map((n, k) => {
                     if (!n) return '';
                     const h = (n / max) * (H - 60),
                         y0 = base - acc - h;
                     acc += h;
-                    return `<rect class="l${k}" x="${bx}" y="${f1(y0)}" width="${bw}" height="${f1(h - 2)}" rx="3"><title>${names[periods[i]]}: ${n} in ${langs[k]}</title></rect>`;
+                    return `<rect class="l${k}" x="${f1(bx)}" y="${f1(y0)}" width="${f1(bw)}" height="${f1(h - 2)}" rx="3"><title>${periodName(pers[i])}: ${n} in ${langs[k]}</title></rect>`;
                 })
-                .join('')}<text x="${bx + bw / 2}" y="${H - 8}">${names[periods[i]]}</text></g>`;
+                .join('')}<text x="${f1(bx + bw / 2)}" y="${H - 8}">${periodName(pers[i])}</text></g>`;
         })
         .join('');
     return `<svg class="vo-stack" viewBox="0 0 ${W} ${H}" role="img" aria-label="Main language per project, by period">${bars}</svg>
 <ul class="vo-key">${langs.map((l, k) => `<li><span class="l${k}"></span>${l}</li>`).join('')}</ul>`;
+}
+
+/** Donut: projects per period. */
+export function donut(): string {
+    const pers = periods();
+    const counts = pers.map((y) => PROJECTS.filter((p) => yearOf(p) === y).length),
+        total = counts.reduce((a, b) => a + b, 0);
+    let acc = 0;
+    const arcs = counts
+        .map((n, k) => {
+            const pct = (n / total) * 100,
+                arc = `<circle class="arc l${k}" cx="130" cy="110" r="74" pathLength="100" stroke-dasharray="${f1(Math.max(0, pct - 0.8))} ${f1(100 - pct + 0.8)}" stroke-dashoffset="${f1(-acc)}"><title>${periodName(pers[k])}: ${n}</title></circle>`;
+            acc += pct;
+            return arc;
+        })
+        .join('');
+    return `<svg class="vo-donut" viewBox="0 0 260 220" role="img" aria-label="Projects per period: ${pers.map((y, k) => `${periodName(y)} ${counts[k]}`).join(', ')}">
+<g class="spin">${arcs}</g><text class="big" x="130" y="114">${total}</text><text x="130" y="134">projects</text></svg>
+<ul class="vo-key">${pers.map((y, k) => `<li><span class="l${k}"></span>${periodName(y)} · ${counts[k]}</li>`).join('')}</ul>`;
+}
+
+/** When each skill first appears (from the same events as the path chart). */
+function firstSeen(): Map<string, number> {
+    const seen = new Map<string, number>();
+    for (const e of events()) for (const sk of e.add) if (!seen.has(sk)) seen.set(sk, e.t);
+    return seen;
+}
+
+const pretty = (sk: string) => (sk.length <= 3 ? sk.toUpperCase() : sk[0].toUpperCase() + sk.slice(1));
+
+/** Columns: new skills picked up in each period. */
+export function newSkills(): string {
+    const pers = periods();
+    const yearOfSkill = new Map<string, string>();
+    for (const y of pers)
+        for (const p of PROJECTS.filter((q) => yearOf(q) === y))
+            for (const sk of skills(p.tags)) if (!yearOfSkill.has(sk)) yearOfSkill.set(sk, y);
+    const counts = pers.map((y) => [...yearOfSkill.values()].filter((v) => v === y).length);
+    const max = Math.max(...counts),
+        W = 300,
+        H = 220,
+        col = (W - 60) / pers.length;
+    return `<svg class="vo-stack vo-cols" viewBox="0 0 ${W} ${H}" role="img" aria-label="New skills per period: ${pers.map((y, k) => `${periodName(y)} ${counts[k]}`).join(', ')}">
+${pers
+    .map((y, k) => {
+        const h = (counts[k] / max) * (H - 70),
+            bx = 30 + k * col + col / 2 - 22;
+        return `<g class="bar"><rect class="l2" x="${f1(bx)}" y="${f1(H - 28 - h)}" width="44" height="${f1(h)}" rx="4" /><text x="${f1(bx + 22)}" y="${f1(H - 36 - h)}" class="val">${counts[k]}</text><text x="${f1(bx + 22)}" y="${H - 8}">${periodName(y)}</text></g>`;
+    })
+    .join('')}</svg>`;
+}
+
+/** Chips: skills first used in the last 12 months. */
+export function learnedThisYear(): { count: number; html: string } {
+    const recent = [...firstSeen()].filter(([, t]) => t > NOW - 1).map(([sk]) => sk);
+    return {
+        count: recent.length,
+        html: `<ul class="vo-chips">${recent
+            .slice(0, 18)
+            .map((sk) => `<li>${pretty(sk)}</li>`)
+            .join('')}${recent.length > 18 ? `<li class="more">+${recent.length - 18}</li>` : ''}</ul>`
+    };
 }
 
 export function clusters(): string {
@@ -314,7 +408,7 @@ export function topSkills(): string {
     return `<ol class="vo-bars">${best
         .map(
             ([s, n]) =>
-                `<li><span class="name">${s.length <= 3 ? s.toUpperCase() : s[0].toUpperCase() + s.slice(1)}</span><span class="track"><span class="fill" data-w="${n / max}"></span></span><span class="n">${n}</span></li>`
+                `<li><span class="name">${pretty(s)}</span><span class="track"><span class="fill" data-w="${n / max}"></span></span><span class="n">${n}</span></li>`
         )
         .join('')}</ol>`;
 }

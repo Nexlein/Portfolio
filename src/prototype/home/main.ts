@@ -12,7 +12,7 @@ import { variantI } from './web';
 import { variantJ } from './silk';
 import { variantK, variantL } from './orbit';
 import { variantM } from './brain';
-import { variantN, variantO } from './premium';
+import { variantN, variantO, variantP } from './premium';
 
 const VARIANTS: Variant[] = [
     { key: 'A', name: 'Policy field', mount: variantA },
@@ -29,10 +29,11 @@ const VARIANTS: Variant[] = [
     { key: 'L', name: 'Round 9 · living web', mount: variantL },
     { key: 'M', name: 'Round 10 · neural map', mount: variantM },
     { key: 'N', name: 'Round 11 · premium', mount: variantN },
-    { key: 'O', name: 'Round 12 · charts & motion', mount: variantO }
+    { key: 'O', name: 'Round 12 · charts & motion', mount: variantO },
+    { key: 'P', name: 'Round 13 · living page', mount: variantP }
 ];
 
-const key = new URLSearchParams(location.search).get('variant')?.toUpperCase() ?? 'O';
+const key = new URLSearchParams(location.search).get('variant')?.toUpperCase() ?? 'P';
 const current = VARIANTS.find((v) => v.key === key) ?? VARIANTS[0];
 const app = document.getElementById('app')!;
 

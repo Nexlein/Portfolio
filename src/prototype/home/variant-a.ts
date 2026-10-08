@@ -252,6 +252,7 @@ export function policyField(canvas: HTMLCanvasElement): void {
 
     let t = 0;
     const frame = () => {
+        if (!canvas.isConnected) return; // swapped for another simulation
         t += 0.004;
         if (pointer) setGoal(pointer.x, pointer.y);
         else
