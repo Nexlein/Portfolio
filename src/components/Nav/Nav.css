@@ -109,19 +109,8 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    box-shadow: 0 0 0 1px var(--hair);
-}
-
-.swatch-current {
     background: linear-gradient(135deg, var(--bg) 0 50%, var(--signal) 50% 100%);
-}
-
-.swatch-midnight {
-    background: linear-gradient(135deg, #05070d 0 50%, #f5a524 50% 100%);
-}
-
-.swatch-daylight {
-    background: linear-gradient(135deg, #fbfbfd 0 50%, #a35c00 50% 100%);
+    box-shadow: 0 0 0 1px var(--hair);
 }
 
 .nav-theme-menu {
@@ -145,6 +134,16 @@
         opacity 160ms ease-out,
         transform 160ms var(--ease-out),
         visibility 0s 160ms;
+}
+
+/* Luna: the menu stays a cream window under the blue bar */
+[data-theme='luna'] .nav-theme-menu {
+    --ink: #0a1f44;
+    --muted: #4f5b73;
+    --hair: rgb(10 31 68 / 14%);
+    --raised: #f6f4e8;
+
+    background: #fff;
 }
 
 .nav-themes.open .nav-theme-menu {
@@ -199,4 +198,23 @@
     .nav-last {
         display: none;
     }
+}
+
+/* Luna: the bar is a Luna title bar and the CV button is the green Start button */
+[data-theme='luna'] .nav {
+    --ink: #fff;
+    --muted: rgb(255 255 255 / 85%);
+    --hair: rgb(255 255 255 / 30%);
+    --raised: rgb(255 255 255 / 20%);
+
+    background: linear-gradient(180deg, #3d95ff 0%, #0058e6 10%, #0054e3 55%, #0046c8 100%);
+    backdrop-filter: none;
+    border-bottom-color: #0a2a82;
+}
+
+[data-theme='luna'] .nav-cv {
+    background: linear-gradient(180deg, #5fc15f 0%, #2f8f2f 55%, #267a26 100%);
+    color: #fff;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 45%);
+    text-shadow: 0 1px 1px rgb(0 0 0 / 35%);
 }

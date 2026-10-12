@@ -25,7 +25,8 @@ export const en = {
         },
         themes: {
             midnight: 'Midnight',
-            daylight: 'Daylight'
+            daylight: 'Daylight',
+            luna: 'Luna'
         },
         footer: {
             made: 'Made with coffee, time and tokens',
