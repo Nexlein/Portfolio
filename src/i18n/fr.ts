@@ -129,6 +129,23 @@ export const fr = {
             thisYear: 'Cette année',
             newSkills: '{n} nouvelles compétences en 12 mois'
         },
+        method: {
+            title1: 'Comment je travaille.',
+            title2: 'Vite, et vérifié.',
+            test: {
+                title: "Les tests d'abord",
+                body: "J'écris le test avant le code, puis l'IA le fait passer. Chaque changement passe les tests unitaires et navigateur avant d'être fusionné."
+            },
+            agents: {
+                title: 'Des agents sous contrôle',
+                body: "Mes agents IA travaillent dans un cadre écrit : un fichier de conventions, une carte du code régénérée à chaque commit, et des permissions qui les tiennent à l'écart de ce qu'ils ne doivent pas toucher."
+            },
+            compound: {
+                title: 'Chaque projet sert le suivant',
+                body: 'Chaque projet laisse derrière lui des outils, des tests et des notes qui accélèrent le suivant.'
+            },
+            source: 'Voir comment ce site est construit'
+        },
         hire: {
             title1: 'Deux façons de travailler ensemble.',
             title2: 'Stage ou freelance.',

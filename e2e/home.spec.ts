@@ -12,7 +12,8 @@ test.describe('without JavaScript', () => {
         await expect(page.locator('.feature')).toHaveCount(PROJECTS.filter((p) => p.featured).length);
         await expect(page.locator('.path-svg')).toBeVisible();
         await expect(page.locator('.chart-card')).toHaveCount(3);
-        await expect(page.locator('.tile')).toHaveCount(2);
+        await expect(page.locator('#hire .tile')).toHaveCount(2);
+        await expect(page.locator('#method .tile')).toHaveCount(3);
         await expect(page.locator('.hero-copy h1')).toBeVisible(); // reveals never hide content without JS
     });
 });

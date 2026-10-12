@@ -391,3 +391,8 @@
         padding: 28px;
     }
 }
+
+/* How I work: the link to the source sits under the three cards */
+.method-source {
+    margin-top: 32px;
+}

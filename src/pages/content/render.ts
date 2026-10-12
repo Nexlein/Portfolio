@@ -27,6 +27,8 @@ export const BLOCKS: Record<string, Block> = {
     'path-chart': home.pathBlock,
     experience: home.experience,
     numbers: home.numbersBlock,
+    method: home.method,
+    'method-source': home.methodSource,
     hire: home.hire,
     contact: home.contact,
     email: home.email,
