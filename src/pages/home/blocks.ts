@@ -39,9 +39,7 @@ export function featured(lang: Lang): string {
         .map(
             (p) => `<a class="feature surface reveal" href="${localizedPath(projectPath(p.id), lang)}">
 <span class="feature-media"><img src="${still(p)}" alt="" loading="lazy" width="640" height="400" /></span>
-<span class="feature-body"><span class="eyebrow">${domainName(lang, p.category)}</span><strong>${p.title}</strong>
-<span class="feature-line">${oneLiner(p, lang)}</span><span class="mono">${p.tags.slice(0, 4).join(' · ')}</span>
-<span class="link">${t(lang, 'featured.open')} <span aria-hidden="true">›</span></span></span></a>`
+<span class="feature-body"><span class="eyebrow">${domainName(lang, p.category)}</span><strong>${p.title}</strong></span></a>`
         )
         .join('');
 }

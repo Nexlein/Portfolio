@@ -65,9 +65,7 @@ export const en = {
             }
         },
         featured: {
-            title1: 'Selected work.',
-            title2: 'Three to start with.',
-            open: 'Open project'
+            label: 'Start here'
         },
         work: {
             title1: '{n} projects.',

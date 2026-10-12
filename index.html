@@ -80,19 +80,6 @@
                 <p class="method-source wrap reveal" data-render="method-source"></p>
             </section>
 
-            <!-- Selected work: the featured projects -->
-            <section class="section" id="featured" aria-labelledby="featured-title">
-                <div class="section-head reveal">
-                    <h2 class="headline" id="featured-title">
-                        <span class="line"><span data-i18n="home.featured.title1">Selected work.</span></span>
-                        <span class="line"
-                            ><span class="recede" data-i18n="home.featured.title2">Three to start with.</span></span
-                        >
-                    </h2>
-                </div>
-                <div class="features wrap" data-render="featured"></div>
-            </section>
-
             <!-- Work: every project; the map is drawn on top on large screens (src/components/NeuralMap) -->
             <section class="section work" id="work" aria-labelledby="work-title">
                 <div class="section-head reveal">
@@ -103,6 +90,8 @@
                             >Hover one to see what it lights up, or ask the network.</span
                         >
                     </p>
+                    <p class="features-label mono" data-i18n="home.featured.label">Start here</p>
+                    <div class="features" data-render="featured"></div>
                     <span class="sr-only" id="ask-label" data-i18n="home.work.ask">Light up a domain</span>
                     <div
                         class="segmented query desk-only"
