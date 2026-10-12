@@ -142,3 +142,20 @@
         animation: none;
     }
 }
+
+/* The title's second line slides out and back in as it changes (see rotateTitle in Hero.ts) */
+.js .reveal.in .line > span.cycling {
+    transition-duration: 450ms;
+    transition-delay: 0ms;
+}
+
+.js .reveal.in .line > span.cycling.out {
+    translate: 0 105%;
+}
+
+/* On narrow screens the variants wrap differently: reserve two lines so the text below never jumps */
+@media (width <= 600px) {
+    .hero .line:nth-child(2) {
+        min-height: 2lh;
+    }
+}

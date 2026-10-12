@@ -42,6 +42,7 @@ export function initHero(): void {
     button.addEventListener('click', () => show((current = (current + 1) % SIMS.length), true));
 
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    rotateTitle(hero, copy);
     let ticking = false;
     let progress = 0;
     window.addEventListener('resize', () => (height = hero.offsetHeight), { passive: true });
@@ -62,4 +63,26 @@ export function initHero(): void {
         },
         { passive: true }
     );
+}
+
+/** The title's second line cycles through a few ways to finish the sentence; it pauses while the visitor reads. */
+function rotateTitle(hero: HTMLElement, copy: HTMLElement): void {
+    const line = hero.querySelector<HTMLElement>('[data-i18n="home.hero.title2"]');
+    if (!line) return;
+    const keys = ['title2', 'title2b', 'title2c'];
+    let index = 0;
+    let paused = false;
+    copy.addEventListener('pointerenter', () => (paused = true));
+    copy.addEventListener('pointerleave', () => (paused = false));
+    copy.addEventListener('focusin', () => (paused = true));
+    copy.addEventListener('focusout', () => (paused = false));
+    window.setInterval(() => {
+        if (paused || document.hidden || scrollY > hero.offsetHeight / 2) return;
+        line.classList.add('cycling', 'out');
+        window.setTimeout(() => {
+            index = (index + 1) % keys.length;
+            line.textContent = i18n.t(`home.hero.${keys[index]}`);
+            line.classList.remove('out');
+        }, 450);
+    }, 4200);
 }

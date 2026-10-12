@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **cv.html** (106)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
-- **index.html** (161)
+- **index.html** (163)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
 - **project.html** (75) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
@@ -46,9 +46,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render
 
 ## src/components/Hero
-- **Hero.css** (145) — Sparser simulations get more presence
+- **Hero.css** (162) — Sparser simulations get more presence
   - ← index.html
-- **Hero.ts** (66) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
+- **Hero.ts** (89) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
   - exports: initHero
   - → core/i18n, components/Hero/sims/index
   - ← pages/home/home
@@ -136,10 +136,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (192)
+- **en.ts** (194)
   - exports: en
   - ← core/translate
-- **fr.ts** (192)
+- **fr.ts** (194)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
