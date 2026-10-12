@@ -17,9 +17,33 @@ export function initNav(): void {
     if (!nav) return;
     initPill(nav);
     initThemes(nav);
+    initProgress();
     nav.querySelectorAll<HTMLAnchorElement>('[data-lang]').forEach((a) =>
         a.addEventListener('click', () => store('lang', a.dataset.lang!))
     );
+}
+
+/** A thin line under the bar: how far down the page the visitor is. */
+function initProgress(): void {
+    const bar = document.querySelector<HTMLElement>('.nav-progress');
+    if (!bar) return;
+    let ticking = false;
+    const update = () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        bar.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
+        ticking = false;
+    };
+    window.addEventListener(
+        'scroll',
+        () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(update);
+        },
+        { passive: true }
+    );
+    window.addEventListener('resize', update);
+    update();
 }
 
 function initPill(nav: HTMLElement): void {

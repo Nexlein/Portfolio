@@ -15,6 +15,7 @@ export const fr = {
     site: {
         nav: {
             label: 'Navigation principale',
+            skip: 'Aller au contenu',
             work: 'Projets',
             path: 'Parcours',
             hire: 'Recruter',

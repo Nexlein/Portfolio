@@ -80,13 +80,13 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: neural.test.ts, value-iteration.test.ts
 
 ## src/components/Nav
-- **Nav.css** (221) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
+- **Nav.css** (257) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← cv.html, index.html, project.html
-- **Nav.ts** (104) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
+- **Nav.ts** (128) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav
   - → components/Nav/themes
   - ← pages/cv/cv, pages/home/home, pages/project/project
-- **render.ts** (42) — Top navigation, rendered at build time in every language (data-render="nav"), so links, the language switch and the theme menu are real H...
+- **render.ts** (44) — Top navigation, rendered at build time in every language (data-render="nav"), so links, the language switch and the theme menu are real H...
   - exports: renderNav
   - → core/translate, components/Nav/themes
   - ← pages/content/render
@@ -141,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (212)
+- **en.ts** (213)
   - exports: en
   - ← core/translate
-- **fr.ts** (212)
+- **fr.ts** (213)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts

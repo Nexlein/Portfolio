@@ -15,6 +15,7 @@ export const en = {
     site: {
         nav: {
             label: 'Main navigation',
+            skip: 'Skip to content',
             work: 'Work',
             path: 'Path',
             hire: 'Hire',

@@ -195,3 +195,23 @@ test('reduced motion: no scroll reveal hides content and nothing moves on its ow
     await expect(page.locator('.chart-card').first()).toBeVisible();
     await expect(page.locator('.avail-dot')).toHaveCSS('animation-name', 'none');
 });
+
+test.describe('navbar', () => {
+    test('the progress line follows the scroll', async ({ page }) => {
+        await page.goto('/');
+        const bar = page.locator('.nav-progress');
+        const scale = () => bar.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
+        expect(await scale()).toBe(0);
+        await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+        await expect.poll(scale).toBeGreaterThan(0.9);
+    });
+
+    test('the first Tab reaches a skip link that jumps to the content', async ({ page }) => {
+        await page.goto('/');
+        await page.keyboard.press('Tab');
+        const skip = page.locator('.skip');
+        await expect(skip).toBeFocused();
+        await expect(skip).toBeInViewport();
+        await expect(page.locator('main#main')).toHaveCount(1);
+    });
+});
