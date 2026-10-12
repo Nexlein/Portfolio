@@ -47,6 +47,11 @@ function initPill(nav: HTMLElement): void {
         { rootMargin: '-45% 0px -50% 0px' }
     );
     sections.forEach((s) => spy.observe(s));
+
+    // The pill is measured in pixels: measure again once the web font is in and when the window changes
+    const rest = () => nav.matches(':hover') || moveTo(active);
+    window.addEventListener('resize', rest);
+    void document.fonts?.ready.then(rest);
 }
 
 const currentTheme = () => document.documentElement.dataset.theme as Theme;
@@ -85,6 +90,9 @@ function initThemes(nav: HTMLElement): void {
     });
     document.addEventListener('pointerdown', (e) => {
         if (!wrap.contains(e.target as Node)) setOpen(false);
+    });
+    wrap.addEventListener('focusout', (e) => {
+        if (!wrap.contains(e.relatedTarget as Node | null)) setOpen(false);
     });
     wrap.addEventListener('keydown', (e) => {
         if (e.key !== 'Escape') return;

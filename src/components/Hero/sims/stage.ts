@@ -20,6 +20,8 @@ export interface Stage {
     /** Click on the hero's empty space (not on its links or buttons). */
     onClick: (fn: (p: Point) => void) => void;
     onResize: (fn: () => void) => void;
+    /** Remove every listener and observer this stage added (the canvas is being swapped out). */
+    dispose: () => void;
     /** Run `frame` every animation frame while visible; once only with reduced motion. */
     loop: (frame: (t: number) => void) => void;
     reduced: boolean;
@@ -48,13 +50,17 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         const r = canvas.getBoundingClientRect();
         return { x: e.clientX - r.left, y: e.clientY - r.top };
     };
-    // Listeners stay with this canvas: once it is swapped out, they ignore events
-    host.addEventListener('pointermove', (e) => canvas.isConnected && (pointer = local(e)));
-    host.addEventListener('pointerleave', () => (pointer = null));
-    window.addEventListener('themechange', read);
-    window.addEventListener('resize', () => canvas.isConnected && size());
+    // Listeners live as long as this canvas: dispose() removes them when it is swapped out
+    const life = new AbortController();
+    const { signal } = life;
+    host.addEventListener('pointermove', (e) => (pointer = local(e)), { signal });
+    host.addEventListener('pointerleave', () => (pointer = null), { signal });
+    window.addEventListener('themechange', read, { signal });
+    window.addEventListener('resize', size, { signal });
     let seen = true;
-    new IntersectionObserver(([e]) => (seen = e.isIntersecting)).observe(canvas);
+    const visibility = new IntersectionObserver(([e]) => (seen = e.isIntersecting));
+    visibility.observe(canvas);
+    signal.addEventListener('abort', () => visibility.disconnect());
     read();
     size();
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -74,11 +80,16 @@ export function stage(canvas: HTMLCanvasElement): Stage {
             y: canvas.clientHeight * (0.42 + 0.25 * Math.sin(t * 1.7))
         }),
         onClick: (fn) =>
-            host.addEventListener('click', (e) => {
-                if (!canvas.isConnected || (e.target as Element).closest('a, button')) return;
-                fn(local(e));
-            }),
+            host.addEventListener(
+                'click',
+                (e) => {
+                    if ((e.target as Element).closest('a, button')) return;
+                    fn(local(e));
+                },
+                { signal }
+            ),
         onResize: (fn) => resizers.push(fn),
+        dispose: () => life.abort(),
         loop: (frame) => {
             if (reduced) return frame(performance.now());
             const tick = (t: number) => {

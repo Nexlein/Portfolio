@@ -10,17 +10,18 @@ import { localizedPath } from '@/core/translate';
 import { PROJECTS, projectPath } from '@/data/projects';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
-import { mountNeuralMap } from '@/components/NeuralMap/NeuralMap';
 import { initNumbers, initPathChart, initReveals } from '@/components/Charts/Charts';
 import { MAP_MAX } from './blocks';
 
 /** The map needs room: below this width the plain list is the better view. */
 const MAP_MIN_WIDTH = 900;
 
-function initWork(): void {
+async function initWork(): Promise<void> {
     const section = document.querySelector<HTMLElement>('.work');
     const host = section?.querySelector<HTMLElement>('.map-host');
     if (!section || !host || innerWidth <= MAP_MIN_WIDTH) return;
+    // Loaded here, not at the top: phones never download the map code
+    const { mountNeuralMap } = await import('@/components/NeuralMap/NeuralMap');
     section.classList.add('has-map');
     const map = mountNeuralMap(host, MAP_MAX);
 
@@ -84,7 +85,7 @@ function bootstrap(): void {
     initAnalytics();
     initNav();
     initHero();
-    initWork();
+    void initWork();
     initPathChart();
     initNumbers();
     initReveals();
