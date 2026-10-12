@@ -1,0 +1,36 @@
+{
+    "$schema": "https://json.schemastore.org/claude-code-settings.json",
+    "permissions": {
+        "allow": [
+            "Bash(npm run dev*)",
+            "Bash(npm run typecheck*)",
+            "Bash(npm run format*)",
+            "Bash(npm run codemap*)",
+            "Bash(npm run cv:pdf*)",
+            "Bash(npm run audit*)",
+            "Bash(npx prettier*)",
+            "Bash(npx playwright test*)",
+            "Bash(node scripts/codemap.mjs*)",
+            "Bash(gh pr view*)",
+            "Bash(gh pr checks*)",
+            "Bash(gh pr list*)",
+            "Bash(gh run list*)",
+            "Bash(gh run view*)",
+            "Bash(git switch*)",
+            "Bash(git fetch*)",
+            "Bash(git pull --ff-only*)"
+        ],
+        "deny": [
+            "Read(./node_modules/**)",
+            "Read(./dist/**)",
+            "Read(./cv-pdf/**)",
+            "Read(./test-results/**)",
+            "Read(./playwright-report/**)",
+            "Read(./coverage/**)",
+            "Read(./graphify-out/**)",
+            "Read(./package-lock.json)",
+            "Read(./public/projects/**/*.mp4)",
+            "Read(./public/projects/**/*.webm)"
+        ]
+    }
+}
