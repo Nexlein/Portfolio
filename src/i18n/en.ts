@@ -1,15 +1,15 @@
 export const en = {
     meta: {
-        imageAlt: 'Nielsen COMBE--BRACCIALE, AI and software developer portfolio',
+        imageAlt: 'Nielsen COMBE--BRACCIALE, AI, data and software engineer portfolio',
         home: {
-            title: 'Nexlein — AI & Software Developer',
+            title: 'Nexlein — AI, Data & Software Engineer',
             description:
-                'Portfolio of Nielsen COMBE--BRACCIALE (Nexlein) — Epitech student and AI systems developer building real-time simulations, decision engines, and C++ architectures.'
+                'Nielsen COMBE--BRACCIALE (Nexlein), AI, data and software engineer. Reliable software at the speed of AI: TDD, agentic workflows, simulations, decision engines.'
         },
         cv: {
             title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
-                'CV of Nielsen COMBE--BRACCIALE, AI systems architect and C++ developer: autonomous decision systems, real-time simulation engines and high-performance engineering.'
+                'CV of Nielsen COMBE--BRACCIALE, AI, data and software engineer: TDD, agentic workflows, autonomous decision systems and real-time simulation engines.'
         }
     },
     site: {
@@ -167,9 +167,9 @@ export const en = {
             pdf: 'Download PDF'
         },
         hero: {
-            role: 'AI Systems Architect & C++ Developer',
+            role: 'AI, Data & Software Engineer',
             summary:
-                'Building AI systems that decide and learn. Focused on autonomous decision architectures, real-time simulation engines, and high-performance engineering.',
+                'Building reliable software at the speed of AI, with TDD and agentic workflows. Focused on autonomous decision systems, real-time simulation engines, and high-performance C++.',
             badge1: 'Part-Time (Sept-Feb)',
             badge2: 'Full-Time Intern (Mar-Aug)',
             badge3: 'Freelance'
