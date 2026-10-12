@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **cv.html** (105)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
-- **index.html** (163)
+- **index.html** (167)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
 - **project.html** (75) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
@@ -46,9 +46,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render
 
 ## src/components/Hero
-- **Hero.css** (162) — Sparser simulations get more presence
+- **Hero.css** (187) — Sparser simulations get more presence
   - ← index.html
-- **Hero.ts** (89) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
+- **Hero.ts** (103) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
   - exports: initHero
   - → core/i18n, components/Hero/sims/index
   - ← pages/home/home
@@ -141,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (213)
+- **en.ts** (214)
   - exports: en
   - ← core/translate
-- **fr.ts** (213)
+- **fr.ts** (214)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -177,8 +177,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render, pages/home/home, pages/project/render
 - **home.css** (475) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (113) — Home page.
-  - → core/analytics, core/i18n, core/translate, data/projects, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
+- **home.ts** (115) — Home page.
+  - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 
 ## src/pages/project
@@ -196,20 +196,23 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← vite-plugins/pages
 
 ## src/styles
-- **base.css** (263) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (269) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← cv.html, index.html, project.html
 - **tokens.css** (116) — Design tokens of the redesign.
   - ← styles/base.css
 
 ## src/ui
+- **glide.ts** (41) — In-page links glide to their section instead of jumping (about 0.7 s, eased).
+  - exports: ease, initGlide
+  - ← pages/home/home
 - **icons.ts** (18) — Inline SVG icons shared across components.
   - exports: Icons, domainIcon
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
 - **video.ts** (41) — MIME type for a project video, from its extension.
   - exports: videoType, videoPoster, prefersReducedMotion, playVideosWhenVisible
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
-- tests: video.dom.test.ts, video.test.ts
+- tests: glide.test.ts, video.dom.test.ts, video.test.ts
 
 ## src
 - **vite-env.d.ts** (10) — / <reference types="vite/client" />

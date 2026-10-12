@@ -8,6 +8,7 @@ import { initAnalytics } from '@/core/analytics';
 import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/translate';
 import { PROJECTS, projectPath } from '@/data/projects';
+import { initGlide } from '@/ui/glide';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
 import { initNumbers, initPathChart, initReveals } from '@/components/Charts/Charts';
@@ -99,6 +100,7 @@ function bootstrap(): void {
 
     initAnalytics();
     initNav();
+    initGlide();
     initHero();
     void initWork();
     initPathTabs();

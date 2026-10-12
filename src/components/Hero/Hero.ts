@@ -37,6 +37,7 @@ export function initHero(): void {
         name.textContent = t('name');
         hint.textContent = t('hint');
     };
+    initCue(hero);
     show(current, false);
     button.hidden = false;
     button.addEventListener('click', () => show((current = (current + 1) % SIMS.length), true));
@@ -85,4 +86,17 @@ function rotateTitle(hero: HTMLElement, copy: HTMLElement): void {
             line.classList.remove('out');
         }, 450);
     }, 4200);
+}
+
+/** The scroll cue fades out as the visitor starts to scroll. */
+function initCue(hero: HTMLElement): void {
+    const cue = hero.querySelector<HTMLElement>('.scroll-cue');
+    if (!cue) return;
+    window.addEventListener(
+        'scroll',
+        () => {
+            cue.style.opacity = String(Math.max(0, 1 - scrollY / 120));
+        },
+        { passive: true }
+    );
 }

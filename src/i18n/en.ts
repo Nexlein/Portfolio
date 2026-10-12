@@ -45,6 +45,7 @@ export const en = {
             work: 'See the work',
             hire: 'Hire me',
             switch: 'Show another simulation',
+            scroll: 'Scroll down',
             sims: {
                 valueIteration: {
                     name: 'Value iteration',

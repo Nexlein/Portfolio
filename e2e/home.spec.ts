@@ -225,3 +225,28 @@ test.describe('navbar', () => {
         await expect(page.locator('main#main')).toHaveCount(1);
     });
 });
+
+test.describe('scroll polish', () => {
+    test('the hero button glides to its section and keeps the hash', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('.hero .btn[href="#work"]').click();
+        const top = () => page.locator('#work').evaluate((el) => Math.round(el.getBoundingClientRect().top));
+        await expect.poll(top, { timeout: 5000 }).toBeLessThanOrEqual(60);
+        expect(page.url()).toContain('#work');
+        await expect(page.locator('#work')).toBeFocused();
+    });
+
+    test('the scroll cue shows at the top and fades once the page scrolls', async ({ page }) => {
+        await page.goto('/');
+        const cue = page.locator('.scroll-cue');
+        await expect(cue).toHaveCSS('opacity', '1');
+        await page.evaluate(() => scrollTo(0, 400));
+        await expect.poll(() => cue.evaluate((el) => getComputedStyle(el).opacity)).toBe('0');
+    });
+
+    test('with reduced motion the cue does not bob', async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/');
+        await expect(page.locator('.scroll-cue')).toHaveCSS('animation-name', 'none');
+    });
+});

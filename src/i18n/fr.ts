@@ -45,6 +45,7 @@ export const fr = {
             work: 'Voir les projets',
             hire: 'Me recruter',
             switch: 'Changer de simulation',
+            scroll: 'Faire défiler',
             sims: {
                 valueIteration: {
                     name: 'Itération de valeur',

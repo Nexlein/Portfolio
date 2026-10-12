@@ -159,3 +159,28 @@
         min-height: 2lh;
     }
 }
+
+/* A small chevron hints that the page continues; it fades out once the visitor scrolls (see initCue) */
+.scroll-cue {
+    position: absolute;
+    bottom: 68px;
+    left: 50%;
+    z-index: 1;
+    translate: -50% 0;
+    color: var(--muted);
+    font-size: 26px;
+    line-height: 1;
+    animation: bob 2.2s ease-in-out infinite;
+}
+
+@keyframes bob {
+    50% {
+        translate: -50% 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-cue {
+        animation: none;
+    }
+}
