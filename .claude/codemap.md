@@ -135,10 +135,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (191)
+- **en.ts** (192)
   - exports: en
   - ← core/translate
-- **fr.ts** (191)
+- **fr.ts** (192)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts

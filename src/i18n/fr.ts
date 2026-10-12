@@ -1,15 +1,15 @@
 export const fr = {
     meta: {
-        imageAlt: 'Portfolio de Nielsen Combe-Bracciale, développeur IA et logiciel',
+        imageAlt: 'Portfolio de Nielsen COMBE--BRACCIALE, développeur IA et logiciel',
         home: {
             title: 'Nexlein — Développeur IA & Logiciel',
             description:
-                "Portfolio de Nielsen Combe-Bracciale (Nexlein), étudiant à Epitech et développeur de systèmes d'IA : simulations temps réel, moteurs de décision et architectures C++."
+                "Portfolio de Nielsen COMBE--BRACCIALE (Nexlein), étudiant à Epitech et développeur de systèmes d'IA : simulations temps réel, moteurs de décision et architectures C++."
         },
         cv: {
-            title: 'Nielsen Combe-Bracciale — CV',
+            title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
-                "CV de Nielsen Combe-Bracciale, architecte de systèmes d'IA et développeur C++ : systèmes de décision autonomes, moteurs de simulation temps réel et ingénierie haute performance."
+                "CV de Nielsen COMBE--BRACCIALE, architecte de systèmes d'IA et développeur C++ : systèmes de décision autonomes, moteurs de simulation temps réel et ingénierie haute performance."
         }
     },
     site: {
@@ -28,6 +28,7 @@ export const fr = {
             daylight: 'Plein jour'
         },
         footer: {
+            made: 'Fait avec du café, du temps et des tokens',
             email: 'E-mail',
             source: 'Voir le code source'
         }

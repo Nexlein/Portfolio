@@ -26,7 +26,7 @@ export function renderNav(lang: Lang, path: string): string {
     ).join('');
 
     return `<header class="nav" id="nav">
-  <a class="nav-name" href="${onHome ? '#top' : home}">Nielsen<span class="nav-last"> Combe-Bracciale</span></a>
+  <a class="nav-name" href="${onHome ? '#top' : home}">Nielsen<span class="nav-last"> COMBE--BRACCIALE</span></a>
   <nav aria-label="${t('label')}">
     <span class="nav-pill" aria-hidden="true"></span>
     ${SECTIONS.map((id) => `<a class="nav-link" href="${anchor(id)}" data-section="${id}">${t(id)}</a>`).join('')}
