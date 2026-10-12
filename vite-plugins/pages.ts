@@ -59,7 +59,10 @@ export const PAGES: PageSpec[] = [
         imageAlt: () => project.title,
         jsonLd: (lang) =>
             projectSource(project, lang, projectDescription(project, lang), `${SITE}/projects/${project.id}/og.jpg`),
-        fill: (document, lang) => fillProjectPage(document, project, lang)
+        fill: (document, lang) => {
+            renderContent(document, lang, projectPath(project.id)); // nav and footer
+            fillProjectPage(document, project, lang);
+        }
     }))
 ];
 

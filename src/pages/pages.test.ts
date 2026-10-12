@@ -95,12 +95,24 @@ describe('project pages', () => {
         it.each(LANGS)('renders its content in %s', (lang) => {
             const doc = render(page, lang);
             expect(doc.getElementById('project-title')!.textContent).toBe(project.title);
-            expect(doc.querySelectorAll('#project-tags .project-tag')).toHaveLength(project.tags.length);
+            expect(doc.querySelectorAll('#project-specs .project-tag')).toHaveLength(project.tags.length);
+            expect(doc.querySelector('#nav')).not.toBeNull();
             expect(doc.querySelector('#project-media video, #project-media img')).not.toBeNull();
             expect(doc.getElementById('project-back')!.getAttribute('href')).toBe(`${localizedPath('/', lang)}#work`);
             const github = doc.getElementById('project-github');
             if (project.github) expect(github!.getAttribute('href')).toBe(project.github);
             else expect(github).toBeNull();
+        });
+
+        it.each(LANGS)('links to its three nearest projects in %s, never to itself', (lang) => {
+            const links = [...render(page, lang).querySelectorAll('#project-related a')].map((a) =>
+                a.getAttribute('href')
+            );
+            expect(links).toHaveLength(3);
+            expect(new Set(links).size).toBe(3);
+            expect(links).not.toContain(localizedPath(`/projects/${id}.html`, lang));
+            for (const href of links)
+                expect(href).toMatch(new RegExp(`^${lang === 'fr' ? '/fr' : ''}/projects/[\\w-]+\\.html$`));
         });
 
         it('uses SoftwareSourceCode structured data pointing at the repository', () => {

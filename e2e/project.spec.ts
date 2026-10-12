@@ -14,12 +14,28 @@ test.describe('project page', () => {
         await expect(page.locator('#project-media video')).toHaveJSProperty('paused', false);
     });
 
-    test('gallery arrows work on the page too', async ({ page }) => {
+    test('the gallery moves with its arrows, dots and keys', async ({ page }) => {
         await page.goto(`/projects/${gallery.id}.html`);
-        const active = page.locator('#project-media .modal-gallery img.active');
+        const active = page.locator('#project-media .gallery img.active');
+        const count = page.locator('.gallery-count');
         await expect(active).toHaveAttribute('data-idx', '0');
         await page.locator('#project-media .next').click();
         await expect(active).toHaveAttribute('data-idx', '1');
+        await expect(count).toHaveText(`2 / ${gallery.media.type === 'gallery' ? gallery.media.images.length : 0}`);
+        await page.keyboard.press('ArrowLeft');
+        await expect(active).toHaveAttribute('data-idx', '0');
+        await page.locator('.gallery-dots button').last().click();
+        await expect(page.locator('.gallery-dots button').last()).toHaveAttribute('aria-current', 'true');
+    });
+
+    test('connected projects lead to other project pages', async ({ page }) => {
+        await page.goto(`/projects/${video.id}.html`);
+        const card = page.locator('#project-related a').first();
+        await card.scrollIntoViewIfNeeded();
+        await expect(card.locator('.overlap-fill')).toHaveCSS('width', /^[1-9]/);
+        await card.click();
+        await expect(page).toHaveURL(/\/projects\/[\w-]+\.html$/);
+        await expect(page).not.toHaveURL(new RegExp(`/${video.id}\\.html$`));
     });
 
     test('the back link returns to the projects on the home page', async ({ page }) => {
@@ -29,22 +45,19 @@ test.describe('project page', () => {
         await expect(page.locator('#work h2')).toBeVisible();
     });
 
-    test('the navbar works from a nested page', async ({ page, isMobile }) => {
+    test('the nav links back to the home sections', async ({ page }) => {
         await page.goto(`/projects/${video.id}.html`);
-        if (isMobile) await page.locator('#mobile-menu-btn').click();
-        await expect(page.locator('.nav-link[data-section="projects"]')).toHaveClass(/active/);
-        await expect(page.locator('.nav-link[data-section="availability"]')).toHaveAttribute('href', '/#hire');
-        await expect(page.locator('.nav-cta')).toHaveAttribute('href', '/#contact');
+        await expect(page.locator('.nav-link[data-section="hire"]')).toHaveAttribute('href', '/#hire');
+        await expect(page.locator('.nav-name')).toHaveAttribute('href', '/');
     });
 
-    test('exists in French, and the toggle switches to the English page', async ({ page, isMobile }) => {
+    test('exists in French, and the toggle switches to the English page', async ({ page }) => {
         await page.goto(`/fr/projects/${video.id}.html`);
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
         await expect(page.locator('#project-desc')).toHaveText(video.description.fr);
         await expect(page.locator('#project-back')).toHaveAttribute('href', '/fr/#work');
 
-        if (isMobile) await page.locator('#mobile-menu-btn').click();
-        await page.locator('#nav-lang-btn').click();
+        await page.locator('.nav-lang [data-lang="en"]').click();
         await expect(page).toHaveURL(new RegExp(`/projects/${video.id}\\.html$`));
         await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     });

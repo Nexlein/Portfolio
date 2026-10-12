@@ -1,24 +1,31 @@
 /**
  * Project page entry point. The content is rendered at build time (src/pages/project/render.ts);
- * this only adds the navbar, translations of injected UI and media behaviour.
+ * this adds the nav, the gallery, the video and the reveals.
  */
-import { translateDOM } from '@/core/i18n';
 import { initAnalytics } from '@/core/analytics';
-import { injectNavbar } from '@/components/Navbar/Navbar';
-import { initNavShadow } from '@/components/Navbar/scroll';
-import { bindModalGallery } from '@/components/ProjectModal/gallery';
-import { playVideosWhenVisible } from '@/ui/video';
+import { initNav } from '@/components/Nav/Nav';
+import { initReveals } from '@/components/Charts/Charts';
+import { playVideosWhenVisible, prefersReducedMotion } from '@/ui/video';
+import { initGallery } from './gallery';
 
-document.addEventListener('DOMContentLoaded', () => {
+/** Overlap bars fill to their share once revealed (CSSOM: the CSP forbids style attributes). */
+function initOverlaps(): void {
+    document.querySelectorAll<HTMLElement>('.overlap-fill').forEach((bar) => {
+        bar.style.setProperty('--overlap', `${bar.dataset.overlap}%`);
+    });
+}
+
+function bootstrap(): void {
     initAnalytics();
-    injectNavbar('projects');
-    initNavShadow();
-    translateDOM();
+    initNav();
+    initOverlaps();
+    initReveals();
 
-    const media = document.getElementById('project-media');
-    if (media) {
-        const images = media.querySelectorAll('.modal-gallery img').length;
-        if (images > 0) bindModalGallery(media, images);
-        playVideosWhenVisible(media);
-    }
-});
+    const media = document.getElementById('project-media')!;
+    const gallery = media.querySelector<HTMLElement>('.gallery');
+    if (gallery) initGallery(gallery);
+    playVideosWhenVisible(media);
+    if (prefersReducedMotion()) media.querySelector('video')?.setAttribute('controls', ''); // no autoplay: let them press play
+}
+
+bootstrap();

@@ -167,7 +167,21 @@ export const fr = {
         page: 'Ouvrir la page du projet'
     },
     projectPage: {
-        back: 'Tous les projets'
+        back: 'Tous les projets',
+        code: 'Voir le code',
+        started: 'Début',
+        domain: 'Domaine',
+        period: 'Période',
+        stack: 'Stack',
+        related1: 'Projets connectés.',
+        related2: 'Là où mènent les compétences.',
+        shares: 'En commun :',
+        sameDomain: 'Même domaine : {domain}',
+        overlap: '{n} % en commun',
+        gallery: "Captures d'écran",
+        image: 'Image {i} sur {n}',
+        prev: 'Image précédente',
+        next: 'Image suivante'
     },
     cv: {
         controls: {

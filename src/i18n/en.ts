@@ -167,7 +167,21 @@ export const en = {
         page: 'Open project page'
     },
     projectPage: {
-        back: 'All projects'
+        back: 'All projects',
+        code: 'View the code',
+        started: 'Started',
+        domain: 'Domain',
+        period: 'Period',
+        stack: 'Stack',
+        related1: 'Connected projects.',
+        related2: 'Where the skills lead next.',
+        shares: 'Shares',
+        sameDomain: 'Same domain: {domain}',
+        overlap: '{n}% overlap',
+        gallery: 'Screenshots',
+        image: 'Image {i} of {n}',
+        prev: 'Previous image',
+        next: 'Next image'
     },
     cv: {
         controls: {
