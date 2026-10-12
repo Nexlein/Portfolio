@@ -6,5 +6,3 @@
 export const THEMES = ['midnight', 'daylight'] as const;
 
 export type Theme = (typeof THEMES)[number];
-
-export const DEFAULT_THEME: Theme = 'midnight';

@@ -35,10 +35,12 @@ export const fr = {
     },
     home: {
         hero: {
-            role: 'Ingénieur IA &amp; C++ · Epitech',
-            title1: 'Du logiciel qui apprend.',
-            title2: 'Et qui décide.',
-            lede: "Je conçois des agents d'apprentissage par renforcement, des simulations et les systèmes qui les font tourner. Actuellement développeur IA chez Issanka.",
+            role: 'Ingénieur IA · Data · Logiciel · Epitech',
+            title1: 'Du logiciel fiable,',
+            title2: "à la vitesse de l'IA.",
+            title2b: 'avec les tests avant le code.',
+            title2c: 'avec des workflows agentiques.',
+            lede: 'Je travaille en TDD avec des workflows agentiques : mon code part vite et il est vérifié avant de partir. Actuellement développeur IA chez Issanka.',
             work: 'Voir les projets',
             hire: 'Me recruter',
             switch: 'Changer de simulation',

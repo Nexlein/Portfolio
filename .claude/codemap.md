@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **cv.html** (106)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
-- **index.html** (161)
+- **index.html** (163)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
 - **project.html** (75) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
@@ -46,9 +46,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render
 
 ## src/components/Hero
-- **Hero.css** (145) — Sparser simulations get more presence
+- **Hero.css** (162) — Sparser simulations get more presence
   - ← index.html
-- **Hero.ts** (56) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
+- **Hero.ts** (89) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
   - exports: initHero
   - → core/i18n, components/Hero/sims/index
   - ← pages/home/home
@@ -62,22 +62,23 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: flocking
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
-- **index.ts** (16) — The hero simulations.
+- **index.ts** (19) — The hero simulations.
   - exports: SIMS, runSim
   - → components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/stage, components/Hero/sims/value-iteration
   - ← components/Hero/Hero
-- **stage.ts** (94) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
+- **stage.ts** (105) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
   - exports: Point, Stage, stage
   - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/value-iteration
 - **value-iteration.ts** (154) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
   - exports: valueIteration
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
+- tests: value-iteration.test.ts
 
 ## src/components/Nav
 - **Nav.css** (203) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← cv.html, index.html, project.html
-- **Nav.ts** (96) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
+- **Nav.ts** (104) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav
   - → components/Nav/themes
   - ← pages/cv/cv, pages/home/home, pages/project/project
@@ -85,8 +86,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: renderNav
   - → core/translate, components/Nav/themes
   - ← pages/content/render
-- **themes.ts** (11) — Themes offered in the nav picker.
-  - exports: THEMES, Theme, DEFAULT_THEME
+- **themes.ts** (9) — Themes offered in the nav picker.
+  - exports: THEMES, Theme
   - ← components/Nav/Nav, components/Nav/render
 
 ## src/components/NeuralMap
@@ -135,10 +136,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (192)
+- **en.ts** (194)
   - exports: en
   - ← core/translate
-- **fr.ts** (192)
+- **fr.ts** (194)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -171,8 +172,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render, pages/home/home, pages/project/render
 - **home.css** (394) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (96) — Home page.
-  - → core/analytics, core/i18n, core/translate, data/projects, components/Nav/Nav, components/Hero/Hero, components/NeuralMap/NeuralMap, components/Charts/Charts, pages/home/blocks
+- **home.ts** (97) — Home page.
+  - → core/analytics, core/i18n, core/translate, data/projects, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 
 ## src/pages/project

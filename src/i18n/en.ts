@@ -35,10 +35,12 @@ export const en = {
     },
     home: {
         hero: {
-            role: 'AI &amp; C++ engineer · Epitech',
-            title1: 'Software that learns.',
-            title2: 'And decides.',
-            lede: 'I build reinforcement-learning agents, simulations and the systems that run them. Currently an AI developer at Issanka.',
+            role: 'AI · Data · Software engineer · Epitech',
+            title1: 'Building reliable software',
+            title2: 'at the speed of AI.',
+            title2b: 'with tests before code.',
+            title2c: 'with agentic workflows.',
+            lede: 'I build with TDD and agentic workflows, so my code ships fast and is verified before it does. Currently an AI developer at Issanka.',
             work: 'See the work',
             hire: 'Hire me',
             switch: 'Show another simulation',

@@ -13,9 +13,13 @@ export function initHero(): void {
         name = button.querySelector<HTMLElement>('.hero-sim-name')!,
         copy = hero.querySelector<HTMLElement>('.hero-copy')!;
     let current = Math.floor(Math.random() * SIMS.length);
+    let stop: (() => void) | undefined;
+    // Scroll progress is a layout read: measure it once, and again when the window changes
+    let height = hero.offsetHeight;
+    let field = hero.querySelector('canvas')!;
 
     const show = (index: number, swap: boolean) => {
-        const old = hero.querySelector('canvas')!;
+        const old = field;
         const canvas = swap ? document.createElement('canvas') : old;
         canvas.className = 'hero-field';
         canvas.dataset.sim = SIMS[index].id;
@@ -26,7 +30,9 @@ export function initHero(): void {
             old.replaceWith(canvas);
             requestAnimationFrame(() => canvas.classList.remove('incoming'));
         }
-        runSim(index, canvas);
+        stop?.();
+        stop = runSim(index, canvas);
+        field = canvas;
         const t = (key: string) => i18n.t(`home.hero.sims.${SIMS[index].id}.${key}`);
         name.textContent = t('name');
         hint.textContent = t('hint');
@@ -36,20 +42,47 @@ export function initHero(): void {
     button.addEventListener('click', () => show((current = (current + 1) % SIMS.length), true));
 
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    rotateTitle(hero, copy);
     let ticking = false;
+    let progress = 0;
+    window.addEventListener('resize', () => (height = hero.offsetHeight), { passive: true });
     window.addEventListener(
         'scroll',
         () => {
             if (ticking) return;
             ticking = true;
             requestAnimationFrame(() => {
-                const p = Math.min(1, scrollY / hero.offsetHeight);
-                hero.querySelector('canvas')!.style.transform = `translateY(${p * 90}px) scale(${1 + p * 0.06})`;
+                const p = Math.min(1, scrollY / height);
+                ticking = false;
+                if (p === 1 && progress === 1) return; // already scrolled away: nothing left to move
+                progress = p;
+                field.style.transform = `translateY(${p * 90}px) scale(${1 + p * 0.06})`;
                 copy.style.transform = `translateY(${p * -50}px)`;
                 copy.style.opacity = String(1 - p * 1.15);
-                ticking = false;
             });
         },
         { passive: true }
     );
+}
+
+/** The title's second line cycles through a few ways to finish the sentence; it pauses while the visitor reads. */
+function rotateTitle(hero: HTMLElement, copy: HTMLElement): void {
+    const line = hero.querySelector<HTMLElement>('[data-i18n="home.hero.title2"]');
+    if (!line) return;
+    const keys = ['title2', 'title2b', 'title2c'];
+    let index = 0;
+    let paused = false;
+    copy.addEventListener('pointerenter', () => (paused = true));
+    copy.addEventListener('pointerleave', () => (paused = false));
+    copy.addEventListener('focusin', () => (paused = true));
+    copy.addEventListener('focusout', () => (paused = false));
+    window.setInterval(() => {
+        if (paused || document.hidden || scrollY > hero.offsetHeight / 2) return;
+        line.classList.add('cycling', 'out');
+        window.setTimeout(() => {
+            index = (index + 1) % keys.length;
+            line.textContent = i18n.t(`home.hero.${keys[index]}`);
+            line.classList.remove('out');
+        }, 450);
+    }, 4200);
 }

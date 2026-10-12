@@ -10,6 +10,9 @@ export const SIMS: { id: string; run: (s: Stage) => void }[] = [
     { id: 'descent', run: descent }
 ];
 
-export function runSim(index: number, canvas: HTMLCanvasElement): void {
-    SIMS[index].run(stage(canvas));
+/** Start a simulation on `canvas`; the returned function stops listening (call it before swapping the canvas). */
+export function runSim(index: number, canvas: HTMLCanvasElement): () => void {
+    const s = stage(canvas);
+    SIMS[index].run(s);
+    return s.dispose;
 }

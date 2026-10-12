@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Nexlein/Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Nexlein/Portfolio/actions/workflows/ci.yml)
 
-Personal software engineering portfolio of Nielsen Combe-Bracciale. Built with vanilla TypeScript and Vite, deployed on Vercel. Content is available in English and French.
+Personal software engineering portfolio of Nielsen COMBE--BRACCIALE. Built with vanilla TypeScript and Vite, deployed on Vercel. Content is available in English and French.
 
 ## Pages
 
