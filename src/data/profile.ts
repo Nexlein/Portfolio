@@ -64,7 +64,7 @@ export const EXPERIENCES: Experience[] = [
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
             en: 'Building a SaaS platform from scratch that integrates AI-driven workflows and RAG architectures, and developing conversational AI agents while modernizing the web architecture.',
-            fr: "Conception d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG, et développement d'agents conversationnels en modernisant l'architecture web."
+            fr: "Conception d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG, et développement d'agents conversationnels, avec la modernisation de l'architecture web."
         },
         highlights: [
             {
@@ -85,12 +85,12 @@ export const EXPERIENCES: Experience[] = [
         period: { en: 'Sept - Dec 2025', fr: 'Sept - Déc 2025' },
         summary: {
             en: 'Developed Razor components and managed databases via Entity Framework. Engineered an internal Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and Ollama to securely query enterprise data.',
-            fr: "Développement de composants Razor et gestion de bases de données via Entity Framework. Conception d'un système RAG interne utilisant Microsoft Agent Framework et Ollama pour interroger les données de l'entreprise de manière sécurisée."
+            fr: "Développement de composants Razor et gestion de bases de données via Entity Framework. Conception d'un système RAG interne, basé sur Microsoft Agent Framework et Ollama, pour interroger les données de l'entreprise en toute sécurité."
         },
         highlights: [
             {
                 en: 'Engineered an internal AI Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and local Ollama LLMs.',
-                fr: "Conception d'un système interne RAG (Retrieval-Augmented Generation) utilisant Microsoft Agent Framework et des modèles locaux Ollama."
+                fr: "Conception d'un système RAG interne (Retrieval-Augmented Generation) avec Microsoft Agent Framework et des modèles Ollama en local."
             },
             {
                 en: 'Developed Razor components and managed databases with Entity Framework.',
@@ -106,16 +106,16 @@ export const EXPERIENCES: Experience[] = [
         period: { en: '2025 - 2026', fr: '2025 - 2026' },
         summary: {
             en: 'Competed in two Generative AI Hackathons to build innovative LLM tools, and two Cycom cybersecurity CTF events.',
-            fr: "Participation à deux Hackathons d'IA Générative pour concevoir des outils LLM innovants, et à deux événements Cycom (Conférences Cybersécurité et CTF)."
+            fr: "Participation à deux hackathons d'IA générative pour concevoir des outils LLM innovants, et à deux événements Cycom (conférences de cybersécurité et CTF)."
         },
         highlights: [
             {
                 en: 'Competed in 2 Generative AI Hackathons (building innovative LLM tools).',
-                fr: "Participation à 2 Hackathons IA Générative (création d'outils LLM innovants)."
+                fr: "Participation à 2 hackathons d'IA générative (outils LLM innovants)."
             },
             {
                 en: 'Participated in 2 Cycom events (Cybersecurity talks and CTFs).',
-                fr: 'Participation à 2 événements Cycom (Conférences et CTFs Cybersécurité).'
+                fr: 'Participation à 2 événements Cycom (conférences et CTF de cybersécurité).'
             }
         ]
     }
@@ -258,7 +258,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 id: 'zappy',
                 summary: {
                     en: 'Multiplayer autonomous AI network game. Handled concurrent socket connections and state.',
-                    fr: "Jeu en réseau multijoueur avec IA autonome. Gestion des connexions de sockets concurrentes et de l'état."
+                    fr: "Jeu en réseau multijoueur avec IA autonome. Gestion des connexions simultanées par sockets et de l'état du jeu."
                 },
                 tags: ['C++', 'Sockets']
             },
@@ -289,7 +289,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 title: 'AI-Racing',
                 summary: {
                     en: 'RL agent (PPO) navigating a custom kinematic physics environment with raycast sensors.',
-                    fr: 'Agent RL (PPO) naviguant dans un environnement de physique cinématique personnalisé avec capteurs à lancer de rayons.'
+                    fr: 'Agent RL (PPO) qui navigue dans un environnement à physique cinématique sur mesure, avec des capteurs à lancer de rayons.'
                 },
                 tags: ['Python', 'RL', 'Gymnasium']
             },
@@ -297,7 +297,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 id: 'persona',
                 summary: {
                     en: 'Self-hosted AI personalized news digest workflow.',
-                    fr: "Workflow de résumé d'actualités personnalisé par IA auto-hébergé."
+                    fr: "Workflow auto-hébergé de résumé d'actualités personnalisé par IA."
                 },
                 tags: ['N8N', 'Mistral']
             },
@@ -305,7 +305,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 id: 'blackjack-ai',
                 summary: {
                     en: 'Deep RL agent (Maskable PPO) learning optimal Blackjack strategy in a custom environment.',
-                    fr: 'Agent RL profond (Maskable PPO) apprenant la stratégie optimale du Blackjack dans un environnement personnalisé.'
+                    fr: 'Agent RL profond (Maskable PPO) qui apprend la stratégie optimale du blackjack dans un environnement sur mesure.'
                 },
                 tags: ['Python', 'RL', 'PPO']
             }
@@ -319,7 +319,7 @@ export const OFFERS: Offer[] = [
         title: { en: 'Full-Time Internship', fr: 'Stage à temps plein' },
         summary: {
             en: 'Mandatory Epitech Tek3 placement (Full-time)',
-            fr: "Stage de fin d'année obligatoire Epitech Tek3 (Temps plein)"
+            fr: "Stage de fin d'année obligatoire Epitech Tek3 (temps plein)"
         },
         rows: [
             {

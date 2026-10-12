@@ -4,7 +4,7 @@ export const fr = {
         home: {
             title: 'Nexlein — Ingénieur IA, Data & Logiciel',
             description:
-                "Nielsen COMBE--BRACCIALE (Nexlein), ingénieur IA, data et logiciel. Du logiciel fiable à la vitesse de l'IA : TDD, workflows agentiques, simulations, moteurs de décision."
+                "Nielsen COMBE--BRACCIALE (Nexlein), ingénieur IA, data et logiciel. Des logiciels fiables à la vitesse de l'IA : TDD, workflows agentiques, simulations, moteurs de décision."
         },
         cv: {
             title: 'Nielsen COMBE--BRACCIALE — CV',
@@ -37,11 +37,11 @@ export const fr = {
     home: {
         hero: {
             role: 'Ingénieur IA · Data · Logiciel · Epitech',
-            title1: 'Du logiciel fiable,',
+            title1: 'Créer des logiciels fiables',
             title2: "à la vitesse de l'IA.",
-            title2b: 'avec les tests avant le code.',
-            title2c: 'avec des workflows agentiques.',
-            lede: 'Je travaille en TDD avec des workflows agentiques : mon code part vite et il est vérifié avant de partir. Actuellement développeur IA chez Issanka.',
+            title2b: 'en TDD.',
+            title2c: 'avec des agents IA.',
+            lede: 'Je travaille en TDD avec des workflows agentiques : je livre vite, et tout est vérifié avant la mise en ligne. Actuellement développeur IA chez Issanka.',
             work: 'Voir les projets',
             hire: 'Me recruter',
             switch: 'Changer de simulation',
@@ -146,8 +146,8 @@ export const fr = {
                 body: "Mes agents IA travaillent dans un cadre écrit : un fichier de conventions, une carte du code régénérée à chaque commit, et des permissions qui les tiennent à l'écart de ce qu'ils ne doivent pas toucher."
             },
             compound: {
-                title: 'Chaque projet sert le suivant',
-                body: 'Chaque projet laisse derrière lui des outils, des tests et des notes qui accélèrent le suivant.'
+                title: 'Chaque projet accélère le suivant',
+                body: 'Chaque projet laisse derrière lui des outils, des tests et des notes pour le suivant.'
             },
             source: 'Voir comment ce site est construit'
         },
@@ -191,7 +191,7 @@ export const fr = {
         hero: {
             role: 'Ingénieur IA, Data & Logiciel',
             summary:
-                "Du logiciel fiable à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialisé dans les systèmes de décision autonomes, les moteurs de simulation en temps réel et le C++ haute performance.",
+                "Conception de logiciels fiables à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialités : systèmes de décision autonomes, moteurs de simulation en temps réel et C++ haute performance.",
             badge2: 'Stage à temps plein (mars–août)',
             badge3: 'Freelance'
         },

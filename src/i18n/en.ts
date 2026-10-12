@@ -41,7 +41,7 @@ export const en = {
             title2: 'at the speed of AI.',
             title2b: 'with tests before code.',
             title2c: 'with agentic workflows.',
-            lede: 'I build with TDD and agentic workflows, so my code ships fast and is verified before it does. Currently an AI developer at Issanka.',
+            lede: 'I build with TDD and agentic workflows, so I ship fast and everything is verified before it goes live. Currently an AI developer at Issanka.',
             work: 'See the work',
             hire: 'Hire me',
             switch: 'Show another simulation',
@@ -146,8 +146,8 @@ export const en = {
                 body: 'My AI agents work inside rules I wrote down: a conventions file, a code map rebuilt on every commit, and permissions that keep them out of what they should not touch.'
             },
             compound: {
-                title: 'Every project pays forward',
-                body: 'Each project leaves tools, tests and notes behind that make the next one faster.'
+                title: 'Each project speeds up the next',
+                body: 'Each project leaves tools, tests and notes behind for the next one.'
             },
             source: 'See how this site is built'
         },
