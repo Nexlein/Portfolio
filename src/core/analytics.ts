@@ -9,8 +9,6 @@ export const ANALYTICS_SCRIPT = '/_vercel/insights/script.js';
 
 export function initAnalytics(enabled: boolean = IS_VERCEL_BUILD): void {
     if (!enabled) return;
-    // The home page embeds cv.html in an iframe: count the visit once, from the top-level page
-    if (window.top !== window.self) return;
     if (document.querySelector(`script[src="${ANALYTICS_SCRIPT}"]`)) return;
 
     const script = document.createElement('script');

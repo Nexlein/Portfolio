@@ -28,10 +28,4 @@ describe('initAnalytics', () => {
         expect(scripts()).toHaveLength(1);
         expect((scripts()[0] as HTMLScriptElement).defer).toBe(true);
     });
-
-    it('does not count a page view from inside an iframe (the CV embedded in the home page)', () => {
-        vi.spyOn(window, 'top', 'get').mockReturnValue({} as Window);
-        initAnalytics(true);
-        expect(scripts()).toHaveLength(0);
-    });
 });

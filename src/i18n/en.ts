@@ -32,13 +32,6 @@ export const en = {
             source: 'View the source'
         }
     },
-    navbar: {
-        home: 'Home',
-        journey: 'Journey',
-        projects: 'Projects',
-        availability: 'Availability',
-        contact: 'Contact'
-    },
     home: {
         hero: {
             role: 'AI &amp; C++ engineer · Epitech',
@@ -147,24 +140,6 @@ export const en = {
             copy: 'Copy email',
             copied: 'Email copied'
         }
-    },
-    projects: {
-        eyebrow: 'Software Engineering',
-        title: 'Projects',
-        sub: 'Showcasing high-performance applications, concurrent systems, and graphical engines developed during my Epitech curriculum.',
-        filterAllYears: 'All Years',
-        filterAllCats: 'All Categories',
-        filterAi: 'AI & Data Science',
-        filterArch: 'Software Architecture',
-        filterSys: 'Systems & Unix',
-        filterDevops: 'DevOps & Infrastructure',
-        filterGraph: 'Graphical & Games',
-        filterPersonal: 'Personal',
-        showMore: 'Show More'
-    },
-    modal: {
-        github: 'View on GitHub',
-        page: 'Open project page'
     },
     projectPage: {
         back: 'All projects',

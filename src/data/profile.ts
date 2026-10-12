@@ -54,7 +54,7 @@ export interface Offer {
     rows: { label: Text; value: Text; note: Text; recruiter?: true }[];
 }
 
-/** In CV order. Every entry appears on the CV and on the home timeline (see TIMELINE). */
+/** In CV order. Every entry appears on the CV and under the path chart on the home page. */
 export const EXPERIENCES: Experience[] = [
     {
         id: 'issanka',

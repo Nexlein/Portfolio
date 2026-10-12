@@ -32,13 +32,6 @@ export const fr = {
             source: 'Voir le code source'
         }
     },
-    navbar: {
-        home: 'Accueil',
-        journey: 'Parcours',
-        projects: 'Projets',
-        availability: 'Disponibilité',
-        contact: 'Contact'
-    },
     home: {
         hero: {
             role: 'Ingénieur IA &amp; C++ · Epitech',
@@ -147,24 +140,6 @@ export const fr = {
             copy: "Copier l'e-mail",
             copied: 'E-mail copié'
         }
-    },
-    projects: {
-        eyebrow: 'Ingénierie Logicielle',
-        title: 'Projets',
-        sub: "Présentation d'applications haute performance, de systèmes concurrents et de moteurs graphiques développés durant mon cursus à Epitech.",
-        filterAllYears: 'Toutes les Années',
-        filterAllCats: 'Toutes les Catégories',
-        filterAi: 'IA & Data Science',
-        filterArch: 'Architecture Logicielle',
-        filterSys: 'Systèmes & Unix',
-        filterDevops: 'DevOps & Infrastructure',
-        filterGraph: 'Graphisme & Jeux',
-        filterPersonal: 'Personnel',
-        showMore: 'Voir plus'
-    },
-    modal: {
-        github: 'Voir sur GitHub',
-        page: 'Ouvrir la page du projet'
     },
     projectPage: {
         back: 'Tous les projets',
