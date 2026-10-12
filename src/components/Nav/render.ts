@@ -22,7 +22,7 @@ export function renderNav(lang: Lang, path: string): string {
         .join('');
     const themes = THEMES.map(
         (id) =>
-            `<button type="button" role="menuitemradio" aria-checked="false" data-theme-id="${id}"><span class="swatch swatch-${id}" aria-hidden="true"></span>${lookup(lang, `site.themes.${id}`)}</button>`
+            `<button type="button" role="menuitemradio" aria-checked="false" data-theme-id="${id}"><span class="swatch" data-theme="${id}" aria-hidden="true"></span>${lookup(lang, `site.themes.${id}`)}</button>`
     ).join('');
 
     return `<header class="nav" id="nav">
@@ -32,7 +32,7 @@ export function renderNav(lang: Lang, path: string): string {
     ${SECTIONS.map((id) => `<a class="nav-link" href="${anchor(id)}" data-section="${id}">${t(id)}</a>`).join('')}
     <span class="nav-lang" role="group" aria-label="${t('language')}">${languages}</span>
     <div class="nav-themes">
-      <button type="button" class="nav-theme-btn press" aria-haspopup="menu" aria-expanded="false" aria-label="${t('theme')}"><span class="swatch swatch-current" aria-hidden="true"></span></button>
+      <button type="button" class="nav-theme-btn press" aria-haspopup="menu" aria-expanded="false" aria-label="${t('theme')}"><span class="swatch" aria-hidden="true"></span></button>
       <div class="nav-theme-menu" role="menu">${themes}</div>
     </div>
     <a class="nav-cv press" href="${localizedPath('/cv.html', lang)}">${t('cv')}</a>

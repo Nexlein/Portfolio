@@ -109,19 +109,8 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
-    box-shadow: 0 0 0 1px var(--hair);
-}
-
-.swatch-current {
     background: linear-gradient(135deg, var(--bg) 0 50%, var(--signal) 50% 100%);
-}
-
-.swatch-midnight {
-    background: linear-gradient(135deg, #05070d 0 50%, #f5a524 50% 100%);
-}
-
-.swatch-daylight {
-    background: linear-gradient(135deg, #fbfbfd 0 50%, #a35c00 50% 100%);
+    box-shadow: 0 0 0 1px var(--hair);
 }
 
 .nav-theme-menu {
