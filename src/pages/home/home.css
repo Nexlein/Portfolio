@@ -243,6 +243,49 @@
     margin-top: auto;
 }
 
+/* Recruiter details: one quiet line until opened */
+.tile-more {
+    margin: -12px 0 32px;
+    font-size: 14px;
+}
+
+.tile-more summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    list-style: none;
+    cursor: pointer;
+    transition: color 160ms ease;
+}
+
+.tile-more summary::-webkit-details-marker {
+    display: none;
+}
+
+.tile-more summary::after {
+    content: '›';
+    transition: rotate 200ms var(--ease-out);
+}
+
+.tile-more[open] summary {
+    color: var(--ink);
+}
+
+.tile-more[open] summary::after {
+    rotate: 90deg;
+}
+
+.tile-more p {
+    margin: 10px 0 0;
+}
+
+.tile-more .tile-note {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
 .talk {
     margin-top: 56px;
     text-align: center;
@@ -306,6 +349,10 @@
     :is(.feature, .tile):hover {
         transform: translateY(-4px);
         box-shadow: var(--shadow), var(--shadow-lift);
+    }
+
+    .tile-more summary:hover {
+        color: var(--ink);
     }
 
     .feature:hover .feature-media img {

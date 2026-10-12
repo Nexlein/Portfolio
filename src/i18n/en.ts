@@ -10,11 +10,6 @@ export const en = {
             title: 'Nielsen Combe-Bracciale — CV',
             description:
                 'CV of Nielsen Combe-Bracciale, AI systems architect and C++ developer: autonomous decision systems, real-time simulation engines and high-performance engineering.'
-        },
-        availability: {
-            title: 'Nexlein — Availability',
-            description:
-                "Nielsen Combe-Bracciale's availability: Epitech Tek3 full-time internship and freelance missions in AI integration and backend development."
         }
     },
     site: {
@@ -36,13 +31,6 @@ export const en = {
             email: 'Email',
             source: 'View the source'
         }
-    },
-    navbar: {
-        home: 'Home',
-        journey: 'Journey',
-        projects: 'Projects',
-        availability: 'Availability',
-        contact: 'Contact'
     },
     home: {
         hero: {
@@ -148,38 +136,27 @@ export const en = {
                 freelance: 'Ask for a quote'
             },
             talk: 'Either way, the fastest is an email.',
+            recruiters: 'For recruiters',
             copy: 'Copy email',
             copied: 'Email copied'
         }
     },
-    projects: {
-        eyebrow: 'Software Engineering',
-        title: 'Projects',
-        sub: 'Showcasing high-performance applications, concurrent systems, and graphical engines developed during my Epitech curriculum.',
-        filterAllYears: 'All Years',
-        filterAllCats: 'All Categories',
-        filterAi: 'AI & Data Science',
-        filterArch: 'Software Architecture',
-        filterSys: 'Systems & Unix',
-        filterDevops: 'DevOps & Infrastructure',
-        filterGraph: 'Graphical & Games',
-        filterPersonal: 'Personal',
-        showMore: 'Show More'
-    },
-    availability: {
-        tag: 'Available Now',
-        title: "What I'm Looking For",
-        bio: 'I am an Epitech Tek3 student actively seeking professional opportunities to apply my skills in AI, backend architecture, and high-performance software development.',
-        footer: "Interested? Let's connect.",
-        footerBtnEmail: 'Email Me',
-        footerBtnLinkedin: 'LinkedIn'
-    },
-    modal: {
-        github: 'View on GitHub',
-        page: 'Open project page'
-    },
     projectPage: {
-        back: 'All projects'
+        back: 'All projects',
+        code: 'View the code',
+        started: 'Started',
+        domain: 'Domain',
+        period: 'Period',
+        stack: 'Stack',
+        related1: 'Connected projects.',
+        related2: 'Where the skills lead next.',
+        shares: 'Shares',
+        sameDomain: 'Same domain: {domain}',
+        overlap: '{n}% overlap',
+        gallery: 'Screenshots',
+        image: 'Image {i} of {n}',
+        prev: 'Previous image',
+        next: 'Next image'
     },
     cv: {
         controls: {
@@ -194,12 +171,17 @@ export const en = {
             badge2: 'Full-Time Intern (Mar-Aug)',
             badge3: 'Freelance'
         },
+        toolbox: {
+            total: '{n} skills used in projects',
+            recent: '+{n} in the last 12 months'
+        },
         sections: {
             experience: 'Experience',
             expertise: 'Core Expertise',
             systems: 'Systems Architecture',
             ai: 'AI & Data Science',
-            education: 'Education & Certs'
+            education: 'Education & Certs',
+            toolbox: 'Toolbox'
         },
         links: {
             linkedin: 'LinkedIn Profile'

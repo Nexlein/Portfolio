@@ -1,6 +1,6 @@
 /**
  * Everything the site says about its owner, written once in every language.
- * Pages render it at build time: the home timeline, the CV and the availability page.
+ * Pages render it at build time: the home and the CV.
  * UI words (buttons, headings) stay in src/i18n; facts live here.
  * Text may contain inline <strong>/<br>, but never CSS classes: styling belongs to the templates.
  */
@@ -50,10 +50,11 @@ export interface Offer {
     id: 'full-time' | 'freelance';
     title: Text;
     summary: Text;
-    rows: { label: Text; value: Text; note: Text }[];
+    /** `recruiter`: pay and contract details, folded away on the home. */
+    rows: { label: Text; value: Text; note: Text; recruiter?: true }[];
 }
 
-/** In CV order. Every entry appears on the CV and on the home timeline (see TIMELINE). */
+/** In CV order. Every entry appears on the CV and under the path chart on the home page. */
 export const EXPERIENCES: Experience[] = [
     {
         id: 'issanka',
@@ -333,6 +334,7 @@ export const OFFERS: Offer[] = [
             },
             {
                 label: { en: 'Recruiter Info', fr: 'Infos Recruteur' },
+                recruiter: true,
                 value: {
                     en: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).',
                     fr: 'Min. légal : 4,50€/h (taux 2026, ~650-700€/mois).'

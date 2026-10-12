@@ -29,8 +29,12 @@ test.describe('project map', () => {
 
         await expect(page.locator('.nm.booted')).toHaveCount(1); // the map has drawn itself in
         const first = cards.first();
-        await first.hover({ force: true }); // cards float, so they are never 'stable'
-        await expect(first).toHaveClass(/open/);
+        // Cards float, so they are never 'stable', and one can drift from under the pointer during the hover-intent
+        // delay: hover again until it opens, as a person would
+        await expect(async () => {
+            await first.hover({ force: true });
+            await expect(first).toHaveClass(/open/, { timeout: 1000 });
+        }).toPass({ timeout: 10_000 });
         await expect(page.locator('.nm-card.near').first()).toHaveAttribute('data-score', /\d/);
     });
 
@@ -152,8 +156,8 @@ test.describe('language', () => {
     test('French browsers are sent to the French page on their first visit', async ({ browser }) => {
         const context = await browser.newContext({ locale: 'fr-FR' });
         const page = await context.newPage();
-        await page.goto('/availability.html');
-        await expect(page).toHaveURL(/\/fr\/availability\.html$/);
+        await page.goto('/cv.html');
+        await expect(page).toHaveURL(/\/fr\/cv\.html$/);
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
         await expect(page.locator('body')).toBeVisible();
         await context.close();

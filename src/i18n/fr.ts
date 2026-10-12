@@ -10,11 +10,6 @@ export const fr = {
             title: 'Nielsen Combe-Bracciale — CV',
             description:
                 "CV de Nielsen Combe-Bracciale, architecte de systèmes d'IA et développeur C++ : systèmes de décision autonomes, moteurs de simulation temps réel et ingénierie haute performance."
-        },
-        availability: {
-            title: 'Nexlein — Disponibilités',
-            description:
-                "Disponibilités de Nielsen Combe-Bracciale : stage de fin d'études Epitech (Tek3) à temps plein et missions freelance en intégration d'IA et développement backend."
         }
     },
     site: {
@@ -36,13 +31,6 @@ export const fr = {
             email: 'E-mail',
             source: 'Voir le code source'
         }
-    },
-    navbar: {
-        home: 'Accueil',
-        journey: 'Parcours',
-        projects: 'Projets',
-        availability: 'Disponibilité',
-        contact: 'Contact'
     },
     home: {
         hero: {
@@ -148,38 +136,27 @@ export const fr = {
                 freelance: 'Demander un devis'
             },
             talk: 'Dans les deux cas, le plus rapide est un e-mail.',
+            recruiters: 'Pour les recruteurs',
             copy: "Copier l'e-mail",
             copied: 'E-mail copié'
         }
     },
-    projects: {
-        eyebrow: 'Ingénierie Logicielle',
-        title: 'Projets',
-        sub: "Présentation d'applications haute performance, de systèmes concurrents et de moteurs graphiques développés durant mon cursus à Epitech.",
-        filterAllYears: 'Toutes les Années',
-        filterAllCats: 'Toutes les Catégories',
-        filterAi: 'IA & Data Science',
-        filterArch: 'Architecture Logicielle',
-        filterSys: 'Systèmes & Unix',
-        filterDevops: 'DevOps & Infrastructure',
-        filterGraph: 'Graphisme & Jeux',
-        filterPersonal: 'Personnel',
-        showMore: 'Voir plus'
-    },
-    availability: {
-        tag: 'Disponible',
-        title: 'Ce que je recherche',
-        bio: 'Étudiant en Tek3 à Epitech, je recherche activement des opportunités professionnelles pour mettre en pratique mes compétences en IA, en architecture backend et en développement logiciel haute performance.',
-        footer: 'Intéressé ? Contactons-nous.',
-        footerBtnEmail: 'Email Me',
-        footerBtnLinkedin: 'LinkedIn'
-    },
-    modal: {
-        github: 'Voir sur GitHub',
-        page: 'Ouvrir la page du projet'
-    },
     projectPage: {
-        back: 'Tous les projets'
+        back: 'Tous les projets',
+        code: 'Voir le code',
+        started: 'Début',
+        domain: 'Domaine',
+        period: 'Période',
+        stack: 'Stack',
+        related1: 'Projets connectés.',
+        related2: 'Là où mènent les compétences.',
+        shares: 'En commun :',
+        sameDomain: 'Même domaine : {domain}',
+        overlap: '{n} % en commun',
+        gallery: "Captures d'écran",
+        image: 'Image {i} sur {n}',
+        prev: 'Image précédente',
+        next: 'Image suivante'
     },
     cv: {
         controls: {
@@ -194,12 +171,17 @@ export const fr = {
             badge2: 'Stage Temps Plein (Mar-Aoû)',
             badge3: 'Freelance'
         },
+        toolbox: {
+            total: '{n} compétences utilisées en projet',
+            recent: '+{n} sur les 12 derniers mois'
+        },
         sections: {
             experience: 'Expérience',
             expertise: 'Expertise Technique',
             systems: 'Architecture Systèmes',
             ai: 'IA & Data Science',
-            education: 'Formation & Certifications'
+            education: 'Formation & Certifications',
+            toolbox: 'Boîte à outils'
         },
         links: {
             linkedin: 'Profil LinkedIn'

@@ -90,7 +90,13 @@
                             >Hover one to see what it lights up, or ask the network.</span
                         >
                     </p>
-                    <div class="segmented query desk-only" role="group" data-render="domain-query"></div>
+                    <span class="sr-only" id="ask-label" data-i18n="home.work.ask">Light up a domain</span>
+                    <div
+                        class="segmented query desk-only"
+                        role="group"
+                        aria-labelledby="ask-label"
+                        data-render="domain-query"
+                    ></div>
                 </div>
                 <div class="map-host"></div>
                 <p class="map-more" data-render="map-more"></p>

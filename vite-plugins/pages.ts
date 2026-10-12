@@ -50,7 +50,6 @@ const fixedPage = (path: string, template: string, key: string, jsonLd?: PageSpe
 export const PAGES: PageSpec[] = [
     fixedPage('/', 'index.html', 'home', profilePage),
     fixedPage('/cv.html', 'cv.html', 'cv', cvPerson),
-    fixedPage('/availability.html', 'availability.html', 'availability'),
     ...PROJECTS.map((project): PageSpec => ({
         path: projectPath(project.id),
         template: 'project.html',
@@ -60,7 +59,10 @@ export const PAGES: PageSpec[] = [
         imageAlt: () => project.title,
         jsonLd: (lang) =>
             projectSource(project, lang, projectDescription(project, lang), `${SITE}/projects/${project.id}/og.jpg`),
-        fill: (document, lang) => fillProjectPage(document, project, lang)
+        fill: (document, lang) => {
+            renderContent(document, lang, projectPath(project.id)); // nav and footer
+            fillProjectPage(document, project, lang);
+        }
     }))
 ];
 

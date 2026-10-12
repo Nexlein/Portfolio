@@ -21,6 +21,19 @@ try {
     for (const { path, file } of PDFS) {
         await page.goto(`http://localhost:4174${path}`, { waitUntil: 'networkidle' });
         await page.evaluate(() => document.fonts.ready);
+        // The printed sheet clips at A4 height: content past it would vanish from the PDF without adding a page
+        await page.emulateMedia({ media: 'print' });
+        const overflow = await page.evaluate(() => {
+            const sheet = document.querySelector('.sheet');
+            return sheet ? sheet.scrollHeight - sheet.clientHeight : 0;
+        });
+        await page.emulateMedia({ media: null });
+        if (overflow > 0) {
+            console.error(
+                `${file}: the CV overflows A4 by ${overflow}px, tighten the print styles in src/pages/cv/cv.css`
+            );
+            failed = true;
+        }
         // The CV's print stylesheet lays it out on one A4 page and hides the on-screen controls
         const pdf = await page.pdf({
             path: `${OUT_DIR}/${file}`,

@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
 import { BLOCKS, renderContent } from './render';
-import { EDUCATION, EXPERIENCES, OFFERS, SKILLS } from '@/data/profile';
+import { EDUCATION, EXPERIENCES, SKILLS } from '@/data/profile';
 import { LANGS } from '@/core/translate';
 
 const templates = import.meta.glob<string>('../../../*.html', { query: '?raw', import: 'default', eager: true });
@@ -32,12 +32,25 @@ describe('content blocks', () => {
             expect(root.querySelectorAll('li')).toHaveLength(EXPERIENCES.flatMap((e) => e.highlights).length);
         });
 
-        it('renders skills, education and offers', () => {
+        it('renders the CV contact links and the toolbox sparkline', () => {
+            expect(render('cv-contact', lang).querySelectorAll('a')).toHaveLength(4);
+            expect(render('cv-contact', lang).querySelector('a')!.getAttribute('href')).toMatch(/^mailto:/);
+            const toolbox = render('cv-toolbox', lang);
+            expect(toolbox.querySelector('.cv-spark-line')!.getAttribute('d')).toMatch(/^M[\d.]+ [\d.]+L/);
+            expect(toolbox.textContent).toMatch(/\d+/);
+        });
+
+        it('links CV projects to their pages, in the same language', () => {
+            const links = [...render('cv-projects-ai', lang).querySelectorAll('h3 a')].map((a) =>
+                a.getAttribute('href')
+            );
+            expect(links.length).toBeGreaterThan(0);
+            for (const href of links) expect(href).toContain(`${lang === 'fr' ? '/fr' : ''}/projects/`);
+        });
+
+        it('renders skills and education', () => {
             expect(render('cv-skills', lang).querySelectorAll('h3')).toHaveLength(SKILLS.length);
             expect(render('cv-education', lang).querySelectorAll('h3')).toHaveLength(EDUCATION.length);
-            const offers = render('offers', lang).querySelectorAll('.card-availability');
-            expect(offers).toHaveLength(OFFERS.length);
-            expect(offers[0].querySelectorAll('.avail-lbl')).toHaveLength(OFFERS[0].rows.length);
         });
     });
 });
