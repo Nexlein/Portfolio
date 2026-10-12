@@ -197,6 +197,16 @@ test('reduced motion: no scroll reveal hides content and nothing moves on its ow
 });
 
 test.describe('navbar', () => {
+    test('stays at the top while scrolling, on every page', async ({ page }) => {
+        for (const path of ['/', '/cv.html', '/projects/zappy.html']) {
+            await page.goto(path);
+            await page.evaluate(() => scrollTo(0, 1200));
+            await expect
+                .poll(() => page.locator('.nav').evaluate((el) => Math.round(el.getBoundingClientRect().top)))
+                .toBe(0);
+        }
+    });
+
     test('the progress line follows the scroll', async ({ page }) => {
         await page.goto('/');
         const bar = page.locator('.nav-progress');

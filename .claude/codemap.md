@@ -80,7 +80,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: neural.test.ts, value-iteration.test.ts
 
 ## src/components/Nav
-- **Nav.css** (257) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
+- **Nav.css** (264) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← cv.html, index.html, project.html
 - **Nav.ts** (128) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav

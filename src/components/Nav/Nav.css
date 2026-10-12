@@ -1,4 +1,11 @@
 /* Thin frosted bar: name on the left, sections, language, theme and CV on the right. */
+
+/* The build renders the bar inside a wrapper: without this the wrapper (as tall as the bar) would be all the
+   room `sticky` has, and the bar would scroll away with the page. */
+[data-render='nav'] {
+    display: contents;
+}
+
 .nav {
     position: sticky;
     top: 0;
