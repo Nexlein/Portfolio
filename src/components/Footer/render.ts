@@ -7,7 +7,7 @@ import { OWNER } from '../../core/site.ts';
 export function renderFooter(lang: Lang): string {
     const t = (key: string) => lookup(lang, `site.footer.${key}`);
     return `<footer class="footer">
-  <span>Nielsen Combe-Bracciale</span>
+  <span>${t('made')}</span>
   <nav aria-label="Contact">
     <a href="mailto:${OWNER.email}">${t('email')}</a>
     <a href="${OWNER.github}">GitHub</a>

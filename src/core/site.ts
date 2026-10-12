@@ -2,7 +2,7 @@
 export const SITE = 'https://nexlein.vercel.app';
 
 export const OWNER = {
-    name: 'Nielsen Combe-Bracciale',
+    name: 'Nielsen COMBE--BRACCIALE',
     alias: 'Nexlein',
     github: 'https://github.com/Nexlein',
     linkedin: 'https://www.linkedin.com/in/nielsen-combebracciale/',
