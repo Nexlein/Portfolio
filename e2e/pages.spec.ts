@@ -1,9 +1,9 @@
 import { test, expect } from './fixtures';
 
-// The redesigned home uses Schibsted Grotesk; the other pages move to it as they are redesigned
+// Every page uses the redesign's Schibsted Grotesk
 const pages = ['', '/fr'].flatMap((prefix) => [
     { path: `${prefix}/`, heading: prefix ? 'apprend' : 'learns', font: 'Schibsted Grotesk' },
-    { path: `${prefix}/cv.html`, heading: 'Nielsen', font: 'Inter' },
+    { path: `${prefix}/cv.html`, heading: 'Nielsen', font: 'Schibsted Grotesk' },
     { path: `${prefix}/projects/zappy.html`, heading: 'Zappy', font: 'Schibsted Grotesk' }
 ]);
 

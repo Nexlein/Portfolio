@@ -25,169 +25,81 @@
         <meta property="og:image:alt" content="Nielsen Combe-Bracciale, AI and software developer portfolio" />
         <meta name="twitter:card" content="summary_large_image" />
 
-        <link rel="stylesheet" href="/src/styles/utilities.css" />
-
+        <link rel="stylesheet" href="/src/styles/base.css" />
+        <link rel="stylesheet" href="/src/components/Nav/Nav.css" />
+        <link rel="stylesheet" href="/src/components/Footer/Footer.css" />
         <link rel="stylesheet" href="/src/pages/cv/cv.css" />
-        <script type="module" src="/src/pages/cv/cv.ts"></script>
     </head>
     <body>
-        <!-- Floating Controls -->
-        <div class="cv-controls">
-            <a id="cv-pdf-link" href="cv.pdf" target="_blank" rel="noopener">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span data-i18n="cv.controls.pdf">Download PDF</span>
-            </a>
-            <button id="cv-print-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                    <rect x="6" y="14" width="12" height="8"></rect>
-                </svg>
-                <span data-i18n="cv.controls.print">Print</span>
-            </button>
-        </div>
+        <div data-render="nav"></div>
 
-        <main class="page">
-            <div class="bento-grid">
-                <!-- Hero Section -->
-                <div class="card span-3 cv-hero-card">
-                    <div class="flex-row-items-flex-start-justify-space-between">
-                        <div>
-                            <h1>Nielsen Combe-Bracciale</h1>
-                            <p class="cv-hero-role" data-i18n="cv.hero.role">AI Systems Architect & C++ Developer</p>
-                            <p class="text-14px-color-text-main" data-i18n="cv.hero.summary">
-                                Building AI systems that decide and learn. Focused on autonomous decision architectures,
-                                real-time simulation engines, and high-performance engineering.
-                            </p>
-                            <div class="flex-row">
-                                <div class="flex-row-center-text-12px-color-accent-blue">
-                                    <svg width="24" height="24" class="icon-14" viewBox="0 0 24 24">
-                                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                                    </svg>
-                                    <span data-i18n="cv.hero.badge1">Part-Time (Sept-Jan)</span>
-                                </div>
-                                <div class="flex-row-center-text-12px">
-                                    <svg width="24" height="24" class="icon-14" viewBox="0 0 24 24">
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <polyline points="12 6 12 12 16 14"></polyline>
-                                    </svg>
-                                    <span data-i18n="cv.hero.badge2">Full-Time Intern (Mar-Aug)</span>
-                                </div>
-                                <div class="flex-row-center-text-12px-1">
-                                    <svg width="24" height="24" class="icon-14" viewBox="0 0 24 24">
-                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                    </svg>
-                                    <span data-i18n="cv.hero.badge3">Freelance</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-row-items-flex-start">
-                            <div class="flex-col-gap-items-flex-end">
-                                <a href="mailto:nielsen.combe-bracciale@epitech.eu" class="cv-link cv-nowrap">
-                                    <svg width="24" height="24" viewBox="0 0 24 24">
-                                        <path
-                                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                                        ></path>
-                                        <polyline points="22,6 12,13 2,6"></polyline>
-                                    </svg>
-                                    nielsen.combe-bracciale@epitech.eu
-                                </a>
-
-                                <a href="https://nexlein.vercel.app" class="cv-link">
-                                    <svg width="24" height="24" viewBox="0 0 24 24">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <line x1="2" y1="12" x2="22" y2="12" />
-                                        <path
-                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-                                        />
-                                    </svg>
-                                    nexlein.vercel.app
-                                </a>
-                                <a href="https://github.com/Nexlein" class="cv-link">
-                                    <svg width="24" height="24" viewBox="0 0 24 24">
-                                        <path
-                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                                        />
-                                    </svg>
-                                    github.com/Nexlein
-                                </a>
-                                <a href="https://www.linkedin.com/in/nielsen-combebracciale/" class="cv-link">
-                                    <svg width="24" height="24" viewBox="0 0 24 24">
-                                        <path
-                                            d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
-                                        />
-                                        <rect x="2" y="9" width="4" height="12" />
-                                        <circle cx="4" cy="4" r="2" />
-                                    </svg>
-                                    <span data-i18n="cv.links.linkedin">LinkedIn Profile</span>
-                                </a>
-                            </div>
-                            <img src="/qrcode.svg" alt="Portfolio QR Code" class="print-qr-code" />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Experience -->
-                <div class="card span-2" data-render="cv-experience">
-                    <h2>
-                        <svg width="24" height="24" class="icon-header" viewBox="0 0 24 24">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                        </svg>
-                        <span data-i18n="cv.sections.experience">Experience</span>
-                    </h2>
-                </div>
-
-                <!-- Core Expertise -->
-                <div class="card span-1" data-render="cv-skills">
-                    <h2>
-                        <svg width="24" height="24" class="icon-header" viewBox="0 0 24 24">
-                            <polyline points="16 18 22 12 16 6" />
-                            <polyline points="8 6 2 12 8 18" />
-                        </svg>
-                        <span data-i18n="cv.sections.expertise">Core Expertise</span>
-                    </h2>
-                </div>
-
-                <!-- Systems Architecture -->
-                <div class="card span-1" data-render="cv-projects-systems">
-                    <h2>
-                        <svg width="24" height="24" class="icon-header" viewBox="0 0 24 24">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                            <line x1="8" y1="21" x2="16" y2="21" />
-                            <line x1="12" y1="17" x2="12" y2="21" />
-                        </svg>
-                        <span data-i18n="cv.sections.systems">Systems Architecture</span>
-                    </h2>
-                </div>
-
-                <!-- AI & Data Science -->
-                <div class="card span-1" data-render="cv-projects-ai">
-                    <h2>
-                        <svg width="24" height="24" class="icon-header" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                            <path d="M2 12h20" />
-                        </svg>
-                        <span data-i18n="cv.sections.ai">AI & Data Science</span>
-                    </h2>
-                </div>
-
-                <!-- Education -->
-                <div class="card span-1" data-render="cv-education">
-                    <h2>
-                        <svg width="24" height="24" class="icon-header" viewBox="0 0 24 24">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                        </svg>
-                        <span data-i18n="cv.sections.education">Education & Certs</span>
-                    </h2>
+        <main class="cv-stage">
+            <!-- On screen only: what this is, and the two ways to take it away -->
+            <div class="cv-bar wrap">
+                <p class="mono">Curriculum vitae · A4</p>
+                <div class="cv-actions">
+                    <button type="button" id="cv-print-btn" class="link">
+                        <span data-i18n="cv.controls.print">Print</span>
+                    </button>
+                    <a id="cv-pdf-link" class="btn press" href="cv.pdf" target="_blank" rel="noopener">
+                        <span data-i18n="cv.controls.pdf">Download PDF</span> <span aria-hidden="true">↓</span>
+                    </a>
                 </div>
             </div>
+
+            <!-- The sheet: paper in every theme, and exactly what the PDF prints (scripts/cv-pdf.mjs) -->
+            <article class="sheet">
+                <header class="sheet-head">
+                    <div>
+                        <h1>Nielsen Combe-Bracciale</h1>
+                        <p class="sheet-role" data-i18n="cv.hero.role">AI Systems Architect &amp; C++ Developer</p>
+                        <p class="sheet-summary" data-i18n="cv.hero.summary">
+                            Building AI systems that decide and learn.
+                        </p>
+                        <ul class="sheet-badges">
+                            <li data-i18n="cv.hero.badge1">Part-Time (Sept-Feb)</li>
+                            <li data-i18n="cv.hero.badge2">Full-Time Intern (Mar-Aug)</li>
+                            <li data-i18n="cv.hero.badge3">Freelance</li>
+                        </ul>
+                    </div>
+                    <div class="sheet-contact">
+                        <ul data-render="cv-contact"></ul>
+                        <img src="/qrcode.svg" alt="Portfolio QR code" width="64" height="64" />
+                    </div>
+                </header>
+
+                <div class="sheet-body">
+                    <div class="sheet-main">
+                        <section data-render="cv-experience">
+                            <h2 data-i18n="cv.sections.experience">Experience</h2>
+                        </section>
+                        <div class="sheet-cols">
+                            <section data-render="cv-projects-systems">
+                                <h2 data-i18n="cv.sections.systems">Systems Architecture</h2>
+                            </section>
+                            <section data-render="cv-projects-ai">
+                                <h2 data-i18n="cv.sections.ai">AI &amp; Data Science</h2>
+                            </section>
+                        </div>
+                    </div>
+
+                    <aside class="sheet-side">
+                        <section data-render="cv-skills">
+                            <h2 data-i18n="cv.sections.expertise">Core Expertise</h2>
+                        </section>
+                        <section data-render="cv-education">
+                            <h2 data-i18n="cv.sections.education">Education &amp; Certs</h2>
+                        </section>
+                        <section class="cv-toolbox" data-render="cv-toolbox">
+                            <h2 data-i18n="cv.sections.toolbox">Toolbox</h2>
+                        </section>
+                    </aside>
+                </div>
+            </article>
         </main>
+
+        <div data-render="footer"></div>
+
+        <script type="module" src="/src/pages/cv/cv.ts"></script>
     </body>
 </html>

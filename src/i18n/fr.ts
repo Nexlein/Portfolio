@@ -196,12 +196,17 @@ export const fr = {
             badge2: 'Stage Temps Plein (Mar-Aoû)',
             badge3: 'Freelance'
         },
+        toolbox: {
+            total: '{n} compétences utilisées en projet',
+            recent: '+{n} sur les 12 derniers mois'
+        },
         sections: {
             experience: 'Expérience',
             expertise: 'Expertise Technique',
             systems: 'Architecture Systèmes',
             ai: 'IA & Data Science',
-            education: 'Formation & Certifications'
+            education: 'Formation & Certifications',
+            toolbox: 'Boîte à outils'
         },
         links: {
             linkedin: 'Profil LinkedIn'

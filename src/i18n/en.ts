@@ -196,12 +196,17 @@ export const en = {
             badge2: 'Full-Time Intern (Mar-Aug)',
             badge3: 'Freelance'
         },
+        toolbox: {
+            total: '{n} skills used in projects',
+            recent: '+{n} in the last 12 months'
+        },
         sections: {
             experience: 'Experience',
             expertise: 'Core Expertise',
             systems: 'Systems Architecture',
             ai: 'AI & Data Science',
-            education: 'Education & Certs'
+            education: 'Education & Certs',
+            toolbox: 'Toolbox'
         },
         links: {
             linkedin: 'LinkedIn Profile'
