@@ -6,7 +6,7 @@
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { THEMES } from './themes.ts';
 
-const SECTIONS = ['work', 'path', 'numbers', 'hire'] as const;
+const SECTIONS = ['work', 'path', 'hire'] as const;
 
 /** `path` is the page being rendered, in the default language ('/', '/cv.html', '/projects/zappy.html'). */
 export function renderNav(lang: Lang, path: string): string {

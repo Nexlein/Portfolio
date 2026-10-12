@@ -77,6 +77,21 @@ function initSpotlight(): void {
     });
 }
 
+/** Path and Numbers share a section: a switch shows one panel at a time (without JS both are on the page). */
+function initPathTabs(): void {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.path-tabs button');
+    const show = (name: string) => {
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.panel === name)));
+        buttons.forEach(
+            (b) => (document.getElementById(`panel-${b.dataset.panel}`)!.hidden = b.dataset.panel !== name)
+        );
+    };
+    buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.panel!)));
+    const numbers = location.hash === '#numbers'; // old links to the Numbers section
+    show(numbers ? 'numbers' : 'path');
+    if (numbers) document.getElementById('path')?.scrollIntoView();
+}
+
 function bootstrap(): void {
     // Old links (/?project=<id>) opened a modal; projects now have their own page
     const linked = PROJECTS.find((p) => p.id === new URLSearchParams(location.search).get('project'));
@@ -86,6 +101,7 @@ function bootstrap(): void {
     initNav();
     initHero();
     void initWork();
+    initPathTabs();
     initPathChart();
     initNumbers();
     initReveals();

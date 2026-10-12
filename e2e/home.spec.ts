@@ -108,6 +108,7 @@ test.describe('charts', () => {
 
     test('a numbers card shows its second view', async ({ page }) => {
         await page.goto('/');
+        await page.locator('.path-tabs button[data-panel="numbers"]').click();
         const card = page.locator('.chart-card').first();
         await card.scrollIntoViewIfNeeded();
         await card.locator('.dots button').nth(1).click();
@@ -190,7 +191,7 @@ test.describe('language', () => {
 test('reduced motion: no scroll reveal hides content and nothing moves on its own', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await page.locator('#numbers').scrollIntoViewIfNeeded();
+    await page.locator('.path-tabs button[data-panel="numbers"]').click();
     await expect(page.locator('.chart-card').first()).toBeVisible();
     await expect(page.locator('.avail-dot')).toHaveCSS('animation-name', 'none');
 });

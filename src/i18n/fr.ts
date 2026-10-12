@@ -17,7 +17,6 @@ export const fr = {
             label: 'Navigation principale',
             work: 'Projets',
             path: 'Parcours',
-            numbers: 'Chiffres',
             hire: 'Recruter',
             cv: 'CV',
             language: 'Langue',
@@ -102,6 +101,7 @@ export const fr = {
             devops: 'DevOps'
         },
         path: {
+            tab: 'Parcours',
             title1: 'Le parcours.',
             title2: 'Chaque étape méritée.',
             symbol: 'Compétences · taille de la boîte à outils',
@@ -112,8 +112,7 @@ export const fr = {
             shipped: '{p} démarré'
         },
         numbers: {
-            title1: 'En chiffres.',
-            title2: 'Calculés, pas déclarés.',
+            tab: 'Chiffres',
             sub: 'Chaque graphique ci-dessous est calculé à partir des projets eux-mêmes.',
             view: 'Vue',
             other: 'Autres',

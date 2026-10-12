@@ -105,7 +105,7 @@
                 <ul class="project-list wrap" id="project-list" data-render="project-list"></ul>
             </section>
 
-            <!-- Path: the skill toolbox over time, with checkpoints (src/components/Charts) -->
+            <!-- Path: the skill toolbox over time with checkpoints, and the numbers behind it (src/components/Charts) -->
             <section class="section" id="path" aria-labelledby="path-title">
                 <div class="section-head reveal">
                     <h2 class="headline" id="path-title">
@@ -114,25 +114,25 @@
                             ><span class="recede" data-i18n="home.path.title2">Every checkpoint earned.</span></span
                         >
                     </h2>
+                    <div class="segmented path-tabs" role="group" aria-labelledby="path-title">
+                        <button type="button" aria-pressed="true" aria-controls="panel-path" data-panel="path">
+                            <span data-i18n="home.path.tab">Path</span>
+                        </button>
+                        <button type="button" aria-pressed="false" aria-controls="panel-numbers" data-panel="numbers">
+                            <span data-i18n="home.numbers.tab">Numbers</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="wrap" data-render="path-chart"></div>
-                <ul class="experience wrap" data-render="experience"></ul>
-            </section>
-
-            <!-- Numbers: small charts computed from the projects -->
-            <section class="section" id="numbers" aria-labelledby="numbers-title">
-                <div class="section-head reveal">
-                    <h2 class="headline small" id="numbers-title">
-                        <span class="line"><span data-i18n="home.numbers.title1">By the numbers.</span></span>
-                        <span class="line"
-                            ><span class="recede" data-i18n="home.numbers.title2">Computed, not claimed.</span></span
-                        >
-                    </h2>
-                    <p class="lede" data-i18n="home.numbers.sub">
+                <div id="panel-path" class="panel">
+                    <div class="wrap" data-render="path-chart"></div>
+                    <ul class="experience wrap" data-render="experience"></ul>
+                </div>
+                <div id="panel-numbers" class="panel">
+                    <p class="lede numbers-sub reveal" data-i18n="home.numbers.sub">
                         Every chart below is calculated from the projects themselves.
                     </p>
+                    <div data-render="numbers"></div>
                 </div>
-                <div data-render="numbers"></div>
             </section>
 
             <!-- Hire: two ways to work together, then one email -->
