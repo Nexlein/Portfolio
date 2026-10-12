@@ -1,15 +1,15 @@
 export const fr = {
     meta: {
-        imageAlt: 'Portfolio de Nielsen COMBE--BRACCIALE, développeur IA et logiciel',
+        imageAlt: 'Portfolio de Nielsen COMBE--BRACCIALE, ingénieur IA, data et logiciel',
         home: {
-            title: 'Nexlein — Développeur IA & Logiciel',
+            title: 'Nexlein — Ingénieur IA, Data & Logiciel',
             description:
-                "Portfolio de Nielsen COMBE--BRACCIALE (Nexlein), étudiant à Epitech et développeur de systèmes d'IA : simulations temps réel, moteurs de décision et architectures C++."
+                "Nielsen COMBE--BRACCIALE (Nexlein), ingénieur IA, data et logiciel. Du logiciel fiable à la vitesse de l'IA : TDD, workflows agentiques, simulations, moteurs de décision."
         },
         cv: {
             title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
-                "CV de Nielsen COMBE--BRACCIALE, architecte de systèmes d'IA et développeur C++ : systèmes de décision autonomes, moteurs de simulation temps réel et ingénierie haute performance."
+                'CV de Nielsen COMBE--BRACCIALE, ingénieur IA, data et logiciel : TDD, workflows agentiques, systèmes de décision autonomes et moteurs de simulation temps réel.'
         }
     },
     site: {
@@ -167,9 +167,9 @@ export const fr = {
             pdf: 'Télécharger le PDF'
         },
         hero: {
-            role: 'Architecte Systèmes IA & Développeur C++',
+            role: 'Ingénieur IA, Data & Logiciel',
             summary:
-                "Concepteur de systèmes d'IA autonomes. Spécialisé dans les architectures de décision, les moteurs de simulation en temps réel et le développement haute performance.",
+                "Du logiciel fiable à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialisé dans les systèmes de décision autonomes, les moteurs de simulation en temps réel et le C++ haute performance.",
             badge1: 'Temps Partiel (Sept-Fév)',
             badge2: 'Stage Temps Plein (Mar-Aoû)',
             badge3: 'Freelance'
