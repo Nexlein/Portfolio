@@ -10,6 +10,7 @@
         "test": "vitest run",
         "test:e2e": "vite build && playwright test",
         "cv:pdf": "node scripts/cv-pdf.mjs",
+        "codemap": "node scripts/codemap.mjs",
         "lint": "oxlint && stylelint \"src/**/*.css\"",
         "lint:fix": "oxlint --fix && stylelint \"src/**/*.css\" --fix",
         "format": "prettier --write .",

@@ -1,3 +1,5 @@
 npx lint-staged
 npm run typecheck
 npm run test
+# Keep the code map for AI assistants in step with the code (.claude/codemap.md)
+npm run codemap --silent && git add .claude/codemap.md
