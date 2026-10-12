@@ -62,18 +62,22 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: flocking
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
-- **index.ts** (19) — The hero simulations.
+- **index.ts** (21) — The hero simulations.
   - exports: SIMS, runSim
-  - → components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/stage, components/Hero/sims/value-iteration
+  - → components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/neural, components/Hero/sims/stage, components/Hero/sims/value-iteration
   - ← components/Hero/Hero
+- **neural.ts** (113) — A drifting network: neurons link when they are close.
+  - exports: Link, propagate, neural
+  - → components/Hero/sims/stage
+  - ← components/Hero/sims/index
 - **stage.ts** (105) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
   - exports: Point, Stage, stage
-  - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/value-iteration
+  - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/neural, components/Hero/sims/value-iteration
 - **value-iteration.ts** (154) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
   - exports: valueIteration
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
-- tests: value-iteration.test.ts
+- tests: neural.test.ts, value-iteration.test.ts
 
 ## src/components/Nav
 - **Nav.css** (221) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
@@ -137,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (212)
+- **en.ts** (216)
   - exports: en
   - ← core/translate
-- **fr.ts** (212)
+- **fr.ts** (216)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts

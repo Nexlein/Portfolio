@@ -57,6 +57,10 @@ export const en = {
                 descent: {
                     name: 'Gradient descent',
                     hint: 'Live gradient descent. Your cursor is the minimum. Click to add a hill.'
+                },
+                neural: {
+                    name: 'Neural network',
+                    hint: 'Live neural network. Your cursor fires neurons. Click to send a pulse.'
                 }
             }
         },

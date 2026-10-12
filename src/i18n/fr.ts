@@ -57,6 +57,10 @@ export const fr = {
                 descent: {
                     name: 'Descente de gradient',
                     hint: 'Descente de gradient en direct. Votre curseur est le minimum. Cliquez pour ajouter une colline.'
+                },
+                neural: {
+                    name: 'Réseau de neurones',
+                    hint: 'Réseau de neurones en direct. Votre curseur excite les neurones. Cliquez pour envoyer une impulsion.'
                 }
             }
         },
