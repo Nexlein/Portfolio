@@ -46,3 +46,12 @@ test('the CV links to the PDF in its own language, in a new tab', async ({ page 
         expect(new URL(await link.evaluate((a) => (a as HTMLAnchorElement).href)).pathname).toBe(pdf);
     }
 });
+
+test('the CV sheet wears the chosen theme on screen and prints as white paper', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('theme', 'midnight'));
+    await page.goto('/cv.html');
+    const sheet = page.locator('.sheet');
+    await expect(sheet).toHaveCSS('background-color', 'rgb(15, 19, 28)');
+    await page.emulateMedia({ media: 'print' });
+    await expect(sheet).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+});

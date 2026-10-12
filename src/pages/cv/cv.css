@@ -1,13 +1,14 @@
 /*
- * CV: a sheet of paper on the site's stage. The sheet keeps its own light palette in every theme, and is all
- * that prints: scripts/cv-pdf.mjs prints it to one A4 page and fails the build if it no longer fits.
+ * CV: a sheet on the site's stage. On screen it wears the chosen theme; printed (and in the PDF) it is always
+ * clean white paper. It is all that prints: scripts/cv-pdf.mjs prints it to one A4 page and fails the build if
+ * it no longer fits.
  */
 .sheet {
-    --paper: #fff;
-    --paper-ink: #11141b;
-    --paper-muted: #5a606c;
-    --paper-line: #e4e6eb;
-    --paper-accent: #a35c00;
+    --paper: var(--surface);
+    --paper-ink: var(--ink);
+    --paper-muted: var(--muted);
+    --paper-line: var(--line);
+    --paper-accent: var(--signal);
 
     width: 210mm;
     min-height: 297mm;
@@ -61,6 +62,10 @@
 }
 
 /* ── Sheet ── */
+.name-part {
+    display: block;
+}
+
 .sheet h1 {
     margin: 0;
     font-size: 30px;
@@ -161,8 +166,12 @@
 }
 
 .sheet-contact img {
+    box-sizing: border-box;
     width: 64px;
     height: 64px;
+    padding: 3px;
+    border-radius: 6px;
+    background: #fff; /* a QR code needs a light margin, whatever the theme */
 }
 
 .sheet-body {
@@ -338,6 +347,12 @@
     }
 
     .sheet {
+        --paper: #fff;
+        --paper-ink: #11141b;
+        --paper-muted: #5a606c;
+        --paper-line: #e4e6eb;
+        --paper-accent: #a35c00;
+
         height: 296mm; /* a hair under A4, so rounding never spills a blank second page */
         min-height: 0;
         margin: 0;

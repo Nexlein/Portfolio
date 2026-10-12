@@ -161,7 +161,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: experience, skills, education, projectBlocks, contact, toolbox
   - → data/profile, data/projects, core/site, core/translate, components/Charts/data, components/Charts/render
   - ← pages/content/render
-- **cv.css** (349) — CV: a sheet of paper on the site's stage.
+- **cv.css** (364) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav
