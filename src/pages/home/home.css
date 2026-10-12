@@ -392,7 +392,60 @@
     }
 }
 
-/* How I work: the link to the source sits under the three cards */
+/* How I work: a thin strip under the hero, three plain columns */
+.method {
+    padding: clamp(40px, 6vh, 72px) 0 0;
+    scroll-margin-top: var(--nav-h);
+}
+
+.method-title {
+    max-width: var(--max);
+    margin: 0 auto 24px;
+    padding: 0 var(--gutter);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.method-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 40px;
+    padding: 0 var(--gutter);
+}
+
+.method-item {
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+}
+
+.method-n {
+    color: var(--signal);
+    font-size: 12px;
+}
+
+.method-item h3 {
+    margin: 6px 0 8px;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+}
+
+.method-text {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5;
+}
+
 .method-source {
-    margin-top: 32px;
+    margin-top: 24px;
+    padding: 0 var(--gutter);
+}
+
+@media (width <= 760px) {
+    .method-items {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
 }

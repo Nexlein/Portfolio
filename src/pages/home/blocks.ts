@@ -115,16 +115,15 @@ ${recruiterInfo(o, lang)}
     ).join('');
 }
 
-/** How I work: three practices, then a link to the source of this site as the proof. */
+/** How I work: three practices in a thin strip; the link to the source of this site is the proof. */
 export function method(lang: Lang): string {
-    const cards = (['test', 'agents', 'compound'] as const)
+    return (['test', 'agents', 'compound'] as const)
         .map(
-            (id, i) => `<article class="tile surface reveal">
-<p class="eyebrow">0${i + 1}</p><h3>${t(lang, `method.${id}.title`)}</h3><p class="tile-lede">${t(lang, `method.${id}.body`)}</p>
-</article>`
+            (id, i) => `<div class="method-item reveal">
+<span class="method-n mono">0${i + 1}</span><h3>${t(lang, `method.${id}.title`)}</h3><p class="method-text">${t(lang, `method.${id}.body`)}</p>
+</div>`
         )
         .join('');
-    return cards;
 }
 
 /** Link to the repository, under the cards. */
