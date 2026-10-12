@@ -125,7 +125,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'StartTrek',
         description: {
             en: 'Reinforcement Learning agent trained using Deep Q-Networks (DQN) to safely land a lunar module. Features experience replay, target networks, and domain randomization.',
-            fr: "Agent d'Apprentissage par Renforcement entraîné via Deep Q-Networks (DQN) pour atterrir un module lunaire en toute sécurité. Inclut le rejeu d'expérience et la randomisation de domaine."
+            fr: "Agent d'apprentissage par renforcement entraîné via Deep Q-Networks (DQN) pour faire atterrir un module lunaire sans encombre. Inclut le rejeu d'expérience et la randomisation de domaine."
         },
         tags: ['Python', 'PyTorch', 'RL', 'DQN'],
         category: 'ai',
@@ -139,7 +139,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'Zappy',
         description: {
             en: 'Multiplayer network game where teams of autonomous AI compete on a tile-based world. Built in C/C++ with a server, a graphic client, and autonomous clients driven by FSMs and Utility AI.',
-            fr: "Jeu réseau multijoueur où des équipes d'IA autonomes s'affrontent. Développé en C/C++ avec un serveur, un client graphique et des clients autonomes pilotés par des machines à états (FSM) et de l'IA utilitaire."
+            fr: "Jeu en réseau multijoueur où des équipes d'IA autonomes s'affrontent. Développé en C/C++ avec un serveur, un client graphique et des clients autonomes pilotés par des machines à états (FSM) et de l'IA utilitaire."
         },
         tags: ['C/C++', 'Network', 'FSM', 'Utility AI', 'Game Dev'],
         category: 'architecture',
@@ -172,7 +172,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'Codename',
         description: {
             en: 'A robust testing framework designed to evaluate and fortify Large Language Models against prompt injections and jailbreaks. Integrates adversarial prompting and defensive monitoring to ensure safe LLM deployments.',
-            fr: 'Un framework de test robuste conçu pour évaluer et fortifier les modèles de langage (LLM) contre les injections de prompt et les jailbreaks. Intègre du prompting antagoniste pour sécuriser les déploiements.'
+            fr: 'Un framework de test conçu pour évaluer et renforcer les modèles de langage (LLM) contre les injections de prompt et les jailbreaks. Intègre du prompting antagoniste pour sécuriser les déploiements.'
         },
         tags: ['Security', 'Python', 'LLM', 'Prompt Engineering'],
         category: 'ai',
@@ -276,7 +276,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'MyTop',
         description: {
             en: 'A customized clone of the Unix top utility. Features real-time system monitoring, process listing, memory metrics, and CPU usage, built with C and the ncurses library.',
-            fr: "Un clone sur mesure de l'utilitaire Unix top. Dispose d'une surveillance système en temps réel, de la liste des processus, et de l'utilisation CPU/RAM, développé en C avec ncurses."
+            fr: "Un clone sur mesure de l'utilitaire Unix top. Surveille le système en temps réel : liste des processus, utilisation du CPU et de la RAM. Développé en C avec ncurses."
         },
         tags: ['C', 'ncurses', 'Unix', 'System Programming', 'Terminal'],
         category: 'systems',
@@ -293,7 +293,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'Secured',
         description: {
             en: 'A robust C library implementing a highly efficient Hash Table data structure. Features custom cryptographic hashing functions and collision resolution strategies to ensure secure and fast data retrieval.',
-            fr: 'Une bibliothèque C robuste implémentant une table de hachage hautement efficace. Comprend des fonctions de hachage personnalisées et des stratégies de résolution de collisions.'
+            fr: 'Une bibliothèque C qui implémente une table de hachage performante. Comprend des fonctions de hachage personnalisées et des stratégies de résolution de collisions.'
         },
         tags: ['C', 'Data Structures', 'Algorithms', 'Security', 'Library'],
         category: 'systems',
@@ -311,7 +311,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'Blackjack AI',
         description: {
             en: 'A complete ecosystem using Deep Reinforcement Learning (Maskable PPO) to learn and visualize the mathematically optimal Blackjack strategy without any hardcoded rules.',
-            fr: "Un écosystème complet utilisant l'Apprentissage par Renforcement Profond (Maskable PPO) pour apprendre et visualiser la stratégie optimale du Blackjack sans aucune règle codée en dur."
+            fr: "Un écosystème complet utilisant l'apprentissage par renforcement profond (Maskable PPO) pour apprendre et visualiser la stratégie optimale du Blackjack sans aucune règle codée en dur."
         },
         tags: ['Python', 'Reinforcement Learning', 'Stable-Baselines3', 'Textual', 'Gymnasium'],
         category: 'ai',
@@ -328,7 +328,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'AI Racing',
         description: {
             en: 'A Reinforcement Learning agent built with Gymnasium, Pygame, and Stable Baselines3 (PPO) that learns to drive a car around a track using custom kinematic physics and raycast sensors.',
-            fr: "Un agent d'Apprentissage par Renforcement construit avec Gymnasium, Pygame et Stable Baselines3 (PPO) qui apprend à conduire une voiture sur un circuit en utilisant une physique cinématique personnalisée et des capteurs à lancer de rayons."
+            fr: "Un agent d'apprentissage par renforcement construit avec Gymnasium, Pygame et Stable Baselines3 (PPO) qui apprend à conduire une voiture sur un circuit en utilisant une physique cinématique personnalisée et des capteurs à lancer de rayons."
         },
         tags: ['Python', 'Reinforcement Learning', 'Stable-Baselines3', 'Gymnasium', 'Pygame'],
         category: 'ai',

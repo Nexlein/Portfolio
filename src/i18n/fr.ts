@@ -106,7 +106,7 @@ export const fr = {
         path: {
             title1: 'Le parcours.',
             title2: 'Chaque étape méritée.',
-            symbol: 'Compétences · indice de la boîte à outils',
+            symbol: 'Compétences · taille de la boîte à outils',
             delta: 'sur 12 mois',
             range: 'Période',
             aria: "Compétences distinctes au fil du temps : {n} aujourd'hui.",
@@ -192,8 +192,8 @@ export const fr = {
             role: 'Ingénieur IA, Data & Logiciel',
             summary:
                 "Du logiciel fiable à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialisé dans les systèmes de décision autonomes, les moteurs de simulation en temps réel et le C++ haute performance.",
-            badge1: 'Temps Partiel (Sept-Fév)',
-            badge2: 'Stage Temps Plein (Mar-Aoû)',
+            badge1: 'Temps partiel (sept–fév)',
+            badge2: 'Stage temps plein (mars–août)',
             badge3: 'Freelance'
         },
         toolbox: {
@@ -202,10 +202,10 @@ export const fr = {
         },
         sections: {
             experience: 'Expérience',
-            expertise: 'Expertise Technique',
-            systems: 'Architecture Systèmes',
+            expertise: 'Expertise technique',
+            systems: 'Architecture systèmes',
             ai: 'IA & Data Science',
-            education: 'Formation & Certifications',
+            education: 'Formation et certifications',
             toolbox: 'Boîte à outils'
         },
         links: {

@@ -64,12 +64,12 @@ export const EXPERIENCES: Experience[] = [
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
             en: 'Building a SaaS platform from scratch that integrates AI-driven workflows and RAG architectures, and developing conversational AI agents while modernizing the web architecture.',
-            fr: "Création from scratch d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG, et développement d'agents conversationnels en modernisant l'architecture web."
+            fr: "Conception d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG, et développement d'agents conversationnels en modernisant l'architecture web."
         },
         highlights: [
             {
                 en: 'Building a SaaS platform from scratch integrating AI-driven workflows and RAG architectures.',
-                fr: "Création from scratch d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG."
+                fr: "Conception d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG."
             },
             {
                 en: 'Developing conversational AI agents and modernizing the technical web architecture.',
@@ -158,7 +158,7 @@ export const EDUCATION: Education[] = [
         period: { en: '2024', fr: '2024' },
         summary: {
             en: "Specialized in Mathematics and Computer Science. Successfully passed the intensive 5-week Epitech C Programming 'Piscine' bootcamp.",
-            fr: "Spécialité Mathématiques et Sciences Informatiques. Réussite de la 'Piscine' Epitech, un bootcamp intensif de 5 semaines en programmation C."
+            fr: 'Spécialité Mathématiques et Sciences Informatiques. Réussite de la « Piscine » Epitech, un bootcamp intensif de 5 semaines en programmation C.'
         },
         cvSummary: {
             en: 'Baccalaureate (Specialization: Mathematics & Computer Science).',
@@ -177,7 +177,7 @@ export const EDUCATION: Education[] = [
         cvHidePeriod: true,
         cvSummary: {
             en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent).',
-            fr: 'BIA (2020), PSC 1 (2021).<br />Langues:<br />Français (Natif), Anglais (Bilingue).'
+            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Bilingue).'
         }
     }
 ];
@@ -258,7 +258,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 id: 'zappy',
                 summary: {
                     en: 'Multiplayer autonomous AI network game. Handled concurrent socket connections and state.',
-                    fr: "Jeu réseau multijoueur avec IA autonome. Gestion des connexions de sockets concurrentes et de l'état."
+                    fr: "Jeu en réseau multijoueur avec IA autonome. Gestion des connexions de sockets concurrentes et de l'état."
                 },
                 tags: ['C++', 'Sockets']
             },
@@ -316,54 +316,54 @@ export const CV_PROJECTS: CvProjectGroup[] = [
 export const OFFERS: Offer[] = [
     {
         id: 'full-time',
-        title: { en: 'Full-Time Internship', fr: 'Stage à Temps Plein' },
+        title: { en: 'Full-Time Internship', fr: 'Stage à temps plein' },
         summary: {
             en: 'Mandatory Epitech Tek3 placement (Full-time)',
             fr: "Stage de fin d'année obligatoire Epitech Tek3 (Temps plein)"
         },
         rows: [
             {
-                label: { en: 'Timeline & Rhythm', fr: 'Période & Rythme' },
+                label: { en: 'Timeline & Rhythm', fr: 'Période et rythme' },
                 value: { en: 'March 29 to Aug. 27.', fr: '29 Mars au 27 Août.' },
                 note: { en: 'At least 4 months (5 days/week).', fr: 'Au moins 4 mois (5 jours/semaine).' }
             },
             {
-                label: { en: 'Contract Type', fr: 'Type de Contrat' },
+                label: { en: 'Contract Type', fr: 'Type de contrat' },
                 value: { en: 'Internship, CDD, or CDI.', fr: 'Stage, CDD ou CDI.' },
                 note: { en: 'Full-time placement.', fr: 'Temps plein.' }
             },
             {
-                label: { en: 'Recruiter Info', fr: 'Infos Recruteur' },
+                label: { en: 'Recruiter Info', fr: 'Infos recruteur' },
                 recruiter: true,
                 value: {
                     en: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).',
-                    fr: 'Min. légal : 4,50€/h (taux 2026, ~650-700€/mois).'
+                    fr: 'Min. légal : 4,50 €/h (taux 2026, 650–700 €/mois).'
                 },
                 note: {
                     en: 'No school fees covered by the company.<br />Seeking competitive compensation.',
-                    fr: "Aucun frais de scolarité à la charge de l'entreprise.<br />Recherche d'une rémunération compétitive."
+                    fr: "Aucun frais de scolarité à la charge de l'entreprise.<br />Je souhaite une rémunération compétitive."
                 }
             }
         ]
     },
     {
         id: 'freelance',
-        title: { en: 'Freelance Missions', fr: 'Missions Freelance' },
+        title: { en: 'Freelance Missions', fr: 'Missions freelance' },
         summary: { en: 'B2B project-based collaboration', fr: 'Collaboration B2B par projet' },
         rows: [
             {
-                label: { en: 'Scope & Availability', fr: 'Périmètre & Disponibilité' },
-                value: { en: 'Backend APIs, AI integration.', fr: 'APIs Backend, intégration IA.' },
+                label: { en: 'Scope & Availability', fr: 'Périmètre et disponibilité' },
+                value: { en: 'Backend APIs, AI integration.', fr: "API back-end, intégration d'IA." },
                 note: { en: 'Flexible hours, async delivery.', fr: 'Horaires flexibles, livraison asynchrone.' }
             },
             {
                 label: { en: 'Status', fr: 'Statut' },
-                value: { en: 'Freelancer (Auto-entrepreneur)', fr: 'Freelance (Auto-entrepreneur)' },
+                value: { en: 'Freelancer (Auto-entrepreneur)', fr: 'Freelance (auto-entrepreneur)' },
                 note: { en: 'No payroll taxes for the client.', fr: 'Pas de charges patronales.' }
             },
             {
                 label: { en: 'Rates', fr: 'Tarifs' },
-                value: { en: 'Daily Rate or Fixed Price.', fr: 'TJM ou Forfait.' },
+                value: { en: 'Daily Rate or Fixed Price.', fr: 'TJM ou forfait.' },
                 note: { en: 'Quotation provided upon request.', fr: 'Devis fourni sur demande.' }
             }
         ]
