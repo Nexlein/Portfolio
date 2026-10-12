@@ -152,8 +152,8 @@ test.describe('language', () => {
     test('French browsers are sent to the French page on their first visit', async ({ browser }) => {
         const context = await browser.newContext({ locale: 'fr-FR' });
         const page = await context.newPage();
-        await page.goto('/availability.html');
-        await expect(page).toHaveURL(/\/fr\/availability\.html$/);
+        await page.goto('/cv.html');
+        await expect(page).toHaveURL(/\/fr\/cv\.html$/);
         await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
         await expect(page.locator('body')).toBeVisible();
         await context.close();

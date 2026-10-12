@@ -33,10 +33,7 @@ test.describe('project page', () => {
         await page.goto(`/projects/${video.id}.html`);
         if (isMobile) await page.locator('#mobile-menu-btn').click();
         await expect(page.locator('.nav-link[data-section="projects"]')).toHaveClass(/active/);
-        await expect(page.locator('.nav-link[data-section="availability"]')).toHaveAttribute(
-            'href',
-            '/availability.html'
-        );
+        await expect(page.locator('.nav-link[data-section="availability"]')).toHaveAttribute('href', '/#hire');
         await expect(page.locator('.nav-cta')).toHaveAttribute('href', '/#contact');
     });
 

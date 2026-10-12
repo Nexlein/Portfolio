@@ -70,6 +70,18 @@ describe('CV PDF redirects', () => {
     });
 
     it('the redirects are temporary, so the target can change without browsers caching it', () => {
-        for (const r of vercel.redirects) expect(r.permanent).toBe(false);
+        for (const r of vercel.redirects.filter((rule) => rule.source.endsWith('cv.pdf')))
+            expect(r.permanent).toBe(false);
+    });
+});
+
+describe('retired pages', () => {
+    const redirects = Object.fromEntries(vercel.redirects.map((r) => [r.source, r]));
+
+    it.each([
+        ['/availability.html', '/#hire'],
+        ['/fr/availability.html', '/fr/#hire']
+    ])('%s moves for good to %s', (source, destination) => {
+        expect(redirects[source]).toMatchObject({ destination, permanent: true });
     });
 });

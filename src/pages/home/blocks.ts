@@ -3,7 +3,7 @@
  * matching data-render names). Everything a visitor reads is in the HTML; scripts only add motion and interaction.
  * Relative imports only: rendered from Node.
  */
-import { EXPERIENCES, NOW, OFFERS } from '../../data/profile.ts';
+import { EXPERIENCES, NOW, OFFERS, type Offer } from '../../data/profile.ts';
 import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
@@ -90,15 +90,26 @@ export const pathBlock = (lang: Lang) => pathChart(lang, PROJECTS, thisMonth());
 
 export const numbersBlock = (lang: Lang) => numbers(lang, PROJECTS, thisMonth());
 
-/** The two ways to work together. Pay details stay on the CV and the availability page. */
+/** Pay and contract details, closed until a recruiter asks for them. */
+const recruiterInfo = (o: Offer, lang: Lang) =>
+    o.rows
+        .filter((r) => r.recruiter)
+        .map(
+            (r) => `<details class="tile-more"><summary>${t(lang, 'hire.recruiters')}</summary>
+<p>${r.value[lang]}</p><p class="tile-note">${r.note[lang]}</p></details>`
+        )
+        .join('');
+
+/** The two ways to work together. */
 export function hire(lang: Lang): string {
     return OFFERS.map(
         (o) => `<article class="tile surface reveal">
 <p class="eyebrow">${t(lang, `hire.${o.id}`)}</p><h3>${o.title[lang]}</h3><p class="tile-lede">${o.summary[lang]}</p>
 <dl>${o.rows
-            .filter((r) => r.label.en !== 'Recruiter Info')
+            .filter((r) => !r.recruiter)
             .map((r) => `<div><dt>${r.label[lang]}</dt><dd>${r.value[lang]}</dd></div>`)
             .join('')}</dl>
+${recruiterInfo(o, lang)}
 <a class="link" href="mailto:${OWNER.email}">${t(lang, `hire.cta.${o.id}`)} <span aria-hidden="true">›</span></a>
 </article>`
     ).join('');

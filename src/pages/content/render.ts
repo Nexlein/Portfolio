@@ -1,10 +1,10 @@
 /**
- * Render the site's data into the pages at build time (home, CV, availability, nav and footer everywhere).
+ * Render the site's data into the pages at build time (home, CV, nav and footer everywhere).
  * Templates mark where content goes with data-render="<block>"; entries are appended there.
  * Relative imports only: vite-plugins/pages.ts runs this from Node, without the '@/' alias.
  */
-import { CV_PROJECTS, EDUCATION, EXPERIENCES, OFFERS, SKILLS } from '../../data/profile.ts';
-import type { Offer, Text } from '../../data/profile.ts';
+import { CV_PROJECTS, EDUCATION, EXPERIENCES, SKILLS } from '../../data/profile.ts';
+import type { Text } from '../../data/profile.ts';
 import { PROJECTS } from '../../data/projects.ts';
 import type { Lang } from '../../core/translate.ts';
 import { renderNav } from '../../components/Nav/render.ts';
@@ -20,25 +20,6 @@ const tags = (items: string[], cls = '') =>
 /** Spacing class on every entry but the last, as in the original markup. */
 const spaced = <T>(items: T[], cls: string, render: (item: T) => string) =>
     items.map((item, i) => `<div${i < items.length - 1 ? ` class="${cls}"` : ''}>${render(item)}</div>`).join('');
-
-const OFFER_ICONS: Record<Offer['id'], string> = {
-    'full-time': '<circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>',
-    freelance: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>'
-};
-
-function offerCard(offer: Offer, lang: Lang): string {
-    const rows = offer.rows
-        .map(
-            (row) => `<div><div class="avail-lbl lbl-${offer.id}">${row.label[lang]}</div>
-<div class="text-primary-md">${row.value[lang]}<br /><span class="text-muted-sm">${row.note[lang]}</span></div></div>`
-        )
-        .join('');
-    return `<div class="card card-availability card-${offer.id}">
-<div class="flex-row-center"><div class="avail-icon-box icon-box-${offer.id}">
-<svg class="icon-24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${OFFER_ICONS[offer.id]}</svg></div>
-<div><h2 class="text-primary-lg">${offer.title[lang]}</h2><p class="description text-sm">${offer.summary[lang]}</p></div></div>
-<div class="flex-col-gap">${rows}</div></div>`;
-}
 
 const text = (t: Text, lang: Lang) => t[lang];
 
@@ -94,9 +75,7 @@ ${exp.org ? `<div class="text-13px-color-accent-blue">${exp.org}</div>` : ''}
             'mb-12',
             (edu) =>
                 `<h3>${edu.cvTitle[lang]}</h3>${edu.cvHidePeriod ? '' : `<span class="text-12px-color-text-muted-1">${edu.period[lang]}</span>`}<p>${edu.cvSummary[lang]}</p>`
-        ),
-
-    offers: (lang) => OFFERS.map((offer) => offerCard(offer, lang)).join('')
+        )
 };
 
 /** Append every [data-render] block of the page, in `lang`. Unknown blocks are an error, not a silent gap. */

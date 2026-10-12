@@ -10,6 +10,16 @@
             "source": "/fr/cv.pdf",
             "destination": "https://github.com/Nexlein/Portfolio/releases/download/cv/Nielsen-Combe-Bracciale-CV-FR.pdf",
             "permanent": false
+        },
+        {
+            "source": "/availability.html",
+            "destination": "/#hire",
+            "permanent": true
+        },
+        {
+            "source": "/fr/availability.html",
+            "destination": "/fr/#hire",
+            "permanent": true
         }
     ],
     "headers": [

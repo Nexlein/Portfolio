@@ -1,7 +1,7 @@
 import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/translate';
 
-type Section = 'home' | 'availability' | 'projects';
+type Section = 'home' | 'projects';
 
 class NavbarComponent {
     private readonly activeSection: Section;
@@ -24,7 +24,6 @@ class NavbarComponent {
         // Absolute, language-aware links so the navbar works from any depth (/fr/projects/x.html)
         const lang = i18n.getLang();
         const base = this.activeSection === 'home' ? '' : localizedPath('/', lang);
-        const availability = this.activeSection === 'availability' ? '#' : localizedPath('/availability.html', lang);
         const contact = document.getElementById('contact') ? '#contact' : `${localizedPath('/', lang)}#contact`;
         const active = (section: Section) => (this.activeSection === section ? 'active' : '');
         return `
@@ -42,7 +41,7 @@ class NavbarComponent {
             <a href="${base}#home"     class="nav-link ${active('home')}" data-section="home" data-i18n="navbar.home">Home</a>
             <a href="${base}#path" class="nav-link" data-section="parcours" data-i18n="navbar.journey">Journey</a>
             <a href="${base}#work" class="nav-link ${active('projects')}" data-section="projects" data-i18n="navbar.projects">Projects</a>
-            <a href="${availability}" class="nav-link ${active('availability')}" data-section="availability" data-i18n="navbar.availability">Availability</a>
+            <a href="${base}#hire" class="nav-link" data-section="availability" data-i18n="navbar.availability">Availability</a>
             
             <button id="nav-lang-btn" class="nav-lang-toggle" aria-label="Toggle language">
                 <span class="lang-en">EN</span> / <span class="lang-fr">FR</span>

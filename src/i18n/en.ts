@@ -10,11 +10,6 @@ export const en = {
             title: 'Nielsen Combe-Bracciale — CV',
             description:
                 'CV of Nielsen Combe-Bracciale, AI systems architect and C++ developer: autonomous decision systems, real-time simulation engines and high-performance engineering.'
-        },
-        availability: {
-            title: 'Nexlein — Availability',
-            description:
-                "Nielsen Combe-Bracciale's availability: Epitech Tek3 full-time internship and freelance missions in AI integration and backend development."
         }
     },
     site: {
@@ -148,6 +143,7 @@ export const en = {
                 freelance: 'Ask for a quote'
             },
             talk: 'Either way, the fastest is an email.',
+            recruiters: 'For recruiters',
             copy: 'Copy email',
             copied: 'Email copied'
         }
@@ -165,14 +161,6 @@ export const en = {
         filterGraph: 'Graphical & Games',
         filterPersonal: 'Personal',
         showMore: 'Show More'
-    },
-    availability: {
-        tag: 'Available Now',
-        title: "What I'm Looking For",
-        bio: 'I am an Epitech Tek3 student actively seeking professional opportunities to apply my skills in AI, backend architecture, and high-performance software development.',
-        footer: "Interested? Let's connect.",
-        footerBtnEmail: 'Email Me',
-        footerBtnLinkedin: 'LinkedIn'
     },
     modal: {
         github: 'View on GitHub',

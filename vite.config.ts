@@ -28,7 +28,6 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: resolve(import.meta.dirname, 'index.html'),
-                availability: resolve(import.meta.dirname, 'availability.html'),
                 cv: resolve(import.meta.dirname, 'cv.html'),
                 project: resolve(import.meta.dirname, 'project.html') // template for /projects/<id>.html
             }

@@ -10,11 +10,6 @@ export const fr = {
             title: 'Nielsen Combe-Bracciale — CV',
             description:
                 "CV de Nielsen Combe-Bracciale, architecte de systèmes d'IA et développeur C++ : systèmes de décision autonomes, moteurs de simulation temps réel et ingénierie haute performance."
-        },
-        availability: {
-            title: 'Nexlein — Disponibilités',
-            description:
-                "Disponibilités de Nielsen Combe-Bracciale : stage de fin d'études Epitech (Tek3) à temps plein et missions freelance en intégration d'IA et développement backend."
         }
     },
     site: {
@@ -148,6 +143,7 @@ export const fr = {
                 freelance: 'Demander un devis'
             },
             talk: 'Dans les deux cas, le plus rapide est un e-mail.',
+            recruiters: 'Pour les recruteurs',
             copy: "Copier l'e-mail",
             copied: 'E-mail copié'
         }
@@ -165,14 +161,6 @@ export const fr = {
         filterGraph: 'Graphisme & Jeux',
         filterPersonal: 'Personnel',
         showMore: 'Voir plus'
-    },
-    availability: {
-        tag: 'Disponible',
-        title: 'Ce que je recherche',
-        bio: 'Étudiant en Tek3 à Epitech, je recherche activement des opportunités professionnelles pour mettre en pratique mes compétences en IA, en architecture backend et en développement logiciel haute performance.',
-        footer: 'Intéressé ? Contactons-nous.',
-        footerBtnEmail: 'Email Me',
-        footerBtnLinkedin: 'LinkedIn'
     },
     modal: {
         github: 'Voir sur GitHub',

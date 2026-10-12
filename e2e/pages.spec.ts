@@ -4,7 +4,6 @@ import { test, expect } from './fixtures';
 const pages = ['', '/fr'].flatMap((prefix) => [
     { path: `${prefix}/`, heading: prefix ? 'apprend' : 'learns', font: 'Schibsted Grotesk' },
     { path: `${prefix}/cv.html`, heading: 'Nielsen', font: 'Inter' },
-    { path: `${prefix}/availability.html`, heading: null, font: 'Inter' },
     { path: `${prefix}/projects/zappy.html`, heading: 'Zappy', font: 'Inter' }
 ]);
 

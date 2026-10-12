@@ -6,11 +6,10 @@ Personal software engineering portfolio of Nielsen Combe-Bracciale. Built with v
 
 ## Pages
 
-| Page         | HTML                | Entry script                             |
-| ------------ | ------------------- | ---------------------------------------- |
-| Home         | `index.html`        | `src/pages/home/home.ts`                 |
-| CV           | `cv.html`           | `src/pages/cv/cv.ts`                     |
-| Availability | `availability.html` | `src/pages/availability/availability.ts` |
+| Page | HTML         | Entry script             |
+| ---- | ------------ | ------------------------ |
+| Home | `index.html` | `src/pages/home/home.ts` |
+| CV   | `cv.html`    | `src/pages/cv/cv.ts`     |
 
 ## Getting started
 
@@ -51,7 +50,7 @@ src/
 ├── core/             App-wide services (i18n)
 ├── data/             Site content: profile.ts (experience, education, skills, offers) and projects.ts
 ├── i18n/             Translation dictionaries (en, fr)
-├── pages/            Per-page entry scripts and styles (home, cv, availability)
+├── pages/            Per-page entry scripts and styles (home, cv, project)
 ├── styles/           Global theme, base styles and utilities
 └── ui/               Shared UI primitives (SVG icons)
 public/
@@ -61,7 +60,7 @@ public/
 Conventions:
 
 - Import across folders with the `@/` alias (`@/core/i18n`), within a folder with `./`.
-- HTML pages stay at the repo root so their URLs (`/cv.html`, `/availability.html`) don't change.
+- HTML pages stay at the repo root so their URLs (`/cv.html`) don't change.
 - Tags every page needs in `<head>` (favicon, language guard) are injected by the `sharedHead` plugin in `vite-plugins/shared-head.ts`.
 
 ## Adding a project
@@ -90,10 +89,10 @@ Every page exists in both languages, with its own URL: `/cv.html` and `/fr/cv.ht
 
 Facts live in data files, written once with English and French side by side (`{ en, fr }`, a missing language is a type error):
 
-- `src/data/profile.ts`: experiences, education, skills, the projects the CV highlights, availability offers, and the home timeline order (`TIMELINE`).
+- `src/data/profile.ts`: experiences, education, skills, the projects the CV highlights, the internship and freelance offers, and the checkpoints on the path chart.
 - `src/data/projects.ts`: projects.
 
-Templates mark where content goes with `data-render="<block>"` (home timeline, CV sections, availability cards); `src/pages/content/render.ts` fills them at build time, so crawlers and the CV PDF see real text. `src/i18n/{en,fr}.ts` only holds interface text (navigation, headings, buttons). Text may use `<strong>`/`<br>`, never CSS classes.
+Templates mark where content goes with `data-render="<block>"` (home sections, CV sections); `src/pages/content/render.ts` fills them at build time, so crawlers and the CV PDF see real text. `src/i18n/{en,fr}.ts` only holds interface text (navigation, headings, buttons). Text may use `<strong>`/`<br>`, never CSS classes.
 
 To add a job: append it to `EXPERIENCES` and its id to `TIMELINE`. It appears on the home timeline, the CV and the CV PDF.
 

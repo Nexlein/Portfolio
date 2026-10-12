@@ -50,7 +50,6 @@ const fixedPage = (path: string, template: string, key: string, jsonLd?: PageSpe
 export const PAGES: PageSpec[] = [
     fixedPage('/', 'index.html', 'home', profilePage),
     fixedPage('/cv.html', 'cv.html', 'cv', cvPerson),
-    fixedPage('/availability.html', 'availability.html', 'availability'),
     ...PROJECTS.map((project): PageSpec => ({
         path: projectPath(project.id),
         template: 'project.html',
