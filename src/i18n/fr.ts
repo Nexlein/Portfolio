@@ -192,8 +192,7 @@ export const fr = {
             role: 'Ingénieur IA, Data & Logiciel',
             summary:
                 "Du logiciel fiable à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialisé dans les systèmes de décision autonomes, les moteurs de simulation en temps réel et le C++ haute performance.",
-            badge1: 'Temps partiel (sept–fév)',
-            badge2: 'Stage temps plein (mars–août)',
+            badge2: 'Stage à temps plein (mars–août)',
             badge3: 'Freelance'
         },
         toolbox: {

@@ -192,7 +192,6 @@ export const en = {
             role: 'AI, Data & Software Engineer',
             summary:
                 'Building reliable software at the speed of AI, with TDD and agentic workflows. Focused on autonomous decision systems, real-time simulation engines, and high-performance C++.',
-            badge1: 'Part-Time (Sept-Feb)',
             badge2: 'Full-Time Intern (Mar-Aug)',
             badge3: 'Freelance'
         },
