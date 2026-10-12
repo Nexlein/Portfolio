@@ -76,7 +76,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: value-iteration.test.ts
 
 ## src/components/Nav
-- **Nav.css** (192) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
+- **Nav.css** (221) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← cv.html, index.html, project.html
 - **Nav.ts** (104) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav
@@ -137,10 +137,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (211)
+- **en.ts** (212)
   - exports: en
   - ← core/translate
-- **fr.ts** (211)
+- **fr.ts** (212)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -195,7 +195,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **base.css** (263) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← cv.html, index.html, project.html
-- **tokens.css** (90) — Design tokens of the redesign.
+- **tokens.css** (116) — Design tokens of the redesign.
   - ← styles/base.css
 
 ## src/ui

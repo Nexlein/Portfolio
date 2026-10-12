@@ -87,3 +87,29 @@
 
     color-scheme: light;
 }
+
+/* Luna: the Windows XP palette. Cream window grey, Luna blue, Start-button green for what is active */
+[data-theme='luna'] {
+    --bg: #ece9d8;
+    --surface: #fff;
+    --raised: #f6f4e8;
+    --ink: #0a1f44;
+    --muted: #4f5b73;
+    --line: #d4d0c8;
+    --hair: rgb(10 31 68 / 14%);
+    --signal: #1f6f2a;
+    --cold: #245edc;
+    --pos: #1f6f2a;
+    --shadow: 0 1px 0 #fff inset, 0 8px 24px rgb(10 31 68 / 14%);
+    --shadow-lift: 0 22px 48px rgb(10 31 68 / 18%);
+    --d-systems: #1a7f8e;
+    --d-architecture: #245edc;
+    --d-graphical: #c2410c;
+    --d-devops: #6a4fd6;
+    --c1: #245edc;
+    --c2: #9db8e8;
+    --c3: #8e8b7a;
+    --c4: #1a7f8e;
+
+    color-scheme: light;
+}
