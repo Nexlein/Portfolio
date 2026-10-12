@@ -68,12 +68,12 @@ export const EXPERIENCES: Experience[] = [
         },
         highlights: [
             {
-                en: 'Building a SaaS platform from scratch integrating AI-driven workflows and RAG architectures.',
-                fr: "Conception d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG."
+                en: 'Building a SaaS platform from scratch around AI-driven workflows and RAG.',
+                fr: "Conception d'une plateforme SaaS autour de workflows IA et du RAG."
             },
             {
-                en: 'Developing conversational AI agents and modernizing the technical web architecture.',
-                fr: "Développement d'agents conversationnels et modernisation de l'architecture technique web."
+                en: 'Developing conversational AI agents and modernizing the web architecture.',
+                fr: "Agents conversationnels IA et modernisation de l'architecture web."
             }
         ]
     },
@@ -89,12 +89,12 @@ export const EXPERIENCES: Experience[] = [
         },
         highlights: [
             {
-                en: 'Engineered an internal AI Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and local Ollama LLMs.',
-                fr: "Conception d'un système RAG interne (Retrieval-Augmented Generation) avec Microsoft Agent Framework et des modèles Ollama en local."
+                en: 'Designed an internal RAG system with Microsoft Agent Framework and local Ollama models.',
+                fr: "Conception d'un système RAG interne avec Microsoft Agent Framework et des modèles Ollama en local."
             },
             {
-                en: 'Developed Razor components and managed databases with Entity Framework.',
-                fr: 'Développement de composants Razor et gestion de bases de données avec Entity Framework.'
+                en: 'Built Razor components and database access with Entity Framework.',
+                fr: 'Composants Razor et accès aux bases de données avec Entity Framework.'
             }
         ],
         tags: ['C# / ASP.NET', 'Entity Framework', 'Ollama', 'MS Agent Framework']
@@ -110,12 +110,12 @@ export const EXPERIENCES: Experience[] = [
         },
         highlights: [
             {
-                en: 'Competed in 2 Generative AI Hackathons (building innovative LLM tools).',
-                fr: "Participation à 2 hackathons d'IA générative (outils LLM innovants)."
+                en: 'Competed in 2 generative-AI hackathons, building LLM tools.',
+                fr: "2 hackathons d'IA générative, avec des outils LLM à la clé."
             },
             {
-                en: 'Participated in 2 Cycom events (Cybersecurity talks and CTFs).',
-                fr: 'Participation à 2 événements Cycom (conférences et CTF de cybersécurité).'
+                en: 'Attended 2 Cycom events (cybersecurity talks, CTFs).',
+                fr: 'Participation à 2 événements Cycom (conférences de cybersécurité, CTF).'
             }
         ]
     }
@@ -246,6 +246,11 @@ export const SKILLS: SkillGroup[] = [
         id: 'devops',
         title: { en: 'DevOps & Arch', fr: 'DevOps & Archi' },
         items: ['Docker', 'Linux', 'Git', 'Ansible', 'Jenkins']
+    },
+    {
+        id: 'practices',
+        title: { en: 'Practices', fr: 'Pratiques' },
+        items: ['TDD', 'CI/CD', 'Vitest', 'Playwright', 'GitHub Actions']
     }
 ];
 
