@@ -13,7 +13,7 @@ test.describe('without JavaScript', () => {
         await expect(page.locator('.path-svg')).toBeVisible();
         await expect(page.locator('.chart-card')).toHaveCount(3);
         await expect(page.locator('#hire .tile')).toHaveCount(2);
-        await expect(page.locator('#method .tile')).toHaveCount(3);
+        await expect(page.locator('#method .method-item')).toHaveCount(3);
         await expect(page.locator('.hero-copy h1')).toBeVisible(); // reveals never hide content without JS
     });
 });
@@ -108,6 +108,7 @@ test.describe('charts', () => {
 
     test('a numbers card shows its second view', async ({ page }) => {
         await page.goto('/');
+        await page.locator('.path-tabs button[data-panel="numbers"]').click();
         const card = page.locator('.chart-card').first();
         await card.scrollIntoViewIfNeeded();
         await card.locator('.dots button').nth(1).click();
@@ -190,7 +191,62 @@ test.describe('language', () => {
 test('reduced motion: no scroll reveal hides content and nothing moves on its own', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await page.locator('#numbers').scrollIntoViewIfNeeded();
+    await page.locator('.path-tabs button[data-panel="numbers"]').click();
     await expect(page.locator('.chart-card').first()).toBeVisible();
     await expect(page.locator('.avail-dot')).toHaveCSS('animation-name', 'none');
+});
+
+test.describe('navbar', () => {
+    test('stays at the top while scrolling, on every page', async ({ page }) => {
+        for (const path of ['/', '/cv.html', '/projects/zappy.html']) {
+            await page.goto(path);
+            await page.evaluate(() => scrollTo(0, 1200));
+            await expect
+                .poll(() => page.locator('.nav').evaluate((el) => Math.round(el.getBoundingClientRect().top)))
+                .toBe(0);
+        }
+    });
+
+    test('the progress line follows the scroll', async ({ page }) => {
+        await page.goto('/');
+        const bar = page.locator('.nav-progress');
+        const scale = () => bar.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
+        expect(await scale()).toBe(0);
+        await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+        await expect.poll(scale).toBeGreaterThan(0.9);
+    });
+
+    test('the first Tab reaches a skip link that jumps to the content', async ({ page }) => {
+        await page.goto('/');
+        await page.keyboard.press('Tab');
+        const skip = page.locator('.skip');
+        await expect(skip).toBeFocused();
+        await expect(skip).toBeInViewport();
+        await expect(page.locator('main#main')).toHaveCount(1);
+    });
+});
+
+test.describe('scroll polish', () => {
+    test('the hero button glides to its section and keeps the hash', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('.hero .btn[href="#work"]').click();
+        const top = () => page.locator('#work').evaluate((el) => Math.round(el.getBoundingClientRect().top));
+        await expect.poll(top, { timeout: 5000 }).toBeLessThanOrEqual(60);
+        expect(page.url()).toContain('#work');
+        await expect(page.locator('#work')).toBeFocused();
+    });
+
+    test('the scroll cue shows at the top and fades once the page scrolls', async ({ page }) => {
+        await page.goto('/');
+        const cue = page.locator('.scroll-cue');
+        await expect(cue).toHaveCSS('opacity', '1');
+        await page.evaluate(() => scrollTo(0, 400));
+        await expect.poll(() => cue.evaluate((el) => getComputedStyle(el).opacity)).toBe('0');
+    });
+
+    test('with reduced motion the cue does not bob', async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/');
+        await expect(page.locator('.scroll-cue')).toHaveCSS('animation-name', 'none');
+    });
 });

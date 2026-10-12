@@ -39,9 +39,7 @@ export function featured(lang: Lang): string {
         .map(
             (p) => `<a class="feature surface reveal" href="${localizedPath(projectPath(p.id), lang)}">
 <span class="feature-media"><img src="${still(p)}" alt="" loading="lazy" width="640" height="400" /></span>
-<span class="feature-body"><span class="eyebrow">${domainName(lang, p.category)}</span><strong>${p.title}</strong>
-<span class="feature-line">${oneLiner(p, lang)}</span><span class="mono">${p.tags.slice(0, 4).join(' · ')}</span>
-<span class="link">${t(lang, 'featured.open')} <span aria-hidden="true">›</span></span></span></a>`
+<span class="feature-body"><span class="eyebrow">${domainName(lang, p.category)}</span><strong>${p.title}</strong></span></a>`
         )
         .join('');
 }
@@ -115,16 +113,15 @@ ${recruiterInfo(o, lang)}
     ).join('');
 }
 
-/** How I work: three practices, then a link to the source of this site as the proof. */
+/** How I work: three practices in a thin strip; the link to the source of this site is the proof. */
 export function method(lang: Lang): string {
-    const cards = (['test', 'agents', 'compound'] as const)
+    return (['test', 'agents', 'compound'] as const)
         .map(
-            (id, i) => `<article class="tile surface reveal">
-<p class="eyebrow">0${i + 1}</p><h3>${t(lang, `method.${id}.title`)}</h3><p class="tile-lede">${t(lang, `method.${id}.body`)}</p>
-</article>`
+            (id, i) => `<div class="method-item reveal">
+<span class="method-n mono">0${i + 1}</span><h3>${t(lang, `method.${id}.title`)}</h3><p class="method-text">${t(lang, `method.${id}.body`)}</p>
+</div>`
         )
         .join('');
-    return cards;
 }
 
 /** Link to the repository, under the cards. */

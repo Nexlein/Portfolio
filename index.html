@@ -36,7 +36,7 @@
     <body>
         <div data-render="nav"></div>
 
-        <main>
+        <main id="main">
             <!-- Hero: a live simulation behind the words (src/components/Hero) -->
             <section class="hero" id="top">
                 <canvas class="hero-field" aria-hidden="true"></canvas>
@@ -63,6 +63,10 @@
                     </div>
                 </div>
                 <p class="hero-hint" aria-live="polite"></p>
+                <a class="scroll-cue" href="#method"
+                    ><span aria-hidden="true">⌄</span
+                    ><span class="sr-only" data-i18n="home.hero.scroll">Scroll down</span></a
+                >
                 <button type="button" class="hero-switch press" hidden>
                     <span aria-hidden="true">↻</span>
                     <span class="hero-sim-name"></span>
@@ -70,30 +74,13 @@
                 </button>
             </section>
 
-            <!-- Selected work: the featured projects -->
-            <section class="section" id="featured" aria-labelledby="featured-title">
-                <div class="section-head reveal">
-                    <h2 class="headline" id="featured-title">
-                        <span class="line"><span data-i18n="home.featured.title1">Selected work.</span></span>
-                        <span class="line"
-                            ><span class="recede" data-i18n="home.featured.title2">Three to start with.</span></span
-                        >
-                    </h2>
-                </div>
-                <div class="features wrap" data-render="featured"></div>
-            </section>
-
-            <!-- Method: how I work, with this site as the proof -->
-            <section class="section" id="method" aria-labelledby="method-title">
-                <div class="section-head reveal">
-                    <h2 class="headline small" id="method-title">
-                        <span class="line"><span data-i18n="home.method.title1">How I work.</span></span>
-                        <span class="line"
-                            ><span class="recede" data-i18n="home.method.title2">Fast, and checked.</span></span
-                        >
-                    </h2>
-                </div>
-                <div class="tiles wrap" data-render="method"></div>
+            <!-- Method: how I work, under the hero, as a thin strip (this site is the proof) -->
+            <section class="method" id="method" aria-labelledby="method-title">
+                <h2 class="method-title mono reveal" id="method-title">
+                    <span data-i18n="home.method.title1">How I work.</span>
+                    <span class="recede" data-i18n="home.method.title2">Fast, and checked.</span>
+                </h2>
+                <div class="method-items wrap" data-render="method"></div>
                 <p class="method-source wrap reveal" data-render="method-source"></p>
             </section>
 
@@ -107,6 +94,8 @@
                             >Hover one to see what it lights up, or ask the network.</span
                         >
                     </p>
+                    <p class="features-label mono" data-i18n="home.featured.label">Start here</p>
+                    <div class="features" data-render="featured"></div>
                     <span class="sr-only" id="ask-label" data-i18n="home.work.ask">Light up a domain</span>
                     <div
                         class="segmented query desk-only"
@@ -120,7 +109,7 @@
                 <ul class="project-list wrap" id="project-list" data-render="project-list"></ul>
             </section>
 
-            <!-- Path: the skill toolbox over time, with checkpoints (src/components/Charts) -->
+            <!-- Path: the skill toolbox over time with checkpoints, and the numbers behind it (src/components/Charts) -->
             <section class="section" id="path" aria-labelledby="path-title">
                 <div class="section-head reveal">
                     <h2 class="headline" id="path-title">
@@ -129,25 +118,25 @@
                             ><span class="recede" data-i18n="home.path.title2">Every checkpoint earned.</span></span
                         >
                     </h2>
+                    <div class="segmented path-tabs" role="group" aria-labelledby="path-title">
+                        <button type="button" aria-pressed="true" aria-controls="panel-path" data-panel="path">
+                            <span data-i18n="home.path.tab">Path</span>
+                        </button>
+                        <button type="button" aria-pressed="false" aria-controls="panel-numbers" data-panel="numbers">
+                            <span data-i18n="home.numbers.tab">Numbers</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="wrap" data-render="path-chart"></div>
-                <ul class="experience wrap" data-render="experience"></ul>
-            </section>
-
-            <!-- Numbers: small charts computed from the projects -->
-            <section class="section" id="numbers" aria-labelledby="numbers-title">
-                <div class="section-head reveal">
-                    <h2 class="headline small" id="numbers-title">
-                        <span class="line"><span data-i18n="home.numbers.title1">By the numbers.</span></span>
-                        <span class="line"
-                            ><span class="recede" data-i18n="home.numbers.title2">Computed, not claimed.</span></span
-                        >
-                    </h2>
-                    <p class="lede" data-i18n="home.numbers.sub">
+                <div id="panel-path" class="panel">
+                    <div class="wrap" data-render="path-chart"></div>
+                    <ul class="experience wrap" data-render="experience"></ul>
+                </div>
+                <div id="panel-numbers" class="panel">
+                    <p class="lede numbers-sub reveal" data-i18n="home.numbers.sub">
                         Every chart below is calculated from the projects themselves.
                     </p>
+                    <div data-render="numbers"></div>
                 </div>
-                <div data-render="numbers"></div>
             </section>
 
             <!-- Hire: two ways to work together, then one email -->

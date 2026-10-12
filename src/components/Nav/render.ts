@@ -6,7 +6,7 @@
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { THEMES } from './themes.ts';
 
-const SECTIONS = ['work', 'path', 'numbers', 'hire'] as const;
+const SECTIONS = ['work', 'path', 'hire'] as const;
 
 /** `path` is the page being rendered, in the default language ('/', '/cv.html', '/projects/zappy.html'). */
 export function renderNav(lang: Lang, path: string): string {
@@ -25,7 +25,8 @@ export function renderNav(lang: Lang, path: string): string {
             `<button type="button" role="menuitemradio" aria-checked="false" data-theme-id="${id}"><span class="swatch" data-theme="${id}" aria-hidden="true"></span>${lookup(lang, `site.themes.${id}`)}</button>`
     ).join('');
 
-    return `<header class="nav" id="nav">
+    return `<a class="skip" href="#main">${t('skip')}</a>
+<header class="nav" id="nav">
   <a class="nav-name" href="${onHome ? '#top' : home}">Nielsen<span class="nav-last"> COMBE--BRACCIALE</span></a>
   <nav aria-label="${t('label')}">
     <span class="nav-pill" aria-hidden="true"></span>
@@ -37,5 +38,6 @@ export function renderNav(lang: Lang, path: string): string {
     </div>
     <a class="nav-cv press" href="${localizedPath('/cv.html', lang)}">${t('cv')}</a>
   </nav>
+  <span class="nav-progress" aria-hidden="true"></span>
 </header>`;
 }

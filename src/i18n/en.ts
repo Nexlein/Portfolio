@@ -15,9 +15,9 @@ export const en = {
     site: {
         nav: {
             label: 'Main navigation',
+            skip: 'Skip to content',
             work: 'Work',
             path: 'Path',
-            numbers: 'Numbers',
             hire: 'Hire',
             cv: 'CV',
             language: 'Language',
@@ -45,6 +45,7 @@ export const en = {
             work: 'See the work',
             hire: 'Hire me',
             switch: 'Show another simulation',
+            scroll: 'Scroll down',
             sims: {
                 valueIteration: {
                     name: 'Value iteration',
@@ -65,9 +66,7 @@ export const en = {
             }
         },
         featured: {
-            title1: 'Selected work.',
-            title2: 'Three to start with.',
-            open: 'Open project'
+            label: 'Start here'
         },
         work: {
             title1: '{n} projects.',
@@ -104,6 +103,7 @@ export const en = {
             devops: 'DevOps'
         },
         path: {
+            tab: 'Path',
             title1: 'The path so far.',
             title2: 'Every checkpoint earned.',
             symbol: 'Skills · toolbox index',
@@ -114,8 +114,7 @@ export const en = {
             shipped: '{p} started'
         },
         numbers: {
-            title1: 'By the numbers.',
-            title2: 'Computed, not claimed.',
+            tab: 'Numbers',
             sub: 'Every chart below is calculated from the projects themselves.',
             view: 'View',
             other: 'Other',

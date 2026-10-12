@@ -15,9 +15,9 @@ export const fr = {
     site: {
         nav: {
             label: 'Navigation principale',
+            skip: 'Aller au contenu',
             work: 'Projets',
             path: 'Parcours',
-            numbers: 'Chiffres',
             hire: 'Recruter',
             cv: 'CV',
             language: 'Langue',
@@ -45,6 +45,7 @@ export const fr = {
             work: 'Voir les projets',
             hire: 'Me recruter',
             switch: 'Changer de simulation',
+            scroll: 'Faire défiler',
             sims: {
                 valueIteration: {
                     name: 'Itération de valeur',
@@ -65,9 +66,7 @@ export const fr = {
             }
         },
         featured: {
-            title1: 'Projets choisis.',
-            title2: 'Trois pour commencer.',
-            open: 'Voir le projet'
+            label: 'Pour commencer'
         },
         work: {
             title1: '{n} projets.',
@@ -104,6 +103,7 @@ export const fr = {
             devops: 'DevOps'
         },
         path: {
+            tab: 'Parcours',
             title1: 'Le parcours.',
             title2: 'Chaque étape méritée.',
             symbol: 'Compétences · taille de la boîte à outils',
@@ -114,8 +114,7 @@ export const fr = {
             shipped: '{p} démarré'
         },
         numbers: {
-            title1: 'En chiffres.',
-            title2: 'Calculés, pas déclarés.',
+            tab: 'Chiffres',
             sub: 'Chaque graphique ci-dessous est calculé à partir des projets eux-mêmes.',
             view: 'Vue',
             other: 'Autres',
