@@ -129,6 +129,23 @@ export const en = {
             thisYear: 'This year',
             newSkills: '{n} new skills in 12 months'
         },
+        method: {
+            title1: 'How I work.',
+            title2: 'Fast, and checked.',
+            test: {
+                title: 'Tests first',
+                body: 'I write the test before the code, then let the AI make it pass. Every change runs through unit and browser tests before it merges.'
+            },
+            agents: {
+                title: 'Agents with guardrails',
+                body: 'My AI agents work inside rules I wrote down: a conventions file, a code map rebuilt on every commit, and permissions that keep them out of what they should not touch.'
+            },
+            compound: {
+                title: 'Every project pays forward',
+                body: 'Each project leaves tools, tests and notes behind that make the next one faster.'
+            },
+            source: 'See how this site is built'
+        },
         hire: {
             title1: 'Two ways to work together.',
             title2: 'Internship or freelance.',

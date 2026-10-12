@@ -115,6 +115,22 @@ ${recruiterInfo(o, lang)}
     ).join('');
 }
 
+/** How I work: three practices, then a link to the source of this site as the proof. */
+export function method(lang: Lang): string {
+    const cards = (['test', 'agents', 'compound'] as const)
+        .map(
+            (id, i) => `<article class="tile surface reveal">
+<p class="eyebrow">0${i + 1}</p><h3>${t(lang, `method.${id}.title`)}</h3><p class="tile-lede">${t(lang, `method.${id}.body`)}</p>
+</article>`
+        )
+        .join('');
+    return cards;
+}
+
+/** Link to the repository, under the cards. */
+export const methodSource = (lang: Lang) =>
+    `<a class="link" href="${OWNER.source}">${t(lang, 'method.source')} <span aria-hidden="true">›</span></a>`;
+
 /** Copy email, LinkedIn, CV. */
 export function contact(lang: Lang): string {
     return `<button type="button" class="btn copy-email" data-email="${OWNER.email}">${t(lang, 'hire.copy')}</button>

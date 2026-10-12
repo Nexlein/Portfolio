@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **cv.html** (106)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
-- **index.html** (163)
+- **index.html** (177)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
 - **project.html** (75) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
@@ -136,16 +136,16 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (194)
+- **en.ts** (211)
   - exports: en
   - ← core/translate
-- **fr.ts** (194)
+- **fr.ts** (211)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
 
 ## src/pages/content
-- **render.ts** (52) — Render the site's data into the pages at build time (home, CV, nav and footer everywhere).
+- **render.ts** (54) — Render the site's data into the pages at build time (home, CV, nav and footer everywhere).
   - exports: BLOCKS, renderContent
   - → core/translate, components/Nav/render, components/Footer/render, pages/home/blocks, pages/cv/blocks
   - ← vite-plugins/pages
@@ -166,11 +166,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: headers.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (126) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
-  - exports: MAP_MAX, still, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, contact, email
+- **blocks.ts** (142) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+  - exports: MAP_MAX, still, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← pages/content/render, pages/home/home, pages/project/render
-- **home.css** (394) — Home sections that are not components of their own: selected work, the project list, experience, hire.
+- **home.css** (399) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
 - **home.ts** (97) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
