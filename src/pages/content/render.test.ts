@@ -32,12 +32,16 @@ describe('content blocks', () => {
             expect(root.querySelectorAll('li')).toHaveLength(EXPERIENCES.flatMap((e) => e.highlights).length);
         });
 
-        it('renders the CV contact links and the toolbox sparkline', () => {
-            expect(render('cv-contact', lang).querySelectorAll('a')).toHaveLength(4);
-            expect(render('cv-contact', lang).querySelector('a')!.getAttribute('href')).toMatch(/^mailto:/);
-            const toolbox = render('cv-toolbox', lang);
-            expect(toolbox.querySelector('.cv-spark-line')!.getAttribute('d')).toMatch(/^M[\d.]+ [\d.]+L/);
-            expect(toolbox.textContent).toMatch(/\d+/);
+        it('renders the CV contact links, with the real LinkedIn address as text', () => {
+            const contact = render('cv-contact', lang);
+            expect(contact.querySelectorAll('a')).toHaveLength(4);
+            expect(contact.querySelector('a')!.getAttribute('href')).toMatch(/^mailto:/);
+            expect(contact.textContent).toContain('linkedin.com/in/');
+        });
+
+        it('lists the certifications on their own, not among the studies', () => {
+            expect(render('cv-certs', lang).textContent).toContain('Google Cloud');
+            expect(render('cv-education', lang).textContent).not.toContain('Google Cloud');
         });
 
         it('links CV projects to their pages, in the same language', () => {
@@ -50,7 +54,9 @@ describe('content blocks', () => {
 
         it('renders skills and education', () => {
             expect(render('cv-skills', lang).querySelectorAll('h3')).toHaveLength(SKILLS.length);
-            expect(render('cv-education', lang).querySelectorAll('h3')).toHaveLength(EDUCATION.length);
+            // Studies and certifications are two lists that together hold every entry
+            const count = (block: string) => render(block, lang).querySelectorAll('h3').length;
+            expect(count('cv-education') + count('cv-certs')).toBe(EDUCATION.length);
         });
     });
 });

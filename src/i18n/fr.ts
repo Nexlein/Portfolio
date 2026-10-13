@@ -205,10 +205,7 @@ export const fr = {
             systems: 'Architecture systèmes',
             ai: 'IA & Data Science',
             education: 'Formation et certifications',
-            toolbox: 'Boîte à outils'
-        },
-        links: {
-            linkedin: 'Profil LinkedIn'
+            certs: 'Certifications'
         }
     }
 };

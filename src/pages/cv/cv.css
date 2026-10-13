@@ -166,6 +166,7 @@
 }
 
 .sheet-contact img {
+    display: none; /* the QR code is for paper: online, you are already here */
     box-sizing: border-box;
     width: 64px;
     height: 64px;
@@ -214,10 +215,6 @@
     margin-bottom: 2px;
 }
 
-.sheet-edu .cv-entry {
-    margin-top: 0; /* the grid already spaces the entries: no extra offset for the 2nd and 3rd */
-}
-
 /* ── Skill groups ── */
 .cv-group + .cv-group {
     margin-top: 8px;
@@ -231,6 +228,10 @@
 /* ── Entries ── */
 .cv-entry + .cv-entry {
     margin-top: 10px;
+}
+
+.sheet-edu .cv-entry {
+    margin-top: 0; /* the grid already spaces the entries: no extra offset for the 2nd and 3rd */
 }
 
 .cv-entry-head {
@@ -285,31 +286,6 @@
 }
 
 /* Toolbox: the path chart, in miniature */
-.cv-toolbox-k {
-    display: grid;
-}
-
-.cv-toolbox-k span {
-    color: var(--paper-muted);
-    font-size: 10.5px;
-}
-
-.cv-spark {
-    width: 100%;
-    height: 34px;
-    margin-top: 6px;
-}
-
-.cv-spark-line {
-    fill: none;
-    stroke: var(--paper-accent);
-    stroke-width: 1.5;
-    vector-effect: non-scaling-stroke;
-}
-
-.cv-spark-area {
-    fill: color-mix(in sRGB, var(--paper-accent) 12%, transparent);
-}
 
 @media (hover: hover) and (pointer: fine) {
     .sheet a:hover {
@@ -364,6 +340,10 @@
 
     .cv-stage {
         padding: 0;
+    }
+
+    .sheet-contact img {
+        display: block;
     }
 
     .sheet {

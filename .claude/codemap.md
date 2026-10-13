@@ -31,11 +31,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **data.ts** (174) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
   - exports: yearOf, thisMonth, skills, prettySkill, Milestone, milestones, Point, skillSeries, valueAt, firstSeen, learnedSince, PERIODS, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, components/NeuralMap/graph
-  - ← components/Charts/Charts, components/Charts/render, pages/cv/blocks, pages/home/blocks, pages/project/render
+  - ← components/Charts/Charts, components/Charts/render, pages/home/blocks, pages/project/render
 - **render.ts** (308) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
   - exports: monthName, PATH, pathSamples, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data
-  - ← components/Charts/Charts, pages/cv/blocks, pages/home/blocks, pages/project/render
+  - ← components/Charts/Charts, pages/home/blocks, pages/project/render
 
 ## src/components/Footer
 - **Footer.css** (35)
@@ -141,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (215)
+- **en.ts** (212)
   - exports: en
   - ← core/translate
-- **fr.ts** (215)
+- **fr.ts** (212)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -157,11 +157,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: render.test.ts
 
 ## src/pages/cv
-- **blocks.ts** (79) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
-  - exports: experience, skills, education, projectBlocks, contact, toolbox
-  - → data/profile, data/projects, core/site, core/translate, components/Charts/data, components/Charts/render
+- **blocks.ts** (70) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+  - exports: experience, skills, education, certifications, projectBlocks, contact
+  - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
-- **cv.css** (384) — CV: a sheet on the site's stage.
+- **cv.css** (364) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav

@@ -205,10 +205,7 @@ export const en = {
             systems: 'Systems Architecture',
             ai: 'AI & Data Science',
             education: 'Education & Certs',
-            toolbox: 'Toolbox'
-        },
-        links: {
-            linkedin: 'LinkedIn Profile'
+            certs: 'Certifications'
         }
     }
 };
