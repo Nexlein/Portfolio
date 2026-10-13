@@ -63,13 +63,13 @@ export const EXPERIENCES: Experience[] = [
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
-            en: 'Rebuilt the company website, live since October 2026: a new visual identity, faster pages and many bugs fixed. It also replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
-            fr: "Refonte du site de l'entreprise, en ligne depuis octobre 2026 : une nouvelle identité visuelle, des pages plus rapides et de nombreux bugs corrigés. Elle remplace aussi des abonnements payants (comme Elementor Pro), ce qui réduit les coûts."
+            en: 'Rebuilt the company website, live since 9 October 2026: a new visual identity, faster pages and many bugs fixed. It also replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
+            fr: "Refonte du site de l'entreprise, en ligne depuis le 9 octobre 2026 : une nouvelle identité visuelle, des pages plus rapides et de nombreux bugs corrigés. Elle remplace aussi des abonnements payants (comme Elementor Pro), ce qui réduit les coûts."
         },
         highlights: [
             {
-                en: 'Rebuilt the company website with the new visual identity: faster, many bugs fixed, live since October 2026.',
-                fr: "Refonte du site de l'entreprise à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis octobre 2026."
+                en: 'Rebuilt the company website with the new visual identity: faster, many bugs fixed, live since 9 October 2026.',
+                fr: "Refonte du site de l'entreprise à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis le 9 octobre 2026."
             },
             {
                 en: 'Replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
@@ -84,13 +84,13 @@ export const EXPERIENCES: Experience[] = [
         org: 'Climb2C (Eliona Conseil)',
         period: { en: 'Sept - Dec 2025', fr: 'Sept - Déc 2025' },
         summary: {
-            en: "In a team of five, built an internal Retrieval-Augmented Generation (RAG) system with Microsoft Agent Framework and local Ollama models, and a client questionnaire in Razor and Entity Framework: the clients' answers drive the Climb2C offers recommended to them.",
-            fr: "Dans une équipe de cinq, conception d'un système RAG (Retrieval-Augmented Generation) interne avec Microsoft Agent Framework et des modèles Ollama en local, et d'un questionnaire client en Razor et Entity Framework : les réponses des clients déterminent les offres Climb2C qui leur sont recommandées."
+            en: "In a team of five, I developed my parts on my own: an internal Retrieval-Augmented Generation (RAG) system with Microsoft Agent Framework and local Ollama models, and a client questionnaire in Razor and Entity Framework: the clients' answers drive the Climb2C offers recommended to them.",
+            fr: "Dans une équipe de cinq, j'ai développé seul mes parties : un système RAG (Retrieval-Augmented Generation) interne avec Microsoft Agent Framework et des modèles Ollama en local, et d'un questionnaire client en Razor et Entity Framework : les réponses des clients déterminent les offres Climb2C qui leur sont recommandées."
         },
         highlights: [
             {
-                en: 'Built an internal RAG system with Microsoft Agent Framework and local Ollama models, in a team of five.',
-                fr: "Conception d'un système RAG interne avec Microsoft Agent Framework et des modèles Ollama en local, en équipe de cinq."
+                en: 'Built an internal RAG system on my own, with Microsoft Agent Framework and local Ollama models.',
+                fr: "Conception en solo d'un système RAG interne avec Microsoft Agent Framework et des modèles Ollama en local."
             },
             {
                 en: 'Built a client questionnaire (Razor, Entity Framework): the answers drive the offers we recommend.',
@@ -105,13 +105,13 @@ export const EXPERIENCES: Experience[] = [
         title: { en: 'Hackathons & Cybersecurity', fr: 'Hackathons & Cybersécurité' },
         period: { en: '2025 - 2026', fr: '2025 - 2026' },
         summary: {
-            en: 'Two generative-AI hackathons (10 to 48 hours, about ten teams): a pull-request hook that reviews the code with good points, bad points and questions that keep a human in the loop, and a chatbot that turns lessons into quiz questions and grades the answers. We placed second at the first one. Two Cycom cybersecurity events (2025 and 2026): a hackathon where we built a tool that automates security scans such as nmap, then a classic CTF.',
-            fr: "Deux hackathons d'IA générative (de 10 à 48 heures, une dizaine d'équipes) : un hook de pull request qui relit le code avec des points positifs, des points négatifs et des questions pour garder l'humain dans la boucle, et un chatbot qui transforme des cours en questions de quiz et note les réponses. Nous avons fini deuxièmes au premier. Deux événements de cybersécurité Cycom (2025 et 2026) : un hackathon où nous avons conçu un outil qui automatise des scans de sécurité comme nmap, puis un CTF classique."
+            en: 'Two generative-AI hackathons (48 hours each, about seven teams): a pull-request hook that reviews the code with good points, bad points and questions that keep a human in the loop, and a chatbot that turns lessons into quiz questions and grades the answers, which placed second. Two Cycom cybersecurity events (2025 and 2026): a hackathon where we built a tool that automates security scans such as nmap, then a classic CTF.',
+            fr: "Deux hackathons d'IA générative (48 heures chacun, environ sept équipes) : un hook de pull request qui relit le code avec des points positifs, des points négatifs et des questions pour garder l'humain dans la boucle, et un chatbot qui transforme des cours en questions de quiz et note les réponses, et qui a fini deuxième. Deux événements de cybersécurité Cycom (2025 et 2026) : un hackathon où nous avons conçu un outil qui automatise des scans de sécurité comme nmap, puis un CTF classique."
         },
         highlights: [
             {
-                en: '2 generative-AI hackathons: a code-review PR hook and a revision-quiz chatbot. 2nd place at the first.',
-                fr: "2 hackathons d'IA générative : un hook de PR qui relit le code et un chatbot de révision par quiz. 2e place au premier."
+                en: '2 generative-AI hackathons, 48 h each: a code-review PR hook and a revision-quiz chatbot (2nd place).',
+                fr: "2 hackathons d'IA générative de 48 h : un hook de PR qui relit le code et un chatbot de révision par quiz (2e place)."
             },
             {
                 en: '2 Cycom editions (2025, 2026): a hackathon building a security-scan tool, then a CTF.',
@@ -216,8 +216,8 @@ export const CHECKPOINTS: Checkpoint[] = [
 export const NOW = {
     role: { en: 'AI developer at Issanka', fr: 'Développeur IA chez Issanka' },
     focus: {
-        en: "The company's new website, live since October",
-        fr: "Le nouveau site de l'entreprise, en ligne depuis octobre"
+        en: "The company's new website, live since 9 October",
+        fr: "Le nouveau site de l'entreprise, en ligne depuis le 9 octobre"
     },
     detail: { en: 'Sept 2026 – Feb 2027 · Epitech year 3', fr: 'Sept 2026 – Fév 2027 · Epitech 3e année' },
     availability: { en: 'Open to an internship · Mar – Aug', fr: 'Disponible en stage · mars – août' }
