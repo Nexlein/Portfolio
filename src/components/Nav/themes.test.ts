@@ -19,4 +19,13 @@ describe('themes', () => {
     it('every token block belongs to a listed theme', () => {
         for (const id of new Set(declared)) expect(THEMES as readonly string[]).toContain(id);
     });
+
+    it('every theme defines the same inputs, and nothing else', () => {
+        const inputs = ['--bg', '--surface', '--ink', '--signal', '--cold', '--third', '--depth', 'color-scheme'];
+        for (const id of THEMES) {
+            const block = tokens.match(new RegExp(`\\[data-theme='${id}'\\]\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+            const defined = [...block.matchAll(/(--[a-z0-9-]+|color-scheme)\s*:/g)].map((m) => m[1]);
+            expect(new Set(defined), `inputs of ${id}`).toEqual(new Set(inputs));
+        }
+    });
 });

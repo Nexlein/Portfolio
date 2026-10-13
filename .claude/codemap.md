@@ -80,7 +80,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: neural.test.ts, value-iteration.test.ts
 
 ## src/components/Nav
-- **Nav.css** (264) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
+- **Nav.css** (231) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← cv.html, index.html, project.html
 - **Nav.ts** (128) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav
@@ -90,7 +90,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: renderNav
   - → core/translate, components/Nav/themes
   - ← pages/content/render
-- **themes.ts** (9) — Themes offered in the nav picker.
+- **themes.ts** (10) — Themes offered in the nav picker.
   - exports: THEMES, Theme
   - ← components/Nav/Nav, components/Nav/render
 - tests: themes.test.ts
@@ -141,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (214)
+- **en.ts** (213)
   - exports: en
   - ← core/translate
-- **fr.ts** (214)
+- **fr.ts** (213)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -199,7 +199,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **base.css** (269) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← cv.html, index.html, project.html
-- **tokens.css** (116) — Design tokens of the redesign.
+- **tokens.css** (91) — Design tokens.
   - ← styles/base.css
 
 ## src/ui

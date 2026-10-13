@@ -51,7 +51,7 @@ test('the CV sheet wears the chosen theme on screen and prints as white paper', 
     await page.addInitScript(() => localStorage.setItem('theme', 'midnight'));
     await page.goto('/cv.html');
     const sheet = page.locator('.sheet');
-    await expect(sheet).toHaveCSS('background-color', 'rgb(15, 19, 28)');
+    await expect(sheet).toHaveCSS('background-color', 'rgb(18, 24, 33)');
     await page.emulateMedia({ media: 'print' });
     await expect(sheet).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 });
