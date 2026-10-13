@@ -65,14 +65,6 @@ export function initPathChart(): void {
         });
     };
 
-    // A marker and its list entry light up together (the svg is redrawn on a range change, so listen on the host)
-    const light = (e: Event, on: boolean) => {
-        const m = (e.target as Element).closest<HTMLElement>('[data-m]')?.dataset.m;
-        if (m) host.querySelectorAll(`[data-m="${m}"]`).forEach((el) => el.classList.toggle('on', on));
-    };
-    host.addEventListener('pointerover', (e) => light(e, true));
-    host.addEventListener('pointerout', (e) => light(e, false));
-
     host.querySelectorAll<HTMLButtonElement>('.path-range button').forEach((b) =>
         b.addEventListener('click', () => {
             host.querySelectorAll('.path-range button').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));

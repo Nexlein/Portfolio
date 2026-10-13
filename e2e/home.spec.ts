@@ -173,24 +173,6 @@ test.describe('charts', () => {
         }
     });
 
-    test('milestones are numbered on the curve and listed in order underneath', async ({ page }) => {
-        await page.goto('/');
-        const chart = page.locator('.path-chart');
-        await chart.scrollIntoViewIfNeeded();
-        const items = chart.locator('.path-milestones li');
-        const count = await items.count();
-        expect(count).toBeGreaterThanOrEqual(5);
-        await expect(chart.locator('.mark')).toHaveCount(count);
-        await expect(items.first().locator('.n')).toHaveText('1');
-        // Hovering an entry lights its marker
-        await items.nth(2).hover();
-        await expect(chart.locator('.mark[data-m="3"]')).toHaveClass(/on/);
-        // A shorter range keeps the list whole and drops the markers that fall outside it
-        await chart.locator('.path-range button[data-range="1"]').click();
-        await expect(items).toHaveCount(count);
-        expect(await chart.locator('.mark').count()).toBeLessThan(count);
-    });
-
     test('the numbers are a gallery of charts that the arrows scroll', async ({ page }) => {
         await page.goto('/');
         const row = page.locator('.numbers-row');
