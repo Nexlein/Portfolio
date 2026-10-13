@@ -282,6 +282,27 @@ test.describe('charts', () => {
         await expect(deck).toHaveClass(/playing/);
     });
 
+    test('clicking index entries keeps the deck paused while the pointer stays, and it resumes once it leaves', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.setViewportSize({ width: 1280, height: 2400 });
+        await page.goto('/');
+        await page.locator('#numbers').scrollIntoViewIfNeeded();
+        const deck = page.locator('.numbers');
+        const entries = page.locator('.numbers-index button');
+        await entries.nth(2).click();
+        await page.waitForTimeout(700); // focus moved to the button: the timer must not start
+        await expect(deck).not.toHaveClass(/playing/);
+        await entries.nth(4).click();
+        await page.waitForTimeout(700);
+        await expect(deck).not.toHaveClass(/playing/);
+        await expect(entries.nth(4)).toHaveAttribute('aria-current', '');
+        await page.locator('.numbers-sub').hover();
+        await expect(deck).toHaveClass(/playing/);
+    });
+
     test('old #numbers links land on the numbers', async ({ page }) => {
         await page.goto('/#numbers');
         await expect(page.locator('.numbers-row')).toBeInViewport();

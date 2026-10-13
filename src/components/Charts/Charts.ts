@@ -114,13 +114,14 @@ export function initPathStory(): void {
     let current = '',
         timer = 0,
         visible = false,
-        held = false;
+        hover = false, // the pointer is on a part that pauses the story
+        focus = false; // the keyboard is on one
 
     const ids = () => [...section.querySelectorAll<SVGElement>('.path-svg .mark')].map((m) => m.dataset.cp!);
     // The timer and the fill line start together, and only when a step begins (a selection) or playing resumes
     // after a pause: calls that change nothing (alt-tab, focus, the pointer moving about) leave them running
     const arm = (restart = false) => {
-        const run = visible && !held && !document.hidden && !reduced();
+        const run = visible && !hover && !focus && !document.hidden && !reduced();
         if (run && !restart && card.classList.contains('playing')) return;
         clearTimeout(timer);
         card.classList.remove('playing');
@@ -150,26 +151,27 @@ export function initPathStory(): void {
         const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
         if (mark) select(mark.dataset.cp!);
         if (within(e.target, STORY_HOLD)) {
-            held = true;
+            hover = true;
             arm();
         }
     });
     section.addEventListener('pointerout', (e) => {
         if (e.pointerType !== 'mouse' || !within(e.target, STORY_HOLD) || within(e.relatedTarget, STORY_HOLD)) return;
-        held = card.matches(':has(:focus-visible)');
+        hover = false;
         arm();
     });
     section.addEventListener('click', (e) => {
         const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
         if (mark) select(mark.dataset.cp!);
     });
+    // Focus moving between the card's own buttons is not a pause or a resume: only leaving the card is
     card.addEventListener('focusin', (e) => {
-        if (!(e.target as Element).matches(':focus-visible')) return;
-        held = true;
+        focus = (e.target as Element).matches(':focus-visible');
         arm();
     });
-    card.addEventListener('focusout', () => {
-        held = false;
+    card.addEventListener('focusout', (e) => {
+        if (within(e.relatedTarget, '.exp-card')) return;
+        focus = false;
         arm();
     });
     nav.querySelector('.exp-prev')!.addEventListener('click', () => step(-1));
@@ -213,10 +215,11 @@ export function initNumbers(): void {
     let cur = -1,
         timer = 0,
         visible = false,
-        held = false;
+        hover = false, // the pointer is on a card, the index or the arrows
+        focus = false; // the keyboard is on one
 
     const arm = (restart = false) => {
-        const run = visible && !held && !document.hidden && !reduced();
+        const run = visible && !hover && !focus && !document.hidden && !reduced();
         if (run && !restart && root.classList.contains('playing')) return; // nothing changed: keep running
         clearTimeout(timer);
         root.classList.remove('playing');
@@ -252,21 +255,22 @@ export function initNumbers(): void {
     // Paused while the pointer is on a card, the index or the arrows (or the keyboard is on them), not the whole block
     root.addEventListener('pointerover', (e) => {
         if (e.pointerType !== 'mouse' || !within(e.target, DECK_HOLD)) return;
-        held = true;
+        hover = true;
         arm();
     });
     root.addEventListener('pointerout', (e) => {
         if (e.pointerType !== 'mouse' || !within(e.target, DECK_HOLD) || within(e.relatedTarget, DECK_HOLD)) return;
-        held = root.matches(':has(:focus-visible)');
+        hover = false;
         arm();
     });
+    // Clicking an index entry moves focus between buttons: that must not look like leaving
     root.addEventListener('focusin', (e) => {
-        if (!(e.target as Element).matches(':focus-visible')) return;
-        held = true;
+        focus = (e.target as Element).matches(':focus-visible');
         arm();
     });
-    root.addEventListener('focusout', () => {
-        held = false;
+    root.addEventListener('focusout', (e) => {
+        if (within(e.relatedTarget, '.numbers')) return;
+        focus = false;
         arm();
     });
     document.addEventListener('visibilitychange', () => arm());
