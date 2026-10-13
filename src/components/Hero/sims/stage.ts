@@ -39,7 +39,7 @@ export function stage(canvas: HTMLCanvasElement): Stage {
     };
     const resizers: (() => void)[] = [];
     const size = () => {
-        const dpr = Math.min(2, devicePixelRatio || 1);
+        const dpr = Math.min(1.5, devicePixelRatio || 1); // abstract art: no need for full Retina pixels
         canvas.width = canvas.clientWidth * dpr;
         canvas.height = canvas.clientHeight * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

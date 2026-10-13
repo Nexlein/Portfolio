@@ -21,6 +21,58 @@ test.describe('without JavaScript', () => {
 test.describe('project map', () => {
     test.beforeEach(({ isMobile }) => test.skip(isMobile, 'phones get the list'));
 
+    test('a domain chip filters the map, and the same chip clears it', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm.booted')).toHaveCount(1);
+        const chip = page.locator('.query button').first();
+        const domain = await chip.getAttribute('data-domain');
+        await chip.click();
+        await expect(chip).toHaveAttribute('aria-pressed', 'true');
+        await expect(page.locator('.nm')).toHaveClass(/filtered/);
+        const dimmed = page.locator('.nm-card.dim');
+        expect(await dimmed.count()).toBeGreaterThan(0);
+        await expect(page.locator(`.nm-card.dim[data-domain="${domain}"]`)).toHaveCount(0);
+        await chip.click();
+        await expect(chip).toHaveAttribute('aria-pressed', 'false');
+        await expect(page.locator('.nm-card.dim')).toHaveCount(0);
+    });
+
+    test('a card the pointer only grazed does not stay frozen', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await page.waitForTimeout(4500);
+        // Graze card A and move on to card B inside the hover-intent delay
+        await page.evaluate(() => {
+            const [a, b] = [...document.querySelectorAll('.nm-card:not(.off)')];
+            const mouse = { pointerType: 'mouse' };
+            a.dispatchEvent(new PointerEvent('pointerenter', mouse));
+            a.dispatchEvent(new PointerEvent('pointerleave', mouse));
+            b.dispatchEvent(new PointerEvent('pointerenter', mouse));
+        });
+        await page.waitForTimeout(500);
+        const where = () =>
+            page.evaluate(() => (document.querySelector('.nm-card:not(.off)') as HTMLElement).style.translate);
+        const before = await where();
+        await expect.poll(where, { timeout: 4000 }).not.toBe(before); // it keeps drifting with the others
+    });
+
+    test('resizing while a card is open leaves no stuck badge or open card', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await page.waitForTimeout(4500);
+        await page.evaluate(() => {
+            const card = document.querySelector('.nm-card:not(.off)')!;
+            card.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
+        });
+        await expect(page.locator('.nm-card.near[data-score]').first()).toBeAttached();
+        await page.setViewportSize({ width: 1290, height: 800 });
+        await page.waitForTimeout(500);
+        await page.keyboard.press('Escape');
+        await expect(page.locator('.nm-card[data-score]')).toHaveCount(0);
+        await expect(page.locator('.nm-card.open')).toHaveCount(0);
+    });
+
     test('draws every project and unfolds one on hover, with its similar projects', async ({ page }) => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded();
@@ -52,6 +104,7 @@ test.describe('project map', () => {
 
     test('a click unfolds, a second click opens the project page', async ({ page }) => {
         await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded(); // the map is drawn as the section comes into view
         const card = page.locator('.nm-card[data-id="starttrek"]');
         await card.scrollIntoViewIfNeeded();
         await card.focus();
@@ -62,6 +115,7 @@ test.describe('project map', () => {
 
     test('asking for a domain lights its projects up', async ({ page }) => {
         await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
         await page.locator('.query button[data-domain="ai"]').click();
         const aiCard = page.locator(`.nm-card[data-id="${PROJECTS.find((p) => p.category === 'ai')!.id}"]`);
         await expect

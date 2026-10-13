@@ -360,6 +360,11 @@
     opacity: 0.4;
 }
 
+/* A domain is asked for (see query): its projects stay lit, the others dim until the filter is cleared */
+.nm.filtered .nm-card.dim:not(.open, .near) {
+    opacity: 0.3;
+}
+
 .nm-card.near {
     border-color: color-mix(in sRGB, var(--signal) 60%, var(--hair));
 }

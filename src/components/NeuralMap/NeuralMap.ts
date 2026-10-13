@@ -56,6 +56,7 @@ interface Card extends Pt {
     vy: number;
     act: number; // activation 0..1, shown as a glow
     shown: number; // last activation written to the DOM
+    timer: number; // pending hover-intent timeout (open or close) of this card
 }
 
 interface Synapse {
@@ -155,8 +156,9 @@ function nowHtml(): string {
 }
 
 export interface NeuralMap {
-    /** Light up a domain: its hidden projects are called in, then its projects fire. */
-    query: (domain: string) => void;
+    /** Light up a domain and keep it lit (the other projects dim): its hidden projects are called in, then its
+     * projects fire. `null` clears the filter. */
+    query: (domain: string | null) => void;
     /** Projects shown / total. */
     shown: number;
 }
@@ -231,6 +233,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         const W = web.clientWidth,
             H = web.clientHeight;
         if (W < 400) return; // hidden: phones get the list
+        reset();
         const cx = W / 2,
             cy = H / 2,
             fit = fitFor(W, H);
@@ -249,7 +252,8 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             vx: 0,
             vy: 0,
             act: 0,
-            shown: -1
+            shown: -1,
+            timer: 0
         }));
 
         // Period layers: a dotted ellipse each, labelled in its widest gap
@@ -327,6 +331,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
 
         now.style.left = `${cx}px`;
         now.style.top = `${cy}px`;
+        applyFilter();
     };
 
     // Boot once, the first time most of the map is on screen
@@ -507,6 +512,12 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             inEl = elOf(inP);
         out.el.classList.add('leaving');
         setTimeout(() => {
+            // The leaving card may have been hovered or open meanwhile: leave nothing of that behind
+            if (opened === out) close(out);
+            clearTimeout(out.timer);
+            out.hold = false;
+            out.el.classList.remove('open', 'near');
+            delete out.el.dataset.score;
             out.el.classList.add('off');
             out.el.classList.remove('leaving');
             hidden.splice(hidden.indexOf(inP), 1);
@@ -519,9 +530,8 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             inEl.classList.remove('off');
             void inEl.offsetWidth;
             inEl.classList.remove('entering');
-            for (const sg of signals) for (const n of [sg.head, sg.tail]) n.remove();
-            signals = [];
             wire(out);
+            applyFilter();
             out.act = 0.8; // the newcomer arrives lit
         }, 450);
     };
@@ -613,6 +623,24 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
 
     // A card unfolds in place (hover with intent, focus, first tap); its neighbours light up with their similarity
     let opened: Card | null = null;
+    // The domain filter: its projects stay lit, the others dim until it is cleared
+    let filter: string | null = null;
+    const applyFilter = () => {
+        web.classList.toggle('filtered', filter !== null);
+        for (const el of els) el.classList.toggle('dim', filter !== null && el.dataset.domain !== filter);
+    };
+
+    /** Forget every transient state (open card, badges, hover timers) before the map is redrawn. */
+    const reset = () => {
+        for (const c of cards) clearTimeout(c.timer);
+        if (opened) close(opened);
+        for (const el of els) {
+            el.classList.remove('open', 'near');
+            delete el.dataset.score;
+        }
+        web.classList.remove('focus');
+        opened = null;
+    };
     const mark = (c: Card, on: boolean) => {
         for (const sy of syns) {
             if (sy.a !== c && sy.b !== c) continue;
@@ -647,10 +675,10 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         if (!reduced()) spread(c, performance.now() + 150, 0.75, new Set());
     };
 
-    let timer = 0;
-    const later = (fn: () => void, ms: number) => {
-        clearTimeout(timer);
-        timer = window.setTimeout(fn, ms);
+    // Hover intent is per card: moving from one card to the next must not cancel the first one's close
+    const later = (c: Card, fn: () => void, ms: number) => {
+        clearTimeout(c.timer);
+        c.timer = window.setTimeout(fn, ms);
     };
     const cardOf = (a: HTMLAnchorElement) => cards.find((c) => c.el === a);
     els.forEach((a) => {
@@ -658,12 +686,12 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             const c = cardOf(a);
             if (e.pointerType === 'touch' || !c) return;
             c.hold = true;
-            later(() => open(c), 120);
+            later(c, () => open(c), 120);
         });
         a.addEventListener('pointerleave', (e) => {
             const c = cardOf(a);
             if (e.pointerType === 'touch' || !c) return;
-            later(() => close(c), 160);
+            later(c, () => close(c), 160);
         });
         a.addEventListener('focus', () => {
             const c = cardOf(a);
@@ -686,25 +714,37 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
 
     build();
     let resizeTimer = 0;
+    let size = `${web.clientWidth}x${web.clientHeight}`;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(build, 150);
+        resizeTimer = window.setTimeout(() => {
+            const next = `${web.clientWidth}x${web.clientHeight}`;
+            if (next === size) return; // e.g. a phone's address bar sliding away: nothing to redraw
+            size = next;
+            build();
+        }, 150);
     });
     requestAnimationFrame(frame);
 
     return {
         shown: shown.length,
         query: (domain) => {
-            // Hidden projects of that domain come in first, replacing the most related shown ones
+            filter = domain;
+            applyFilter();
+            if (!domain) return;
+            // Hidden projects of that domain come in first, each replacing a different one of the most related shown ones
             const calls = hidden.filter((p) => p.category === domain).slice(0, 2);
+            const taken = new Set<Card>();
             calls.forEach((p, i) => {
                 const out = cards
-                    .filter((c) => c.star.p.category !== domain && !c.star.p.featured && c !== opened)
+                    .filter((c) => c.star.p.category !== domain && !c.star.p.featured && c !== opened && !taken.has(c))
                     .reduce<Card | null>(
                         (a, c) => (!a || similarity(c.star.p, p) > similarity(a.star.p, p) ? c : a),
                         null
                     );
-                if (out) setTimeout(() => swap(out, p), i * 300);
+                if (!out) return;
+                taken.add(out);
+                setTimeout(() => swap(out, p), i * 300);
             });
             setTimeout(
                 () => {
