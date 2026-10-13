@@ -303,6 +303,22 @@ test.describe('charts', () => {
         await expect(deck).toHaveClass(/playing/);
     });
 
+    test('a window that is narrow at load shows the list, then draws the map once it is widened', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'resizes the window');
+        await page.setViewportSize({ width: 800, height: 900 });
+        await page.goto('/');
+        await page.locator('.work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.project-list')).toBeVisible();
+        await expect(page.locator('.nm')).toHaveCount(0);
+        await page.setViewportSize({ width: 1280, height: 900 });
+        await page.locator('.work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm')).toBeVisible();
+        await expect(page.locator('.project-list')).toBeHidden();
+    });
+
     test('old #numbers links land on the numbers', async ({ page }) => {
         await page.goto('/#numbers');
         await expect(page.locator('.numbers-row')).toBeInViewport();

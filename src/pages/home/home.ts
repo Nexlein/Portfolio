@@ -20,7 +20,14 @@ const MAP_MIN_WIDTH = 900;
 async function initWork(): Promise<void> {
     const section = document.querySelector<HTMLElement>('.work');
     const host = section?.querySelector<HTMLElement>('.map-host');
-    if (!section || !host || innerWidth <= MAP_MIN_WIDTH) return;
+    if (!section || !host) return;
+    // Narrow at load (a docked devtools, a split screen, browser zoom): keep the list, and draw the map if the
+    // window is widened later
+    const wide = matchMedia(`(min-width: ${MAP_MIN_WIDTH + 1}px)`);
+    if (!wide.matches) {
+        wide.addEventListener('change', () => void initWork(), { once: true });
+        return;
+    }
     // Drawn when the section is about to come into view, not at load: the map is hundreds of animated elements,
     // and the visitor starts on the hero. (The section itself is observed: the map host is hidden until then.)
     await new Promise<void>((resolve) => {

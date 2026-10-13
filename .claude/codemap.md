@@ -177,7 +177,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render, pages/home/home, pages/project/render
 - **home.css** (570) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (119) — Home page.
+- **home.ts** (126) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 
