@@ -317,6 +317,7 @@
 
 .numbers.deck .numbers-row {
     display: grid;
+    max-width: 540px;
     margin-top: 30px;
 }
 
@@ -362,6 +363,7 @@
 
 /* Cards share the height of the tallest: the chart sits in the middle of what is left */
 .numbers.deck .chart-card > :is(svg, .chips) {
+    max-height: 250px;
     margin-block: auto;
 }
 
