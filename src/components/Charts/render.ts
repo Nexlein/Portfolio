@@ -111,7 +111,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
 </div>`;
 }
 
-// ── Numbers: a gallery of small charts ───────────────────────────────────────
+// ── Numbers: small charts ───────────────────────────────────────
 
 const label = (lang: Lang, key: string, set = 'domains') => {
     if (key === OTHER) return t(lang, 'numbers.other');
@@ -273,13 +273,13 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
 
 const count = (n: number) => `<span class="count" data-to="${n}">${n}</span>`;
 
-/** One chart in the gallery: a small label, a one-line title, the chart. */
+/** One chart of the deck: a small label, a one-line title, the chart. */
 const chartCard = (k: string, v: string, body: string) =>
     `<article class="chart-card surface reveal"><p class="card-k">${k}</p><p class="card-v">${v}</p>${body}</article>`;
 
 /**
- * The numbers: a gallery of small charts computed from the projects, three at a time (scroll, swipe or the
- * arrows). Adding a chart is one more `chartCard` below.
+ * The numbers: small charts computed from the projects, shown as a deck (see initNumbers; a plain grid without
+ * JS). Adding a chart is one more `chartCard` below.
  */
 export function numbers(lang: Lang, projects: ProjectEntry[], now: number): string {
     const domains = domainAxes(projects).keys.length,
@@ -297,8 +297,9 @@ export function numbers(lang: Lang, projects: ProjectEntry[], now: number): stri
     return `<div class="numbers" id="numbers">
 <div class="numbers-head"><p class="numbers-sub">${t(lang, 'numbers.sub')}</p>
 <div class="numbers-nav" hidden><button type="button" class="numbers-prev" aria-label="${t(lang, 'numbers.prev')}">‹</button><button type="button" class="numbers-next" aria-label="${t(lang, 'numbers.next')}">›</button></div></div>
-<div class="numbers-row" role="group" aria-label="${t(lang, 'numbers.sub')}" tabindex="0">
+<div class="numbers-body"><div class="numbers-index" aria-label="${t(lang, 'numbers.sub')}"></div>
+<div class="numbers-row">
 ${cards}
-</div>
+</div></div>
 </div>`;
 }

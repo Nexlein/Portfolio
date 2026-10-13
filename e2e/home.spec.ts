@@ -173,19 +173,36 @@ test.describe('charts', () => {
         }
     });
 
-    test('the numbers are a gallery of charts that the arrows scroll', async ({ page }) => {
+    test('the numbers are a deck: one chart in front, the arrows and the index bring another one forward', async ({
+        page
+    }) => {
         await page.goto('/');
-        const row = page.locator('.numbers-row');
-        await row.scrollIntoViewIfNeeded();
+        const stage = page.locator('.numbers-row');
+        await stage.scrollIntoViewIfNeeded();
         expect(await page.locator('.chart-card').count()).toBeGreaterThanOrEqual(7);
-        const prev = page.locator('.numbers-prev');
-        const next = page.locator('.numbers-next');
-        await expect(prev).toBeDisabled();
-        await next.click();
-        await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeGreaterThan(100);
-        await expect(prev).toBeEnabled();
-        await prev.click();
-        await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeLessThan(5);
+        const front = page.locator('.chart-card[data-pos="0"]');
+        await expect(front).toHaveCount(1);
+        const first = await front.locator('.card-k').textContent();
+        await page.locator('.numbers-next').click();
+        await expect(front.locator('.card-k')).not.toHaveText(first!);
+        await page.locator('.numbers-prev').click();
+        await expect(front.locator('.card-k')).toHaveText(first!);
+        const third = page.locator('.numbers-index button').nth(3);
+        if (await third.isVisible()) {
+            await third.click(); // the index is desktop only
+            await expect(third).toHaveAttribute('aria-current', '');
+        }
+        await expect(page.locator('.chart-card[data-pos="0"]')).toHaveCount(1);
+        expect(await stage.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+    });
+
+    test('the deck turns by itself, and stops while the pointer is on it', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('.numbers-row').scrollIntoViewIfNeeded();
+        const front = page.locator('.chart-card[data-pos="0"] .card-k');
+        const first = await front.textContent();
+        await page.mouse.move(2, 2);
+        await expect(front).not.toHaveText(first!, { timeout: 12000 });
     });
 
     test('old #numbers links land on the numbers', async ({ page }) => {

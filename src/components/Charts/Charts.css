@@ -1,4 +1,4 @@
-/* Path chart and the numbers gallery. Series colours: .c0 … .c4 (tokens --c0 … --c4). */
+/* Path chart and the numbers deck. Series colours: .c0 … .c4 (tokens --c0 … --c4). */
 /* stylelint-disable no-descending-specificity -- each chart's parts are scoped by its own class (.path-svg, .radar...) */
 
 /* ── Path chart ── */
@@ -180,7 +180,7 @@
     font-size: 12px;
 }
 
-/* ── Numbers gallery: small charts, three at a time, scroll-snap (arrows are added by script) ── */
+/* ── Numbers: a deck of small charts (the arrows and the index are added by script) ── */
 .numbers {
     max-width: var(--max);
     margin: 56px auto 0;
@@ -229,21 +229,148 @@
     cursor: default;
 }
 
+/* Without JS: a plain grid of cards */
 .numbers-row {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: calc((100% - 2 * 16px) / 3);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 16px;
-    margin: -6px -4px 0;
-    padding: 6px 4px 14px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 4px; /* the first card snaps to scrollLeft 0 */
-    scrollbar-width: thin;
 }
 
-.numbers-row > .chart-card {
-    scroll-snap-align: start;
+.numbers-index {
+    display: none;
+}
+
+/* With JS: a deck. One card in front, two peeking behind; the index on the left names every chart. */
+.numbers.deck .numbers-body {
+    display: grid;
+    grid-template-columns: minmax(210px, 300px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(24px, 5vw, 64px);
+}
+
+.numbers.deck .numbers-index {
+    display: grid;
+    gap: 2px;
+}
+
+.numbers-index button {
+    position: relative;
+    display: grid;
+    gap: 2px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    color: var(--muted);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        color 200ms,
+        background 200ms;
+}
+
+.numbers-index button span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.numbers-index button small {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.75;
+}
+
+.numbers-index button:hover,
+.numbers-index button[aria-current] {
+    color: var(--ink);
+}
+
+.numbers-index button[aria-current] {
+    background: var(--surface);
+}
+
+.numbers-index button[aria-current] span {
+    color: var(--signal);
+}
+
+/* A thin line fills under the current chart while the deck turns by itself */
+.numbers-index button::after {
+    content: '';
+    position: absolute;
+    inset: auto 14px 4px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--signal);
+    scale: 0 1;
+    transform-origin: left;
+}
+
+.numbers.playing .numbers-index button[aria-current]::after {
+    animation: deck-fill 6500ms linear both;
+}
+
+@keyframes deck-fill {
+    to {
+        scale: 1 1;
+    }
+}
+
+.numbers.deck .numbers-row {
+    display: grid;
+    margin-top: 30px;
+}
+
+.numbers.deck .chart-card {
+    display: flex;
+    flex-direction: column;
+    grid-area: 1 / 1;
+    z-index: calc(10 - var(--p, 3));
+    transform-origin: 50% 0;
+    translate: 0 calc(var(--p, 3) * -14px);
+    scale: calc(1 - var(--p, 3) * 0.05);
+    opacity: calc(1 - var(--p, 3) * 0.4);
+    cursor: pointer;
+    transition:
+        translate 650ms var(--ease-out),
+        scale 650ms var(--ease-out),
+        rotate 650ms var(--ease-out),
+        opacity 500ms ease,
+        transform 260ms var(--ease-out),
+        box-shadow 260ms ease;
+}
+
+.numbers.deck .chart-card[data-pos='0'] {
+    --p: 0;
+
+    cursor: default;
+}
+
+.numbers.deck .chart-card[data-pos='1'] {
+    --p: 1;
+}
+
+.numbers.deck .chart-card[data-pos='2'] {
+    --p: 2;
+}
+
+.numbers.deck .chart-card[data-pos='back'] {
+    --p: 2;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Cards share the height of the tallest: the chart sits in the middle of what is left */
+.numbers.deck .chart-card > :is(svg, .chips) {
+    margin-block: auto;
+}
+
+/* The card that was in front slips away to the right before it tucks behind the others */
+.numbers.deck .chart-card.leaving {
+    translate: 70px 16px;
+    rotate: 3deg;
+    opacity: 0;
+    transition-duration: 420ms;
 }
 
 .chart-card {
@@ -500,8 +627,12 @@
 }
 
 @media (width <= 900px) {
-    .numbers-row {
-        grid-auto-columns: 82%;
+    .numbers.deck .numbers-body {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .numbers.deck .numbers-index {
+        display: none;
     }
 
     .path-chart {

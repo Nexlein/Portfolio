@@ -1,5 +1,5 @@
 /**
- * Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers gallery's
+ * Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's
  * arrows, and count-ups when they come into view. The SVG is already in the page; this only adds behaviour.
  */
 import { i18n } from '@/core/i18n';
@@ -79,25 +79,76 @@ export function initPathChart(): void {
     bind();
 }
 
-/** The numbers gallery: arrows scroll it by one page; they disable at both ends. Without JS it still scrolls. */
+const DECK_MS = 6500;
+
+/**
+ * The numbers as a deck: one chart in front, two peeking behind. Arrows, the index on the left and a click on
+ * the deck bring another one forward; it also turns by itself while it is on screen and untouched (never with
+ * reduced motion). Without JS the cards stay a plain grid.
+ */
 export function initNumbers(): void {
-    const row = document.querySelector<HTMLElement>('.numbers-row');
-    const nav = document.querySelector<HTMLElement>('.numbers-nav');
-    if (!row || !nav) return;
+    const root = document.querySelector<HTMLElement>('.numbers');
+    const stage = root?.querySelector<HTMLElement>('.numbers-row');
+    const nav = root?.querySelector<HTMLElement>('.numbers-nav');
+    if (!root || !stage || !nav) return;
+    const cards = [...stage.querySelectorAll<HTMLElement>('.chart-card')];
+    const n = cards.length;
+    const index = root.querySelector<HTMLElement>('.numbers-index')!;
+    root.classList.add('deck');
     nav.hidden = false;
-    const prev = nav.querySelector<HTMLButtonElement>('.numbers-prev')!,
-        next = nav.querySelector<HTMLButtonElement>('.numbers-next')!;
-    const sync = () => {
-        prev.disabled = row.scrollLeft < 8;
-        next.disabled = row.scrollLeft > row.scrollWidth - row.clientWidth - 8;
+    cards.forEach((c) => c.classList.remove('reveal'));
+    index.append(
+        ...cards.map((c, i) => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.innerHTML = `<span>${c.querySelector('.card-k')!.textContent}</span><small>${c.querySelector('.card-v')!.textContent}</small>`;
+            b.addEventListener('click', () => show(i, true));
+            return b;
+        })
+    );
+    const items = [...index.children] as HTMLButtonElement[];
+    let cur = -1,
+        timer = 0,
+        visible = false,
+        held = false;
+
+    const arm = () => {
+        clearTimeout(timer);
+        const run = visible && !held && !document.hidden && !reduced();
+        root.classList.toggle('playing', run);
+        if (run) timer = window.setTimeout(() => show(cur + 1), DECK_MS);
     };
-    const page = (dir: number) =>
-        row.scrollBy({ left: dir * row.clientWidth, behavior: reduced() ? 'auto' : 'smooth' });
-    prev.addEventListener('click', () => page(-1));
-    next.addEventListener('click', () => page(1));
-    row.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('resize', sync);
-    sync();
+    function show(to: number, user = false) {
+        const next = (to + n) % n;
+        if (next === cur) return;
+        const prev = cur;
+        cur = next;
+        cards.forEach((c, i) => {
+            const d = (i - cur + n) % n;
+            c.dataset.pos = d < 3 ? String(d) : 'back';
+            c.inert = d !== 0;
+            c.classList.toggle('leaving', i === prev && !user);
+        });
+        const front = cards[cur];
+        if (!front.classList.contains('in')) {
+            front.classList.add('in');
+            front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
+        }
+        items.forEach((b, i) => b.toggleAttribute('aria-current', i === cur));
+        arm();
+    }
+    nav.querySelector('.numbers-prev')!.addEventListener('click', () => show(cur - 1, true));
+    nav.querySelector('.numbers-next')!.addEventListener('click', () => show(cur + 1, true));
+    stage.addEventListener('click', (e) => {
+        const card = (e.target as Element).closest<HTMLElement>('.chart-card');
+        if (card && card !== cards[cur]) show(cards.indexOf(card), true);
+    });
+    for (const ev of ['pointerenter', 'focusin'] as const) root.addEventListener(ev, () => ((held = true), arm()));
+    for (const ev of ['pointerleave', 'focusout'] as const)
+        root.addEventListener(ev, () => ((held = root.matches(':focus-within')), arm()));
+    document.addEventListener('visibilitychange', arm);
+    new IntersectionObserver(([e]) => ((visible = e.isIntersecting), arm()), { threshold: 0.4 }).observe(root);
+    show(0);
 }
 
 /** Reveal animations, count-ups and the chart draw-in start once each block comes into view. */
