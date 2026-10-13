@@ -1,7 +1,17 @@
 /*
- * Design tokens of the redesign. Every colour the pages use comes from here; a theme is one block keyed on
- * html[data-theme] (set before first paint by the head script, see vite-plugins/shared-head.ts).
- * Adding a theme: one block below + one entry in src/components/Nav/themes.ts.
+ * Design tokens. Every colour the pages use comes from here.
+ *
+ * A theme is SIX colours plus a colour scheme and a depth, in one block keyed on [data-theme='<id>'] (no :root
+ * in the selector, so any element can carry a theme: the nav's swatches do). Everything else (surfaces, text
+ * tones, lines, shadows, domain and chart colours) is derived below, the same way for every theme.
+ *
+ * Adding a theme: one block of eight values here, its id in src/components/Nav/themes.ts, its name in both
+ * dictionaries. themes.test.ts checks that all three are there and that every theme defines the same inputs.
+ *
+ *   --bg       page background           --signal  the accent: activity, links, the one bright colour
+ *   --surface  cards and panels          --cold    the quiet blue-grey of anything idle
+ *   --ink      text                      --third   a third hue: success, "available", a chart series
+ *   --depth    shadow strength (0 flat, 0.35 deep)
  */
 @import '@fontsource/schibsted-grotesk/latin-400.css';
 @import '@fontsource/schibsted-grotesk/latin-500.css';
@@ -10,43 +20,61 @@
 @import '@fontsource/ibm-plex-mono/latin-400.css';
 @import '@fontsource/ibm-plex-mono/latin-500.css';
 
-/*
- * A theme is a block keyed on [data-theme='<id>'] (no :root), so any element can carry a theme: the nav's
- * swatches do, and paint themselves from the tokens below. Midnight is also the default on :root.
- * To add a theme: a block here, its id in src/components/Nav/themes.ts, its name in both dictionaries
- * (themes.test.ts checks all three).
- */
-
-/* Midnight (default): near-black with a blue cast, Apple greys, amber for what is active */
+/* Midnight (default): ink-blue black, a sharp orange for what is active, a steel blue for what is idle */
 :root,
 [data-theme='midnight'] {
-    --bg: #05070d;
-    --surface: #0f131c;
-    --raised: #161b26;
-    --ink: #f5f5f7;
-    --muted: #8e93a0;
-    --line: #1e2431;
-    --hair: rgb(255 255 255 / 8%);
-    --signal: #f5a524;
-    --cold: #3a5ccc;
-    --pos: #2fbf71;
-    --shadow: 0 1px 0 rgb(255 255 255 / 4%) inset, 0 10px 30px rgb(0 0 0 / 35%);
-    --shadow-lift: 0 24px 50px rgb(0 0 0 / 22%);
+    --bg: #0a0e14;
+    --surface: #121821;
+    --ink: #e6eaf0;
+    --signal: #ff7a1a;
+    --cold: #4c8dff;
+    --third: #2dd4a0;
+    --depth: 0.35;
 
-    /* Domains (charts and map only) */
+    color-scheme: dark;
+}
+
+/* Daylight: paper white with one indigo accent (light theme: cards are lighter than the page) */
+[data-theme='daylight'] {
+    --bg: #fafaf9;
+    --surface: #fff;
+    --ink: #111827;
+    --signal: #4f46e5;
+    --cold: #64748b;
+    --third: #059669;
+    --depth: 0.06;
+
+    color-scheme: light;
+}
+
+/* Derived, identically for every theme, on every element that carries a theme */
+:root,
+[data-theme] {
+    --raised: color-mix(in oklab, var(--surface) 92%, var(--ink));
+    --muted: color-mix(in oklab, var(--ink) 62%, var(--bg));
+    --line: color-mix(in oklab, var(--ink) 11%, var(--bg));
+    --hair: color-mix(in oklab, var(--ink) 10%, transparent);
+    --pos: var(--third);
+    --shadow:
+        0 1px 0 rgb(255 255 255 / calc(var(--depth) * 12%)) inset, 0 10px 30px rgb(0 0 0 / calc(var(--depth) * 100%));
+    --shadow-lift: 0 24px 50px rgb(0 0 0 / calc(var(--depth) * 63%));
+
+    /* Domains (charts and map only): three come from the palette, two are hue shifts of it */
     --d-ai: var(--signal);
-    --d-systems: #34c3b0;
-    --d-architecture: #6f8cff;
-    --d-graphical: #e86fae;
-    --d-devops: #a98bff;
+    --d-systems: var(--third);
+    --d-architecture: var(--cold);
+    --d-graphical: oklch(from var(--signal) l max(c, 0.14) calc(h - 55));
+    --d-devops: oklch(from var(--cold) l max(c, 0.14) calc(h + 55));
 
     /* Chart series: the first (most used) is the accent */
     --c0: var(--signal);
-    --c1: #6f8cff;
-    --c2: #3a4a6b;
-    --c3: #5d6474;
-    --c4: #34c3b0;
+    --c1: var(--cold);
+    --c2: color-mix(in oklab, var(--cold) 45%, var(--bg));
+    --c3: color-mix(in oklab, var(--ink) 35%, var(--bg));
+    --c4: var(--third);
+}
 
+:root {
     /* Type */
     --font-sans: 'Schibsted Grotesk', system-ui, sans-serif;
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
@@ -59,57 +87,4 @@
     --max: 1080px;
     --gutter: 20px;
     --nav-h: 52px;
-
-    color-scheme: dark;
-}
-
-/* Daylight */
-[data-theme='daylight'] {
-    --bg: #fbfbfd;
-    --surface: #fff;
-    --raised: #f5f5f7;
-    --ink: #1d1d1f;
-    --muted: #6e6e73;
-    --line: #e3e3e8;
-    --hair: rgb(0 0 0 / 8%);
-    --signal: #a35c00; /* 5:1 on white: amber text stays readable */
-    --pos: #17834a;
-    --shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 10px 30px rgb(0 0 0 / 6%);
-    --shadow-lift: 0 24px 50px rgb(0 0 0 / 10%);
-    --d-systems: #0f8a7b;
-    --d-architecture: #3a5ccc;
-    --d-graphical: #c23f84;
-    --d-devops: #6a4fd6;
-    --c1: #3a5ccc;
-    --c2: #b9c3da;
-    --c3: #a1a6b3;
-    --c4: #0f8a7b;
-
-    color-scheme: light;
-}
-
-/* Luna: the Windows XP palette. Cream window grey, Luna blue, Start-button green for what is active */
-[data-theme='luna'] {
-    --bg: #ece9d8;
-    --surface: #fff;
-    --raised: #f6f4e8;
-    --ink: #0a1f44;
-    --muted: #4f5b73;
-    --line: #d4d0c8;
-    --hair: rgb(10 31 68 / 14%);
-    --signal: #1f6f2a;
-    --cold: #245edc;
-    --pos: #1f6f2a;
-    --shadow: 0 1px 0 #fff inset, 0 8px 24px rgb(10 31 68 / 14%);
-    --shadow-lift: 0 22px 48px rgb(10 31 68 / 18%);
-    --d-systems: #1a7f8e;
-    --d-architecture: #245edc;
-    --d-graphical: #c2410c;
-    --d-devops: #6a4fd6;
-    --c1: #245edc;
-    --c2: #9db8e8;
-    --c3: #8e8b7a;
-    --c4: #1a7f8e;
-
-    color-scheme: light;
 }

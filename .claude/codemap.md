@@ -46,9 +46,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render
 
 ## src/components/Hero
-- **Hero.css** (187) — Sparser simulations get more presence
+- **Hero.css** (192) — Sparser simulations get more presence
   - ← index.html
-- **Hero.ts** (103) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
+- **Hero.ts** (108) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
   - exports: initHero
   - → core/i18n, components/Hero/sims/index
   - ← pages/home/home
@@ -80,7 +80,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: neural.test.ts, value-iteration.test.ts
 
 ## src/components/Nav
-- **Nav.css** (264) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
+- **Nav.css** (231) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← cv.html, index.html, project.html
 - **Nav.ts** (128) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav
@@ -90,15 +90,15 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: renderNav
   - → core/translate, components/Nav/themes
   - ← pages/content/render
-- **themes.ts** (9) — Themes offered in the nav picker.
+- **themes.ts** (10) — Themes offered in the nav picker.
   - exports: THEMES, Theme
   - ← components/Nav/Nav, components/Nav/render
 - tests: themes.test.ts
 
 ## src/components/NeuralMap
-- **NeuralMap.css** (466) — The project map (see NeuralMap.ts).
+- **NeuralMap.css** (484) — The project map (see NeuralMap.ts).
   - ← index.html
-- **NeuralMap.ts** (708) — The project map: projects as a small neural network.
+- **NeuralMap.ts** (762) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/translate, data/profile, data/projects, ui/icons, ui/video, components/NeuralMap/graph
   - ← pages/home/home
@@ -141,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (214)
+- **en.ts** (213)
   - exports: en
   - ← core/translate
-- **fr.ts** (214)
+- **fr.ts** (213)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -177,7 +177,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render, pages/home/home, pages/project/render
 - **home.css** (475) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (115) — Home page.
+- **home.ts** (134) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 
@@ -199,7 +199,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **base.css** (269) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← cv.html, index.html, project.html
-- **tokens.css** (116) — Design tokens of the redesign.
+- **tokens.css** (91) — Design tokens.
   - ← styles/base.css
 
 ## src/ui

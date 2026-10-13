@@ -21,20 +21,39 @@ async function initWork(): Promise<void> {
     const section = document.querySelector<HTMLElement>('.work');
     const host = section?.querySelector<HTMLElement>('.map-host');
     if (!section || !host || innerWidth <= MAP_MIN_WIDTH) return;
+    // Drawn when the section is about to come into view, not at load: the map is hundreds of animated elements,
+    // and the visitor starts on the hero. (The section itself is observed: the map host is hidden until then.)
+    await new Promise<void>((resolve) => {
+        const io = new IntersectionObserver(
+            ([entry]) => {
+                if (!entry.isIntersecting) return;
+                io.disconnect();
+                resolve();
+            },
+            { rootMargin: '300px 0px' }
+        );
+        io.observe(section);
+    });
     // Loaded here, not at the top: phones never download the map code
     const { mountNeuralMap } = await import('@/components/NeuralMap/NeuralMap');
     section.classList.add('has-map');
     const map = mountNeuralMap(host, MAP_MAX);
 
-    section.querySelectorAll<HTMLButtonElement>('.query button').forEach((b) =>
-        b.addEventListener('click', () => {
-            map.query(b.dataset.domain!);
-            host.scrollIntoView({
-                behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-                block: 'center'
-            });
-        })
-    );
+    // A domain chip toggles a filter: its projects stay lit and the others dim; the same chip again clears it
+    const chips = [...section.querySelectorAll<HTMLButtonElement>('.query button')];
+    chips.forEach((chip) => {
+        chip.setAttribute('aria-pressed', 'false');
+        chip.addEventListener('click', () => {
+            const on = chip.getAttribute('aria-pressed') !== 'true';
+            chips.forEach((c) => c.setAttribute('aria-pressed', String(on && c === chip)));
+            map.query(on ? chip.dataset.domain! : null);
+            if (on)
+                host.scrollIntoView({
+                    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+                    block: 'center'
+                });
+        });
+    });
 
     const list = section.querySelector<HTMLElement>('.project-list')!;
     section.querySelector<HTMLButtonElement>('.see-all')?.addEventListener('click', (e) => {

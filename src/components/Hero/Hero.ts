@@ -9,14 +9,26 @@ export function initHero(): void {
     const hero = document.querySelector<HTMLElement>('.hero');
     if (!hero) return;
     const hint = hero.querySelector<HTMLElement>('.hero-hint')!,
-        button = hero.querySelector<HTMLButtonElement>('.hero-switch')!,
-        name = button.querySelector<HTMLElement>('.hero-sim-name')!,
+        pager = hero.querySelector<HTMLElement>('.hero-pager')!,
         copy = hero.querySelector<HTMLElement>('.hero-copy')!;
     let current = Math.floor(Math.random() * SIMS.length);
     let stop: (() => void) | undefined;
     // Scroll progress is a layout read: measure it once, and again when the window changes
     let height = hero.offsetHeight;
     let field = hero.querySelector('canvas')!;
+
+    // One dot per simulation: the lit one is running, the others switch to it
+    const dots = SIMS.map((sim, index) => {
+        const dot = document.createElement('button');
+        const label = i18n.t(`home.hero.sims.${sim.id}.name`);
+        dot.type = 'button';
+        dot.className = 'hero-dot';
+        dot.title = label;
+        dot.setAttribute('aria-label', label);
+        dot.addEventListener('click', () => index !== current && show((current = index), true));
+        pager.append(dot);
+        return dot;
+    });
 
     const show = (index: number, swap: boolean) => {
         const old = field;
@@ -33,17 +45,15 @@ export function initHero(): void {
         stop?.();
         stop = runSim(index, canvas);
         field = canvas;
-        const t = (key: string) => i18n.t(`home.hero.sims.${SIMS[index].id}.${key}`);
-        name.textContent = t('name');
-        hint.textContent = t('hint');
+        dots.forEach((dot, k) => dot.setAttribute('aria-pressed', String(k === index)));
+        hint.textContent = i18n.t(`home.hero.sims.${SIMS[index].id}.hint`);
     };
     initCue(hero);
     show(current, false);
-    button.hidden = false;
-    button.addEventListener('click', () => show((current = (current + 1) % SIMS.length), true));
+    pager.hidden = false;
 
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    rotateTitle(hero, copy);
+    rotateTitle(hero);
     let ticking = false;
     let progress = 0;
     window.addEventListener('resize', () => (height = hero.offsetHeight), { passive: true });
@@ -66,19 +76,14 @@ export function initHero(): void {
     );
 }
 
-/** The title's second line cycles through a few ways to finish the sentence; it pauses while the visitor reads. */
-function rotateTitle(hero: HTMLElement, copy: HTMLElement): void {
+/** The title's second line cycles through a few ways to finish the sentence (not while the tab is hidden or the hero is scrolled away). */
+function rotateTitle(hero: HTMLElement): void {
     const line = hero.querySelector<HTMLElement>('[data-i18n="home.hero.title2"]');
     if (!line) return;
     const keys = ['title2', 'title2b', 'title2c'];
     let index = 0;
-    let paused = false;
-    copy.addEventListener('pointerenter', () => (paused = true));
-    copy.addEventListener('pointerleave', () => (paused = false));
-    copy.addEventListener('focusin', () => (paused = true));
-    copy.addEventListener('focusout', () => (paused = false));
     window.setInterval(() => {
-        if (paused || document.hidden || scrollY > hero.offsetHeight / 2) return;
+        if (document.hidden || scrollY > hero.offsetHeight / 2) return;
         line.classList.add('cycling', 'out');
         window.setTimeout(() => {
             index = (index + 1) % keys.length;
