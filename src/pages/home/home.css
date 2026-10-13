@@ -457,18 +457,3 @@
         gap: 28px;
     }
 }
-
-/* Path and Numbers share one section: a switch on top, one panel at a time (both show without JS) */
-.path-tabs {
-    margin-top: 30px;
-}
-
-.panel[hidden] {
-    display: none;
-}
-
-.numbers-sub {
-    margin: 40px auto 0;
-    max-width: 52ch;
-    text-align: center;
-}

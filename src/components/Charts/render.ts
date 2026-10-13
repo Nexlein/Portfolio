@@ -111,7 +111,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
 </div>`;
 }
 
-// ── Numbers: a bento of small charts ─────────────────────────────────────────
+// ── Numbers: a gallery of small charts ───────────────────────────────────────
 
 const label = (lang: Lang, key: string, set = 'domains') => {
     if (key === OTHER) return t(lang, 'numbers.other');
@@ -239,37 +239,66 @@ function chips(projects: ProjectEntry[], now: number): string {
         .join('')}${recent.length > 18 ? `<li class="more">+${recent.length - 18}</li>` : ''}</ul>`;
 }
 
-const count = (n: number) => `<span class="count" data-to="${n}">${n}</span>`;
-const face = (k: string, v: string, body: string, shown: boolean) =>
-    `<div class="face"${shown ? '' : ' hidden'}><p class="card-k">${k}</p><p class="card-v">${v}</p>${body}</div>`;
-
-/** A card with two faces, switched by its dots (two views of the same subject). */
-function card(lang: Lang, faces: [string, string]): string {
-    const dots = faces
-        .map(
-            (_, i) =>
-                `<button type="button" aria-label="${t(lang, 'numbers.view')} ${i + 1}" aria-pressed="${i === 0}"></button>`
-        )
+function heatmap(lang: Lang, projects: ProjectEntry[]): string {
+    const pers = periodsIn(projects);
+    const { keys } = domainAxes(projects);
+    const inCell = (d: string, y: string) =>
+        projects.filter((p) => (d === OTHER ? !keys.includes(p.category) : p.category === d) && periodOf(p) === y)
+            .length;
+    const grid = keys.map((d) => pers.map((y) => inCell(d, y)));
+    const max = Math.max(...grid.flat(), 1);
+    const W = 300,
+        H = 220,
+        left = 92,
+        cw = (W - left - 4) / pers.length,
+        ch = Math.min(30, (H - 44) / keys.length);
+    const cells = keys
+        .map((d, r) => {
+            const y0 = 6 + r * ch;
+            const row = pers
+                .map((y, c) => {
+                    const n = grid[r][c];
+                    const x0 = left + c * cw;
+                    return `<rect class="cell${n ? '' : ' empty'}" x="${f1(x0 + 2)}" y="${f1(y0 + 2)}" width="${f1(cw - 4)}" height="${f1(ch - 4)}" rx="4"${n ? ` fill-opacity="${(0.18 + 0.82 * (n / max)).toFixed(2)}"` : ''}><title>${label(lang, d, 'domainsShort')} · ${period(lang, y)}: ${n}</title></rect>${n ? `<text class="n" x="${f1(x0 + cw / 2)}" y="${f1(y0 + ch / 2 + 3.5)}">${n}</text>` : ''}`;
+                })
+                .join('');
+            return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${label(lang, d, 'domainsShort')}</text>${row}</g>`;
+        })
         .join('');
-    return `<article class="chart-card surface reveal"><div class="faces">${faces.join('')}</div><div class="dots" role="group">${dots}</div></article>`;
+    const cols = pers
+        .map((y, c) => `<text x="${f1(left + c * cw + cw / 2)}" y="${H - 8}">${period(lang, y)}</text>`)
+        .join('');
+    return `<svg class="heat" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.heatTitle')}">${cells}${cols}</svg>`;
 }
 
+const count = (n: number) => `<span class="count" data-to="${n}">${n}</span>`;
+
+/** One chart in the gallery: a small label, a one-line title, the chart. */
+const chartCard = (k: string, v: string, body: string) =>
+    `<article class="chart-card surface reveal"><p class="card-k">${k}</p><p class="card-v">${v}</p>${body}</article>`;
+
+/**
+ * The numbers: a gallery of small charts computed from the projects, three at a time (scroll, swipe or the
+ * arrows). Adding a chart is one more `chartCard` below.
+ */
 export function numbers(lang: Lang, projects: ProjectEntry[], now: number): string {
     const domains = domainAxes(projects).keys.length,
         recent = learnedSince(projects, now).length;
     const n = (key: string, value: number) => t(lang, `numbers.${key}`).replace('{n}', count(value));
-    return `<div class="bento">
-${card(lang, [
-    face(t(lang, 'numbers.coverage'), n('domains', domains), radar(lang, projects), true),
-    face(t(lang, 'numbers.periods'), n('byPeriod', projects.length), donut(lang, projects), false)
-])}
-${card(lang, [
-    face(t(lang, 'numbers.languages'), t(lang, 'numbers.languagesTitle'), stackedLanguages(lang, projects), true),
-    face(t(lang, 'numbers.growth'), t(lang, 'numbers.growthTitle'), newSkillColumns(lang, projects), false)
-])}
-${card(lang, [
-    face(t(lang, 'numbers.mostUsed'), n('distinct', distinctSkills(projects)), topSkillBars(projects), true),
-    face(t(lang, 'numbers.thisYear'), n('newSkills', recent), chips(projects, now), false)
-])}
+    const cards = [
+        chartCard(t(lang, 'numbers.coverage'), n('domains', domains), radar(lang, projects)),
+        chartCard(t(lang, 'numbers.languages'), t(lang, 'numbers.languagesTitle'), stackedLanguages(lang, projects)),
+        chartCard(t(lang, 'numbers.mostUsed'), n('distinct', distinctSkills(projects)), topSkillBars(projects)),
+        chartCard(t(lang, 'numbers.heat'), t(lang, 'numbers.heatTitle'), heatmap(lang, projects)),
+        chartCard(t(lang, 'numbers.periods'), n('byPeriod', projects.length), donut(lang, projects)),
+        chartCard(t(lang, 'numbers.growth'), t(lang, 'numbers.growthTitle'), newSkillColumns(lang, projects)),
+        chartCard(t(lang, 'numbers.thisYear'), n('newSkills', recent), chips(projects, now))
+    ].join('\n');
+    return `<div class="numbers" id="numbers">
+<div class="numbers-head"><p class="numbers-sub">${t(lang, 'numbers.sub')}</p>
+<div class="numbers-nav" hidden><button type="button" class="numbers-prev" aria-label="${t(lang, 'numbers.prev')}">‹</button><button type="button" class="numbers-next" aria-label="${t(lang, 'numbers.next')}">›</button></div></div>
+<div class="numbers-row" role="group" aria-label="${t(lang, 'numbers.sub')}" tabindex="0">
+${cards}
+</div>
 </div>`;
 }

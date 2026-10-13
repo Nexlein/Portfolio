@@ -1,4 +1,4 @@
-/* Path chart and the numbers bento. Series colours: .c0 … .c4 (tokens --c0 … --c4). */
+/* Path chart and the numbers gallery. Series colours: .c0 … .c4 (tokens --c0 … --c4). */
 /* stylelint-disable no-descending-specificity -- each chart's parts are scoped by its own class (.path-svg, .radar...) */
 
 /* ── Path chart ── */
@@ -180,34 +180,82 @@
     font-size: 12px;
 }
 
-/* ── Numbers bento ── */
-.bento {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+/* ── Numbers gallery: small charts, three at a time, scroll-snap (arrows are added by script) ── */
+.numbers {
     max-width: var(--max);
-    margin: 64px auto 0;
+    margin: 56px auto 0;
     padding: 0 var(--gutter);
+}
+
+.numbers-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+    margin-bottom: 14px;
+}
+
+.numbers-sub {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.numbers-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.numbers-nav[hidden] {
+    display: none;
+}
+
+.numbers-nav button {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--hair);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: opacity 200ms ease;
+}
+
+.numbers-nav button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.numbers-row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 2 * 16px) / 3);
+    gap: 16px;
+    margin: -6px -4px 0;
+    padding: 6px 4px 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 4px; /* the first card snaps to scrollLeft 0 */
+    scrollbar-width: thin;
+}
+
+.numbers-row > .chart-card {
+    scroll-snap-align: start;
 }
 
 .chart-card {
     position: relative;
     overflow: hidden;
-    padding: 26px;
+    padding: 24px;
     border-radius: 24px;
     transition:
         opacity 700ms var(--ease-out),
         translate 700ms var(--ease-out),
         transform 260ms var(--ease-out),
         box-shadow 260ms ease;
-}
-
-.chart-card:nth-child(2) {
-    transition-delay: 80ms, 80ms, 0ms, 0ms;
-}
-
-.chart-card:nth-child(3) {
-    transition-delay: 160ms, 160ms, 0ms, 0ms;
 }
 
 .card-k {
@@ -233,67 +281,6 @@
     fill: var(--muted);
     font-family: var(--font-mono);
     font-size: 10.5px;
-}
-
-/* Faces crossfade in place, with a little blur to hide the swap */
-.faces {
-    display: grid;
-}
-
-.face {
-    grid-area: 1 / 1;
-    transition:
-        opacity 500ms ease,
-        filter 500ms ease,
-        translate 600ms var(--ease-out),
-        visibility 0s;
-}
-
-.js .face:not(.show) {
-    opacity: 0;
-    filter: blur(6px);
-    translate: 0 6px;
-    visibility: hidden;
-    transition:
-        opacity 300ms ease,
-        filter 300ms ease,
-        translate 300ms ease,
-        visibility 0s 300ms;
-}
-
-.dots {
-    position: absolute;
-    top: 19px;
-    right: 18px;
-    display: flex;
-}
-
-/* A 24px target around a small pill */
-.dots button {
-    display: grid;
-    place-items: center;
-    min-width: 24px;
-    height: 24px;
-    padding: 0 3px;
-    border: 0;
-    background: none;
-    cursor: pointer;
-}
-
-.dots button::after {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
-    background: var(--line);
-    transition:
-        width 300ms var(--ease-out),
-        background-color 200ms ease;
-}
-
-.dots button[aria-pressed='true']::after {
-    width: 22px;
-    background: var(--ink);
 }
 
 /* Series colours */
@@ -385,8 +372,7 @@
     transition: opacity 400ms ease 900ms;
 }
 
-.js .chart-card:not(.in) .radar .shape,
-.js .face:not(.show) .radar .shape {
+.js .chart-card:not(.in) .radar .shape {
     scale: 0.4;
     opacity: 0;
 }
@@ -410,8 +396,7 @@
         opacity 500ms ease;
 }
 
-.js .chart-card:not(.in) .donut .spin,
-.js .face:not(.show) .donut .spin {
+.js .chart-card:not(.in) .donut .spin {
     rotate: -160deg;
     opacity: 0;
 }
@@ -451,8 +436,7 @@
     transition-delay: 200ms;
 }
 
-.js .chart-card:not(.in) .columns .bar,
-.js .face:not(.show) .columns .bar {
+.js .chart-card:not(.in) .columns .bar {
     scale: 1 0;
 }
 
@@ -482,8 +466,7 @@
     transition-delay: 240ms;
 }
 
-.js .chart-card:not(.in) .bars .fill,
-.js .face:not(.show) .bars .fill {
+.js .chart-card:not(.in) .bars .fill {
     scale: 0 1;
 }
 
@@ -517,8 +500,8 @@
 }
 
 @media (width <= 900px) {
-    .bento {
-        grid-template-columns: 1fr;
+    .numbers-row {
+        grid-auto-columns: 82%;
     }
 
     .path-chart {
@@ -534,11 +517,36 @@
 @media (prefers-reduced-motion: reduce) {
     .path-chart .line,
     .chart-card,
-    .face,
     .radar .shape,
     .donut .spin,
     .columns .bar,
     .bars .fill {
         transition: none;
     }
+}
+
+/* Heatmap: domains by period, the cell's opacity is its project count */
+.heat .cell {
+    fill: var(--signal);
+}
+
+.heat .cell.empty {
+    fill: var(--line);
+    fill-opacity: 0.45;
+}
+
+.heat text {
+    fill: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-anchor: middle;
+}
+
+.heat text.row {
+    text-anchor: end;
+}
+
+.heat text.n {
+    fill: var(--bg);
+    font-weight: 500;
 }

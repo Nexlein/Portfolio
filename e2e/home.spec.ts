@@ -11,7 +11,7 @@ test.describe('without JavaScript', () => {
         await expect(page.locator('.project-list li')).toHaveCount(PROJECTS.length);
         await expect(page.locator('.feature')).toHaveCount(PROJECTS.filter((p) => p.featured).length);
         await expect(page.locator('.path-svg')).toBeVisible();
-        await expect(page.locator('.chart-card')).toHaveCount(3);
+        await expect(page.locator('.chart-card')).toHaveCount(7);
         await expect(page.locator('#hire .tile')).toHaveCount(2);
         await expect(page.locator('#method .method-item')).toHaveCount(3);
         await expect(page.locator('.hero-copy h1')).toBeVisible(); // reveals never hide content without JS
@@ -173,14 +173,24 @@ test.describe('charts', () => {
         }
     });
 
-    test('a numbers card shows its second view', async ({ page }) => {
+    test('the numbers are a gallery of charts that the arrows scroll', async ({ page }) => {
         await page.goto('/');
-        await page.locator('.path-tabs button[data-panel="numbers"]').click();
-        const card = page.locator('.chart-card').first();
-        await card.scrollIntoViewIfNeeded();
-        await card.locator('.dots button').nth(1).click();
-        await expect(card.locator('.face').nth(1)).toHaveClass(/show/);
-        await expect(card.locator('.face').nth(0)).not.toHaveClass(/show/);
+        const row = page.locator('.numbers-row');
+        await row.scrollIntoViewIfNeeded();
+        expect(await page.locator('.chart-card').count()).toBeGreaterThanOrEqual(7);
+        const prev = page.locator('.numbers-prev');
+        const next = page.locator('.numbers-next');
+        await expect(prev).toBeDisabled();
+        await next.click();
+        await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeGreaterThan(100);
+        await expect(prev).toBeEnabled();
+        await prev.click();
+        await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeLessThan(5);
+    });
+
+    test('old #numbers links land on the numbers', async ({ page }) => {
+        await page.goto('/#numbers');
+        await expect(page.locator('.numbers-row')).toBeInViewport();
     });
 });
 
@@ -258,7 +268,7 @@ test.describe('language', () => {
 test('reduced motion: no scroll reveal hides content and nothing moves on its own', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await page.locator('.path-tabs button[data-panel="numbers"]').click();
+    await page.locator('.numbers-row').scrollIntoViewIfNeeded();
     await expect(page.locator('.chart-card').first()).toBeVisible();
     await expect(page.locator('.avail-dot')).toHaveCSS('animation-name', 'none');
 });

@@ -102,7 +102,6 @@ export const en = {
             devops: 'DevOps'
         },
         path: {
-            tab: 'Path',
             title1: 'The path so far.',
             title2: 'Every checkpoint earned.',
             symbol: 'Skills · toolbox index',
@@ -113,7 +112,10 @@ export const en = {
             shipped: '{p} started'
         },
         numbers: {
-            tab: 'Numbers',
+            heat: 'Domains by period',
+            heatTitle: 'Where the projects sit',
+            prev: 'Previous charts',
+            next: 'Next charts',
             sub: 'Every chart below is calculated from the projects themselves.',
             view: 'View',
             other: 'Other',

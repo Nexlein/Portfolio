@@ -118,25 +118,10 @@
                             ><span class="recede" data-i18n="home.path.title2">Every checkpoint earned.</span></span
                         >
                     </h2>
-                    <div class="segmented path-tabs" role="group" aria-labelledby="path-title">
-                        <button type="button" aria-pressed="true" aria-controls="panel-path" data-panel="path">
-                            <span data-i18n="home.path.tab">Path</span>
-                        </button>
-                        <button type="button" aria-pressed="false" aria-controls="panel-numbers" data-panel="numbers">
-                            <span data-i18n="home.numbers.tab">Numbers</span>
-                        </button>
-                    </div>
                 </div>
-                <div id="panel-path" class="panel">
-                    <div class="wrap" data-render="path-chart"></div>
-                    <ul class="experience wrap" data-render="experience"></ul>
-                </div>
-                <div id="panel-numbers" class="panel">
-                    <p class="lede numbers-sub reveal" data-i18n="home.numbers.sub">
-                        Every chart below is calculated from the projects themselves.
-                    </p>
-                    <div data-render="numbers"></div>
-                </div>
+                <div class="wrap" data-render="path-chart"></div>
+                <div data-render="numbers"></div>
+                <ul class="experience wrap" data-render="experience"></ul>
             </section>
 
             <!-- Hire: two ways to work together, then one email -->

@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **cv.html** (106)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
-- **index.html** (167)
+- **index.html** (152)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
 - **project.html** (75) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
@@ -22,9 +22,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: PDFS
 
 ## src/components/Charts
-- **Charts.css** (545) — Path chart and the numbers bento.
+- **Charts.css** (553) — Path chart and the numbers gallery.
   - ← index.html
-- **Charts.ts** (116) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers' two faces, and count-ups when they come...
+- **Charts.ts** (118) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers gallery's arrows, and count-ups when the...
   - exports: countUp, initPathChart, initNumbers, initReveals
   - → core/i18n, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
@@ -32,7 +32,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: yearOf, thisMonth, skills, prettySkill, Milestone, milestones, Point, skillSeries, valueAt, firstSeen, learnedSince, PERIODS, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, components/NeuralMap/graph
   - ← components/Charts/Charts, components/Charts/render, pages/cv/blocks, pages/home/blocks, pages/project/render
-- **render.ts** (276) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+- **render.ts** (305) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
   - exports: monthName, PATH, pathSamples, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data
   - ← components/Charts/Charts, pages/cv/blocks, pages/home/blocks, pages/project/render
@@ -141,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (213)
+- **en.ts** (215)
   - exports: en
   - ← core/translate
-- **fr.ts** (213)
+- **fr.ts** (215)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -175,9 +175,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: MAP_MAX, still, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← pages/content/render, pages/home/home, pages/project/render
-- **home.css** (475) — Home sections that are not components of their own: selected work, the project list, experience, hire.
+- **home.css** (460) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (134) — Home page.
+- **home.ts** (118) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 

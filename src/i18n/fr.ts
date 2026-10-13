@@ -102,7 +102,6 @@ export const fr = {
             devops: 'DevOps'
         },
         path: {
-            tab: 'Parcours',
             title1: 'Le parcours.',
             title2: 'Chaque étape méritée.',
             symbol: 'Compétences · taille de la boîte à outils',
@@ -113,7 +112,10 @@ export const fr = {
             shipped: '{p} démarré'
         },
         numbers: {
-            tab: 'Chiffres',
+            heat: 'Domaines par période',
+            heatTitle: 'Où se placent les projets',
+            prev: 'Graphiques précédents',
+            next: 'Graphiques suivants',
             sub: 'Chaque graphique ci-dessous est calculé à partir des projets eux-mêmes.',
             view: 'Vue',
             other: 'Autres',

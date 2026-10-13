@@ -1,6 +1,6 @@
 /**
- * Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers' two faces,
- * and count-ups when they come into view. The SVG is already in the page; this only adds behaviour.
+ * Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers gallery's
+ * arrows, and count-ups when they come into view. The SVG is already in the page; this only adds behaviour.
  */
 import { i18n } from '@/core/i18n';
 import { PROJECTS } from '@/data/projects';
@@ -79,23 +79,25 @@ export function initPathChart(): void {
     bind();
 }
 
-/** Bento cards: two faces each, switched by the dots; replay the face's count-ups when shown. */
+/** The numbers gallery: arrows scroll it by one page; they disable at both ends. Without JS it still scrolls. */
 export function initNumbers(): void {
-    document.querySelectorAll<HTMLElement>('.chart-card').forEach((card) => {
-        const faces = [...card.querySelectorAll<HTMLElement>('.face')],
-            dots = [...card.querySelectorAll<HTMLButtonElement>('.dots button')];
-        faces.forEach((f, i) => {
-            f.hidden = false; // the faces now crossfade in place (CSS); without JS only the first one shows
-            f.classList.toggle('show', i === 0);
-        });
-        dots.forEach((d, i) =>
-            d.addEventListener('click', () => {
-                faces.forEach((f, k) => f.classList.toggle('show', k === i));
-                dots.forEach((o, k) => o.setAttribute('aria-pressed', String(k === i)));
-                faces[i].querySelectorAll<HTMLElement>('.count').forEach(countUp);
-            })
-        );
-    });
+    const row = document.querySelector<HTMLElement>('.numbers-row');
+    const nav = document.querySelector<HTMLElement>('.numbers-nav');
+    if (!row || !nav) return;
+    nav.hidden = false;
+    const prev = nav.querySelector<HTMLButtonElement>('.numbers-prev')!,
+        next = nav.querySelector<HTMLButtonElement>('.numbers-next')!;
+    const sync = () => {
+        prev.disabled = row.scrollLeft < 8;
+        next.disabled = row.scrollLeft > row.scrollWidth - row.clientWidth - 8;
+    };
+    const page = (dir: number) =>
+        row.scrollBy({ left: dir * row.clientWidth, behavior: reduced() ? 'auto' : 'smooth' });
+    prev.addEventListener('click', () => page(-1));
+    next.addEventListener('click', () => page(1));
+    row.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
 }
 
 /** Reveal animations, count-ups and the chart draw-in start once each block comes into view. */
@@ -106,7 +108,7 @@ export function initReveals(): void {
                 if (!e.isIntersecting) return;
                 const n = e.target as HTMLElement;
                 n.classList.add('in', 'drawn');
-                n.querySelectorAll<HTMLElement>('.face.show .count, .path-total .count').forEach(countUp);
+                n.querySelectorAll<HTMLElement>('.chart-card .count, .path-total .count').forEach(countUp);
                 io.unobserve(n);
             }),
         { rootMargin: '0px 0px -12% 0px' }
