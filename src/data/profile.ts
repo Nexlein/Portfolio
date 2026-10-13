@@ -59,7 +59,7 @@ export const EXPERIENCES: Experience[] = [
     {
         id: 'issanka',
         kind: 'job',
-        title: { en: 'AI Developer (Part-Time)', fr: 'Développeur IA (Temps partiel)' },
+        title: { en: 'AI Developer (Part-Time)', fr: 'Développeur IA (temps partiel)' },
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
@@ -80,7 +80,7 @@ export const EXPERIENCES: Experience[] = [
     {
         id: 'climb2c',
         kind: 'internship',
-        title: { en: 'Full-Stack & AI Developer Intern', fr: 'Développeur Full-Stack & IA' },
+        title: { en: 'Full-Stack & AI Developer Intern', fr: 'Développeur Full-Stack & IA (stage)' },
         org: 'Climb2C (Eliona Conseil)',
         period: { en: 'Sept - Dec 2025', fr: 'Sept - Déc 2025' },
         summary: {

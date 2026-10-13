@@ -200,21 +200,6 @@
     gap: 7mm;
 }
 
-/* ── Education: a full-width row under both columns, entries side by side ── */
-.sheet-edu {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px 7mm;
-    margin-top: 12px;
-    padding-top: 10px;
-    border-top: 1px solid var(--paper-line);
-}
-
-.sheet-edu h2 {
-    grid-column: 1 / -1;
-    margin-bottom: 2px;
-}
-
 /* ── Skill groups ── */
 .cv-group + .cv-group {
     margin-top: 8px;
@@ -228,10 +213,6 @@
 /* ── Entries ── */
 .cv-entry + .cv-entry {
     margin-top: 10px;
-}
-
-.sheet-edu .cv-entry {
-    margin-top: 0; /* the grid already spaces the entries: no extra offset for the 2nd and 3rd */
 }
 
 .cv-entry-head {
@@ -305,8 +286,7 @@
 
     .sheet-head,
     .sheet-body,
-    .sheet-cols,
-    .sheet-edu {
+    .sheet-cols {
         display: flex;
         flex-direction: column;
     }

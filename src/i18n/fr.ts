@@ -192,7 +192,7 @@ export const fr = {
             role: 'Ingénieur IA, Data & Logiciel',
             summary:
                 "Conception de logiciels fiables à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialités : systèmes de décision autonomes, moteurs de simulation en temps réel et C++ haute performance.",
-            badge2: 'Stage à temps plein (mars–août)',
+            badge2: 'Stage à temps plein (mars–août 2027)',
             badge3: 'Freelance'
         },
         toolbox: {
@@ -204,7 +204,7 @@ export const fr = {
             expertise: 'Expertise technique',
             systems: 'Architecture systèmes',
             ai: 'IA & Data Science',
-            education: 'Formation et certifications',
+            education: 'Formation',
             certs: 'Certifications'
         }
     }
