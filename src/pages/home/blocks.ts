@@ -3,14 +3,14 @@
  * matching data-render names). Everything a visitor reads is in the HTML; scripts only add motion and interaction.
  * Relative imports only: rendered from Node.
  */
-import { EXPERIENCES, NOW, OFFERS, type Offer } from '../../data/profile.ts';
+import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, OFFERS, type Checkpoint, type Offer } from '../../data/profile.ts';
 import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
 import { videoPoster } from '../../ui/video.ts';
-import { numbers, pathChart } from '../../components/Charts/render.ts';
-import { thisMonth } from '../../components/Charts/data.ts';
+import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
+import { thisMonth, yearOf } from '../../components/Charts/data.ts';
 import { pickShown } from '../../components/NeuralMap/graph.ts';
 
 /** Most projects the map shows at once (the rest rotate in). */
@@ -75,13 +75,30 @@ export function mapMore(lang: Lang): string {
     return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all" aria-expanded="false">${t(lang, 'work.seeAll')}</button>`;
 }
 
+/** Entries of the path list that show at once; the earlier ones fold away (see initPathLinks). */
+const EXP_SHOWN = 3;
+
+/** Every checkpoint of the path chart as a list entry, oldest first like the chart; the latest few are open. */
 export function experience(lang: Lang): string {
-    return EXPERIENCES.map(
-        (
-            e
-        ) => `<li data-cp="${e.id}" tabindex="0"><span class="exp-when">${e.period[lang]}</span><span class="exp-what"><strong>${e.title[lang]}${e.org ? ` · ${e.org}` : ''}</strong>
-<span>${e.summary[lang].split('. ')[0].replace(/\.$/, '')}.</span></span></li>`
-    ).join('');
+    const entries = [...EXPERIENCES, ...EDUCATION];
+    const item = (c: Checkpoint) => {
+        const e = entries.find((x) => x.id === c.id)!;
+        const org = 'org' in e && e.org ? ` · ${e.org}` : '';
+        const when = 'kind' in e ? e.period[lang] : monthName(yearOf(c.date), lang);
+        const first = e.summary[lang]
+            .split('. ')[0]
+            .replace(/<[^>]+>/g, '')
+            .replace(/\.$/, '');
+        return `<li data-cp="${c.id}" tabindex="0"><span class="exp-when">${when}</span><span class="exp-what"><strong>${e.title[lang]}${org}</strong>
+<span>${first}.</span></span></li>`;
+    };
+    const early = CHECKPOINTS.slice(0, -EXP_SHOWN).map(item).join(''),
+        late = CHECKPOINTS.slice(-EXP_SHOWN).map(item).join('');
+    if (!early) return `<ul>${late}</ul>`;
+    const n = CHECKPOINTS.length - EXP_SHOWN;
+    return `<button type="button" class="exp-toggle" aria-expanded="false" hidden data-more="${t(lang, 'path.earlier').replace('{n}', String(n))}" data-less="${t(lang, 'path.fewer')}">${t(lang, 'path.earlier').replace('{n}', String(n))}</button>
+<div class="exp-fold"><ul>${early}</ul></div>
+<ul>${late}</ul>`;
 }
 
 export const pathBlock = (lang: Lang) => pathChart(lang, PROJECTS, thisMonth());

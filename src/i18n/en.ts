@@ -109,7 +109,9 @@ export const en = {
             range: 'Time range',
             aria: 'Distinct skills over time: {n} today.',
             skills: '{n} skills',
-            shipped: '{p} started'
+            shipped: '{p} started',
+            earlier: 'Show {n} earlier steps',
+            fewer: 'Show fewer'
         },
         numbers: {
             heat: 'Domains by period',

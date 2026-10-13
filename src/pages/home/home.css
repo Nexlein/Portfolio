@@ -185,6 +185,13 @@
     background: var(--hair);
 }
 
+.experience ul {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
 .experience li {
     position: relative;
     display: grid;
@@ -228,6 +235,48 @@
 
 .experience.lit li:not(.on) {
     opacity: 0.45;
+}
+
+/* Earlier steps fold away (height animates through a 0fr → 1fr grid row); the button above opens them */
+.exp-toggle {
+    position: relative;
+    justify-self: start;
+    margin: 0 0 4px 40px;
+    padding: 6px 14px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+        color 200ms,
+        border-color 200ms;
+}
+
+.exp-toggle:hover {
+    border-color: var(--signal);
+    color: var(--ink);
+}
+
+.exp-fold {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 450ms var(--ease-out);
+}
+
+.exp-fold > ul {
+    min-height: 0;
+    overflow: hidden;
+}
+
+.js .experience:not(.open) .exp-fold {
+    grid-template-rows: 0fr;
+}
+
+.js .experience:not(.open) .exp-fold > ul {
+    visibility: hidden;
+    transition: visibility 0s 450ms;
 }
 
 .exp-when {

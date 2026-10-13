@@ -89,7 +89,20 @@ const idOf = (e: Event) => (e.target as Element).closest<HTMLElement>('[data-cp]
 export function initPathLinks(): void {
     const section = document.getElementById('path');
     if (!section) return;
+    const list = section.querySelector<HTMLElement>('.experience');
+    const toggle = list?.querySelector<HTMLButtonElement>('.exp-toggle');
+    const fold = (open: boolean) => {
+        list!.classList.toggle('open', open);
+        toggle!.setAttribute('aria-expanded', String(open));
+        toggle!.textContent = toggle!.dataset[open ? 'less' : 'more']!;
+    };
+    if (toggle) {
+        toggle.hidden = false;
+        toggle.addEventListener('click', () => fold(!list!.classList.contains('open')));
+    }
     const light = (id: string | null) => {
+        // A checkpoint whose entry is folded away opens the fold
+        if (toggle && id && list!.querySelector(`.exp-fold [data-cp="${CSS.escape(id)}"]`)) fold(true);
         const on = id ? section.querySelectorAll(`[data-cp="${CSS.escape(id)}"]`) : [];
         section.querySelectorAll('.marks, .experience').forEach((g) => g.classList.toggle('lit', on.length > 0));
         section.querySelectorAll('[data-cp]').forEach((n) => n.classList.toggle('on', [...on].includes(n)));

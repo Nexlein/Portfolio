@@ -207,18 +207,34 @@ test.describe('charts', () => {
 
     test('the experience list and the path chart light each other up', async ({ page }) => {
         await page.goto('/');
-        const li = page.locator('.experience li[data-cp="climb2c"]');
-        const mark = page.locator('.path-svg .mark[data-cp="climb2c"]');
+        const li = page.locator('.experience li[data-cp="issanka"]');
+        const mark = page.locator('.path-svg .mark[data-cp="issanka"]');
         await li.scrollIntoViewIfNeeded();
         await li.focus();
         await expect(mark).toHaveClass(/on/);
         await expect(li).toHaveClass(/on/);
-        await expect(page.locator('.experience li[data-cp="issanka"]')).not.toHaveClass(/on/);
+        await expect(page.locator('.experience li[data-cp="hackathons"]')).not.toHaveClass(/on/);
         await li.blur();
         await expect(mark).not.toHaveClass(/on/);
         await page.locator('.path-chart').scrollIntoViewIfNeeded();
-        await mark.locator('.mark-hit').hover({ force: true });
-        await expect(li).toHaveClass(/on/);
+        // Climb2C sits mid-chart, clear of its neighbours on a phone-width plot
+        await page.locator('.path-svg .mark[data-cp="climb2c"] .mark-hit').hover({ force: true });
+        await expect(page.locator('.experience li[data-cp="climb2c"]')).toHaveClass(/on/);
+    });
+
+    test('the path list holds every checkpoint, earlier ones fold away and open from the chart', async ({ page }) => {
+        await page.goto('/');
+        const items = page.locator('.experience li');
+        expect(await items.count()).toBe(await page.locator('.path-svg .mark').count());
+        const early = page.locator('.experience li[data-cp="epitech"]');
+        await expect(early).toBeHidden();
+        await page.locator('.exp-toggle').click();
+        await expect(early).toBeVisible();
+        await page.locator('.exp-toggle').click();
+        await expect(early).toBeHidden();
+        await page.locator('.path-chart').scrollIntoViewIfNeeded();
+        await page.locator('.path-svg .mark[data-cp="epitech"] .mark-hit').hover({ force: true });
+        await expect(early).toBeVisible();
     });
 
     test('old #numbers links land on the numbers', async ({ page }) => {
