@@ -114,10 +114,12 @@ export function initPathStory(): void {
         held = false;
 
     const ids = () => [...section.querySelectorAll<SVGElement>('.path-svg .mark')].map((m) => m.dataset.cp!);
-    // Every call restarts both the timer and the fill line, so they never drift apart
-    const arm = () => {
-        clearTimeout(timer);
+    // The timer and the fill line start together, and only when a step begins (a selection) or playing resumes
+    // after a pause: calls that change nothing (alt-tab, focus, the pointer moving about) leave them running
+    const arm = (restart = false) => {
         const run = visible && !held && !document.hidden && !reduced();
+        if (run && !restart && card.classList.contains('playing')) return;
+        clearTimeout(timer);
         card.classList.remove('playing');
         void card.offsetWidth;
         card.classList.toggle('playing', run);
@@ -133,7 +135,7 @@ export function initPathStory(): void {
             n.classList.toggle('on', n.dataset.cp === current);
         });
         count.textContent = `${all.indexOf(current) + 1} / ${all.length}`;
-        arm();
+        arm(true);
     }
     function step(dir: number) {
         const all = ids();
@@ -150,7 +152,7 @@ export function initPathStory(): void {
         }
     });
     section.addEventListener('pointerout', (e) => {
-        if (e.pointerType !== 'mouse' || inside(e.relatedTarget)) return;
+        if (e.pointerType !== 'mouse' || !inside(e.target) || inside(e.relatedTarget)) return;
         held = card.matches(':has(:focus-visible)');
         arm();
     });
@@ -210,9 +212,10 @@ export function initNumbers(): void {
         visible = false,
         held = false;
 
-    const arm = () => {
-        clearTimeout(timer);
+    const arm = (restart = false) => {
         const run = visible && !held && !document.hidden && !reduced();
+        if (run && !restart && root.classList.contains('playing')) return; // nothing changed: keep running
+        clearTimeout(timer);
         root.classList.remove('playing');
         void root.offsetWidth; // restart the fill line together with the timer
         root.classList.toggle('playing', run);
@@ -235,7 +238,7 @@ export function initNumbers(): void {
             front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
         }
         items.forEach((b, i) => b.toggleAttribute('aria-current', i === cur));
-        arm();
+        arm(true);
     }
     nav.querySelector('.numbers-prev')!.addEventListener('click', () => show(cur - 1, true));
     nav.querySelector('.numbers-next')!.addEventListener('click', () => show(cur + 1, true));
@@ -246,7 +249,7 @@ export function initNumbers(): void {
     for (const ev of ['pointerenter', 'focusin'] as const) root.addEventListener(ev, () => ((held = true), arm()));
     for (const ev of ['pointerleave', 'focusout'] as const)
         root.addEventListener(ev, () => ((held = root.matches(':focus-within')), arm()));
-    document.addEventListener('visibilitychange', arm);
+    document.addEventListener('visibilitychange', () => arm());
     new IntersectionObserver(([e]) => ((visible = e.isIntersecting), arm()), { threshold: 0.4 }).observe(root);
     show(0);
 }

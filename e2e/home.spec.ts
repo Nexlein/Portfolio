@@ -238,6 +238,25 @@ test.describe('charts', () => {
         await expect(page.locator('.exp-count')).toHaveText(/^1 \/ \d$/);
     });
 
+    test('moving the pointer about or changing focus does not restart the story timer', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.setViewportSize({ width: 1280, height: 2400 }); // the story and the numbers on screen together
+        await page.goto('/');
+        await page.locator('#numbers').scrollIntoViewIfNeeded();
+        await page.mouse.move(2, 2);
+        const elapsed = () =>
+            page.locator('.exp-progress').evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
+        await expect.poll(elapsed).toBeGreaterThan(900);
+        // The pointer crosses the numbers part (index, arrows, section text)
+        await page.locator('.numbers-sub').hover();
+        await page.locator('.numbers-index button').nth(2).hover();
+        await page.locator('.numbers-nav button').first().hover();
+        await page.mouse.move(2, 2, { steps: 3 });
+        await page.evaluate(() => window.dispatchEvent(new Event('blur')));
+        await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+        expect(await elapsed()).toBeGreaterThan(1200);
+    });
+
     test('old #numbers links land on the numbers', async ({ page }) => {
         await page.goto('/#numbers');
         await expect(page.locator('.numbers-row')).toBeInViewport();
