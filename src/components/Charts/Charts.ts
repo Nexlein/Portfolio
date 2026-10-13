@@ -90,7 +90,10 @@ export function initPathChart(): void {
     bind();
 }
 
-const inside = (el: EventTarget | null) => (el as Element | null)?.closest?.('.path-chart, .exp-card');
+/** True when `el` is inside something that matches `selector` (the parts that pause a timer while the pointer is on them). */
+const within = (el: EventTarget | null, selector: string) => !!(el as Element | null)?.closest?.(selector);
+const STORY_HOLD = '.path-plot, .path-range, .exp-card';
+const DECK_HOLD = '.numbers-stage, .numbers-index, .numbers-nav';
 
 const STEP_MS = 6500;
 
@@ -146,13 +149,13 @@ export function initPathStory(): void {
         if (e.pointerType !== 'mouse') return;
         const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
         if (mark) select(mark.dataset.cp!);
-        if (inside(e.target)) {
+        if (within(e.target, STORY_HOLD)) {
             held = true;
             arm();
         }
     });
     section.addEventListener('pointerout', (e) => {
-        if (e.pointerType !== 'mouse' || !inside(e.target) || inside(e.relatedTarget)) return;
+        if (e.pointerType !== 'mouse' || !within(e.target, STORY_HOLD) || within(e.relatedTarget, STORY_HOLD)) return;
         held = card.matches(':has(:focus-visible)');
         arm();
     });
@@ -246,9 +249,26 @@ export function initNumbers(): void {
         const card = (e.target as Element).closest<HTMLElement>('.chart-card');
         if (card && card !== cards[cur]) show(cards.indexOf(card), true);
     });
-    for (const ev of ['pointerenter', 'focusin'] as const) root.addEventListener(ev, () => ((held = true), arm()));
-    for (const ev of ['pointerleave', 'focusout'] as const)
-        root.addEventListener(ev, () => ((held = root.matches(':focus-within')), arm()));
+    // Paused while the pointer is on a card, the index or the arrows (or the keyboard is on them), not the whole block
+    root.addEventListener('pointerover', (e) => {
+        if (e.pointerType !== 'mouse' || !within(e.target, DECK_HOLD)) return;
+        held = true;
+        arm();
+    });
+    root.addEventListener('pointerout', (e) => {
+        if (e.pointerType !== 'mouse' || !within(e.target, DECK_HOLD) || within(e.relatedTarget, DECK_HOLD)) return;
+        held = root.matches(':has(:focus-visible)');
+        arm();
+    });
+    root.addEventListener('focusin', (e) => {
+        if (!(e.target as Element).matches(':focus-visible')) return;
+        held = true;
+        arm();
+    });
+    root.addEventListener('focusout', () => {
+        held = false;
+        arm();
+    });
     document.addEventListener('visibilitychange', () => arm());
     new IntersectionObserver(([e]) => ((visible = e.isIntersecting), arm()), { threshold: 0.4 }).observe(root);
     show(0);

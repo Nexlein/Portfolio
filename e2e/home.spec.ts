@@ -257,6 +257,31 @@ test.describe('charts', () => {
         expect(await elapsed()).toBeGreaterThan(1200);
     });
 
+    test('the timers pause only on the chart plot, the range buttons and the panel, not on the rest of the block', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.setViewportSize({ width: 1280, height: 2400 });
+        await page.goto('/');
+        await page.locator('#numbers').scrollIntoViewIfNeeded();
+        const story = page.locator('.exp-card');
+        await page.locator('.path-symbol').hover(); // the ticker above the plot
+        await expect(story).toHaveClass(/playing/);
+        await page.locator('.path-svg .hit').hover({ position: { x: 300, y: 150 } });
+        await expect(story).not.toHaveClass(/playing/);
+        await page.locator('.path-range button').first().hover();
+        await expect(story).not.toHaveClass(/playing/);
+        await page.locator('.numbers-sub').hover(); // the line of text above the deck
+        await expect(story).toHaveClass(/playing/);
+        const deck = page.locator('.numbers');
+        await expect(deck).toHaveClass(/playing/);
+        await page.locator('.numbers-index button').nth(2).hover();
+        await expect(deck).not.toHaveClass(/playing/);
+        await page.locator('.numbers-sub').hover();
+        await expect(deck).toHaveClass(/playing/);
+    });
+
     test('old #numbers links land on the numbers', async ({ page }) => {
         await page.goto('/#numbers');
         await expect(page.locator('.numbers-row')).toBeInViewport();
