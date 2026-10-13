@@ -77,7 +77,11 @@ export const en = {
                 'Projects as a network: the most recent closest to the centre, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.',
             more: 'Showing {shown} of {n}, the rest rotate in.',
             seeAll: 'See all projects',
-            hideAll: 'Hide the list',
+            viewLabel: 'Projects view',
+            viewMap: 'Map',
+            viewList: 'List',
+            showMore: 'Show {n} more',
+            showLess: 'Show less',
             now: 'Now',
             open: 'Open project',
             similar: '{s} similar',
@@ -102,7 +106,6 @@ export const en = {
             devops: 'DevOps'
         },
         path: {
-            tab: 'Path',
             title1: 'The path so far.',
             title2: 'Every checkpoint earned.',
             symbol: 'Skills · toolbox index',
@@ -110,10 +113,15 @@ export const en = {
             range: 'Time range',
             aria: 'Distinct skills over time: {n} today.',
             skills: '{n} skills',
-            shipped: '{p} started'
+            shipped: '{p} started',
+            prevStep: 'Previous step',
+            nextStep: 'Next step'
         },
         numbers: {
-            tab: 'Numbers',
+            heat: 'Domains by period',
+            heatTitle: 'Where the projects sit',
+            prev: 'Previous charts',
+            next: 'Next charts',
             sub: 'Every chart below is calculated from the projects themselves.',
             view: 'View',
             other: 'Other',
@@ -190,7 +198,7 @@ export const en = {
             role: 'AI, Data & Software Engineer',
             summary:
                 'Building reliable software at the speed of AI, with TDD and agentic workflows. Focused on autonomous decision systems, real-time simulation engines, and high-performance C++.',
-            badge2: 'Full-Time Intern (Mar-Aug)',
+            badge2: 'Full-Time Intern (Mar–Aug 2027)',
             badge3: 'Freelance'
         },
         toolbox: {
@@ -202,11 +210,8 @@ export const en = {
             expertise: 'Core Expertise',
             systems: 'Systems Architecture',
             ai: 'AI & Data Science',
-            education: 'Education & Certs',
-            toolbox: 'Toolbox'
-        },
-        links: {
-            linkedin: 'LinkedIn Profile'
+            education: 'Education',
+            certs: 'Certifications'
         }
     }
 };

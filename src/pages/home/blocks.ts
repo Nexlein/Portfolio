@@ -3,14 +3,14 @@
  * matching data-render names). Everything a visitor reads is in the HTML; scripts only add motion and interaction.
  * Relative imports only: rendered from Node.
  */
-import { EXPERIENCES, NOW, OFFERS, type Offer } from '../../data/profile.ts';
+import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, OFFERS, type Checkpoint, type Offer } from '../../data/profile.ts';
 import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
 import { videoPoster } from '../../ui/video.ts';
-import { numbers, pathChart } from '../../components/Charts/render.ts';
-import { thisMonth } from '../../components/Charts/data.ts';
+import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
+import { thisMonth, yearOf } from '../../components/Charts/data.ts';
 import { pickShown } from '../../components/NeuralMap/graph.ts';
 
 /** Most projects the map shows at once (the rest rotate in). */
@@ -58,7 +58,7 @@ export function domainQuery(lang: Lang): string {
         .join('');
 }
 
-/** Every project, as a plain list: phones, no JavaScript, search engines, and "See all" under the map. */
+/** Every project, as a plain list: phones, no JavaScript, search engines, and the List view on large screens. */
 export function projectList(lang: Lang): string {
     return PROJECTS.map(
         (
@@ -75,13 +75,27 @@ export function mapMore(lang: Lang): string {
     return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all" aria-expanded="false">${t(lang, 'work.seeAll')}</button>`;
 }
 
+/**
+ * The story under the path chart: one panel per checkpoint, oldest first like the chart. The page script
+ * (initPathStory) shows one at a time and turns it with the chart; without JS they read as a plain list.
+ */
 export function experience(lang: Lang): string {
-    return EXPERIENCES.map(
-        (
-            e
-        ) => `<li><span class="exp-when">${e.period[lang]}</span><span class="exp-what"><strong>${e.title[lang]}${e.org ? ` · ${e.org}` : ''}</strong>
-<span>${e.summary[lang].split('. ')[0].replace(/\.$/, '')}.</span></span></li>`
-    ).join('');
+    const entries = [...EXPERIENCES, ...EDUCATION];
+    const panel = (c: Checkpoint) => {
+        const e = entries.find((x) => x.id === c.id)!;
+        const org = 'org' in e && e.org ? ` · ${e.org}` : '';
+        const when = 'kind' in e ? e.period[lang] : monthName(yearOf(c.date), lang);
+        const sentence = e.summary[lang]
+            .split('. ')[0]
+            .replace(/<[^>]+>/g, '')
+            .replace(/\.$/, '');
+        const text = 'kind' in e ? e.summary[lang] : `${sentence}.`;
+        return `<article class="exp" data-cp="${c.id}"><p class="exp-when">${when}</p><div class="exp-what"><strong>${e.title[lang]}${org}</strong>
+<span>${text}</span></div></article>`;
+    };
+    return `<div class="exp-card surface"><div class="exp-stage">${CHECKPOINTS.map(panel).join('')}</div>
+<div class="exp-nav" hidden><span class="exp-count"></span><button type="button" class="exp-prev" aria-label="${t(lang, 'path.prevStep')}">‹</button><button type="button" class="exp-next" aria-label="${t(lang, 'path.nextStep')}">›</button></div>
+<span class="exp-progress"></span></div>`;
 }
 
 export const pathBlock = (lang: Lang) => pathChart(lang, PROJECTS, thisMonth());

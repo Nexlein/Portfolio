@@ -77,7 +77,11 @@ export const fr = {
                 "Les projets sous forme de réseau : les plus récents au centre, les liens relient les projets qui partagent des compétences (plus clair = plus proches). Survolez ou sélectionnez un projet pour l'aperçu ; validez pour ouvrir sa page.",
             more: '{shown} projets affichés sur {n}, les autres apparaissent à tour de rôle.',
             seeAll: 'Voir tous les projets',
-            hideAll: 'Masquer la liste',
+            viewLabel: 'Affichage des projets',
+            viewMap: 'Carte',
+            viewList: 'Liste',
+            showMore: 'Voir {n} de plus',
+            showLess: 'Voir moins',
             now: 'En ce moment',
             open: 'Voir le projet',
             similar: '{s} de proximité',
@@ -102,7 +106,6 @@ export const fr = {
             devops: 'DevOps'
         },
         path: {
-            tab: 'Parcours',
             title1: 'Le parcours.',
             title2: 'Chaque étape méritée.',
             symbol: 'Compétences · taille de la boîte à outils',
@@ -110,10 +113,15 @@ export const fr = {
             range: 'Période',
             aria: "Compétences distinctes au fil du temps : {n} aujourd'hui.",
             skills: '{n} compétences',
-            shipped: '{p} démarré'
+            shipped: '{p} démarré',
+            prevStep: 'Étape précédente',
+            nextStep: 'Étape suivante'
         },
         numbers: {
-            tab: 'Chiffres',
+            heat: 'Domaines par période',
+            heatTitle: 'Où se placent les projets',
+            prev: 'Graphiques précédents',
+            next: 'Graphiques suivants',
             sub: 'Chaque graphique ci-dessous est calculé à partir des projets eux-mêmes.',
             view: 'Vue',
             other: 'Autres',
@@ -190,7 +198,7 @@ export const fr = {
             role: 'Ingénieur IA, Data & Logiciel',
             summary:
                 "Conception de logiciels fiables à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialités : systèmes de décision autonomes, moteurs de simulation en temps réel et C++ haute performance.",
-            badge2: 'Stage à temps plein (mars–août)',
+            badge2: 'Stage à temps plein (mars–août 2027)',
             badge3: 'Freelance'
         },
         toolbox: {
@@ -202,11 +210,8 @@ export const fr = {
             expertise: 'Expertise technique',
             systems: 'Architecture systèmes',
             ai: 'IA & Data Science',
-            education: 'Formation et certifications',
-            toolbox: 'Boîte à outils'
-        },
-        links: {
-            linkedin: 'Profil LinkedIn'
+            education: 'Formation',
+            certs: 'Certifications'
         }
     }
 };

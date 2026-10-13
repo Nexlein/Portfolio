@@ -90,23 +90,33 @@
                     <h2 class="headline" id="work-title" data-render="work-title"></h2>
                     <p class="lede">
                         <span data-i18n="home.work.sub">Projects connect where they share skills.</span>
-                        <span class="desk-only" data-i18n="home.work.subDesk"
+                        <span class="map-only" data-i18n="home.work.subDesk"
                             >Hover one to see what it lights up, or ask the network.</span
                         >
                     </p>
                     <p class="features-label mono" data-i18n="home.featured.label">Start here</p>
                     <div class="features" data-render="featured"></div>
                     <span class="sr-only" id="ask-label" data-i18n="home.work.ask">Light up a domain</span>
-                    <div
-                        class="segmented query desk-only"
-                        role="group"
-                        aria-labelledby="ask-label"
-                        data-render="domain-query"
-                    ></div>
+                    <div class="work-tools desk-only">
+                        <div
+                            class="segmented query"
+                            role="group"
+                            aria-labelledby="ask-label"
+                            data-render="domain-query"
+                        ></div>
+                        <span class="sr-only" id="view-label" data-i18n="home.work.viewLabel">Projects view</span>
+                        <div class="segmented work-view" role="group" aria-labelledby="view-label" hidden>
+                            <button type="button" data-view="map" data-i18n="home.work.viewMap">Map</button>
+                            <button type="button" data-view="list" data-i18n="home.work.viewList">List</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="map-host"></div>
                 <p class="map-more" data-render="map-more"></p>
-                <ul class="project-list wrap" id="project-list" data-render="project-list"></ul>
+                <div class="list-block">
+                    <ul class="project-list wrap" id="project-list" data-render="project-list"></ul>
+                    <div class="list-more" hidden><button type="button" class="more-btn"></button></div>
+                </div>
             </section>
 
             <!-- Path: the skill toolbox over time with checkpoints, and the numbers behind it (src/components/Charts) -->
@@ -118,25 +128,10 @@
                             ><span class="recede" data-i18n="home.path.title2">Every checkpoint earned.</span></span
                         >
                     </h2>
-                    <div class="segmented path-tabs" role="group" aria-labelledby="path-title">
-                        <button type="button" aria-pressed="true" aria-controls="panel-path" data-panel="path">
-                            <span data-i18n="home.path.tab">Path</span>
-                        </button>
-                        <button type="button" aria-pressed="false" aria-controls="panel-numbers" data-panel="numbers">
-                            <span data-i18n="home.numbers.tab">Numbers</span>
-                        </button>
-                    </div>
                 </div>
-                <div id="panel-path" class="panel">
-                    <div class="wrap" data-render="path-chart"></div>
-                    <ul class="experience wrap" data-render="experience"></ul>
-                </div>
-                <div id="panel-numbers" class="panel">
-                    <p class="lede numbers-sub reveal" data-i18n="home.numbers.sub">
-                        Every chart below is calculated from the projects themselves.
-                    </p>
-                    <div data-render="numbers"></div>
-                </div>
+                <div class="wrap" data-render="path-chart"></div>
+                <div class="exp-wrap wrap" data-render="experience"></div>
+                <div data-render="numbers"></div>
             </section>
 
             <!-- Hire: two ways to work together, then one email -->

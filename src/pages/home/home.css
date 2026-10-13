@@ -78,7 +78,12 @@
 }
 
 /* ── Work ── */
-.query {
+.work-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px 24px;
     margin-top: 30px;
 }
 
@@ -152,36 +157,81 @@
     font-size: 20px;
 }
 
-/* With the map drawn, the list waits behind "See all" */
-.work.has-map .map-host {
+/* The view (set by script): the map and the list swap; without JS only the list is there */
+.work[data-view='map'] .map-host {
     display: block;
+    min-height: max(760px, 94vh); /* the map's own height: nothing jumps when it is drawn */
 }
 
-.work.has-map .project-list:not(.open) {
+.work[data-view='map'] .list-block {
+    display: none;
+}
+
+.work:not([data-view='map']) :is(.map-host, .map-more, .map-only) {
     display: none;
 }
 
 /* Phones and no map: the query buttons have nothing to light up */
-.work:not(.has-map) .desk-only {
+.work:not([data-wide]) .desk-only {
     display: none;
 }
 
-/* ── Experience under the path chart ── */
-.experience {
-    display: grid;
-    margin-top: 28px;
-    list-style: none;
+.list-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.experience li {
+.more-btn {
+    padding: 9px 20px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 200ms;
+}
+
+.more-btn:hover {
+    border-color: var(--signal);
+}
+
+/* Rows that "Show more" brings in slide up one after the other */
+.project-list li.row-in {
+    animation: row-in 420ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+@keyframes row-in {
+    from {
+        opacity: 0;
+        translate: 0 12px;
+    }
+}
+
+/* ── The story under the path chart: one checkpoint at a time (see initPathStory). Without JS: a plain list ── */
+.exp-card {
+    position: relative;
+    margin-top: 14px;
+    overflow: hidden;
+    padding: 26px 28px 30px;
+    border-radius: 24px;
+}
+
+.exp {
     display: grid;
     grid-template-columns: 11em 1fr;
     gap: 20px;
-    padding: 18px 8px;
-    border-bottom: 1px solid var(--hair);
+    padding-right: 120px;
+}
+
+.exp + .exp {
+    margin-top: 22px;
 }
 
 .exp-when {
+    margin: 0;
     padding-top: 3px;
     color: var(--muted);
     font-family: var(--font-mono);
@@ -190,12 +240,107 @@
 
 .exp-what {
     display: grid;
+    align-content: start;
     gap: 4px;
+}
+
+.exp-what strong {
+    font-size: 1.05rem;
 }
 
 .exp-what span {
     color: var(--muted);
     line-height: 1.45;
+}
+
+/* With JS the panels share one cell and cross-fade: the card never changes height */
+.exp-card.live .exp-stage {
+    display: grid;
+}
+
+.exp-card.live .exp {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 10px;
+    transition:
+        opacity 320ms,
+        translate 450ms var(--ease-out),
+        visibility 0s 320ms;
+}
+
+.exp-card.live .exp + .exp {
+    margin-top: 0;
+}
+
+.exp-card.live .exp.on {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition-delay: 120ms, 120ms, 0s;
+}
+
+.exp-nav {
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.exp-nav[hidden] {
+    display: none;
+}
+
+.exp-count {
+    margin-right: 6px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.exp-nav button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--hair);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 200ms;
+}
+
+.exp-nav button:hover {
+    border-color: var(--signal);
+}
+
+/* A thin line fills along the bottom while the story turns by itself */
+.exp-progress {
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--signal);
+    scale: 0 1;
+    transform-origin: left;
+}
+
+.exp-card.playing .exp-progress {
+    animation: exp-fill var(--dur, 6500ms) linear both;
+}
+
+@keyframes exp-fill {
+    to {
+        scale: 1 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .exp-card.live .exp {
+        transition: none;
+    }
 }
 
 /* ── Hire ── */
@@ -390,9 +535,18 @@
         scroll-snap-align: center;
     }
 
-    .experience li {
+    .exp {
         grid-template-columns: 1fr;
         gap: 6px;
+        padding-right: 0;
+    }
+
+    .exp-card {
+        padding: 22px 20px 56px;
+    }
+
+    .exp-nav {
+        inset: auto 16px 14px auto;
     }
 
     .tile {
@@ -424,13 +578,31 @@
 }
 
 .method-item {
+    position: relative;
     padding-top: 20px;
     border-top: 1px solid var(--hair);
 }
 
+/* The amber line that draws along the top on hover (see the hover block below) */
+.method-item::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 auto;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--signal);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 520ms var(--ease-out);
+}
+
 .method-n {
+    display: inline-block;
     color: var(--signal);
     font-size: 12px;
+    transition:
+        letter-spacing 360ms var(--ease-out),
+        translate 360ms var(--ease-out);
 }
 
 .method-item h3 {
@@ -444,6 +616,7 @@
     color: var(--muted);
     font-size: 15px;
     line-height: 1.5;
+    transition: color 300ms;
 }
 
 .method-source {
@@ -451,24 +624,57 @@
     padding: 0 var(--gutter);
 }
 
+@media (hover: hover) and (pointer: fine) {
+    .method-item {
+        transition: opacity 300ms;
+    }
+
+    /* The title is ink; on hover an amber sweep runs through it from the left */
+    @supports (background-clip: text) {
+        .method-item h3 {
+            background: linear-gradient(90deg, var(--signal) 50%, var(--ink) 50%) 100% 0 / 200% 100% no-repeat;
+            background-clip: text;
+            color: transparent;
+            transition: background-position 600ms var(--ease-out);
+        }
+
+        .method-item:hover h3 {
+            background-position: 0 0;
+        }
+    }
+
+    .method-item:hover::before {
+        scale: 1 1;
+    }
+
+    .method-item:hover .method-n {
+        letter-spacing: 0.18em;
+        translate: 4px 0;
+    }
+
+    .method-item:hover .method-text {
+        color: var(--ink);
+    }
+
+    /* The two others step back */
+    .method-items:has(.method-item:hover) .method-item:not(:hover) {
+        opacity: 0.55;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .method-item,
+    .method-item::before,
+    .method-n,
+    .method-item h3,
+    .method-text {
+        transition: none;
+    }
+}
+
 @media (width <= 760px) {
     .method-items {
         grid-template-columns: 1fr;
         gap: 28px;
     }
-}
-
-/* Path and Numbers share one section: a switch on top, one panel at a time (both show without JS) */
-.path-tabs {
-    margin-top: 30px;
-}
-
-.panel[hidden] {
-    display: none;
-}
-
-.numbers-sub {
-    margin: 40px auto 0;
-    max-width: 52ch;
-    text-align: center;
 }

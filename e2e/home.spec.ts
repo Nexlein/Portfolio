@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { test, expect } from './fixtures';
 import { PROJECTS } from '../src/data/projects';
 import { en } from '../src/i18n/en';
@@ -11,7 +12,7 @@ test.describe('without JavaScript', () => {
         await expect(page.locator('.project-list li')).toHaveCount(PROJECTS.length);
         await expect(page.locator('.feature')).toHaveCount(PROJECTS.filter((p) => p.featured).length);
         await expect(page.locator('.path-svg')).toBeVisible();
-        await expect(page.locator('.chart-card')).toHaveCount(3);
+        await expect(page.locator('.chart-card')).toHaveCount(7);
         await expect(page.locator('#hire .tile')).toHaveCount(2);
         await expect(page.locator('#method .method-item')).toHaveCount(3);
         await expect(page.locator('.hero-copy h1')).toBeVisible(); // reveals never hide content without JS
@@ -78,7 +79,7 @@ test.describe('project map', () => {
         await page.locator('#work').scrollIntoViewIfNeeded();
         const cards = page.locator('.nm-card:not(.off)');
         await expect(cards).toHaveCount(PROJECTS.length);
-        await expect(page.locator('.project-list')).toBeHidden(); // behind "See all" when the map is drawn
+        await expect(page.locator('.project-list')).toBeHidden(); // the list is the other view
 
         await expect(page.locator('.nm.booted')).toHaveCount(1); // the map has drawn itself in
         const first = cards.first();
@@ -126,6 +127,58 @@ test.describe('project map', () => {
     });
 });
 
+const rows = (page: Page) => page.locator('.project-list li:not([hidden])');
+
+test.describe('project list', () => {
+    test('shows a few rows, "Show more" adds a page at a time and "Show less" folds back', async ({ page }) => {
+        await page.setViewportSize({ width: 800, height: 900 }); // the list view, on every project
+        await page.goto('/');
+        await page.locator('.project-list').scrollIntoViewIfNeeded();
+        await expect(rows(page)).toHaveCount(6);
+        const more = page.locator('.more-btn');
+        await expect(more).toHaveText(/Show 6 more/);
+        await more.click();
+        await expect(rows(page)).toHaveCount(12);
+        await more.click();
+        await expect(rows(page)).toHaveCount(PROJECTS.length);
+        await expect(more).toHaveText('Show less');
+        await more.click();
+        await expect(rows(page)).toHaveCount(6);
+    });
+
+    test('desktop: a switch swaps the map and the list, and remembers the choice', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'phones have no map');
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm')).toBeVisible();
+        await expect(page.locator('.project-list')).toBeHidden();
+        await page.locator('.work-view [data-view="list"]').click();
+        await expect(page.locator('.nm')).toBeHidden();
+        await expect(rows(page)).toHaveCount(6);
+        await page.reload();
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.work-view [data-view="list"]')).toHaveAttribute('aria-pressed', 'true');
+        await expect(rows(page)).toHaveCount(6);
+        await page.locator('.work-view [data-view="map"]').click();
+        await expect(page.locator('.nm')).toBeVisible();
+        await expect(page.locator('.project-list')).toBeHidden();
+    });
+
+    test('desktop: a domain chip filters the list, and the page count follows', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'the chips are desktop only');
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await page.locator('.work-view [data-view="list"]').click();
+        const domain = PROJECTS.find((p) => p.category === 'systems')!.category;
+        const expected = PROJECTS.filter((p) => p.category === domain).length;
+        await page.locator(`.query button[data-domain="${domain}"]`).click();
+        await expect(rows(page)).toHaveCount(Math.min(6, expected));
+        for (const li of await rows(page).all()) await expect(li.locator('a')).toHaveAttribute('data-domain', domain);
+        await page.locator(`.query button[data-domain="${domain}"]`).click();
+        await expect(rows(page)).toHaveCount(6);
+    });
+});
+
 test.describe('on phones', () => {
     test.beforeEach(({ isMobile }) => test.skip(!isMobile, 'phones only'));
 
@@ -136,6 +189,25 @@ test.describe('on phones', () => {
         await link.scrollIntoViewIfNeeded();
         await link.click();
         await expect(page).toHaveURL(/\/projects\/.+\.html$/);
+    });
+});
+
+test.describe('how I work', () => {
+    test.beforeEach(({ isMobile }) => test.skip(isMobile, 'needs a mouse'));
+
+    test('hovering an item lights it up and steps the others back', async ({ page }) => {
+        await page.goto('/');
+        const items = page.locator('.method-item');
+        await items.nth(1).scrollIntoViewIfNeeded();
+        await expect(items.nth(0)).toHaveCSS('opacity', '1');
+        await items.nth(1).hover();
+        await expect(items.nth(0)).toHaveCSS('opacity', '0.55');
+        await expect(items.nth(2)).toHaveCSS('opacity', '0.55');
+        await expect(items.nth(1)).toHaveCSS('opacity', '1');
+        await expect(items.nth(1).locator('h3')).toHaveCSS('background-position', /^0(px|%) 0(px|%)$/);
+        await expect(items.nth(1).locator('.method-n')).toHaveCSS('letter-spacing', /^\d+(\.\d+)?px$/);
+        await page.mouse.move(2, 2);
+        await expect(items.nth(0)).toHaveCSS('opacity', '1');
     });
 });
 
@@ -173,14 +245,155 @@ test.describe('charts', () => {
         }
     });
 
-    test('a numbers card shows its second view', async ({ page }) => {
+    test('the numbers are a deck: one chart in front, the arrows and the index bring another one forward', async ({
+        page
+    }) => {
         await page.goto('/');
-        await page.locator('.path-tabs button[data-panel="numbers"]').click();
-        const card = page.locator('.chart-card').first();
-        await card.scrollIntoViewIfNeeded();
-        await card.locator('.dots button').nth(1).click();
-        await expect(card.locator('.face').nth(1)).toHaveClass(/show/);
-        await expect(card.locator('.face').nth(0)).not.toHaveClass(/show/);
+        const stage = page.locator('.numbers-row');
+        await stage.scrollIntoViewIfNeeded();
+        expect(await page.locator('.chart-card').count()).toBeGreaterThanOrEqual(7);
+        const front = page.locator('.chart-card[data-pos="0"]');
+        await expect(front).toHaveCount(1);
+        const first = await front.locator('.card-k').textContent();
+        await page.locator('.numbers-next').click();
+        await expect(front.locator('.card-k')).not.toHaveText(first!);
+        await page.locator('.numbers-prev').click();
+        await expect(front.locator('.card-k')).toHaveText(first!);
+        const third = page.locator('.numbers-index button').nth(3);
+        if (await third.isVisible()) {
+            await third.click(); // the index is desktop only
+            await expect(third).toHaveAttribute('aria-current', '');
+        }
+        await expect(page.locator('.chart-card[data-pos="0"]')).toHaveCount(1);
+        expect(await stage.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+    });
+
+    test('the deck turns by itself, and stops while the pointer is on it', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('.numbers-row').scrollIntoViewIfNeeded();
+        const front = page.locator('.chart-card[data-pos="0"] .card-k');
+        const first = await front.textContent();
+        await page.mouse.move(2, 2);
+        await expect(front).not.toHaveText(first!, { timeout: 12000 });
+    });
+
+    test('the story under the path chart: one checkpoint at a time, lit on the chart, driven by arrows and hover', async ({
+        page
+    }) => {
+        await page.goto('/');
+        const marks = page.locator('.path-svg .mark');
+        await page.locator('.exp-card').scrollIntoViewIfNeeded();
+        expect(await page.locator('.exp').count()).toBe(await marks.count());
+        await expect(page.locator('.exp.on')).toHaveCount(1);
+        await expect(page.locator('.path-svg .mark.on')).toHaveCount(1);
+        const first = await page.locator('.exp.on').getAttribute('data-cp');
+        await page.locator('.exp-next').click();
+        await expect(page.locator('.exp.on')).not.toHaveAttribute('data-cp', first!);
+        await expect(page.locator('.path-svg .mark.on')).not.toHaveAttribute('data-cp', first!);
+        await page.locator('.exp-prev').click();
+        await expect(page.locator('.exp.on')).toHaveAttribute('data-cp', first!);
+        // Climb2C sits mid-chart, clear of its neighbours on a phone-width plot
+        await page.locator('.path-svg .mark[data-cp="climb2c"] .mark-hit').hover({ force: true });
+        await expect(page.locator('.exp.on')).toHaveAttribute('data-cp', 'climb2c');
+        await expect(page.locator('.path-svg .mark.on')).toHaveAttribute('data-cp', 'climb2c');
+    });
+
+    test('the story turns by itself, and a range change keeps a valid selection', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('.exp-card').scrollIntoViewIfNeeded();
+        await page.mouse.move(2, 2);
+        const first = await page.locator('.exp.on').getAttribute('data-cp');
+        await expect(page.locator('.exp.on')).not.toHaveAttribute('data-cp', first!, { timeout: 12000 });
+        await page.locator('.path-range [data-range="1"]').click();
+        await expect(page.locator('.exp.on')).toHaveCount(1);
+        await expect(page.locator('.path-svg .mark.on')).toHaveCount(1);
+        await expect(page.locator('.exp-count')).toHaveText(/^1 \/ \d$/);
+    });
+
+    test('moving the pointer about or changing focus does not restart the story timer', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.setViewportSize({ width: 1280, height: 2400 }); // the story and the numbers on screen together
+        await page.goto('/');
+        await page.locator('#numbers').scrollIntoViewIfNeeded();
+        await page.mouse.move(2, 2);
+        const elapsed = () =>
+            page.locator('.exp-progress').evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
+        await expect.poll(elapsed).toBeGreaterThan(900);
+        // The pointer crosses the numbers part (index, arrows, section text)
+        await page.locator('.numbers-sub').hover();
+        await page.locator('.numbers-index button').nth(2).hover();
+        await page.locator('.numbers-nav button').first().hover();
+        await page.mouse.move(2, 2, { steps: 3 });
+        await page.evaluate(() => window.dispatchEvent(new Event('blur')));
+        await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+        expect(await elapsed()).toBeGreaterThan(1200);
+    });
+
+    test('the timers pause only on the chart plot, the range buttons and the panel, not on the rest of the block', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.setViewportSize({ width: 1280, height: 2400 });
+        await page.goto('/');
+        await page.locator('#numbers').scrollIntoViewIfNeeded();
+        const story = page.locator('.exp-card');
+        await page.locator('.path-symbol').hover(); // the ticker above the plot
+        await expect(story).toHaveClass(/playing/);
+        await page.locator('.path-svg .hit').hover({ position: { x: 300, y: 150 } });
+        await expect(story).not.toHaveClass(/playing/);
+        await page.locator('.path-range button').first().hover();
+        await expect(story).not.toHaveClass(/playing/);
+        await page.locator('.numbers-sub').hover(); // the line of text above the deck
+        await expect(story).toHaveClass(/playing/);
+        const deck = page.locator('.numbers');
+        await expect(deck).toHaveClass(/playing/);
+        await page.locator('.numbers-index button').nth(2).hover();
+        await expect(deck).not.toHaveClass(/playing/);
+        await page.locator('.numbers-sub').hover();
+        await expect(deck).toHaveClass(/playing/);
+    });
+
+    test('clicking index entries keeps the deck paused while the pointer stays, and it resumes once it leaves', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.setViewportSize({ width: 1280, height: 2400 });
+        await page.goto('/');
+        await page.locator('#numbers').scrollIntoViewIfNeeded();
+        const deck = page.locator('.numbers');
+        const entries = page.locator('.numbers-index button');
+        await entries.nth(2).click();
+        await page.waitForTimeout(700); // focus moved to the button: the timer must not start
+        await expect(deck).not.toHaveClass(/playing/);
+        await entries.nth(4).click();
+        await page.waitForTimeout(700);
+        await expect(deck).not.toHaveClass(/playing/);
+        await expect(entries.nth(4)).toHaveAttribute('aria-current', '');
+        await page.locator('.numbers-sub').hover();
+        await expect(deck).toHaveClass(/playing/);
+    });
+
+    test('a window that is narrow at load shows the list, then draws the map once it is widened', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'resizes the window');
+        await page.setViewportSize({ width: 800, height: 900 });
+        await page.goto('/');
+        await page.locator('.work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.project-list')).toBeVisible();
+        await expect(page.locator('.nm')).toHaveCount(0);
+        await page.setViewportSize({ width: 1280, height: 900 });
+        await page.locator('.work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm')).toBeVisible();
+        await expect(page.locator('.project-list')).toBeHidden();
+    });
+
+    test('old #numbers links land on the numbers', async ({ page }) => {
+        await page.goto('/#numbers');
+        await expect(page.locator('.numbers-row')).toBeInViewport();
     });
 });
 
@@ -258,7 +471,7 @@ test.describe('language', () => {
 test('reduced motion: no scroll reveal hides content and nothing moves on its own', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await page.locator('.path-tabs button[data-panel="numbers"]').click();
+    await page.locator('.numbers-row').scrollIntoViewIfNeeded();
     await expect(page.locator('.chart-card').first()).toBeVisible();
     await expect(page.locator('.avail-dot')).toHaveCSS('animation-name', 'none');
 });
