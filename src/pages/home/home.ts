@@ -11,7 +11,7 @@ import { PROJECTS, projectPath } from '@/data/projects';
 import { initGlide } from '@/ui/glide';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
-import { initNumbers, initPathChart, initPathLinks, initReveals } from '@/components/Charts/Charts';
+import { initNumbers, initPathChart, initPathStory, initReveals } from '@/components/Charts/Charts';
 import { MAP_MAX } from './blocks';
 
 /** The map needs room: below this width the plain list is the better view. */
@@ -108,7 +108,7 @@ function bootstrap(): void {
     initHero();
     void initWork();
     initPathChart();
-    initPathLinks();
+    initPathStory();
     initNumbers();
     initReveals();
     initCopyEmail();

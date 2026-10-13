@@ -110,8 +110,8 @@ export const fr = {
             aria: "Compétences distinctes au fil du temps : {n} aujourd'hui.",
             skills: '{n} compétences',
             shipped: '{p} démarré',
-            earlier: 'Voir les {n} étapes précédentes',
-            fewer: 'Voir moins'
+            prevStep: 'Étape précédente',
+            nextStep: 'Étape suivante'
         },
         numbers: {
             heat: 'Domaines par période',

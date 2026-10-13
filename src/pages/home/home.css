@@ -166,120 +166,28 @@
     display: none;
 }
 
-/* ── Experience under the path chart: a timeline whose entries light their checkpoint on the chart ── */
-.experience {
+/* ── The story under the path chart: one checkpoint at a time (see initPathStory). Without JS: a plain list ── */
+.exp-card {
     position: relative;
-    display: grid;
-    margin-top: 20px;
-    list-style: none;
+    margin-top: 14px;
+    overflow: hidden;
+    padding: 26px 28px 30px;
+    border-radius: 24px;
 }
 
-/* The rail */
-.experience::before {
-    content: '';
-    position: absolute;
-    top: 30px;
-    bottom: 30px;
-    left: 12px;
-    width: 1px;
-    background: var(--hair);
-}
-
-.experience ul {
-    display: grid;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.experience li {
-    position: relative;
+.exp {
     display: grid;
     grid-template-columns: 11em 1fr;
     gap: 20px;
-    padding: 18px 8px 18px 40px;
-    border-radius: 14px;
-    outline: none;
-    transition:
-        opacity 220ms,
-        background 220ms;
+    padding-right: 120px;
 }
 
-.experience li::before {
-    content: '';
-    position: absolute;
-    top: 25px;
-    left: 8px;
-    width: 9px;
-    height: 9px;
-    border: 1.5px solid var(--signal);
-    border-radius: 50%;
-    background: var(--bg);
-    transition:
-        scale 220ms var(--ease-out),
-        background 220ms;
-}
-
-.experience li:focus-visible {
-    box-shadow: 0 0 0 2px var(--signal);
-}
-
-.experience li.on {
-    background: var(--surface);
-}
-
-.experience li.on::before {
-    background: var(--signal);
-    scale: 1.5;
-}
-
-.experience.lit li:not(.on) {
-    opacity: 0.45;
-}
-
-/* Earlier steps fold away (height animates through a 0fr → 1fr grid row); the button above opens them */
-.exp-toggle {
-    position: relative;
-    justify-self: start;
-    margin: 0 0 4px 40px;
-    padding: 6px 14px;
-    border: 1px solid var(--hair);
-    border-radius: 999px;
-    background: var(--surface);
-    color: var(--muted);
-    font-size: 13px;
-    cursor: pointer;
-    transition:
-        color 200ms,
-        border-color 200ms;
-}
-
-.exp-toggle:hover {
-    border-color: var(--signal);
-    color: var(--ink);
-}
-
-.exp-fold {
-    display: grid;
-    grid-template-rows: 1fr;
-    transition: grid-template-rows 450ms var(--ease-out);
-}
-
-.exp-fold > ul {
-    min-height: 0;
-    overflow: hidden;
-}
-
-.js .experience:not(.open) .exp-fold {
-    grid-template-rows: 0fr;
-}
-
-.js .experience:not(.open) .exp-fold > ul {
-    visibility: hidden;
-    transition: visibility 0s 450ms;
+.exp + .exp {
+    margin-top: 22px;
 }
 
 .exp-when {
+    margin: 0;
     padding-top: 3px;
     color: var(--muted);
     font-family: var(--font-mono);
@@ -288,12 +196,107 @@
 
 .exp-what {
     display: grid;
+    align-content: start;
     gap: 4px;
+}
+
+.exp-what strong {
+    font-size: 1.05rem;
 }
 
 .exp-what span {
     color: var(--muted);
     line-height: 1.45;
+}
+
+/* With JS the panels share one cell and cross-fade: the card never changes height */
+.exp-card.live .exp-stage {
+    display: grid;
+}
+
+.exp-card.live .exp {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 10px;
+    transition:
+        opacity 320ms,
+        translate 450ms var(--ease-out),
+        visibility 0s 320ms;
+}
+
+.exp-card.live .exp + .exp {
+    margin-top: 0;
+}
+
+.exp-card.live .exp.on {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+    transition-delay: 120ms, 120ms, 0s;
+}
+
+.exp-nav {
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.exp-nav[hidden] {
+    display: none;
+}
+
+.exp-count {
+    margin-right: 6px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.exp-nav button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--hair);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 200ms;
+}
+
+.exp-nav button:hover {
+    border-color: var(--signal);
+}
+
+/* A thin line fills along the bottom while the story turns by itself */
+.exp-progress {
+    position: absolute;
+    inset: auto 0 0;
+    height: 2px;
+    background: var(--signal);
+    scale: 0 1;
+    transform-origin: left;
+}
+
+.exp-card.playing .exp-progress {
+    animation: exp-fill var(--dur, 6500ms) linear both;
+}
+
+@keyframes exp-fill {
+    to {
+        scale: 1 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .exp-card.live .exp {
+        transition: none;
+    }
 }
 
 /* ── Hire ── */
@@ -488,9 +491,18 @@
         scroll-snap-align: center;
     }
 
-    .experience li {
+    .exp {
         grid-template-columns: 1fr;
         gap: 6px;
+        padding-right: 0;
+    }
+
+    .exp-card {
+        padding: 22px 20px 56px;
+    }
+
+    .exp-nav {
+        inset: auto 16px 14px auto;
     }
 
     .tile {

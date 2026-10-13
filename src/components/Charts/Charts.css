@@ -104,7 +104,7 @@
     fill: transparent;
 }
 
-/* Linked with the experience list (initPathLinks): the lit checkpoint grows and fills, the others step back */
+/* Linked with the story under the chart (initPathStory): the lit checkpoint grows and fills, the others step back */
 .path-svg .mark,
 .path-svg .mark text,
 .path-svg .mark line {
@@ -115,7 +115,7 @@
 }
 
 .path-svg .marks.lit .mark:not(.on) {
-    opacity: 0.3;
+    opacity: 0.5;
 }
 
 .path-svg .mark.on .mark-dot {

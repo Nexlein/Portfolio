@@ -79,9 +79,9 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
                 half = label.length * 3.3 + 8;
             const row = rowsEnd.findIndex((end) => mx - half > end);
             if (row < 0)
-                return `<g class="mark" data-cp="${c.id}"><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="13" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle></g>`;
+                return `<g class="mark" data-cp="${c.id}"><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle></g>`;
             rowsEnd[row] = mx + half;
-            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="13" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
+            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
         })
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">

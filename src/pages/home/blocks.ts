@@ -75,13 +75,13 @@ export function mapMore(lang: Lang): string {
     return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all" aria-expanded="false">${t(lang, 'work.seeAll')}</button>`;
 }
 
-/** Entries of the path list that show at once; the earlier ones fold away (see initPathLinks). */
-const EXP_SHOWN = 3;
-
-/** Every checkpoint of the path chart as a list entry, oldest first like the chart; the latest few are open. */
+/**
+ * The story under the path chart: one panel per checkpoint, oldest first like the chart. The page script
+ * (initPathStory) shows one at a time and turns it with the chart; without JS they read as a plain list.
+ */
 export function experience(lang: Lang): string {
     const entries = [...EXPERIENCES, ...EDUCATION];
-    const item = (c: Checkpoint) => {
+    const panel = (c: Checkpoint) => {
         const e = entries.find((x) => x.id === c.id)!;
         const org = 'org' in e && e.org ? ` · ${e.org}` : '';
         const when = 'kind' in e ? e.period[lang] : monthName(yearOf(c.date), lang);
@@ -89,16 +89,12 @@ export function experience(lang: Lang): string {
             .split('. ')[0]
             .replace(/<[^>]+>/g, '')
             .replace(/\.$/, '');
-        return `<li data-cp="${c.id}" tabindex="0"><span class="exp-when">${when}</span><span class="exp-what"><strong>${e.title[lang]}${org}</strong>
-<span>${first}.</span></span></li>`;
+        return `<article class="exp" data-cp="${c.id}"><p class="exp-when">${when}</p><div class="exp-what"><strong>${e.title[lang]}${org}</strong>
+<span>${first}.</span></div></article>`;
     };
-    const early = CHECKPOINTS.slice(0, -EXP_SHOWN).map(item).join(''),
-        late = CHECKPOINTS.slice(-EXP_SHOWN).map(item).join('');
-    if (!early) return `<ul>${late}</ul>`;
-    const n = CHECKPOINTS.length - EXP_SHOWN;
-    return `<button type="button" class="exp-toggle" aria-expanded="false" hidden data-more="${t(lang, 'path.earlier').replace('{n}', String(n))}" data-less="${t(lang, 'path.fewer')}">${t(lang, 'path.earlier').replace('{n}', String(n))}</button>
-<div class="exp-fold"><ul>${early}</ul></div>
-<ul>${late}</ul>`;
+    return `<div class="exp-card surface"><div class="exp-stage">${CHECKPOINTS.map(panel).join('')}</div>
+<div class="exp-nav" hidden><span class="exp-count"></span><button type="button" class="exp-prev" aria-label="${t(lang, 'path.prevStep')}">‹</button><button type="button" class="exp-next" aria-label="${t(lang, 'path.nextStep')}">›</button></div>
+<span class="exp-progress"></span></div>`;
 }
 
 export const pathBlock = (lang: Lang) => pathChart(lang, PROJECTS, thisMonth());

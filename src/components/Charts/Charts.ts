@@ -79,40 +79,94 @@ export function initPathChart(): void {
     bind();
 }
 
-const idOf = (e: Event) => (e.target as Element).closest<HTMLElement>('[data-cp]')?.dataset.cp ?? null;
+const inside = (el: EventTarget | null) => (el as Element | null)?.closest?.('.path-chart, .exp-card');
+
+const STEP_MS = 6500,
+    RESUME_MS = 1500;
 
 /**
- * The path chart and the experience list under it are one story: hovering or focusing an entry of the list lights
- * its checkpoint on the chart (and the other way round); the rest dims. Marks come and go with the range
- * buttons, so everything is looked up at the time of the event.
+ * The story under the path chart: one checkpoint is selected at a time, lit on the chart and told in the panel
+ * below. It moves on by itself while it is on screen and untouched; a mouse over a checkpoint selects it for as
+ * long as it stays there, and leaving resumes from that point. Taps, the arrows and the range buttons work too
+ * (marks come and go with the range, so they are looked up each time). Never moves on its own with reduced motion.
  */
-export function initPathLinks(): void {
+export function initPathStory(): void {
     const section = document.getElementById('path');
-    if (!section) return;
-    const list = section.querySelector<HTMLElement>('.experience');
-    const toggle = list?.querySelector<HTMLButtonElement>('.exp-toggle');
-    const fold = (open: boolean) => {
-        list!.classList.toggle('open', open);
-        toggle!.setAttribute('aria-expanded', String(open));
-        toggle!.textContent = toggle!.dataset[open ? 'less' : 'more']!;
+    const card = section?.querySelector<HTMLElement>('.exp-card');
+    if (!section || !card) return;
+    const nav = card.querySelector<HTMLElement>('.exp-nav')!,
+        count = card.querySelector<HTMLElement>('.exp-count')!,
+        bar = card.querySelector<HTMLElement>('.exp-progress')!;
+    nav.hidden = false;
+    card.classList.add('live');
+    let current = '',
+        timer = 0,
+        visible = false,
+        held = false;
+
+    const ids = () => [...section.querySelectorAll<SVGElement>('.path-svg .mark')].map((m) => m.dataset.cp!);
+    const arm = (delay = STEP_MS) => {
+        clearTimeout(timer);
+        const run = visible && !held && !document.hidden && !reduced();
+        card.classList.toggle('playing', run);
+        bar.style.setProperty('--dur', `${delay}ms`);
+        if (run) timer = window.setTimeout(() => step(1), delay);
     };
-    if (toggle) {
-        toggle.hidden = false;
-        toggle.addEventListener('click', () => fold(!list!.classList.contains('open')));
+    function select(id: string, force = false) {
+        const all = ids();
+        const next = all.includes(id) ? id : all[0];
+        if (next === current && !force) return;
+        current = next;
+        section!.querySelector('.marks')?.classList.add('lit');
+        section!.querySelectorAll<HTMLElement | SVGElement>('[data-cp]').forEach((n) => {
+            n.classList.toggle('on', n.dataset.cp === current);
+        });
+        count.textContent = `${all.indexOf(current) + 1} / ${all.length}`;
+        bar.style.animation = 'none';
+        void bar.offsetWidth; // restart the fill
+        bar.style.animation = '';
+        arm();
     }
-    const light = (id: string | null) => {
-        // A checkpoint whose entry is folded away opens the fold
-        if (toggle && id && list!.querySelector(`.exp-fold [data-cp="${CSS.escape(id)}"]`)) fold(true);
-        const on = id ? section.querySelectorAll(`[data-cp="${CSS.escape(id)}"]`) : [];
-        section.querySelectorAll('.marks, .experience').forEach((g) => g.classList.toggle('lit', on.length > 0));
-        section.querySelectorAll('[data-cp]').forEach((n) => n.classList.toggle('on', [...on].includes(n)));
-    };
-    section.addEventListener('pointerover', (e) => light(idOf(e)));
-    section.addEventListener('pointerout', (e) => {
-        if (!(e.relatedTarget as Element | null)?.closest?.('[data-cp]')) light(null);
+    function step(dir: number) {
+        const all = ids();
+        select(all[(all.indexOf(current) + dir + all.length) % all.length]);
+    }
+
+    section.addEventListener('pointerover', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
+        if (mark) select(mark.dataset.cp!);
+        if (inside(e.target)) {
+            held = true;
+            arm();
+        }
     });
-    section.addEventListener('focusin', (e) => light(idOf(e)));
-    section.addEventListener('focusout', () => light(null));
+    section.addEventListener('pointerout', (e) => {
+        if (e.pointerType !== 'mouse' || inside(e.relatedTarget)) return;
+        held = card.matches(':has(:focus-visible)');
+        arm(RESUME_MS);
+    });
+    section.addEventListener('click', (e) => {
+        const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
+        if (mark) select(mark.dataset.cp!);
+    });
+    card.addEventListener('focusin', (e) => {
+        if (!(e.target as Element).matches(':focus-visible')) return;
+        held = true;
+        arm();
+    });
+    card.addEventListener('focusout', () => {
+        held = false;
+        arm(RESUME_MS);
+    });
+    nav.querySelector('.exp-prev')!.addEventListener('click', () => step(-1));
+    nav.querySelector('.exp-next')!.addEventListener('click', () => step(1));
+    new MutationObserver(() => select(current, true)).observe(section.querySelector('.path-plot')!, {
+        childList: true
+    });
+    document.addEventListener('visibilitychange', () => arm());
+    new IntersectionObserver(([e]) => ((visible = e.isIntersecting), arm()), { threshold: 0.5 }).observe(card);
+    select(ids()[0], true);
 }
 
 const DECK_MS = 6500;

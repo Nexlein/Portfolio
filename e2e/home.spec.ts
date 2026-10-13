@@ -205,36 +205,37 @@ test.describe('charts', () => {
         await expect(front).not.toHaveText(first!, { timeout: 12000 });
     });
 
-    test('the experience list and the path chart light each other up', async ({ page }) => {
+    test('the story under the path chart: one checkpoint at a time, lit on the chart, driven by arrows and hover', async ({
+        page
+    }) => {
         await page.goto('/');
-        const li = page.locator('.experience li[data-cp="issanka"]');
-        const mark = page.locator('.path-svg .mark[data-cp="issanka"]');
-        await li.scrollIntoViewIfNeeded();
-        await li.focus();
-        await expect(mark).toHaveClass(/on/);
-        await expect(li).toHaveClass(/on/);
-        await expect(page.locator('.experience li[data-cp="hackathons"]')).not.toHaveClass(/on/);
-        await li.blur();
-        await expect(mark).not.toHaveClass(/on/);
-        await page.locator('.path-chart').scrollIntoViewIfNeeded();
+        const marks = page.locator('.path-svg .mark');
+        await page.locator('.exp-card').scrollIntoViewIfNeeded();
+        expect(await page.locator('.exp').count()).toBe(await marks.count());
+        await expect(page.locator('.exp.on')).toHaveCount(1);
+        await expect(page.locator('.path-svg .mark.on')).toHaveCount(1);
+        const first = await page.locator('.exp.on').getAttribute('data-cp');
+        await page.locator('.exp-next').click();
+        await expect(page.locator('.exp.on')).not.toHaveAttribute('data-cp', first!);
+        await expect(page.locator('.path-svg .mark.on')).not.toHaveAttribute('data-cp', first!);
+        await page.locator('.exp-prev').click();
+        await expect(page.locator('.exp.on')).toHaveAttribute('data-cp', first!);
         // Climb2C sits mid-chart, clear of its neighbours on a phone-width plot
         await page.locator('.path-svg .mark[data-cp="climb2c"] .mark-hit').hover({ force: true });
-        await expect(page.locator('.experience li[data-cp="climb2c"]')).toHaveClass(/on/);
+        await expect(page.locator('.exp.on')).toHaveAttribute('data-cp', 'climb2c');
+        await expect(page.locator('.path-svg .mark.on')).toHaveAttribute('data-cp', 'climb2c');
     });
 
-    test('the path list holds every checkpoint, earlier ones fold away and open from the chart', async ({ page }) => {
+    test('the story turns by itself, and a range change keeps a valid selection', async ({ page }) => {
         await page.goto('/');
-        const items = page.locator('.experience li');
-        expect(await items.count()).toBe(await page.locator('.path-svg .mark').count());
-        const early = page.locator('.experience li[data-cp="epitech"]');
-        await expect(early).toBeHidden();
-        await page.locator('.exp-toggle').click();
-        await expect(early).toBeVisible();
-        await page.locator('.exp-toggle').click();
-        await expect(early).toBeHidden();
-        await page.locator('.path-chart').scrollIntoViewIfNeeded();
-        await page.locator('.path-svg .mark[data-cp="epitech"] .mark-hit').hover({ force: true });
-        await expect(early).toBeVisible();
+        await page.locator('.exp-card').scrollIntoViewIfNeeded();
+        await page.mouse.move(2, 2);
+        const first = await page.locator('.exp.on').getAttribute('data-cp');
+        await expect(page.locator('.exp.on')).not.toHaveAttribute('data-cp', first!, { timeout: 12000 });
+        await page.locator('.path-range [data-range="1"]').click();
+        await expect(page.locator('.exp.on')).toHaveCount(1);
+        await expect(page.locator('.path-svg .mark.on')).toHaveCount(1);
+        await expect(page.locator('.exp-count')).toHaveText(/^1 \/ \d$/);
     });
 
     test('old #numbers links land on the numbers', async ({ page }) => {

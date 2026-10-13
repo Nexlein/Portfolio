@@ -110,8 +110,8 @@ export const en = {
             aria: 'Distinct skills over time: {n} today.',
             skills: '{n} skills',
             shipped: '{p} started',
-            earlier: 'Show {n} earlier steps',
-            fewer: 'Show fewer'
+            prevStep: 'Previous step',
+            nextStep: 'Next step'
         },
         numbers: {
             heat: 'Domains by period',

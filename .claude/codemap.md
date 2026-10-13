@@ -24,8 +24,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Charts
 - **Charts.css** (732) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (205) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
-  - exports: countUp, initPathChart, initPathLinks, initNumbers, initReveals
+- **Charts.ts** (259) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
+  - exports: countUp, initPathChart, initPathStory, initNumbers, initReveals
   - → core/i18n, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
 - **data.ts** (174) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
@@ -171,11 +171,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: headers.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (156) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+- **blocks.ts** (152) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
   - exports: MAP_MAX, still, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← pages/content/render, pages/home/home, pages/project/render
-- **home.css** (558) — Home sections that are not components of their own: selected work, the project list, experience, hire.
+- **home.css** (570) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
 - **home.ts** (119) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
