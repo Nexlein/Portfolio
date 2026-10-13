@@ -35,7 +35,7 @@ export const monthName = (time: number, lang: Lang) =>
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
-export const PATH = { W: 1080, H: 360, L: 44, R: 60, T: 84, B: 30 };
+export const PATH = { W: 1080, H: 360, L: 44, R: 60, T: 44, B: 30 };
 const smooth = (u: number) => u * u * (3 - 2 * u);
 
 /** Sampled smooth steps between milestones: the line, the hover dot and the tooltip all use these. */
@@ -69,30 +69,32 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
     for (let v = 0; v <= total; v += step) ticks.push(v);
     const years: number[] = [];
     for (let yr = Math.ceil(t0); yr <= now; yr++) years.push(yr);
-    // Checkpoint labels take the first free row; when none is free the checkpoint keeps a dot and a tooltip
-    const rowsEnd = [-Infinity, -Infinity, -Infinity];
-    const marks = CHECKPOINTS.filter((c) => yearOf(c.date) >= t0 && yearOf(c.date) <= now)
-        .map((c) => {
-            const label = c.label[lang],
-                mx = x(yearOf(c.date)),
-                my = y(valueAt(points, yearOf(c.date))),
-                half = label.length * 3.3 + 8;
-            const row = rowsEnd.findIndex((end) => mx - half > end);
-            if (row < 0)
-                return `<circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle>`;
-            rowsEnd[row] = mx + half;
-            return `<g class="mark"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
+    // Checkpoints are numbered markers on the curve; the list under the chart says what each one is
+    const marks = CHECKPOINTS.map((c, i) => ({ c, n: i + 1 }))
+        .filter(({ c }) => yearOf(c.date) >= t0 && yearOf(c.date) <= now)
+        .map(({ c, n }) => {
+            const mx = x(yearOf(c.date)),
+                my = y(valueAt(points, yearOf(c.date)));
+            return `<g class="mark" data-m="${n}"><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="9.5"><title>${c.label[lang]}</title></circle><text class="mark-n" x="${f1(mx)}" y="${f1(my + 3.7)}">${n}</text></g>`;
         })
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
 <g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${years.map((yr) => `<text class="year" x="${f1(x(yr))}" y="${H - 8}">${yr}</text>`).join('')}</g>
-<g class="marks">${marks}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
 <path class="line" pathLength="1" d="${line}" />
 <circle class="now" cx="${f1(x(now))}" cy="${f1(y(total))}" r="4.5" />
 <g class="cross" visibility="hidden"><line class="cross-x" y1="${T - 10}" y2="${H - B}" /><circle class="cross-dot" r="4.5" /></g>
-<rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}" /></svg>`;
+<rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}" />
+<g class="marks">${marks}</g></svg>`;
+}
+
+/** The checkpoints in order: number, month, what. The numbers match the markers on the curve. */
+function milestones(lang: Lang): string {
+    return `<ol class="path-milestones">${CHECKPOINTS.map(
+        (c, i) =>
+            `<li data-m="${i + 1}"><span class="n">${i + 1}</span><span class="when">${monthName(yearOf(c.date), lang)}</span><span class="what">${c.label[lang]}</span></li>`
+    ).join('')}</ol>`;
 }
 
 export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): string {
@@ -108,6 +110,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
     <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}"><button type="button" data-range="1">1Y</button><button type="button" data-range="2">2Y</button><button type="button" data-range="max" aria-pressed="true">Max</button></div>
   </div>
   <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" role="status" hidden></div></div>
+  ${milestones(lang)}
 </div>`;
 }
 
