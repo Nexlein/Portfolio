@@ -295,11 +295,11 @@ export function numbers(lang: Lang, projects: ProjectEntry[], now: number): stri
         chartCard(t(lang, 'numbers.thisYear'), n('newSkills', recent), chips(projects, now))
     ].join('\n');
     return `<div class="numbers" id="numbers">
-<div class="numbers-head"><p class="numbers-sub">${t(lang, 'numbers.sub')}</p>
-<div class="numbers-nav" hidden><button type="button" class="numbers-prev" aria-label="${t(lang, 'numbers.prev')}">‹</button><button type="button" class="numbers-next" aria-label="${t(lang, 'numbers.next')}">›</button></div></div>
+<div class="numbers-head"><p class="numbers-sub">${t(lang, 'numbers.sub')}</p></div>
 <div class="numbers-body"><div class="numbers-index" aria-label="${t(lang, 'numbers.sub')}"></div>
-<div class="numbers-row">
+<div class="numbers-stage"><div class="numbers-row">
 ${cards}
-</div></div>
+</div>
+<div class="numbers-nav" hidden><button type="button" class="numbers-prev" aria-label="${t(lang, 'numbers.prev')}">‹</button><button type="button" class="numbers-next" aria-label="${t(lang, 'numbers.next')}">›</button></div></div></div>
 </div>`;
 }
