@@ -1,0 +1,749 @@
+/* Path chart and the numbers deck. Series colours: .c0 … .c4 (tokens --c0 … --c4). */
+/* stylelint-disable no-descending-specificity -- each chart's parts are scoped by its own class (.path-svg, .radar...) */
+
+/* ── Path chart ── */
+.path-chart {
+    position: relative;
+    max-width: var(--max);
+    margin: 64px auto 0;
+    padding: 28px 28px 18px;
+    border-radius: 28px;
+}
+
+.path-ticker {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+}
+
+.path-symbol {
+    margin: 0;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.path-total {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 14px;
+    margin: 6px 0 0;
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+.path-delta {
+    color: var(--pos);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+.path-range button {
+    padding: 6px 14px;
+    font-size: 12px;
+}
+
+.path-plot {
+    position: relative;
+    margin-top: 10px;
+}
+
+.path-svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.path-svg .grid line {
+    stroke: var(--hair);
+}
+
+.path-svg text {
+    fill: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+}
+
+.path-svg .year {
+    text-anchor: middle;
+}
+
+.path-svg .mark line {
+    stroke: var(--muted);
+    stroke-opacity: 0.35;
+    stroke-dasharray: 2 4;
+}
+
+.path-svg .mark text {
+    fill: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    text-anchor: middle;
+}
+
+.path-svg .mark-dot {
+    fill: var(--bg);
+    stroke: var(--signal);
+    stroke-width: 1.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+        scale 220ms var(--ease-out),
+        fill 220ms;
+}
+
+.path-svg .mark-hit {
+    fill: transparent;
+}
+
+/* Linked with the story under the chart (initPathStory): the lit checkpoint grows and fills, the others step back */
+.path-svg .mark,
+.path-svg .mark text,
+.path-svg .mark line {
+    transition:
+        opacity 220ms,
+        stroke-opacity 220ms,
+        fill 220ms;
+}
+
+.path-svg .marks.lit .mark:not(.on) {
+    opacity: 0.5;
+}
+
+.path-svg .mark.on .mark-dot {
+    fill: var(--signal);
+    scale: 1.9;
+    filter: drop-shadow(0 0 6px var(--signal));
+}
+
+.path-svg .mark.on text {
+    fill: var(--signal);
+}
+
+.path-svg .mark.on line {
+    stroke: var(--signal);
+    stroke-opacity: 0.8;
+    stroke-dasharray: none;
+}
+
+.path-svg .stop-top {
+    stop-color: var(--signal);
+    stop-opacity: 0.28;
+}
+
+.path-svg .stop-bottom {
+    stop-color: var(--signal);
+    stop-opacity: 0;
+}
+
+.path-svg .area {
+    fill: url('#path-fill');
+}
+
+.path-svg .line {
+    fill: none;
+    stroke: var(--signal);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+}
+
+.path-svg .now {
+    fill: var(--signal);
+}
+
+.path-svg .cross-x {
+    stroke: var(--muted);
+    stroke-dasharray: 3 3;
+}
+
+.path-svg .cross-dot {
+    fill: var(--signal);
+    stroke: var(--bg);
+    stroke-width: 2;
+}
+
+.path-svg .hit {
+    fill: transparent;
+    cursor: crosshair;
+}
+
+/* Draw-in: the line traces itself, then the area and the checkpoints appear */
+.js .path-chart:not(.drawn) .line {
+    stroke-dashoffset: 1;
+}
+
+.js .path-chart:not(.drawn) :is(.area, .now, .marks) {
+    opacity: 0;
+}
+
+.path-chart.drawn .line {
+    transition: stroke-dashoffset 1600ms var(--ease-in-out);
+}
+
+.path-chart.drawn :is(.area, .now, .marks) {
+    transition: opacity 700ms ease-out 900ms;
+}
+
+.path-tip {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    gap: 2px;
+    padding: 8px 12px;
+    border: 1px solid var(--hair);
+    border-radius: 10px;
+    background: color-mix(in sRGB, var(--raised) 92%, transparent);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 24px rgb(0 0 0 / 25%);
+    font-size: 13px;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, calc(-100% - 14px));
+}
+
+.path-tip[hidden] {
+    display: none;
+}
+
+.path-tip span:last-child {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* ── Numbers: a deck of small charts (the arrows and the index are added by script) ── */
+.numbers {
+    max-width: var(--max);
+    margin: 56px auto 0;
+    padding: 0 var(--gutter);
+}
+
+.numbers-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+    margin-bottom: 14px;
+}
+
+.numbers-sub {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+/* Up and down, to the left of the index (the ‹ › glyphs are turned a quarter); below the deck on phones */
+.numbers-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.numbers-nav[hidden] {
+    display: none;
+}
+
+.numbers-nav button {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--hair);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1;
+    rotate: 90deg;
+    cursor: pointer;
+    transition:
+        opacity 200ms ease,
+        border-color 200ms;
+}
+
+.numbers-nav button:not(:disabled):hover {
+    border-color: var(--signal);
+}
+
+.numbers-nav button:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+/* Without JS: a plain grid of cards */
+.numbers-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.numbers-index {
+    display: none;
+}
+
+/* With JS: a deck. One card in front, two peeking behind; the index on the left names every chart. */
+.numbers.deck .numbers-body {
+    display: grid;
+    grid-template-columns: auto minmax(190px, 260px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(16px, 3vw, 40px);
+}
+
+.numbers.deck .numbers-index {
+    display: grid;
+    gap: 2px;
+}
+
+.numbers-index button {
+    position: relative;
+    display: grid;
+    gap: 2px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    color: var(--muted);
+    text-align: left;
+    cursor: pointer;
+    transition:
+        color 200ms,
+        background 200ms;
+}
+
+.numbers-index button span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.numbers-index button small {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    opacity: 0.75;
+}
+
+.numbers-index button:hover,
+.numbers-index button[aria-current] {
+    color: var(--ink);
+}
+
+.numbers-index button[aria-current] {
+    background: var(--surface);
+}
+
+.numbers-index button[aria-current] span {
+    color: var(--signal);
+}
+
+/* A thin line fills under the current chart while the deck turns by itself */
+.numbers-index button::after {
+    content: '';
+    position: absolute;
+    inset: auto 14px 4px;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--signal);
+    scale: 0 1;
+    transform-origin: left;
+}
+
+.numbers.playing .numbers-index button[aria-current]::after {
+    animation: deck-fill 6500ms linear both;
+}
+
+@keyframes deck-fill {
+    to {
+        scale: 1 1;
+    }
+}
+
+.numbers.deck .numbers-stage {
+    width: 100%;
+    max-width: 540px;
+    margin-inline: auto;
+}
+
+.numbers.deck .numbers-row {
+    display: grid;
+    margin-top: 30px;
+}
+
+.numbers.deck .chart-card {
+    display: flex;
+    flex-direction: column;
+    grid-area: 1 / 1;
+    z-index: calc(10 - var(--p, 3));
+    transform-origin: 50% 0;
+    translate: 0 calc(var(--p, 3) * -14px);
+    scale: calc(1 - var(--p, 3) * 0.05);
+    opacity: calc(1 - var(--p, 3) * 0.4);
+    cursor: pointer;
+    transition:
+        translate 650ms var(--ease-out),
+        scale 650ms var(--ease-out),
+        rotate 650ms var(--ease-out),
+        opacity 500ms ease,
+        transform 260ms var(--ease-out),
+        box-shadow 260ms ease;
+}
+
+.numbers.deck .chart-card[data-pos='0'] {
+    --p: 0;
+
+    cursor: default;
+}
+
+.numbers.deck .chart-card[data-pos='1'] {
+    --p: 1;
+}
+
+.numbers.deck .chart-card[data-pos='2'] {
+    --p: 2;
+}
+
+.numbers.deck .chart-card[data-pos='back'] {
+    --p: 2;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Cards share the height of the tallest: the chart sits in the middle of what is left */
+.numbers.deck .chart-card > :is(svg, .chips) {
+    max-height: 250px;
+    margin-block: auto;
+}
+
+/* The card that was in front slips away to the right before it tucks behind the others */
+.numbers.deck .chart-card.leaving {
+    translate: 70px 16px;
+    rotate: 3deg;
+    opacity: 0;
+    transition-duration: 420ms;
+}
+
+.chart-card {
+    position: relative;
+    overflow: hidden;
+    padding: 24px;
+    border-radius: 24px;
+    transition:
+        opacity 700ms var(--ease-out),
+        translate 700ms var(--ease-out),
+        transform 260ms var(--ease-out),
+        box-shadow 260ms ease;
+}
+
+.card-k {
+    margin: 0;
+    color: var(--signal);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.card-v {
+    margin: 4px 0 16px;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+}
+
+.chart-card svg {
+    width: 100%;
+    height: auto;
+}
+
+.chart-card text {
+    fill: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+}
+
+/* Series colours */
+.c0 {
+    fill: var(--c0);
+    stroke: var(--c0);
+    background: var(--c0);
+}
+
+.c1 {
+    fill: var(--c1);
+    stroke: var(--c1);
+    background: var(--c1);
+}
+
+.c2 {
+    fill: var(--c2);
+    stroke: var(--c2);
+    background: var(--c2);
+}
+
+.c3 {
+    fill: var(--c3);
+    stroke: var(--c3);
+    background: var(--c3);
+}
+
+.c4 {
+    fill: var(--c4);
+    stroke: var(--c4);
+    background: var(--c4);
+}
+
+.columns rect {
+    stroke: none;
+}
+
+.key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.key li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.key span {
+    width: 9px;
+    height: 9px;
+    border-radius: 3px;
+}
+
+/* Radar */
+.radar {
+    overflow: visible;
+}
+
+.radar text {
+    font-size: 16px;
+}
+
+.radar :is(.ring, .spoke) {
+    fill: none;
+    stroke: var(--hair);
+}
+
+.radar .shape {
+    fill: color-mix(in sRGB, var(--signal) 22%, transparent);
+    stroke: var(--signal);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    transform-box: view-box;
+    transform-origin: 130px 130px;
+    transition:
+        scale 1100ms var(--ease-out) 200ms,
+        opacity 600ms ease 200ms;
+}
+
+.radar .pt {
+    fill: var(--signal);
+    transition: opacity 400ms ease 900ms;
+}
+
+.js .chart-card:not(.in) .radar .shape {
+    scale: 0.4;
+    opacity: 0;
+}
+
+.js .chart-card:not(.in) .radar .pt {
+    opacity: 0;
+}
+
+/* Donut */
+.donut .arc {
+    fill: none;
+    stroke-width: 26;
+}
+
+.donut .spin {
+    transform-box: view-box;
+    transform-origin: 130px 110px;
+    rotate: -90deg;
+    transition:
+        rotate 1100ms var(--ease-out),
+        opacity 500ms ease;
+}
+
+.js .chart-card:not(.in) .donut .spin {
+    rotate: -160deg;
+    opacity: 0;
+}
+
+.donut text {
+    text-anchor: middle;
+}
+
+.donut .big {
+    fill: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 30px;
+    font-weight: 700;
+}
+
+/* Columns */
+.columns text {
+    text-anchor: middle;
+}
+
+.columns .value {
+    fill: var(--ink);
+    font-size: 13px;
+}
+
+.columns .bar {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    transition: scale 900ms var(--ease-out);
+}
+
+.columns .bar:nth-child(2) {
+    transition-delay: 100ms;
+}
+
+.columns .bar:nth-child(3) {
+    transition-delay: 200ms;
+}
+
+.js .chart-card:not(.in) .columns .bar {
+    scale: 1 0;
+}
+
+/* Top skills */
+.bars .name {
+    fill: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 13px;
+}
+
+.bars .track {
+    fill: var(--raised);
+}
+
+.bars .fill {
+    fill: var(--signal);
+    transform-box: fill-box;
+    transform-origin: left;
+    transition: scale 900ms var(--ease-out);
+}
+
+.bars .bar-row:nth-child(n + 3) .fill {
+    transition-delay: 120ms;
+}
+
+.bars .bar-row:nth-child(n + 5) .fill {
+    transition-delay: 240ms;
+}
+
+.js .chart-card:not(.in) .bars .fill {
+    scale: 0 1;
+}
+
+/* Chips */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.chips li {
+    padding: 4px 10px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--raised);
+    font-size: 12px;
+}
+
+.chips .more {
+    color: var(--signal);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .chart-card.in:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow), var(--shadow-lift);
+    }
+}
+
+@media (width <= 900px) {
+    .numbers.deck .numbers-body {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .numbers.deck .numbers-nav {
+        flex-direction: row;
+        order: 2;
+        margin-top: 4px;
+    }
+
+    .numbers-nav button {
+        rotate: none;
+    }
+
+    .numbers.deck .numbers-index {
+        display: none;
+    }
+
+    .path-chart {
+        margin-inline: 12px;
+        padding: 20px 14px 12px;
+    }
+
+    .path-total {
+        font-size: 34px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .path-chart .line,
+    .chart-card,
+    .radar .shape,
+    .donut .spin,
+    .columns .bar,
+    .bars .fill {
+        transition: none;
+    }
+}
+
+/* Heatmap: domains by period, the cell's opacity is its project count */
+.heat .cell {
+    fill: var(--signal);
+}
+
+.heat .cell.empty {
+    fill: var(--line);
+    fill-opacity: 0.45;
+}
+
+.heat text {
+    fill: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-anchor: middle;
+}
+
+.heat text.row {
+    text-anchor: end;
+}
+
+.heat text.n {
+    fill: var(--bg);
+    font-weight: 500;
+}

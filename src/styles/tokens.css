@@ -1,0 +1,90 @@
+/*
+ * Design tokens. Every colour the pages use comes from here.
+ *
+ * A theme is SIX colours plus a colour scheme and a depth, in one block keyed on [data-theme='<id>'] (no :root
+ * in the selector, so any element can carry a theme: the nav's swatches do). Everything else (surfaces, text
+ * tones, lines, shadows, domain and chart colours) is derived below, the same way for every theme.
+ *
+ * Adding a theme: one block of eight values here, its id in src/components/Nav/themes.ts, its name in both
+ * dictionaries. themes.test.ts checks that all three are there and that every theme defines the same inputs.
+ *
+ *   --bg       page background           --signal  the accent: activity, links, the one bright colour
+ *   --surface  cards and panels          --cold    the quiet blue-grey of anything idle
+ *   --ink      text                      --third   a third hue: success, "available", a chart series
+ *   --depth    shadow strength (0 flat, 0.35 deep)
+ */
+@import '@fontsource/schibsted-grotesk/latin-400.css';
+@import '@fontsource/schibsted-grotesk/latin-500.css';
+@import '@fontsource/schibsted-grotesk/latin-600.css';
+@import '@fontsource/schibsted-grotesk/latin-700.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+/* Midnight (default): ink-blue black, a sharp orange for what is active, a steel blue for what is idle */
+:root,
+[data-theme='midnight'] {
+    --bg: #0a0e14;
+    --surface: #121821;
+    --ink: #e6eaf0;
+    --signal: #ff7a1a;
+    --cold: #4c8dff;
+    --third: #2dd4a0;
+    --depth: 0.35;
+
+    color-scheme: dark;
+}
+
+/* Daylight: paper white with one indigo accent (light theme: cards are lighter than the page) */
+[data-theme='daylight'] {
+    --bg: #fafaf9;
+    --surface: #fff;
+    --ink: #111827;
+    --signal: #4f46e5;
+    --cold: #64748b;
+    --third: #059669;
+    --depth: 0.06;
+
+    color-scheme: light;
+}
+
+/* Derived, identically for every theme, on every element that carries a theme */
+:root,
+[data-theme] {
+    --raised: color-mix(in oklab, var(--surface) 92%, var(--ink));
+    --muted: color-mix(in oklab, var(--ink) 62%, var(--bg));
+    --line: color-mix(in oklab, var(--ink) 11%, var(--bg));
+    --hair: color-mix(in oklab, var(--ink) 10%, transparent);
+    --pos: var(--third);
+    --shadow:
+        0 1px 0 rgb(255 255 255 / calc(var(--depth) * 12%)) inset, 0 10px 30px rgb(0 0 0 / calc(var(--depth) * 100%));
+    --shadow-lift: 0 24px 50px rgb(0 0 0 / calc(var(--depth) * 63%));
+
+    /* Domains (charts and map only): three come from the palette, two are hue shifts of it */
+    --d-ai: var(--signal);
+    --d-systems: var(--third);
+    --d-architecture: var(--cold);
+    --d-graphical: oklch(from var(--signal) l max(c, 0.14) calc(h - 55));
+    --d-devops: oklch(from var(--cold) l max(c, 0.14) calc(h + 55));
+
+    /* Chart series: the first (most used) is the accent */
+    --c0: var(--signal);
+    --c1: var(--cold);
+    --c2: color-mix(in oklab, var(--cold) 45%, var(--bg));
+    --c3: color-mix(in oklab, var(--ink) 35%, var(--bg));
+    --c4: var(--third);
+}
+
+:root {
+    /* Type */
+    --font-sans: 'Schibsted Grotesk', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    /* Motion: strong ease-out for UI, ease-in-out for things moving on screen */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+    /* Layout */
+    --max: 1080px;
+    --gutter: 20px;
+    --nav-h: 52px;
+}

@@ -23,38 +23,51 @@
         <meta property="og:image:alt" content="" />
         <meta name="twitter:card" content="summary_large_image" />
 
-        <link rel="stylesheet" href="/src/styles/global.css" />
-        <link rel="stylesheet" href="/src/components/Navbar/Navbar.css" />
-        <link rel="stylesheet" href="/src/components/ProjectModal/ProjectModal.css" />
+        <link rel="stylesheet" href="/src/styles/base.css" />
+        <link rel="stylesheet" href="/src/components/Nav/Nav.css" />
+        <link rel="stylesheet" href="/src/components/Footer/Footer.css" />
         <link rel="stylesheet" href="/src/pages/project/project.css" />
     </head>
     <body>
-        <div id="nav-sentinel"></div>
-        <main>
-            <article id="project" class="section project-page">
-                <a id="project-back" class="project-back" href="/#projects">
-                    <span aria-hidden="true">←</span>
-                    <span data-i18n="projectPage.back">All projects</span>
+        <div data-render="nav"></div>
+
+        <main id="main">
+            <article class="project wrap">
+                <a id="project-back" class="project-back" href="/#work">
+                    <span aria-hidden="true">‹</span> <span data-i18n="projectPage.back">All projects</span>
                 </a>
 
-                <header class="project-header">
-                    <span id="project-eyebrow" class="mono-tag"></span>
+                <header class="project-head reveal">
+                    <p id="project-eyebrow" class="eyebrow"></p>
                     <h1 id="project-title" class="project-title"></h1>
-                    <div id="project-tags" class="modal-tags"></div>
+                    <p id="project-desc" class="project-desc"></p>
+                    <a id="project-github" class="btn press" href="/">
+                        <span data-i18n="projectPage.code">View the code</span> <span aria-hidden="true">›</span>
+                    </a>
                 </header>
 
-                <div class="project-body">
-                    <div id="project-media" class="modal-media project-media-frame"></div>
+                <div id="project-media" class="project-media surface reveal"></div>
 
-                    <div class="project-info-col">
-                        <p id="project-desc" class="project-desc"></p>
-                        <a id="project-github" class="modal-github" target="_blank" rel="noopener">
-                            <span data-i18n="modal.github">View on GitHub</span>
-                        </a>
-                    </div>
-                </div>
+                <dl id="project-specs" class="specs reveal"></dl>
             </article>
+
+            <!-- Connected projects: the map's nearest neighbours (src/components/NeuralMap/graph.ts) -->
+            <section class="section related" aria-labelledby="related-title">
+                <div class="section-head reveal">
+                    <h2 class="headline small" id="related-title">
+                        <span class="line"><span data-i18n="projectPage.related1">Connected projects.</span></span>
+                        <span class="line"
+                            ><span class="recede" data-i18n="projectPage.related2"
+                                >Where the skills lead next.</span
+                            ></span
+                        >
+                    </h2>
+                </div>
+                <div id="project-related" class="related-grid wrap"></div>
+            </section>
         </main>
+
+        <div data-render="footer"></div>
 
         <script type="module" src="/src/pages/project/project.ts"></script>
     </body>

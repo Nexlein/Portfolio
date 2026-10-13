@@ -10,6 +10,16 @@
             "source": "/fr/cv.pdf",
             "destination": "https://github.com/Nexlein/Portfolio/releases/download/cv/Nielsen-Combe-Bracciale-CV-FR.pdf",
             "permanent": false
+        },
+        {
+            "source": "/availability.html",
+            "destination": "/#hire",
+            "permanent": true
+        },
+        {
+            "source": "/fr/availability.html",
+            "destination": "/fr/#hire",
+            "permanent": true
         }
     ],
     "headers": [
@@ -18,7 +28,7 @@
             "headers": [
                 {
                     "key": "Content-Security-Policy",
-                    "value": "default-src 'self'; script-src 'self' 'sha256-D/Dq6DrPChR4yhx6v2Yb/vrcxGaAiix+w2WEkWui7Y0='; style-src 'self'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+                    "value": "default-src 'self'; script-src 'self' 'sha256-RBb8kVBAYgITrAGQeO5529R9U+ZLGWQXKksYpYqNhSM='; style-src 'self'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
                 },
                 {
                     "key": "X-Content-Type-Options",
@@ -26,7 +36,7 @@
                 },
                 {
                     "key": "X-Frame-Options",
-                    "value": "SAMEORIGIN"
+                    "value": "DENY"
                 },
                 {
                     "key": "Referrer-Policy",

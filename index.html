@@ -3,361 +3,158 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Nexlein — AI & Software Developer</title>
+        <title>Nexlein — AI, Data & Software Engineer</title>
         <meta
             name="description"
-            content="Portfolio of Nielsen Combe-Bracciale (Nexlein) — Epitech student and AI systems developer building real-time simulations, decision engines, and C++ architectures."
+            content="Nielsen COMBE--BRACCIALE (Nexlein), AI, data and software engineer. Reliable software at the speed of AI: TDD, agentic workflows, simulations, decision engines."
         />
         <link rel="canonical" href="https://nexlein.vercel.app/" />
 
         <!-- Social previews (Open Graph / X) -->
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Nexlein" />
-        <meta property="og:title" content="Nexlein — AI & Software Developer" />
+        <meta property="og:title" content="Nexlein — AI, Data & Software Engineer" />
         <meta
             property="og:description"
-            content="Portfolio of Nielsen Combe-Bracciale (Nexlein) — Epitech student and AI systems developer building real-time simulations, decision engines, and C++ architectures."
+            content="Nielsen COMBE--BRACCIALE (Nexlein), AI, data and software engineer. Reliable software at the speed of AI: TDD, agentic workflows, simulations, decision engines."
         />
         <meta property="og:url" content="https://nexlein.vercel.app/" />
         <meta property="og:image" content="https://nexlein.vercel.app/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Nielsen Combe-Bracciale, AI and software developer portfolio" />
+        <meta property="og:image:alt" content="Nielsen COMBE--BRACCIALE, AI, data and software engineer portfolio" />
         <meta name="twitter:card" content="summary_large_image" />
-        <link rel="stylesheet" href="/src/styles/global.css" />
-        <link rel="stylesheet" href="/src/components/Navbar/Navbar.css" />
-        <link rel="stylesheet" href="/src/components/ProjectGrid/ProjectGrid.css" />
-        <link rel="stylesheet" href="/src/components/ProjectModal/ProjectModal.css" />
+        <link rel="stylesheet" href="/src/styles/base.css" />
+        <link rel="stylesheet" href="/src/components/Nav/Nav.css" />
+        <link rel="stylesheet" href="/src/components/Hero/Hero.css" />
+        <link rel="stylesheet" href="/src/components/NeuralMap/NeuralMap.css" />
+        <link rel="stylesheet" href="/src/components/Charts/Charts.css" />
+        <link rel="stylesheet" href="/src/components/Footer/Footer.css" />
+        <link rel="stylesheet" href="/src/pages/home/home.css" />
     </head>
 
     <body>
-        <div id="nav-sentinel"></div>
-        <main>
-            <!-- ─── Hero ─────────────────────────────────────── -->
-            <section id="home" class="section section-home">
-                <div class="home-content">
-                    <div class="home-eyebrow">
-                        <span class="mono-tag">Epitech · AI Track</span>
-                        <span class="eyebrow-sep"></span>
-                        <span class="mono-tag available" data-i18n="home.tag">Open to opportunities</span>
-                    </div>
+        <div data-render="nav"></div>
 
-                    <h1 class="hero-name">Nielsen<br />Combe-Bracciale</h1>
-                    <p class="hero-alias">@Nexlein</p>
-
-                    <p class="hero-bio" data-i18n="home.bio">
-                        I build AI systems that decide and learn. My work spans autonomous decision architectures,
-                        real-time simulation engines, and high-performance C++.<br /><br />Currently studying at Epitech
-                        with a focus on applied artificial intelligence.
+        <main id="main">
+            <!-- Hero: a live simulation behind the words (src/components/Hero) -->
+            <section class="hero" id="top">
+                <canvas class="hero-field" aria-hidden="true"></canvas>
+                <div class="hero-copy reveal">
+                    <a class="avail press" href="#hire"
+                        ><span class="avail-dot" aria-hidden="true"></span><span data-render="availability"></span
+                    ></a>
+                    <p class="eyebrow" data-i18n="home.hero.role">AI · Data · Software engineer · Epitech</p>
+                    <h1 class="display">
+                        <span class="line"><span data-i18n="home.hero.title1">Building reliable software</span></span>
+                        <span class="line"
+                            ><span class="recede" data-i18n="home.hero.title2">at the speed of AI.</span></span
+                        >
+                    </h1>
+                    <p class="lede" data-i18n="home.hero.lede">
+                        I build with TDD and agentic workflows, so I ship fast and everything is verified before it goes
+                        live.
                     </p>
-
-                    <div class="home-actions">
-                        <a href="#projects" class="btn-hero-primary" id="hero-projects-link" data-i18n="home.projects"
-                            >View Projects</a
+                    <div class="actions">
+                        <a class="btn" href="#work" data-i18n="home.hero.work">See the work</a>
+                        <a class="link" href="#hire"
+                            ><span data-i18n="home.hero.hire">Hire me</span> <span aria-hidden="true">›</span></a
                         >
-                        <button class="btn-hero-ghost" id="hero-cv-link" data-i18n="home.viewcv">View CV</button>
                     </div>
-
-                    <div class="contact-row">
-                        <a
-                            href="https://github.com/Nexlein"
-                            target="_blank"
-                            rel="noopener"
-                            class="contact-link"
-                            id="link-github"
-                        >
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                                ></path>
-                            </svg>
-                            GitHub
-                        </a>
-                        <a
-                            href="https://www.linkedin.com/in/nielsen-combebracciale/"
-                            target="_blank"
-                            rel="noopener"
-                            class="contact-link"
-                            id="link-linkedin"
-                        >
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
-                                ></path>
-                                <rect x="2" y="9" width="4" height="12"></rect>
-                                <circle cx="4" cy="4" r="2"></circle>
-                            </svg>
-                            LinkedIn
-                        </a>
-                        <a href="mailto:nielsen.combe-bracciale@epitech.eu" class="contact-link" id="link-email">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                                ></path>
-                                <polyline points="22,6 12,13 2,6"></polyline>
-                            </svg>
-                            Email
-                        </a>
-                    </div>
-
-                    <div class="stack-row">
-                        <span class="stack-tag">C / C++</span>
-                        <span class="stack-tag">C# .NET</span>
-                        <span class="stack-tag">Python</span>
-                        <span class="stack-tag">Machine Learning</span>
-                        <span class="stack-tag">Reinforcement Learning</span>
-                        <span class="stack-tag">Prompt Engineering</span>
-                        <span class="stack-tag">RAG Systems</span>
-                        <span class="stack-tag">Local LLMs</span>
-                        <span class="stack-tag">System Architecture</span>
-                        <span class="stack-tag">Concurrent Systems</span>
-                    </div>
+                </div>
+                <p class="hero-hint" aria-live="polite"></p>
+                <a class="scroll-cue" href="#method"
+                    ><span aria-hidden="true">⌄</span
+                    ><span class="sr-only" data-i18n="home.hero.scroll">Scroll down</span></a
+                >
+                <div class="hero-pager" role="group" aria-labelledby="hero-pager-label" hidden>
+                    <span class="sr-only" id="hero-pager-label" data-i18n="home.hero.switch"
+                        >Show another simulation</span
+                    >
                 </div>
             </section>
 
-            <!-- ─── Parcours ──────────────────────────────────────── -->
-            <section id="parcours" class="section section-parcours">
-                <div class="section-eyebrow" data-i18n="journey.eyebrow">My Journey</div>
-                <h2 class="section-title" data-i18n="journey.title">Experience & Education</h2>
-                <p class="section-sub" data-i18n="journey.sub">
-                    A timeline of my academic background, professional experience, and continuous learning.
-                </p>
-
-                <div class="timeline" data-render="timeline"></div>
+            <!-- Method: how I work, under the hero, as a thin strip (this site is the proof) -->
+            <section class="method" id="method" aria-labelledby="method-title">
+                <h2 class="method-title mono reveal" id="method-title">
+                    <span data-i18n="home.method.title1">How I work.</span>
+                    <span class="recede" data-i18n="home.method.title2">Fast, and checked.</span>
+                </h2>
+                <div class="method-items wrap" data-render="method"></div>
+                <p class="method-source wrap reveal" data-render="method-source"></p>
             </section>
 
-            <!-- ─── Software Projects ─────────────────────────── -->
-            <section id="projects" class="section section-projects">
-                <div class="section-eyebrow" data-i18n="projects.eyebrow">Software Engineering</div>
-                <h2 class="section-title" data-i18n="projects.title">Projects</h2>
-                <p class="section-sub" data-i18n="projects.sub">
-                    Showcasing high-performance applications, concurrent systems, and graphical engines developed during
-                    my Epitech curriculum.
-                </p>
-
-                <div class="filter-controls">
-                    <div class="filter-group" role="group" aria-label="Filter projects by year">
-                        <button
-                            class="filter-btn year-filter active"
-                            data-year="all"
-                            data-i18n="projects.filterAllYears"
+            <!-- Work: every project; the map is drawn on top on large screens (src/components/NeuralMap) -->
+            <section class="section work" id="work" aria-labelledby="work-title">
+                <div class="section-head reveal">
+                    <h2 class="headline" id="work-title" data-render="work-title"></h2>
+                    <p class="lede">
+                        <span data-i18n="home.work.sub">Projects connect where they share skills.</span>
+                        <span class="map-only" data-i18n="home.work.subDesk"
+                            >Hover one to see what it lights up, or ask the network.</span
                         >
-                            All Years
-                        </button>
-                        <button class="filter-btn year-filter" data-year="Tek1">Tek1</button>
-                        <button class="filter-btn year-filter" data-year="Tek2">Tek2</button>
-                        <button class="filter-btn year-filter" data-year="Personal" data-i18n="projects.filterPersonal">
-                            Personal
-                        </button>
-                    </div>
-                    <div class="filter-group" role="group" aria-label="Filter projects by category">
-                        <button
-                            class="filter-btn cat-filter active"
-                            data-filter="all"
-                            id="filter-all"
-                            data-i18n="projects.filterAllCats"
-                        >
-                            All Categories
-                        </button>
-                        <button
-                            class="filter-btn cat-filter"
-                            data-filter="ai"
-                            id="filter-ai"
-                            data-i18n="projects.filterAi"
-                        >
-                            AI & Data Science
-                        </button>
-                        <button
-                            class="filter-btn cat-filter"
-                            data-filter="architecture"
-                            id="filter-architecture"
-                            data-i18n="projects.filterArch"
-                        >
-                            Software Architecture
-                        </button>
-                        <button
-                            class="filter-btn cat-filter"
-                            data-filter="systems"
-                            id="filter-systems"
-                            data-i18n="projects.filterSys"
-                        >
-                            Systems & Unix
-                        </button>
-                        <button
-                            class="filter-btn cat-filter"
-                            data-filter="devops"
-                            id="filter-devops"
-                            data-i18n="projects.filterDevops"
-                        >
-                            DevOps & Infrastructure
-                        </button>
-                        <button
-                            class="filter-btn cat-filter"
-                            data-filter="graphical"
-                            id="filter-graphical"
-                            data-i18n="projects.filterGraph"
-                        >
-                            Graphical & Games
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Project cards are rendered from src/data/projects.ts at boot time -->
-                <div class="projects-grid" id="projects-grid"></div>
-
-                <div id="show-more-container" class="show-more-wrapper">
-                    <button id="show-more-projects" class="btn-hero-ghost show-more-btn">
-                        <span data-i18n="projects.showMore">Show More</span>
-                        <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            class="show-more-icon"
-                        >
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </button>
-                </div>
-            </section>
-
-            <!-- ─── Contact / Footer ──────────────────────────── -->
-            <footer id="contact" class="site-footer">
-                <div class="footer-inner">
-                    <h2 class="footer-title" data-i18n="home.footerTitle">Let's Build Something.</h2>
-                    <p class="footer-desc" data-i18n="home.footerDesc">
-                        I am currently open to new opportunities. Check my availability to see if our timelines align,
-                        or reach out directly.
                     </p>
-                    <div class="footer-actions">
-                        <a href="availability.html" class="btn-hero-primary footer-btn">
-                            <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                class="footer-btn-icon"
-                            >
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            <span data-i18n="home.footerBtn">Check Availability</span>
-                        </a>
+                    <p class="features-label mono" data-i18n="home.featured.label">Start here</p>
+                    <div class="features" data-render="featured"></div>
+                    <span class="sr-only" id="ask-label" data-i18n="home.work.ask">Light up a domain</span>
+                    <div class="work-tools desk-only">
+                        <div
+                            class="segmented query"
+                            role="group"
+                            aria-labelledby="ask-label"
+                            data-render="domain-query"
+                        ></div>
+                        <span class="sr-only" id="view-label" data-i18n="home.work.viewLabel">Projects view</span>
+                        <div class="segmented work-view" role="group" aria-labelledby="view-label" hidden>
+                            <button type="button" data-view="map" data-i18n="home.work.viewMap">Map</button>
+                            <button type="button" data-view="list" data-i18n="home.work.viewList">List</button>
+                        </div>
                     </div>
                 </div>
-            </footer>
+                <div class="map-host"></div>
+                <p class="map-more" data-render="map-more"></p>
+                <div class="list-block">
+                    <ul class="project-list wrap" id="project-list" data-render="project-list"></ul>
+                    <div class="list-more" hidden><button type="button" class="more-btn"></button></div>
+                </div>
+            </section>
+
+            <!-- Path: the skill toolbox over time with checkpoints, and the numbers behind it (src/components/Charts) -->
+            <section class="section" id="path" aria-labelledby="path-title">
+                <div class="section-head reveal">
+                    <h2 class="headline" id="path-title">
+                        <span class="line"><span data-i18n="home.path.title1">The path so far.</span></span>
+                        <span class="line"
+                            ><span class="recede" data-i18n="home.path.title2">Every checkpoint earned.</span></span
+                        >
+                    </h2>
+                </div>
+                <div class="wrap" data-render="path-chart"></div>
+                <div class="exp-wrap wrap" data-render="experience"></div>
+                <div data-render="numbers"></div>
+            </section>
+
+            <!-- Hire: two ways to work together, then one email -->
+            <section class="section" id="hire" aria-labelledby="hire-title">
+                <div class="section-head reveal">
+                    <h2 class="headline small" id="hire-title">
+                        <span class="line"><span data-i18n="home.hire.title1">Two ways to work together.</span></span>
+                        <span class="line"
+                            ><span class="recede" data-i18n="home.hire.title2">Internship or freelance.</span></span
+                        >
+                    </h2>
+                </div>
+                <div class="tiles wrap" data-render="hire"></div>
+                <div class="talk reveal">
+                    <p data-i18n="home.hire.talk">Either way, the fastest is an email.</p>
+                    <div class="actions" data-render="contact"></div>
+                    <p class="mono talk-mail" data-render="email"></p>
+                </div>
+            </section>
         </main>
 
-        <!-- CV Modal -->
-        <div id="cv-modal-backdrop" class="modal-backdrop">
-            <div class="modal-window flex-col-gap-1">
-                <button class="modal-close cv-modal-close-btn" id="cv-modal-close" aria-label="Close CV">
-                    <svg
-                        width="24"
-                        height="24"
-                        class="icon-20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-                <div class="cv-modal-wrapper">
-                    <iframe class="cv-modal-iframe" id="cv-iframe" src="cv.html" title="Curriculum vitae"></iframe>
-                </div>
-            </div>
-        </div>
-
-        <!-- Project Modal -->
-        <div id="project-modal-backdrop" class="modal-backdrop">
-            <div
-                class="modal-window"
-                id="project-modal-window"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="modal-title"
-            >
-                <button class="modal-close" id="modal-close" aria-label="Close project">
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-                <div class="modal-inner">
-                    <div class="modal-media" id="modal-media"></div>
-                    <div class="modal-info">
-                        <div class="modal-tags" id="modal-tags"></div>
-                        <h2 class="modal-title" id="modal-title"></h2>
-                        <p class="modal-desc" id="modal-desc"></p>
-                        <a class="modal-github" id="modal-github" target="_blank" rel="noopener">
-                            <svg
-                                width="24"
-                                height="24"
-                                class="icon-16"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                                ></path>
-                            </svg>
-                            View on GitHub
-                        </a>
-                        <a class="modal-page-link" id="modal-page">
-                            <span data-i18n="modal.page">Open project page</span>
-                            <span aria-hidden="true">→</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div data-render="footer"></div>
+        <div class="toast" role="status" aria-live="polite"></div>
 
         <script type="module" src="/src/pages/home/home.ts"></script>
     </body>

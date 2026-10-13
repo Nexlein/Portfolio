@@ -16,7 +16,7 @@ export const DEFAULT_LANG: Lang = 'en';
 
 const dictionaries: Record<Lang, typeof en> = { en, fr };
 
-/** Look up a dotted key ('projects.title'); falls back to the key itself so gaps are visible. */
+/** Look up a dotted key ('projectPage.back'); falls back to the key itself so gaps are visible. */
 export function lookup(lang: Lang, key: string): string {
     let node: unknown = dictionaries[lang];
     for (const part of key.split('.')) {

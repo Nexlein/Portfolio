@@ -1,9 +1,8 @@
 import { test, expect } from './fixtures';
 
 const pages = ['', '/fr'].flatMap((prefix) => [
-    { path: `${prefix}/`, heading: 'Nielsen' },
+    { path: `${prefix}/`, heading: prefix ? 'fiable' : 'reliable' },
     { path: `${prefix}/cv.html`, heading: 'Nielsen' },
-    { path: `${prefix}/availability.html`, heading: null },
     { path: `${prefix}/projects/zappy.html`, heading: 'Zappy' }
 ]);
 
@@ -19,7 +18,7 @@ for (const { path, heading } of pages) {
 
         const fontsLoaded = await page.evaluate(async () => {
             await document.fonts.ready;
-            return document.fonts.check('16px Inter');
+            return document.fonts.check('16px "Schibsted Grotesk"');
         });
         expect(fontsLoaded).toBe(true);
         // The fixture fails the test on console errors or CSP violations
@@ -46,4 +45,13 @@ test('the CV links to the PDF in its own language, in a new tab', async ({ page 
         await expect(link).toHaveAttribute('target', '_blank');
         expect(new URL(await link.evaluate((a) => (a as HTMLAnchorElement).href)).pathname).toBe(pdf);
     }
+});
+
+test('the CV sheet wears the chosen theme on screen and prints as white paper', async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem('theme', 'midnight'));
+    await page.goto('/cv.html');
+    const sheet = page.locator('.sheet');
+    await expect(sheet).toHaveCSS('background-color', 'rgb(18, 24, 33)');
+    await page.emulateMedia({ media: 'print' });
+    await expect(sheet).toHaveCSS('background-color', 'rgb(255, 255, 255)');
 });

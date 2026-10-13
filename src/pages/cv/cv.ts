@@ -1,15 +1,7 @@
-import { translateDOM } from '@/core/i18n';
+/** CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button. */
 import { initAnalytics } from '@/core/analytics';
+import { initNav } from '@/components/Nav/Nav';
 
-document.addEventListener('DOMContentLoaded', () => {
-    initAnalytics();
-    // Later language changes (here or in the parent page via the storage event) re-translate on their own
-    translateDOM();
-
-    const printBtn = document.getElementById('cv-print-btn');
-    if (printBtn) {
-        printBtn.addEventListener('click', () => {
-            window.print();
-        });
-    }
-});
+initAnalytics();
+initNav();
+document.getElementById('cv-print-btn')?.addEventListener('click', () => window.print());

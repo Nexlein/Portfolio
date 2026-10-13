@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import vercel from '../../vercel.json';
-import { LANGUAGE_REDIRECT_SCRIPT } from '../../vite-plugins/shared-head';
+import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
 
 const siteHeaders = Object.fromEntries(
     vercel.headers.find((rule) => rule.source === '/(.*)')!.headers.map((h) => [h.key, h.value])
@@ -19,8 +19,8 @@ async function sha256(text: string): Promise<string> {
 }
 
 describe('Content-Security-Policy', () => {
-    it('allows the inline language redirect script by hash, and nothing else inline', async () => {
-        expect(csp['script-src']).toEqual(["'self'", await sha256(LANGUAGE_REDIRECT_SCRIPT)]);
+    it('allows the inline head script (theme + language) by hash, and nothing else inline', async () => {
+        expect(csp['script-src']).toEqual(["'self'", await sha256(HEAD_SCRIPT)]);
         expect(csp['style-src']).toEqual(["'self'"]);
     });
 
@@ -29,18 +29,19 @@ describe('Content-Security-Policy', () => {
     });
 
     it('locks every fetch to our own origin', () => {
-        for (const directive of ['default-src', 'img-src', 'media-src', 'font-src', 'connect-src', 'frame-src']) {
+        for (const directive of ['default-src', 'img-src', 'media-src', 'font-src', 'connect-src']) {
             expect(csp[directive], directive).toEqual(["'self'"]);
         }
         expect(csp['object-src']).toEqual(["'none'"]);
-        expect(csp['frame-ancestors']).toEqual(["'self'"]); // the CV is framed by the home page only
+        expect(csp['frame-src']).toEqual(["'none'"]);
+        expect(csp['frame-ancestors']).toEqual(["'none'"]); // nothing frames the site, not even itself
     });
 });
 
 describe('security headers', () => {
     it.each([
         ['X-Content-Type-Options', 'nosniff'],
-        ['X-Frame-Options', 'SAMEORIGIN'],
+        ['X-Frame-Options', 'DENY'],
         ['Referrer-Policy', 'strict-origin-when-cross-origin']
     ])('sends %s: %s', (key, value) => {
         expect(siteHeaders[key]).toBe(value);
@@ -70,6 +71,18 @@ describe('CV PDF redirects', () => {
     });
 
     it('the redirects are temporary, so the target can change without browsers caching it', () => {
-        for (const r of vercel.redirects) expect(r.permanent).toBe(false);
+        for (const r of vercel.redirects.filter((rule) => rule.source.endsWith('cv.pdf')))
+            expect(r.permanent).toBe(false);
+    });
+});
+
+describe('retired pages', () => {
+    const redirects = Object.fromEntries(vercel.redirects.map((r) => [r.source, r]));
+
+    it.each([
+        ['/availability.html', '/#hire'],
+        ['/fr/availability.html', '/fr/#hire']
+    ])('%s moves for good to %s', (source, destination) => {
+        expect(redirects[source]).toMatchObject({ destination, permanent: true });
     });
 });

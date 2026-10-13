@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
 import { BLOCKS, renderContent } from './render';
-import { EDUCATION, EXPERIENCES, OFFERS, SKILLS, TIMELINE } from '@/data/profile';
+import { EDUCATION, EXPERIENCES, SKILLS } from '@/data/profile';
 import { LANGS } from '@/core/translate';
 
 const templates = import.meta.glob<string>('../../../*.html', { query: '?raw', import: 'default', eager: true });
@@ -26,26 +26,37 @@ describe('content blocks', () => {
     });
 
     describe.each(LANGS)('in %s', (lang) => {
-        it('renders the whole timeline in order, with the organization when known', () => {
-            const items = render('timeline', lang).querySelectorAll('.timeline-item');
-            expect(items).toHaveLength(TIMELINE.length);
-            const issanka = EXPERIENCES.find((e) => e.id === TIMELINE[0])!;
-            expect(items[0].querySelector('.timeline-title')!.textContent).toContain(issanka.title[lang]);
-            expect(items[0].querySelector('.highlight')!.textContent).toBe(`@ ${issanka.org}`);
-        });
-
         it('renders every CV experience with its bullets', () => {
             const root = render('cv-experience', lang);
             expect(root.querySelectorAll(':scope > div')).toHaveLength(EXPERIENCES.length);
             expect(root.querySelectorAll('li')).toHaveLength(EXPERIENCES.flatMap((e) => e.highlights).length);
         });
 
-        it('renders skills, education and offers', () => {
+        it('renders the CV contact links, with the real LinkedIn address as text', () => {
+            const contact = render('cv-contact', lang);
+            expect(contact.querySelectorAll('a')).toHaveLength(4);
+            expect(contact.querySelector('a')!.getAttribute('href')).toMatch(/^mailto:/);
+            expect(contact.textContent).toContain('linkedin.com/in/');
+        });
+
+        it('lists the certifications on their own, not among the studies', () => {
+            expect(render('cv-certs', lang).textContent).toContain('Google Cloud');
+            expect(render('cv-education', lang).textContent).not.toContain('Google Cloud');
+        });
+
+        it('links CV projects to their pages, in the same language', () => {
+            const links = [...render('cv-projects-ai', lang).querySelectorAll('h3 a')].map((a) =>
+                a.getAttribute('href')
+            );
+            expect(links.length).toBeGreaterThan(0);
+            for (const href of links) expect(href).toContain(`${lang === 'fr' ? '/fr' : ''}/projects/`);
+        });
+
+        it('renders skills and education', () => {
             expect(render('cv-skills', lang).querySelectorAll('h3')).toHaveLength(SKILLS.length);
-            expect(render('cv-education', lang).querySelectorAll('h3')).toHaveLength(EDUCATION.length);
-            const offers = render('offers', lang).querySelectorAll('.card-availability');
-            expect(offers).toHaveLength(OFFERS.length);
-            expect(offers[0].querySelectorAll('.avail-lbl')).toHaveLength(OFFERS[0].rows.length);
+            // Studies and certifications are two lists that together hold every entry
+            const count = (block: string) => render(block, lang).querySelectorAll('h3').length;
+            expect(count('cv-education') + count('cv-certs')).toBe(EDUCATION.length);
         });
     });
 });

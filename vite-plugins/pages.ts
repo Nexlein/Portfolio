@@ -43,14 +43,13 @@ const fixedPage = (path: string, template: string, key: string, jsonLd?: PageSpe
     image: DEFAULT_IMAGE,
     imageAlt: (lang) => lookup(lang, 'meta.imageAlt'),
     jsonLd,
-    fill: renderContent // data-render blocks from src/data/profile.ts
+    fill: (document, lang) => renderContent(document, lang, path) // data-render blocks (profile, nav, charts...)
 });
 
 /** Every page of the site. Adding a project to src/data/projects.ts adds its page here. */
 export const PAGES: PageSpec[] = [
     fixedPage('/', 'index.html', 'home', profilePage),
     fixedPage('/cv.html', 'cv.html', 'cv', cvPerson),
-    fixedPage('/availability.html', 'availability.html', 'availability'),
     ...PROJECTS.map((project): PageSpec => ({
         path: projectPath(project.id),
         template: 'project.html',
@@ -60,7 +59,10 @@ export const PAGES: PageSpec[] = [
         imageAlt: () => project.title,
         jsonLd: (lang) =>
             projectSource(project, lang, projectDescription(project, lang), `${SITE}/projects/${project.id}/og.jpg`),
-        fill: (document, lang) => fillProjectPage(document, project, lang)
+        fill: (document, lang) => {
+            renderContent(document, lang, projectPath(project.id)); // nav and footer
+            fillProjectPage(document, project, lang);
+        }
     }))
 ];
 

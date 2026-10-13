@@ -1,6 +1,6 @@
 /**
  * Everything the site says about its owner, written once in every language.
- * Pages render it at build time: the home timeline, the CV and the availability page.
+ * Pages render it at build time: the home and the CV.
  * UI words (buttons, headings) stay in src/i18n; facts live here.
  * Text may contain inline <strong>/<br>, but never CSS classes: styling belongs to the templates.
  */
@@ -14,7 +14,7 @@ export interface Experience {
     title: Text;
     org?: string;
     period: Text;
-    /** Long form, for the home timeline. */
+    /** One line, for the story under the path chart. */
     summary: Text;
     /** Short bullets, for the CV. */
     highlights: Text[];
@@ -50,50 +50,51 @@ export interface Offer {
     id: 'full-time' | 'freelance';
     title: Text;
     summary: Text;
-    rows: { label: Text; value: Text; note: Text }[];
+    /** `recruiter`: pay and contract details, folded away on the home. */
+    rows: { label: Text; value: Text; note: Text; recruiter?: true }[];
 }
 
-/** In CV order. Every entry appears on the CV and on the home timeline (see TIMELINE). */
+/** In CV order. Every entry appears on the CV and under the path chart on the home page. */
 export const EXPERIENCES: Experience[] = [
     {
         id: 'issanka',
         kind: 'job',
-        title: { en: 'AI Developer (Part-Time)', fr: 'Développeur IA (Temps partiel)' },
+        title: { en: 'AI Developer (Part-Time)', fr: 'Développeur IA (temps partiel)' },
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
-            en: 'Building a SaaS platform from scratch that integrates AI-driven workflows and RAG architectures, and developing conversational AI agents while modernizing the web architecture.',
-            fr: "Création from scratch d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG, et développement d'agents conversationnels en modernisant l'architecture web."
+            en: 'Rebuilt the company website: a new look, faster pages, many bugs fixed. Live since 9 October 2026.',
+            fr: "Refonte du site de l'entreprise : nouveau look, pages plus rapides, de nombreux bugs corrigés. En ligne depuis le 9 octobre 2026."
         },
         highlights: [
             {
-                en: 'Building a SaaS platform from scratch integrating AI-driven workflows and RAG architectures.',
-                fr: "Création from scratch d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG."
+                en: 'Rebuilt the company website with the new visual identity: faster, many bugs fixed, live since 9 October 2026.',
+                fr: "Refonte du site de l'entreprise à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis le 9 octobre 2026."
             },
             {
-                en: 'Developing conversational AI agents and modernizing the technical web architecture.',
-                fr: "Développement d'agents conversationnels et modernisation de l'architecture technique web."
+                en: 'Replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
+                fr: "Remplacement d'abonnements payants (comme Elementor Pro) : des coûts en moins."
             }
         ]
     },
     {
         id: 'climb2c',
         kind: 'internship',
-        title: { en: 'Full-Stack & AI Developer Intern', fr: 'Développeur Full-Stack & IA' },
+        title: { en: 'Full-Stack & AI Developer Intern', fr: 'Développeur Full-Stack & IA (stage)' },
         org: 'Climb2C (Eliona Conseil)',
         period: { en: 'Sept - Dec 2025', fr: 'Sept - Déc 2025' },
         summary: {
-            en: 'Developed Razor components and managed databases via Entity Framework. Engineered an internal Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and Ollama to securely query enterprise data.',
-            fr: "Développement de composants Razor et gestion de bases de données via Entity Framework. Conception d'un système RAG interne utilisant Microsoft Agent Framework et Ollama pour interroger les données de l'entreprise de manière sécurisée."
+            en: 'Built my own parts of an internal RAG system and a client questionnaire that drives the offers Climb2C recommends.',
+            fr: "Conception de mes parties d'un système RAG interne et d'un questionnaire client dont les réponses orientent les offres de Climb2C."
         },
         highlights: [
             {
-                en: 'Engineered an internal AI Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and local Ollama LLMs.',
-                fr: "Conception d'un système interne RAG (Retrieval-Augmented Generation) utilisant Microsoft Agent Framework et des modèles locaux Ollama."
+                en: 'Built an internal RAG system on my own, with Microsoft Agent Framework and local Ollama models.',
+                fr: "Conception en solo d'un système RAG interne avec Microsoft Agent Framework et des modèles Ollama en local."
             },
             {
-                en: 'Developed Razor components and managed databases with Entity Framework.',
-                fr: 'Développement de composants Razor et gestion de bases de données avec Entity Framework.'
+                en: 'Built a client questionnaire (Razor, Entity Framework): the answers drive the offers we recommend.',
+                fr: 'Questionnaire client (Razor, Entity Framework) : les réponses déterminent les offres recommandées.'
             }
         ],
         tags: ['C# / ASP.NET', 'Entity Framework', 'Ollama', 'MS Agent Framework']
@@ -104,17 +105,17 @@ export const EXPERIENCES: Experience[] = [
         title: { en: 'Hackathons & Cybersecurity', fr: 'Hackathons & Cybersécurité' },
         period: { en: '2025 - 2026', fr: '2025 - 2026' },
         summary: {
-            en: 'Competed in two Generative AI Hackathons to build innovative LLM tools, and two Cycom cybersecurity CTF events.',
-            fr: "Participation à deux Hackathons d'IA Générative pour concevoir des outils LLM innovants, et à deux événements Cycom (Conférences Cybersécurité et CTF)."
+            en: 'Two 48-hour GenAI hackathons, with second place for a quiz chatbot, and two Cycom cybersecurity events.',
+            fr: "Deux hackathons d'IA générative de 48 h, avec une deuxième place pour un chatbot de quiz, et deux événements de cybersécurité Cycom."
         },
         highlights: [
             {
-                en: 'Competed in 2 Generative AI Hackathons (building innovative LLM tools).',
-                fr: "Participation à 2 Hackathons IA Générative (création d'outils LLM innovants)."
+                en: '2 generative-AI hackathons, 48 h each: a code-review PR hook and a revision-quiz chatbot (2nd place).',
+                fr: "2 hackathons d'IA générative de 48 h : un hook de PR qui relit le code et un chatbot de révision par quiz (2e place)."
             },
             {
-                en: 'Participated in 2 Cycom events (Cybersecurity talks and CTFs).',
-                fr: 'Participation à 2 événements Cycom (Conférences et CTFs Cybersécurité).'
+                en: '2 Cycom editions (2025, 2026): a hackathon building a security-scan tool, then a CTF.',
+                fr: '2 éditions de Cycom (2025, 2026) : un hackathon (outil de scans de sécurité), puis un CTF.'
             }
         ]
     }
@@ -157,7 +158,7 @@ export const EDUCATION: Education[] = [
         period: { en: '2024', fr: '2024' },
         summary: {
             en: "Specialized in Mathematics and Computer Science. Successfully passed the intensive 5-week Epitech C Programming 'Piscine' bootcamp.",
-            fr: "Spécialité Mathématiques et Sciences Informatiques. Réussite de la 'Piscine' Epitech, un bootcamp intensif de 5 semaines en programmation C."
+            fr: 'Spécialité Mathématiques et Sciences Informatiques. Réussite de la « Piscine » Epitech, un bootcamp intensif de 5 semaines en programmation C.'
         },
         cvSummary: {
             en: 'Baccalaureate (Specialization: Mathematics & Computer Science).',
@@ -176,10 +177,51 @@ export const EDUCATION: Education[] = [
         cvHidePeriod: true,
         cvSummary: {
             en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent).',
-            fr: 'BIA (2020), PSC 1 (2021).<br />Langues:<br />Français (Natif), Anglais (Bilingue).'
+            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Bilingue).'
         }
     }
 ];
+
+/** A dated step of the path chart. `id` points at an experience or education entry. */
+export interface Checkpoint {
+    id: string;
+    /** 'YYYY-MM' */
+    date: string;
+    label: Text;
+    /** Skills it brought, on top of the entry's own tags (path chart). */
+    skills?: string[];
+}
+
+/** Path chart checkpoints, oldest first. */
+export const CHECKPOINTS: Checkpoint[] = [
+    {
+        id: 'high-school',
+        date: '2024-07',
+        label: { en: 'Baccalauréat + C bootcamp', fr: 'Bac + Piscine C' },
+        skills: ['C']
+    },
+    { id: 'epitech', date: '2024-09', label: { en: 'Epitech, year 1', fr: 'Epitech, 1re année' } },
+    { id: 'climb2c', date: '2025-09', label: { en: 'Full-stack & AI intern', fr: 'Stage full-stack & IA' } },
+    { id: 'hackathons', date: '2026-05', label: { en: 'GenAI hackathon', fr: 'Hackathon IA générative' } },
+    {
+        id: 'google-cloud',
+        date: '2026-06',
+        label: { en: 'Google Cloud certified', fr: 'Certifié Google Cloud' },
+        skills: ['Google Cloud', 'Generative AI']
+    },
+    { id: 'issanka', date: '2026-09', label: { en: 'AI developer, Issanka', fr: 'Développeur IA, Issanka' } }
+];
+
+/** What is happening now: the centre of the project map and the hero's availability pill. */
+export const NOW = {
+    role: { en: 'AI developer at Issanka', fr: 'Développeur IA chez Issanka' },
+    focus: {
+        en: "The company's new website, live since 9 October",
+        fr: "Le nouveau site de l'entreprise, en ligne depuis le 9 octobre"
+    },
+    detail: { en: 'Sept 2026 – Feb 2027 · Epitech year 3', fr: 'Sept 2026 – Fév 2027 · Epitech 3e année' },
+    availability: { en: 'Open to an internship · Mar – Aug', fr: 'Disponible en stage · mars – août' }
+} satisfies Record<string, Text>;
 
 /** Home timeline order (newest first), mixing experiences and education by id. A test checks every entry is listed once. */
 export const TIMELINE: string[] = [
@@ -207,6 +249,11 @@ export const SKILLS: SkillGroup[] = [
         id: 'devops',
         title: { en: 'DevOps & Arch', fr: 'DevOps & Archi' },
         items: ['Docker', 'Linux', 'Git', 'Ansible', 'Jenkins']
+    },
+    {
+        id: 'practices',
+        title: { en: 'Practices', fr: 'Pratiques' },
+        items: ['TDD', 'CI/CD', 'Vitest', 'Playwright', 'GitHub Actions']
     }
 ];
 
@@ -219,7 +266,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 id: 'zappy',
                 summary: {
                     en: 'Multiplayer autonomous AI network game. Handled concurrent socket connections and state.',
-                    fr: "Jeu réseau multijoueur avec IA autonome. Gestion des connexions de sockets concurrentes et de l'état."
+                    fr: "Jeu en réseau multijoueur avec IA autonome. Gestion des connexions simultanées par sockets et de l'état du jeu."
                 },
                 tags: ['C++', 'Sockets']
             },
@@ -250,7 +297,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 title: 'AI-Racing',
                 summary: {
                     en: 'RL agent (PPO) navigating a custom kinematic physics environment with raycast sensors.',
-                    fr: 'Agent RL (PPO) naviguant dans un environnement de physique cinématique personnalisé avec capteurs à lancer de rayons.'
+                    fr: 'Agent RL (PPO) qui navigue dans un environnement à physique cinématique sur mesure, avec des capteurs à lancer de rayons.'
                 },
                 tags: ['Python', 'RL', 'Gymnasium']
             },
@@ -258,7 +305,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 id: 'persona',
                 summary: {
                     en: 'Self-hosted AI personalized news digest workflow.',
-                    fr: "Workflow de résumé d'actualités personnalisé par IA auto-hébergé."
+                    fr: "Workflow auto-hébergé de résumé d'actualités personnalisé par IA."
                 },
                 tags: ['N8N', 'Mistral']
             },
@@ -266,7 +313,7 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                 id: 'blackjack-ai',
                 summary: {
                     en: 'Deep RL agent (Maskable PPO) learning optimal Blackjack strategy in a custom environment.',
-                    fr: 'Agent RL profond (Maskable PPO) apprenant la stratégie optimale du Blackjack dans un environnement personnalisé.'
+                    fr: 'Agent RL profond (Maskable PPO) qui apprend la stratégie optimale du blackjack dans un environnement sur mesure.'
                 },
                 tags: ['Python', 'RL', 'PPO']
             }
@@ -277,53 +324,54 @@ export const CV_PROJECTS: CvProjectGroup[] = [
 export const OFFERS: Offer[] = [
     {
         id: 'full-time',
-        title: { en: 'Full-Time Internship', fr: 'Stage à Temps Plein' },
+        title: { en: 'Full-Time Internship', fr: 'Stage à temps plein' },
         summary: {
             en: 'Mandatory Epitech Tek3 placement (Full-time)',
-            fr: "Stage de fin d'année obligatoire Epitech Tek3 (Temps plein)"
+            fr: "Stage de fin d'année obligatoire Epitech Tek3 (temps plein)"
         },
         rows: [
             {
-                label: { en: 'Timeline & Rhythm', fr: 'Période & Rythme' },
+                label: { en: 'Timeline & Rhythm', fr: 'Période et rythme' },
                 value: { en: 'March 29 to Aug. 27.', fr: '29 Mars au 27 Août.' },
                 note: { en: 'At least 4 months (5 days/week).', fr: 'Au moins 4 mois (5 jours/semaine).' }
             },
             {
-                label: { en: 'Contract Type', fr: 'Type de Contrat' },
+                label: { en: 'Contract Type', fr: 'Type de contrat' },
                 value: { en: 'Internship, CDD, or CDI.', fr: 'Stage, CDD ou CDI.' },
                 note: { en: 'Full-time placement.', fr: 'Temps plein.' }
             },
             {
-                label: { en: 'Recruiter Info', fr: 'Infos Recruteur' },
+                label: { en: 'Recruiter Info', fr: 'Infos recruteur' },
+                recruiter: true,
                 value: {
                     en: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).',
-                    fr: 'Min. légal : 4,50€/h (taux 2026, ~650-700€/mois).'
+                    fr: 'Min. légal : 4,50 €/h (taux 2026, 650–700 €/mois).'
                 },
                 note: {
                     en: 'No school fees covered by the company.<br />Seeking competitive compensation.',
-                    fr: "Aucun frais de scolarité à la charge de l'entreprise.<br />Recherche d'une rémunération compétitive."
+                    fr: "Aucun frais de scolarité à la charge de l'entreprise.<br />Je souhaite une rémunération compétitive."
                 }
             }
         ]
     },
     {
         id: 'freelance',
-        title: { en: 'Freelance Missions', fr: 'Missions Freelance' },
+        title: { en: 'Freelance Missions', fr: 'Missions freelance' },
         summary: { en: 'B2B project-based collaboration', fr: 'Collaboration B2B par projet' },
         rows: [
             {
-                label: { en: 'Scope & Availability', fr: 'Périmètre & Disponibilité' },
-                value: { en: 'Backend APIs, AI integration.', fr: 'APIs Backend, intégration IA.' },
+                label: { en: 'Scope & Availability', fr: 'Périmètre et disponibilité' },
+                value: { en: 'Backend APIs, AI integration.', fr: "API back-end, intégration d'IA." },
                 note: { en: 'Flexible hours, async delivery.', fr: 'Horaires flexibles, livraison asynchrone.' }
             },
             {
                 label: { en: 'Status', fr: 'Statut' },
-                value: { en: 'Freelancer (Auto-entrepreneur)', fr: 'Freelance (Auto-entrepreneur)' },
+                value: { en: 'Freelancer (Auto-entrepreneur)', fr: 'Freelance (auto-entrepreneur)' },
                 note: { en: 'No payroll taxes for the client.', fr: 'Pas de charges patronales.' }
             },
             {
                 label: { en: 'Rates', fr: 'Tarifs' },
-                value: { en: 'Daily Rate or Fixed Price.', fr: 'TJM ou Forfait.' },
+                value: { en: 'Daily Rate or Fixed Price.', fr: 'TJM ou forfait.' },
                 note: { en: 'Quotation provided upon request.', fr: 'Devis fourni sur demande.' }
             }
         ]
