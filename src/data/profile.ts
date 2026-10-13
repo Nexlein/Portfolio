@@ -63,17 +63,17 @@ export const EXPERIENCES: Experience[] = [
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
-            en: 'Building a SaaS platform from scratch that integrates AI-driven workflows and RAG architectures, and developing conversational AI agents while modernizing the web architecture.',
-            fr: "Conception d'une plateforme SaaS intégrant des workflows pilotés par l'IA et des architectures RAG, et développement d'agents conversationnels, avec la modernisation de l'architecture web."
+            en: 'Rebuilt the company website, live since October 2026: a new visual identity, faster pages and many bugs fixed. It also replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
+            fr: "Refonte du site de l'entreprise, en ligne depuis octobre 2026 : une nouvelle identité visuelle, des pages plus rapides et de nombreux bugs corrigés. Elle remplace aussi des abonnements payants (comme Elementor Pro), ce qui réduit les coûts."
         },
         highlights: [
             {
-                en: 'Building a SaaS platform from scratch around AI-driven workflows and RAG.',
-                fr: "Conception d'une plateforme SaaS autour de workflows IA et du RAG."
+                en: 'Rebuilt the company website with the new visual identity: faster, many bugs fixed, live since October 2026.',
+                fr: "Refonte du site de l'entreprise à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis octobre 2026."
             },
             {
-                en: 'Developing conversational AI agents and modernizing the web architecture.',
-                fr: "Agents conversationnels IA et modernisation de l'architecture web."
+                en: 'Replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
+                fr: "Remplacement d'abonnements payants (comme Elementor Pro) : des coûts en moins."
             }
         ]
     },
@@ -84,17 +84,17 @@ export const EXPERIENCES: Experience[] = [
         org: 'Climb2C (Eliona Conseil)',
         period: { en: 'Sept - Dec 2025', fr: 'Sept - Déc 2025' },
         summary: {
-            en: 'Developed Razor components and managed databases via Entity Framework. Engineered an internal Retrieval-Augmented Generation (RAG) system using Microsoft Agent Framework and Ollama to securely query enterprise data.',
-            fr: "Développement de composants Razor et gestion de bases de données via Entity Framework. Conception d'un système RAG interne, basé sur Microsoft Agent Framework et Ollama, pour interroger les données de l'entreprise en toute sécurité."
+            en: "In a team of five, built an internal Retrieval-Augmented Generation (RAG) system with Microsoft Agent Framework and local Ollama models, and a client questionnaire in Razor and Entity Framework: the clients' answers drive the Climb2C offers recommended to them.",
+            fr: "Dans une équipe de cinq, conception d'un système RAG (Retrieval-Augmented Generation) interne avec Microsoft Agent Framework et des modèles Ollama en local, et d'un questionnaire client en Razor et Entity Framework : les réponses des clients déterminent les offres Climb2C qui leur sont recommandées."
         },
         highlights: [
             {
-                en: 'Designed an internal RAG system with Microsoft Agent Framework and local Ollama models.',
-                fr: "Conception d'un système RAG interne avec Microsoft Agent Framework et des modèles Ollama en local."
+                en: 'Built an internal RAG system with Microsoft Agent Framework and local Ollama models, in a team of five.',
+                fr: "Conception d'un système RAG interne avec Microsoft Agent Framework et des modèles Ollama en local, en équipe de cinq."
             },
             {
-                en: 'Built Razor components and database access with Entity Framework.',
-                fr: 'Composants Razor et accès aux bases de données avec Entity Framework.'
+                en: 'Built a client questionnaire (Razor, Entity Framework): the answers drive the offers we recommend.',
+                fr: 'Questionnaire client (Razor, Entity Framework) : les réponses déterminent les offres recommandées.'
             }
         ],
         tags: ['C# / ASP.NET', 'Entity Framework', 'Ollama', 'MS Agent Framework']
@@ -105,17 +105,17 @@ export const EXPERIENCES: Experience[] = [
         title: { en: 'Hackathons & Cybersecurity', fr: 'Hackathons & Cybersécurité' },
         period: { en: '2025 - 2026', fr: '2025 - 2026' },
         summary: {
-            en: 'Competed in two Generative AI Hackathons to build innovative LLM tools, and two Cycom cybersecurity CTF events.',
-            fr: "Participation à deux hackathons d'IA générative pour concevoir des outils LLM innovants, et à deux événements Cycom (conférences de cybersécurité et CTF)."
+            en: 'Two generative-AI hackathons (10 to 48 hours, about ten teams): a pull-request hook that reviews the code with good points, bad points and questions that keep a human in the loop, and a chatbot that turns lessons into quiz questions and grades the answers. We placed second at the first one. Two Cycom cybersecurity events (2025 and 2026): a hackathon where we built a tool that automates security scans such as nmap, then a classic CTF.',
+            fr: "Deux hackathons d'IA générative (de 10 à 48 heures, une dizaine d'équipes) : un hook de pull request qui relit le code avec des points positifs, des points négatifs et des questions pour garder l'humain dans la boucle, et un chatbot qui transforme des cours en questions de quiz et note les réponses. Nous avons fini deuxièmes au premier. Deux événements de cybersécurité Cycom (2025 et 2026) : un hackathon où nous avons conçu un outil qui automatise des scans de sécurité comme nmap, puis un CTF classique."
         },
         highlights: [
             {
-                en: 'Competed in 2 generative-AI hackathons, building LLM tools.',
-                fr: "2 hackathons d'IA générative, avec des outils LLM à la clé."
+                en: '2 generative-AI hackathons: a code-review PR hook and a revision-quiz chatbot. 2nd place at the first.',
+                fr: "2 hackathons d'IA générative : un hook de PR qui relit le code et un chatbot de révision par quiz. 2e place au premier."
             },
             {
-                en: 'Attended 2 Cycom events (cybersecurity talks, CTFs).',
-                fr: 'Participation à 2 événements Cycom (conférences de cybersécurité, CTF).'
+                en: '2 Cycom editions (2025, 2026): a hackathon building a security-scan tool, then a CTF.',
+                fr: '2 éditions de Cycom (2025, 2026) : un hackathon (outil de scans de sécurité), puis un CTF.'
             }
         ]
     }
@@ -215,7 +215,10 @@ export const CHECKPOINTS: Checkpoint[] = [
 /** What is happening now: the centre of the project map and the hero's availability pill. */
 export const NOW = {
     role: { en: 'AI developer at Issanka', fr: 'Développeur IA chez Issanka' },
-    focus: { en: 'RAG pipelines and conversational agents', fr: 'Pipelines RAG et agents conversationnels' },
+    focus: {
+        en: "The company's new website, live since October",
+        fr: "Le nouveau site de l'entreprise, en ligne depuis octobre"
+    },
     detail: { en: 'Sept 2026 – Feb 2027 · Epitech year 3', fr: 'Sept 2026 – Fév 2027 · Epitech 3e année' },
     availability: { en: 'Open to an internship · Mar – Aug', fr: 'Disponible en stage · mars – août' }
 } satisfies Record<string, Text>;
