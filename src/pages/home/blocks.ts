@@ -89,7 +89,7 @@ export function experience(lang: Lang): string {
             .split('. ')[0]
             .replace(/<[^>]+>/g, '')
             .replace(/\.$/, '');
-        const text = ('blurb' in e && e.blurb?.[lang]) || `${sentence}.`;
+        const text = 'kind' in e ? e.summary[lang] : `${sentence}.`;
         return `<article class="exp" data-cp="${c.id}"><p class="exp-when">${when}</p><div class="exp-what"><strong>${e.title[lang]}${org}</strong>
 <span>${text}</span></div></article>`;
     };
