@@ -88,11 +88,13 @@ test.describe('on phones', () => {
 test.describe('hero', () => {
     test('switches to another simulation', async ({ page }) => {
         await page.goto('/');
-        const name = page.locator('.hero-sim-name');
-        const before = await name.textContent();
-        await page.locator('.hero-switch').click();
-        await expect(name).not.toHaveText(before!);
-        await expect(page.locator('canvas.hero-field')).toHaveCount(1);
+        const canvas = page.locator('canvas.hero-field');
+        const before = await canvas.getAttribute('data-sim');
+        await page.locator('.hero-dot[aria-pressed="false"]').first().click();
+        await expect(canvas).not.toHaveAttribute('data-sim', before!);
+        await expect(canvas).toHaveCount(1);
+        await expect(page.locator('.hero-dot')).toHaveCount(4);
+        await expect(page.locator('.hero-dot[aria-pressed="true"]')).toHaveCount(1);
     });
 
     test('old project links (/?project=id) open the project page', async ({ page }) => {

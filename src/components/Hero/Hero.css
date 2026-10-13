@@ -83,7 +83,7 @@
 
 .hero-hint {
     position: absolute;
-    bottom: 26px;
+    bottom: 40px;
     left: 0;
     right: 0;
     z-index: 1;
@@ -92,32 +92,43 @@
     font-size: 12px;
 }
 
-.hero-switch {
+.hero-pager {
     position: absolute;
-    right: max(var(--gutter), calc(50% - var(--max) / 2));
-    bottom: 18px;
+    bottom: 8px;
+    left: 50%;
     z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 14px;
-    border: 1px solid var(--hair);
-    border-radius: 999px;
-    background: color-mix(in sRGB, var(--surface) 70%, transparent);
-    backdrop-filter: blur(12px);
-    font-size: 13px;
-    cursor: pointer;
-    transition: transform 160ms var(--ease-out);
+    display: flex;
+    translate: -50% 0;
 }
 
-.hero-switch [aria-hidden] {
-    color: var(--signal);
-    transition: rotate 400ms var(--ease-out);
+.hero-dot {
+    display: grid;
+    place-items: center;
+    padding: 10px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.hero-dot::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: color-mix(in sRGB, var(--muted) 45%, transparent);
+    transition:
+        background 200ms ease,
+        scale 200ms var(--ease-out);
+}
+
+.hero-dot[aria-pressed='true']::before {
+    background: var(--signal);
+    scale: 1.45;
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .hero-switch:hover [aria-hidden] {
-        rotate: 180deg;
+    .hero-dot:hover::before {
+        background: var(--muted);
     }
 
     .avail:hover {
@@ -128,12 +139,6 @@
 @media (width <= 760px) {
     .hero-hint {
         display: none;
-    }
-
-    .hero-switch {
-        left: 50%;
-        right: auto;
-        translate: -50% 0;
     }
 }
 
@@ -163,7 +168,7 @@
 /* A small chevron hints that the page continues; it fades out once the visitor scrolls (see initCue) */
 .scroll-cue {
     position: absolute;
-    bottom: 68px;
+    bottom: 78px;
     left: 50%;
     z-index: 1;
     translate: -50% 0;

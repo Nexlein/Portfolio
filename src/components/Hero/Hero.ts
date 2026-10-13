@@ -9,14 +9,26 @@ export function initHero(): void {
     const hero = document.querySelector<HTMLElement>('.hero');
     if (!hero) return;
     const hint = hero.querySelector<HTMLElement>('.hero-hint')!,
-        button = hero.querySelector<HTMLButtonElement>('.hero-switch')!,
-        name = button.querySelector<HTMLElement>('.hero-sim-name')!,
+        pager = hero.querySelector<HTMLElement>('.hero-pager')!,
         copy = hero.querySelector<HTMLElement>('.hero-copy')!;
     let current = Math.floor(Math.random() * SIMS.length);
     let stop: (() => void) | undefined;
     // Scroll progress is a layout read: measure it once, and again when the window changes
     let height = hero.offsetHeight;
     let field = hero.querySelector('canvas')!;
+
+    // One dot per simulation: the lit one is running, the others switch to it
+    const dots = SIMS.map((sim, index) => {
+        const dot = document.createElement('button');
+        const label = i18n.t(`home.hero.sims.${sim.id}.name`);
+        dot.type = 'button';
+        dot.className = 'hero-dot';
+        dot.title = label;
+        dot.setAttribute('aria-label', label);
+        dot.addEventListener('click', () => index !== current && show((current = index), true));
+        pager.append(dot);
+        return dot;
+    });
 
     const show = (index: number, swap: boolean) => {
         const old = field;
@@ -33,14 +45,12 @@ export function initHero(): void {
         stop?.();
         stop = runSim(index, canvas);
         field = canvas;
-        const t = (key: string) => i18n.t(`home.hero.sims.${SIMS[index].id}.${key}`);
-        name.textContent = t('name');
-        hint.textContent = t('hint');
+        dots.forEach((dot, k) => dot.setAttribute('aria-pressed', String(k === index)));
+        hint.textContent = i18n.t(`home.hero.sims.${SIMS[index].id}.hint`);
     };
     initCue(hero);
     show(current, false);
-    button.hidden = false;
-    button.addEventListener('click', () => show((current = (current + 1) % SIMS.length), true));
+    pager.hidden = false;
 
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     rotateTitle(hero);
