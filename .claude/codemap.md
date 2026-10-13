@@ -96,9 +96,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: themes.test.ts
 
 ## src/components/NeuralMap
-- **NeuralMap.css** (466) — The project map (see NeuralMap.ts).
+- **NeuralMap.css** (479) — The project map (see NeuralMap.ts).
   - ← index.html
-- **NeuralMap.ts** (708) — The project map: projects as a small neural network.
+- **NeuralMap.ts** (722) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/translate, data/profile, data/projects, ui/icons, ui/video, components/NeuralMap/graph
   - ← pages/home/home
