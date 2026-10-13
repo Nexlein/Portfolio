@@ -81,13 +81,12 @@ export function initPathChart(): void {
 
 const inside = (el: EventTarget | null) => (el as Element | null)?.closest?.('.path-chart, .exp-card');
 
-const STEP_MS = 6500,
-    RESUME_MS = 1500;
+const STEP_MS = 6500;
 
 /**
  * The story under the path chart: one checkpoint is selected at a time, lit on the chart and told in the panel
  * below. It moves on by itself while it is on screen and untouched; a mouse over a checkpoint selects it for as
- * long as it stays there, and leaving resumes from that point. Taps, the arrows and the range buttons work too
+ * long as it stays there, and leaving resumes from that point with a full step. Taps, the arrows and the range buttons work too
  * (marks come and go with the range, so they are looked up each time). Never moves on its own with reduced motion.
  */
 export function initPathStory(): void {
@@ -95,8 +94,7 @@ export function initPathStory(): void {
     const card = section?.querySelector<HTMLElement>('.exp-card');
     if (!section || !card) return;
     const nav = card.querySelector<HTMLElement>('.exp-nav')!,
-        count = card.querySelector<HTMLElement>('.exp-count')!,
-        bar = card.querySelector<HTMLElement>('.exp-progress')!;
+        count = card.querySelector<HTMLElement>('.exp-count')!;
     nav.hidden = false;
     card.classList.add('live');
     let current = '',
@@ -105,12 +103,14 @@ export function initPathStory(): void {
         held = false;
 
     const ids = () => [...section.querySelectorAll<SVGElement>('.path-svg .mark')].map((m) => m.dataset.cp!);
-    const arm = (delay = STEP_MS) => {
+    // Every call restarts both the timer and the fill line, so they never drift apart
+    const arm = () => {
         clearTimeout(timer);
         const run = visible && !held && !document.hidden && !reduced();
+        card.classList.remove('playing');
+        void card.offsetWidth;
         card.classList.toggle('playing', run);
-        bar.style.setProperty('--dur', `${delay}ms`);
-        if (run) timer = window.setTimeout(() => step(1), delay);
+        if (run) timer = window.setTimeout(() => step(1), STEP_MS);
     };
     function select(id: string, force = false) {
         const all = ids();
@@ -122,9 +122,6 @@ export function initPathStory(): void {
             n.classList.toggle('on', n.dataset.cp === current);
         });
         count.textContent = `${all.indexOf(current) + 1} / ${all.length}`;
-        bar.style.animation = 'none';
-        void bar.offsetWidth; // restart the fill
-        bar.style.animation = '';
         arm();
     }
     function step(dir: number) {
@@ -144,7 +141,7 @@ export function initPathStory(): void {
     section.addEventListener('pointerout', (e) => {
         if (e.pointerType !== 'mouse' || inside(e.relatedTarget)) return;
         held = card.matches(':has(:focus-visible)');
-        arm(RESUME_MS);
+        arm();
     });
     section.addEventListener('click', (e) => {
         const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
@@ -157,7 +154,7 @@ export function initPathStory(): void {
     });
     card.addEventListener('focusout', () => {
         held = false;
-        arm(RESUME_MS);
+        arm();
     });
     nav.querySelector('.exp-prev')!.addEventListener('click', () => step(-1));
     nav.querySelector('.exp-next')!.addEventListener('click', () => step(1));
@@ -205,6 +202,8 @@ export function initNumbers(): void {
     const arm = () => {
         clearTimeout(timer);
         const run = visible && !held && !document.hidden && !reduced();
+        root.classList.remove('playing');
+        void root.offsetWidth; // restart the fill line together with the timer
         root.classList.toggle('playing', run);
         if (run) timer = window.setTimeout(() => show(cur + 1), DECK_MS);
     };

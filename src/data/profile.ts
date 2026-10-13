@@ -197,7 +197,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     {
         id: 'high-school',
         date: '2024-07',
-        label: { en: 'Baccalauréat + C Piscine', fr: 'Bac + Piscine C' },
+        label: { en: 'Baccalauréat + C bootcamp', fr: 'Bac + Piscine C' },
         skills: ['C']
     },
     { id: 'epitech', date: '2024-09', label: { en: 'Epitech, year 1', fr: 'Epitech, 1re année' } },
