@@ -241,11 +241,12 @@
     font-size: 15px;
 }
 
+/* Up and down, to the left of the index (the ‹ › glyphs are turned a quarter); below the deck on phones */
 .numbers-nav {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     gap: 10px;
-    margin-top: 20px;
 }
 
 .numbers-nav[hidden] {
@@ -261,8 +262,15 @@
     color: var(--ink);
     font-size: 18px;
     line-height: 1;
+    rotate: 90deg;
     cursor: pointer;
-    transition: opacity 200ms ease;
+    transition:
+        opacity 200ms ease,
+        border-color 200ms;
+}
+
+.numbers-nav button:not(:disabled):hover {
+    border-color: var(--signal);
 }
 
 .numbers-nav button:disabled {
@@ -284,9 +292,9 @@
 /* With JS: a deck. One card in front, two peeking behind; the index on the left names every chart. */
 .numbers.deck .numbers-body {
     display: grid;
-    grid-template-columns: minmax(210px, 300px) minmax(0, 1fr);
+    grid-template-columns: auto minmax(190px, 260px) minmax(0, 1fr);
     align-items: center;
-    gap: clamp(24px, 5vw, 64px);
+    gap: clamp(16px, 3vw, 40px);
 }
 
 .numbers.deck .numbers-index {
@@ -677,6 +685,16 @@
 @media (width <= 900px) {
     .numbers.deck .numbers-body {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .numbers.deck .numbers-nav {
+        flex-direction: row;
+        order: 2;
+        margin-top: 4px;
+    }
+
+    .numbers-nav button {
+        rotate: none;
     }
 
     .numbers.deck .numbers-index {

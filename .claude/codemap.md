@@ -22,7 +22,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: PDFS
 
 ## src/components/Charts
-- **Charts.css** (732) — Path chart and the numbers deck.
+- **Charts.css** (750) — Path chart and the numbers deck.
   - ← index.html
 - **Charts.ts** (269) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
   - exports: countUp, initPathChart, initPathStory, initNumbers, initReveals
