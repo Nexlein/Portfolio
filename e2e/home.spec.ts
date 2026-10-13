@@ -336,21 +336,26 @@ test.describe('charts', () => {
         test.skip(isMobile, 'needs a mouse');
         await page.setViewportSize({ width: 1280, height: 2400 });
         await page.goto('/');
-        await page.locator('#numbers').scrollIntoViewIfNeeded();
+        await expect(page.locator('.work')).toHaveAttribute('data-view', 'map'); // the layout above has settled
+        // The chart, the story and the deck all fit on screen from here. The hovers are forced: the chart is still
+        // sliding in (a reveal), and waiting for it to be "stable" made Playwright scroll the story out of view
+        await page.locator('.path-chart').evaluate((el) => scrollTo(0, el.getBoundingClientRect().top + scrollY - 120)); // clear of the sticky nav
+        await page.mouse.move(2, 2);
         const story = page.locator('.exp-card');
-        await page.locator('.path-symbol').hover(); // the ticker above the plot
         await expect(story).toHaveClass(/playing/);
-        await page.locator('.path-svg .hit').hover({ position: { x: 300, y: 150 } });
+        await page.locator('.path-symbol').hover({ force: true }); // the ticker above the plot
+        await expect(story).toHaveClass(/playing/);
+        await page.locator('.path-svg .hit').hover({ position: { x: 300, y: 150 }, force: true });
         await expect(story).not.toHaveClass(/playing/);
-        await page.locator('.path-range button').first().hover();
+        await page.locator('.path-range button').first().hover({ force: true });
         await expect(story).not.toHaveClass(/playing/);
-        await page.locator('.numbers-sub').hover(); // the line of text above the deck
+        await page.locator('.numbers-sub').hover({ force: true }); // the line of text above the deck
         await expect(story).toHaveClass(/playing/);
         const deck = page.locator('.numbers');
         await expect(deck).toHaveClass(/playing/);
-        await page.locator('.numbers-index button').nth(2).hover();
+        await page.locator('.numbers-index button').nth(2).hover({ force: true });
         await expect(deck).not.toHaveClass(/playing/);
-        await page.locator('.numbers-sub').hover();
+        await page.locator('.numbers-sub').hover({ force: true });
         await expect(deck).toHaveClass(/playing/);
     });
 
