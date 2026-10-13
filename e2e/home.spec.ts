@@ -192,6 +192,25 @@ test.describe('on phones', () => {
     });
 });
 
+test.describe('how I work', () => {
+    test.beforeEach(({ isMobile }) => test.skip(isMobile, 'needs a mouse'));
+
+    test('hovering an item lights it up and steps the others back', async ({ page }) => {
+        await page.goto('/');
+        const items = page.locator('.method-item');
+        await items.nth(1).scrollIntoViewIfNeeded();
+        await expect(items.nth(0)).toHaveCSS('opacity', '1');
+        await items.nth(1).hover();
+        await expect(items.nth(0)).toHaveCSS('opacity', '0.55');
+        await expect(items.nth(2)).toHaveCSS('opacity', '0.55');
+        await expect(items.nth(1)).toHaveCSS('opacity', '1');
+        await expect(items.nth(1).locator('h3')).toHaveCSS('background-position', /^0(px|%) 0(px|%)$/);
+        await expect(items.nth(1).locator('.method-n')).toHaveCSS('letter-spacing', /^\d+(\.\d+)?px$/);
+        await page.mouse.move(2, 2);
+        await expect(items.nth(0)).toHaveCSS('opacity', '1');
+    });
+});
+
 test.describe('hero', () => {
     test('switches to another simulation', async ({ page }) => {
         await page.goto('/');

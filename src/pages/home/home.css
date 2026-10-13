@@ -578,13 +578,31 @@
 }
 
 .method-item {
+    position: relative;
     padding-top: 20px;
     border-top: 1px solid var(--hair);
 }
 
+/* The amber line that draws along the top on hover (see the hover block below) */
+.method-item::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 auto;
+    height: 2px;
+    border-radius: 1px;
+    background: var(--signal);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 520ms var(--ease-out);
+}
+
 .method-n {
+    display: inline-block;
     color: var(--signal);
     font-size: 12px;
+    transition:
+        letter-spacing 360ms var(--ease-out),
+        translate 360ms var(--ease-out);
 }
 
 .method-item h3 {
@@ -598,11 +616,60 @@
     color: var(--muted);
     font-size: 15px;
     line-height: 1.5;
+    transition: color 300ms;
 }
 
 .method-source {
     margin-top: 24px;
     padding: 0 var(--gutter);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .method-item {
+        transition: opacity 300ms;
+    }
+
+    /* The title is ink; on hover an amber sweep runs through it from the left */
+    @supports (background-clip: text) {
+        .method-item h3 {
+            background: linear-gradient(90deg, var(--signal) 50%, var(--ink) 50%) 100% 0 / 200% 100% no-repeat;
+            background-clip: text;
+            color: transparent;
+            transition: background-position 600ms var(--ease-out);
+        }
+
+        .method-item:hover h3 {
+            background-position: 0 0;
+        }
+    }
+
+    .method-item:hover::before {
+        scale: 1 1;
+    }
+
+    .method-item:hover .method-n {
+        letter-spacing: 0.18em;
+        translate: 4px 0;
+    }
+
+    .method-item:hover .method-text {
+        color: var(--ink);
+    }
+
+    /* The two others step back */
+    .method-items:has(.method-item:hover) .method-item:not(:hover) {
+        opacity: 0.55;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .method-item,
+    .method-item::before,
+    .method-n,
+    .method-item h3,
+    .method-text {
+        transition: none;
+    }
 }
 
 @media (width <= 760px) {
