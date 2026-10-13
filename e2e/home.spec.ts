@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { test, expect } from './fixtures';
 import { PROJECTS } from '../src/data/projects';
 import { en } from '../src/i18n/en';
@@ -78,7 +79,7 @@ test.describe('project map', () => {
         await page.locator('#work').scrollIntoViewIfNeeded();
         const cards = page.locator('.nm-card:not(.off)');
         await expect(cards).toHaveCount(PROJECTS.length);
-        await expect(page.locator('.project-list')).toBeHidden(); // behind "See all" when the map is drawn
+        await expect(page.locator('.project-list')).toBeHidden(); // the list is the other view
 
         await expect(page.locator('.nm.booted')).toHaveCount(1); // the map has drawn itself in
         const first = cards.first();
@@ -123,6 +124,58 @@ test.describe('project map', () => {
                 Number(await aiCard.evaluate((el) => (el as HTMLElement).style.getPropertyValue('--act')))
             )
             .toBeGreaterThan(0.2);
+    });
+});
+
+const rows = (page: Page) => page.locator('.project-list li:not([hidden])');
+
+test.describe('project list', () => {
+    test('shows a few rows, "Show more" adds a page at a time and "Show less" folds back', async ({ page }) => {
+        await page.setViewportSize({ width: 800, height: 900 }); // the list view, on every project
+        await page.goto('/');
+        await page.locator('.project-list').scrollIntoViewIfNeeded();
+        await expect(rows(page)).toHaveCount(6);
+        const more = page.locator('.more-btn');
+        await expect(more).toHaveText(/Show 6 more/);
+        await more.click();
+        await expect(rows(page)).toHaveCount(12);
+        await more.click();
+        await expect(rows(page)).toHaveCount(PROJECTS.length);
+        await expect(more).toHaveText('Show less');
+        await more.click();
+        await expect(rows(page)).toHaveCount(6);
+    });
+
+    test('desktop: a switch swaps the map and the list, and remembers the choice', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'phones have no map');
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm')).toBeVisible();
+        await expect(page.locator('.project-list')).toBeHidden();
+        await page.locator('.work-view [data-view="list"]').click();
+        await expect(page.locator('.nm')).toBeHidden();
+        await expect(rows(page)).toHaveCount(6);
+        await page.reload();
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.work-view [data-view="list"]')).toHaveAttribute('aria-pressed', 'true');
+        await expect(rows(page)).toHaveCount(6);
+        await page.locator('.work-view [data-view="map"]').click();
+        await expect(page.locator('.nm')).toBeVisible();
+        await expect(page.locator('.project-list')).toBeHidden();
+    });
+
+    test('desktop: a domain chip filters the list, and the page count follows', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'the chips are desktop only');
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await page.locator('.work-view [data-view="list"]').click();
+        const domain = PROJECTS.find((p) => p.category === 'systems')!.category;
+        const expected = PROJECTS.filter((p) => p.category === domain).length;
+        await page.locator(`.query button[data-domain="${domain}"]`).click();
+        await expect(rows(page)).toHaveCount(Math.min(6, expected));
+        for (const li of await rows(page).all()) await expect(li.locator('a')).toHaveAttribute('data-domain', domain);
+        await page.locator(`.query button[data-domain="${domain}"]`).click();
+        await expect(rows(page)).toHaveCount(6);
     });
 });
 

@@ -16,59 +16,146 @@ import { MAP_MAX } from './blocks';
 
 /** The map needs room: below this width the plain list is the better view. */
 const MAP_MIN_WIDTH = 900;
+/** Rows of the list shown at first, and added by each "Show more". */
+const LIST_PAGE = 6;
+const VIEW_KEY = 'work-view';
+const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-async function initWork(): Promise<void> {
+const savedView = () => {
+    try {
+        return localStorage.getItem(VIEW_KEY);
+    } catch {
+        return null;
+    }
+};
+
+/**
+ * The work section: a map (wide windows) or a list (phones, or by choice), a domain filter for both, and a list
+ * that shows a few rows and then "Show more". Without JS every row is in the HTML and nothing is hidden.
+ */
+function initWork(): void {
     const section = document.querySelector<HTMLElement>('.work');
     const host = section?.querySelector<HTMLElement>('.map-host');
     if (!section || !host) return;
-    // Narrow at load (a docked devtools, a split screen, browser zoom): keep the list, and draw the map if the
-    // window is widened later
+    const list = section.querySelector<HTMLElement>('.project-list')!;
+    const rows = [...list.querySelectorAll<HTMLElement>('li')];
+    const more = section.querySelector<HTMLElement>('.list-more')!;
+    const moreBtn = more.querySelector<HTMLButtonElement>('.more-btn')!;
+    const switcher = section.querySelector<HTMLElement>('.work-view')!;
+    const chips = [...section.querySelectorAll<HTMLButtonElement>('.query button')];
     const wide = matchMedia(`(min-width: ${MAP_MIN_WIDTH + 1}px)`);
-    if (!wide.matches) {
-        wide.addEventListener('change', () => void initWork(), { once: true });
-        return;
-    }
-    // Drawn when the section is about to come into view, not at load: the map is hundreds of animated elements,
-    // and the visitor starts on the hero. (The section itself is observed: the map host is hidden until then.)
-    await new Promise<void>((resolve) => {
+
+    let domain: string | null = null,
+        shown = LIST_PAGE,
+        view: 'map' | 'list' = 'list',
+        map: { query(d: string | null): void } | undefined,
+        mounting: Promise<void> | undefined;
+
+    // ── List: filtered by the domain chip, a page at a time
+    const renderList = (reveal = false) => {
+        const rowsIn = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain);
+        rows.forEach((li) => {
+            const i = rowsIn.indexOf(li);
+            const open = i >= 0 && i < shown;
+            if (reveal && open && li.hidden) {
+                li.style.setProperty('--i', String(i - (shown - LIST_PAGE)));
+                li.classList.add('row-in');
+            }
+            li.hidden = !open;
+        });
+        const left = rowsIn.length - shown;
+        more.hidden = rowsIn.length <= LIST_PAGE;
+        moreBtn.textContent =
+            left > 0
+                ? i18n.t('home.work.showMore').replace('{n}', String(Math.min(LIST_PAGE, left)))
+                : i18n.t('home.work.showLess');
+    };
+    moreBtn.addEventListener('click', () => {
+        const left = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain).length - shown;
+        if (left > 0) {
+            shown += LIST_PAGE;
+            renderList(true);
+        } else {
+            shown = LIST_PAGE;
+            renderList();
+            list.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+        }
+    });
+    list.addEventListener('animationend', (e) => (e.target as HTMLElement).classList.remove('row-in'));
+
+    // ── Map: loaded the first time it is shown (phones never download the map code)
+    const mountMap = (): Promise<void> => {
+        mounting ??= import('@/components/NeuralMap/NeuralMap').then(({ mountNeuralMap }) => {
+            map = mountNeuralMap(host, MAP_MAX);
+            map.query(domain);
+        });
+        return mounting;
+    };
+
+    const show = (next: 'map' | 'list') => {
+        view = next;
+        section.dataset.view = next;
+        switcher
+            .querySelectorAll('button')
+            .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === next)));
+        if (next === 'map') {
+            mountMap().catch(() => show('list')); // the code could not load (a stale page after a deploy): the list stays usable
+        }
+    };
+
+    // ── Which view: the map on wide windows unless the visitor chose the list; the list everywhere else
+    const sync = () => {
+        const canMap = wide.matches;
+        if (canMap) section.dataset.wide = '';
+        else delete section.dataset.wide;
+        switcher.hidden = !canMap;
+        if (!canMap) return show('list');
+        if (savedView() === 'list') return show('list');
+        // The default map is drawn when its section is about to come into view, not at load: it is hundreds of
+        // animated elements and the visitor starts on the hero
+        if (map || mounting || view === 'map') return show('map');
+        section.dataset.view = 'map';
         const io = new IntersectionObserver(
             ([entry]) => {
                 if (!entry.isIntersecting) return;
                 io.disconnect();
-                resolve();
+                if (wide.matches && savedView() !== 'list') show('map');
             },
             { rootMargin: '300px 0px' }
         );
         io.observe(section);
-    });
-    // Loaded here, not at the top: phones never download the map code
-    const { mountNeuralMap } = await import('@/components/NeuralMap/NeuralMap');
-    section.classList.add('has-map');
-    const map = mountNeuralMap(host, MAP_MAX);
+    };
+    wide.addEventListener('change', sync);
+    switcher.querySelectorAll<HTMLButtonElement>('button').forEach((b) =>
+        b.addEventListener('click', () => {
+            try {
+                localStorage.setItem(VIEW_KEY, b.dataset.view!);
+            } catch {
+                /* private mode: the choice just lasts until the page is closed */
+            }
+            show(b.dataset.view as 'map' | 'list');
+        })
+    );
+    section.querySelector<HTMLButtonElement>('.see-all')?.addEventListener('click', () => show('list'));
 
-    // A domain chip toggles a filter: its projects stay lit and the others dim; the same chip again clears it
-    const chips = [...section.querySelectorAll<HTMLButtonElement>('.query button')];
+    // ── A domain chip toggles a filter: on the map its projects stay lit and the others dim, on the list only they
+    // remain; the same chip again clears it
     chips.forEach((chip) => {
         chip.setAttribute('aria-pressed', 'false');
         chip.addEventListener('click', () => {
             const on = chip.getAttribute('aria-pressed') !== 'true';
             chips.forEach((c) => c.setAttribute('aria-pressed', String(on && c === chip)));
-            map.query(on ? chip.dataset.domain! : null);
-            if (on)
-                host.scrollIntoView({
-                    behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-                    block: 'center'
-                });
+            domain = on ? chip.dataset.domain! : null;
+            shown = LIST_PAGE;
+            map?.query(domain);
+            renderList();
+            if (on && view === 'map')
+                host.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' });
         });
     });
 
-    const list = section.querySelector<HTMLElement>('.project-list')!;
-    section.querySelector<HTMLButtonElement>('.see-all')?.addEventListener('click', (e) => {
-        const button = e.currentTarget as HTMLButtonElement;
-        const open = list.classList.toggle('open');
-        button.setAttribute('aria-expanded', String(open));
-        button.textContent = i18n.t(open ? 'home.work.hideAll' : 'home.work.seeAll');
-    });
+    renderList();
+    sync();
 }
 
 /** Copy the email address, and say so; if the clipboard is blocked, show the address instead. */
@@ -113,7 +200,7 @@ function bootstrap(): void {
     initNav();
     initGlide();
     initHero();
-    void initWork();
+    initWork();
     initPathChart();
     initPathStory();
     initNumbers();

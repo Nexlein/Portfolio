@@ -58,7 +58,7 @@ export function domainQuery(lang: Lang): string {
         .join('');
 }
 
-/** Every project, as a plain list: phones, no JavaScript, search engines, and "See all" under the map. */
+/** Every project, as a plain list: phones, no JavaScript, search engines, and the List view on large screens. */
 export function projectList(lang: Lang): string {
     return PROJECTS.map(
         (

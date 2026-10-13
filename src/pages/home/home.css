@@ -78,7 +78,12 @@
 }
 
 /* ── Work ── */
-.query {
+.work-tools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 14px 24px;
     margin-top: 30px;
 }
 
@@ -152,18 +157,57 @@
     font-size: 20px;
 }
 
-/* With the map drawn, the list waits behind "See all" */
-.work.has-map .map-host {
+/* The view (set by script): the map and the list swap; without JS only the list is there */
+.work[data-view='map'] .map-host {
     display: block;
+    min-height: max(760px, 94vh); /* the map's own height: nothing jumps when it is drawn */
 }
 
-.work.has-map .project-list:not(.open) {
+.work[data-view='map'] .list-block {
+    display: none;
+}
+
+.work:not([data-view='map']) :is(.map-host, .map-more, .map-only) {
     display: none;
 }
 
 /* Phones and no map: the query buttons have nothing to light up */
-.work:not(.has-map) .desk-only {
+.work:not([data-wide]) .desk-only {
     display: none;
+}
+
+.list-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.more-btn {
+    padding: 9px 20px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 200ms;
+}
+
+.more-btn:hover {
+    border-color: var(--signal);
+}
+
+/* Rows that "Show more" brings in slide up one after the other */
+.project-list li.row-in {
+    animation: row-in 420ms var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+@keyframes row-in {
+    from {
+        opacity: 0;
+        translate: 0 12px;
+    }
 }
 
 /* ── The story under the path chart: one checkpoint at a time (see initPathStory). Without JS: a plain list ── */

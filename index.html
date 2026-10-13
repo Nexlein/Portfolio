@@ -90,23 +90,33 @@
                     <h2 class="headline" id="work-title" data-render="work-title"></h2>
                     <p class="lede">
                         <span data-i18n="home.work.sub">Projects connect where they share skills.</span>
-                        <span class="desk-only" data-i18n="home.work.subDesk"
+                        <span class="map-only" data-i18n="home.work.subDesk"
                             >Hover one to see what it lights up, or ask the network.</span
                         >
                     </p>
                     <p class="features-label mono" data-i18n="home.featured.label">Start here</p>
                     <div class="features" data-render="featured"></div>
                     <span class="sr-only" id="ask-label" data-i18n="home.work.ask">Light up a domain</span>
-                    <div
-                        class="segmented query desk-only"
-                        role="group"
-                        aria-labelledby="ask-label"
-                        data-render="domain-query"
-                    ></div>
+                    <div class="work-tools desk-only">
+                        <div
+                            class="segmented query"
+                            role="group"
+                            aria-labelledby="ask-label"
+                            data-render="domain-query"
+                        ></div>
+                        <span class="sr-only" id="view-label" data-i18n="home.work.viewLabel">Projects view</span>
+                        <div class="segmented work-view" role="group" aria-labelledby="view-label" hidden>
+                            <button type="button" data-view="map" data-i18n="home.work.viewMap">Map</button>
+                            <button type="button" data-view="list" data-i18n="home.work.viewList">List</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="map-host"></div>
                 <p class="map-more" data-render="map-more"></p>
-                <ul class="project-list wrap" id="project-list" data-render="project-list"></ul>
+                <div class="list-block">
+                    <ul class="project-list wrap" id="project-list" data-render="project-list"></ul>
+                    <div class="list-more" hidden><button type="button" class="more-btn"></button></div>
+                </div>
             </section>
 
             <!-- Path: the skill toolbox over time with checkpoints, and the numbers behind it (src/components/Charts) -->
