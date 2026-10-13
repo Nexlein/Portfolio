@@ -93,6 +93,45 @@
     fill: var(--bg);
     stroke: var(--signal);
     stroke-width: 1.5;
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+        scale 220ms var(--ease-out),
+        fill 220ms;
+}
+
+.path-svg .mark-hit {
+    fill: transparent;
+}
+
+/* Linked with the experience list (initPathLinks): the lit checkpoint grows and fills, the others step back */
+.path-svg .mark,
+.path-svg .mark text,
+.path-svg .mark line {
+    transition:
+        opacity 220ms,
+        stroke-opacity 220ms,
+        fill 220ms;
+}
+
+.path-svg .marks.lit .mark:not(.on) {
+    opacity: 0.3;
+}
+
+.path-svg .mark.on .mark-dot {
+    fill: var(--signal);
+    scale: 1.9;
+    filter: drop-shadow(0 0 6px var(--signal));
+}
+
+.path-svg .mark.on text {
+    fill: var(--signal);
+}
+
+.path-svg .mark.on line {
+    stroke: var(--signal);
+    stroke-opacity: 0.8;
+    stroke-dasharray: none;
 }
 
 .path-svg .stop-top {

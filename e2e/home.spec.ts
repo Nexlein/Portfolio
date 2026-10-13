@@ -205,6 +205,22 @@ test.describe('charts', () => {
         await expect(front).not.toHaveText(first!, { timeout: 12000 });
     });
 
+    test('the experience list and the path chart light each other up', async ({ page }) => {
+        await page.goto('/');
+        const li = page.locator('.experience li[data-cp="climb2c"]');
+        const mark = page.locator('.path-svg .mark[data-cp="climb2c"]');
+        await li.scrollIntoViewIfNeeded();
+        await li.focus();
+        await expect(mark).toHaveClass(/on/);
+        await expect(li).toHaveClass(/on/);
+        await expect(page.locator('.experience li[data-cp="issanka"]')).not.toHaveClass(/on/);
+        await li.blur();
+        await expect(mark).not.toHaveClass(/on/);
+        await page.locator('.path-chart').scrollIntoViewIfNeeded();
+        await mark.locator('.mark-hit').hover({ force: true });
+        await expect(li).toHaveClass(/on/);
+    });
+
     test('old #numbers links land on the numbers', async ({ page }) => {
         await page.goto('/#numbers');
         await expect(page.locator('.numbers-row')).toBeInViewport();

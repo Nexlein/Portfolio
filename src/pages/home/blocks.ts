@@ -79,7 +79,7 @@ export function experience(lang: Lang): string {
     return EXPERIENCES.map(
         (
             e
-        ) => `<li><span class="exp-when">${e.period[lang]}</span><span class="exp-what"><strong>${e.title[lang]}${e.org ? ` · ${e.org}` : ''}</strong>
+        ) => `<li data-cp="${e.id}" tabindex="0"><span class="exp-when">${e.period[lang]}</span><span class="exp-what"><strong>${e.title[lang]}${e.org ? ` · ${e.org}` : ''}</strong>
 <span>${e.summary[lang].split('. ')[0].replace(/\.$/, '')}.</span></span></li>`
     ).join('');
 }

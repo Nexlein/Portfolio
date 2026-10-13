@@ -79,6 +79,29 @@ export function initPathChart(): void {
     bind();
 }
 
+const idOf = (e: Event) => (e.target as Element).closest<HTMLElement>('[data-cp]')?.dataset.cp ?? null;
+
+/**
+ * The path chart and the experience list under it are one story: hovering or focusing an entry of the list lights
+ * its checkpoint on the chart (and the other way round); the rest dims. Marks come and go with the range
+ * buttons, so everything is looked up at the time of the event.
+ */
+export function initPathLinks(): void {
+    const section = document.getElementById('path');
+    if (!section) return;
+    const light = (id: string | null) => {
+        const on = id ? section.querySelectorAll(`[data-cp="${CSS.escape(id)}"]`) : [];
+        section.querySelectorAll('.marks, .experience').forEach((g) => g.classList.toggle('lit', on.length > 0));
+        section.querySelectorAll('[data-cp]').forEach((n) => n.classList.toggle('on', [...on].includes(n)));
+    };
+    section.addEventListener('pointerover', (e) => light(idOf(e)));
+    section.addEventListener('pointerout', (e) => {
+        if (!(e.relatedTarget as Element | null)?.closest?.('[data-cp]')) light(null);
+    });
+    section.addEventListener('focusin', (e) => light(idOf(e)));
+    section.addEventListener('focusout', () => light(null));
+}
+
 const DECK_MS = 6500;
 
 /**

@@ -166,19 +166,68 @@
     display: none;
 }
 
-/* ── Experience under the path chart ── */
+/* ── Experience under the path chart: a timeline whose entries light their checkpoint on the chart ── */
 .experience {
+    position: relative;
     display: grid;
-    margin-top: 28px;
+    margin-top: 20px;
     list-style: none;
 }
 
+/* The rail */
+.experience::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    bottom: 30px;
+    left: 12px;
+    width: 1px;
+    background: var(--hair);
+}
+
 .experience li {
+    position: relative;
     display: grid;
     grid-template-columns: 11em 1fr;
     gap: 20px;
-    padding: 18px 8px;
-    border-bottom: 1px solid var(--hair);
+    padding: 18px 8px 18px 40px;
+    border-radius: 14px;
+    outline: none;
+    transition:
+        opacity 220ms,
+        background 220ms;
+}
+
+.experience li::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 8px;
+    width: 9px;
+    height: 9px;
+    border: 1.5px solid var(--signal);
+    border-radius: 50%;
+    background: var(--bg);
+    transition:
+        scale 220ms var(--ease-out),
+        background 220ms;
+}
+
+.experience li:focus-visible {
+    box-shadow: 0 0 0 2px var(--signal);
+}
+
+.experience li.on {
+    background: var(--surface);
+}
+
+.experience li.on::before {
+    background: var(--signal);
+    scale: 1.5;
+}
+
+.experience.lit li:not(.on) {
+    opacity: 0.45;
 }
 
 .exp-when {

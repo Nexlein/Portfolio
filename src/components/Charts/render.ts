@@ -79,20 +79,20 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
                 half = label.length * 3.3 + 8;
             const row = rowsEnd.findIndex((end) => mx - half > end);
             if (row < 0)
-                return `<circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle>`;
+                return `<g class="mark" data-cp="${c.id}"><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="13" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle></g>`;
             rowsEnd[row] = mx + half;
-            return `<g class="mark"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
+            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="13" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
         })
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
 <g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${years.map((yr) => `<text class="year" x="${f1(x(yr))}" y="${H - 8}">${yr}</text>`).join('')}</g>
-<g class="marks">${marks}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
 <path class="line" pathLength="1" d="${line}" />
 <circle class="now" cx="${f1(x(now))}" cy="${f1(y(total))}" r="4.5" />
 <g class="cross" visibility="hidden"><line class="cross-x" y1="${T - 10}" y2="${H - B}" /><circle class="cross-dot" r="4.5" /></g>
-<rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}" /></svg>`;
+<rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}" />
+<g class="marks">${marks}</g></svg>`;
 }
 
 export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): string {
