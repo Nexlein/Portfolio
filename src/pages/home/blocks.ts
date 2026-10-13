@@ -85,12 +85,13 @@ export function experience(lang: Lang): string {
         const e = entries.find((x) => x.id === c.id)!;
         const org = 'org' in e && e.org ? ` · ${e.org}` : '';
         const when = 'kind' in e ? e.period[lang] : monthName(yearOf(c.date), lang);
-        const first = e.summary[lang]
+        const sentence = e.summary[lang]
             .split('. ')[0]
             .replace(/<[^>]+>/g, '')
             .replace(/\.$/, '');
+        const text = ('blurb' in e && e.blurb?.[lang]) || `${sentence}.`;
         return `<article class="exp" data-cp="${c.id}"><p class="exp-when">${when}</p><div class="exp-what"><strong>${e.title[lang]}${org}</strong>
-<span>${first}.</span></div></article>`;
+<span>${text}</span></div></article>`;
     };
     return `<div class="exp-card surface"><div class="exp-stage">${CHECKPOINTS.map(panel).join('')}</div>
 <div class="exp-nav" hidden><span class="exp-count"></span><button type="button" class="exp-prev" aria-label="${t(lang, 'path.prevStep')}">‹</button><button type="button" class="exp-next" aria-label="${t(lang, 'path.nextStep')}">›</button></div>

@@ -130,7 +130,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: analytics.test.ts, i18n.test.ts, translate.test.ts
 
 ## src/data
-- **profile.ts** (380) — Everything the site says about its owner, written once in every language.
+- **profile.ts** (394) — Everything the site says about its owner, written once in every language.
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
   - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
@@ -171,7 +171,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: headers.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (152) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+- **blocks.ts** (153) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
   - exports: MAP_MAX, still, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← pages/content/render, pages/home/home, pages/project/render
