@@ -250,3 +250,14 @@ test.describe('scroll polish', () => {
         await expect(page.locator('.scroll-cue')).toHaveCSS('animation-name', 'none');
     });
 });
+
+test.describe('hero title', () => {
+    test('keeps changing while the pointer rests on the text or a button has focus', async ({ page }) => {
+        await page.goto('/');
+        const line = page.locator('.hero h1 .line').nth(1);
+        const first = await line.textContent();
+        await page.locator('.hero-copy .link').focus();
+        await page.locator('.hero-copy').hover();
+        await expect.poll(() => line.textContent(), { timeout: 12_000 }).not.toBe(first);
+    });
+});

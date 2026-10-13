@@ -48,7 +48,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Hero
 - **Hero.css** (187) — Sparser simulations get more presence
   - ← index.html
-- **Hero.ts** (103) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
+- **Hero.ts** (98) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
   - exports: initHero
   - → core/i18n, components/Hero/sims/index
   - ← pages/home/home
