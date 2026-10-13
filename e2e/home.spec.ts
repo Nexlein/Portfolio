@@ -37,6 +37,17 @@ test.describe('project map', () => {
             await expect(first).toHaveClass(/open/, { timeout: 1000 });
         }).toPass({ timeout: 10_000 });
         await expect(page.locator('.nm-card.near').first()).toHaveAttribute('data-score', /\d/);
+        // The score badge is the card's ::after: it must stay a small pill, not inherit the active-card glow ring
+        const badge = await page
+            .locator('.nm-card.near')
+            .first()
+            .evaluate((el) => {
+                const style = getComputedStyle(el, '::after');
+                return { shadow: style.boxShadow, border: style.borderTopWidth, content: style.content };
+            });
+        expect(badge.shadow).toBe('none');
+        expect(badge.border).toBe('0px');
+        expect(badge.content).toMatch(/\d/);
     });
 
     test('a click unfolds, a second click opens the project page', async ({ page }) => {

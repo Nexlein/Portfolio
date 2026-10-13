@@ -198,9 +198,9 @@
     cursor: pointer;
 }
 
-/* The glow of an active card is a fixed ring faded in with opacity: cheap to repaint, unlike a shadow whose
+/* (::before, because ::after is the similarity badge.) The glow of an active card is a fixed ring faded in with opacity: cheap to repaint, unlike a shadow whose
    size and colour change every frame. Blur is kept for the one open card only (a blur per card is costly). */
-.nm-card::after {
+.nm-card::before {
     content: '';
     position: absolute;
     inset: -1px;
