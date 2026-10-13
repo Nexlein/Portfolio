@@ -35,19 +35,33 @@ export function initPathChart(): void {
 
     const bind = () => {
         const svg = plot.querySelector('svg')!,
-            cross = svg.querySelector('.cross')!,
-            hit = svg.querySelector('.hit')!;
+            cross = svg.querySelector('.cross')!;
+        const hide = () => {
+            cross.setAttribute('visibility', 'hidden');
+            tip.hidden = true;
+        };
         const samples = pathSamples(points, t0, now, total);
-        hit.addEventListener('pointermove', (e) => {
+        const span = PATH.W - PATH.L - PATH.R;
+        // The marks sit above the plot, so the crosshair listens on the whole svg and the plot's own bounds decide
+        svg.addEventListener('pointermove', (e) => {
             const r = svg.getBoundingClientRect(),
-                sx = (((e as PointerEvent).clientX - r.left) / r.width) * PATH.W;
-            const near = samples.reduce((a, b) => (Math.abs(b[0] - sx) < Math.abs(a[0] - sx) ? b : a));
-            const time = t0 + ((near[0] - PATH.L) / (PATH.W - PATH.L - PATH.R)) * (now - t0);
+                sx = ((e.clientX - r.left) / r.width) * PATH.W;
+            if (sx < PATH.L || sx > PATH.L + span) return hide();
+            // Follow the pointer along the line: interpolate between the two samples around it
+            let i = 1;
+            while (i < samples.length - 1 && samples[i][0] < sx) i++;
+            const [x0, y0] = samples[i - 1],
+                [x1, y1] = samples[i];
+            const py = x1 === x0 ? y1 : y0 + (y1 - y0) * Math.min(1, Math.max(0, (sx - x0) / (x1 - x0)));
+            const time = t0 + ((sx - PATH.L) / span) * (now - t0);
             cross.setAttribute('visibility', 'visible');
-            cross.querySelector('.cross-x')!.setAttribute('x1', near[0].toFixed(1));
-            cross.querySelector('.cross-x')!.setAttribute('x2', near[0].toFixed(1));
-            cross.querySelector('.cross-dot')!.setAttribute('cx', near[0].toFixed(1));
-            cross.querySelector('.cross-dot')!.setAttribute('cy', near[1].toFixed(1));
+            const line = cross.querySelector('.cross-x')!;
+            line.setAttribute('x1', sx.toFixed(1));
+            line.setAttribute('x2', sx.toFixed(1));
+            line.setAttribute('y1', py.toFixed(1));
+            const dot = cross.querySelector('.cross-dot')!;
+            dot.setAttribute('cx', sx.toFixed(1));
+            dot.setAttribute('cy', py.toFixed(1));
             const last = points.reduce<Point>((l, p) => (p.t <= time && p.m ? p : l), points[0]);
             const what = last.m?.checkpoint
                 ? last.m.checkpoint.label[lang]
@@ -56,13 +70,10 @@ export function initPathChart(): void {
                   : '';
             tip.innerHTML = `<span class="mono">${monthName(time, lang)}</span><strong>${i18n.t('home.path.skills').replace('{n}', String(valueAt(points, time)))}</strong><span>${what}</span>`;
             tip.hidden = false;
-            tip.style.left = `${(near[0] / PATH.W) * 100}%`;
-            tip.style.top = `${(near[1] / PATH.H) * 100}%`;
+            tip.style.left = `${(sx / PATH.W) * 100}%`;
+            tip.style.top = `${(py / PATH.H) * 100}%`;
         });
-        hit.addEventListener('pointerleave', () => {
-            cross.setAttribute('visibility', 'hidden');
-            tip.hidden = true;
-        });
+        svg.addEventListener('pointerleave', hide);
     };
 
     host.querySelectorAll<HTMLButtonElement>('.path-range button').forEach((b) =>

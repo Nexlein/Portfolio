@@ -66,7 +66,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
     const line = samples.map(([px, py], i) => `${i ? 'L' : 'M'}${f1(px)} ${f1(py)}`).join('');
     const step = total > 40 ? 20 : 10;
     const ticks: number[] = [];
-    for (let v = 0; v <= total; v += step) ticks.push(v);
+    for (let v = 0; v <= total * 1.08; v += step) ticks.push(v);
     const years: number[] = [];
     for (let yr = Math.ceil(t0); yr <= now; yr++) years.push(yr);
     // Checkpoint labels take the first free row; when none is free the checkpoint keeps a dot and a tooltip
