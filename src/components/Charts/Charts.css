@@ -709,6 +709,26 @@
     .path-total {
         font-size: 34px;
     }
+
+    /* The chart is drawn 1080 wide and scales down with the screen: its labels grow so they stay readable */
+    .path-svg text {
+        font-size: 18px;
+    }
+
+    .path-svg .mark text {
+        font-size: 15px;
+    }
+}
+
+/* On a phone the checkpoint names would be 5px tall: the story under the chart tells them, the dots stay */
+@media (width <= 600px) {
+    .path-svg text {
+        font-size: 30px;
+    }
+
+    .path-svg .mark text {
+        display: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
