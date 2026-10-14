@@ -56,7 +56,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/home/home
 
 ## src/components/Hero/sims
-- **descent.ts** (72) — Gradient descent with momentum on a bumpy loss landscape.
+- **descent.ts** (99) — Gradient descent with momentum on a bumpy loss landscape.
   - exports: descent
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
@@ -75,7 +75,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **stage.ts** (105) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
   - exports: Point, Stage, stage
   - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/neural, components/Hero/sims/value-iteration
-- **value-iteration.ts** (154) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
+- **value-iteration.ts** (166) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
   - exports: valueIteration
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index

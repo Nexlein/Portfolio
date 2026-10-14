@@ -1,21 +1,34 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Stage } from './stage';
 import { valueIteration } from './value-iteration';
 
+/** Records each arrow's tail->tip segment: an arrow is five path calls (moveTo tail, lineTo tip, barb, moveTo tip, barb). */
+class RecordingPath {
+    static arrows: { x: number; y: number; angle: number }[] = [];
+    private calls = 0;
+    private tail = { x: 0, y: 0 };
+    moveTo(x: number, y: number) {
+        if (this.calls++ % 5 === 0) this.tail = { x, y };
+    }
+    lineTo(x: number, y: number) {
+        if (this.calls++ % 5 !== 1) return;
+        const { tail } = this;
+        RecordingPath.arrows.push({
+            x: (tail.x + x) / 2,
+            y: (tail.y + y) / 2,
+            angle: Math.atan2(y - tail.y, x - tail.x)
+        });
+    }
+}
+
 /** A stage with a recording context, in reduced-motion mode: the simulation settles and draws once. */
 function run(width: number, height: number) {
-    const arrows: { x: number; y: number; angle: number }[] = [];
-    let at = { x: 0, y: 0 };
+    RecordingPath.arrows = [];
+    vi.stubGlobal('Path2D', RecordingPath);
     const ctx = {
-        save() {},
-        restore() {},
-        translate: (x: number, y: number) => (at = { x, y }),
-        rotate: (angle: number) => arrows.push({ ...at, angle }),
         clearRect() {},
         fillRect() {},
         beginPath() {},
-        moveTo() {},
-        lineTo() {},
         stroke() {},
         arc() {},
         fill() {}
@@ -34,10 +47,12 @@ function run(width: number, height: number) {
         reduced: true
     };
     valueIteration(stage);
-    return arrows;
+    return RecordingPath.arrows;
 }
 
 describe('valueIteration', () => {
+    afterEach(() => vi.unstubAllGlobals());
+
     it('points most arrows toward the reward', () => {
         const width = 600,
             height = 400;
