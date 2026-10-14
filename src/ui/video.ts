@@ -1,3 +1,5 @@
+import type { ProjectEntry } from '../data/projects.ts';
+
 /** MIME type for a project video, from its extension. */
 export function videoType(src: string): string {
     return src.split('.').pop()?.toLowerCase() === 'webm' ? 'video/webm' : 'video/mp4';
@@ -7,6 +9,14 @@ export function videoType(src: string): string {
 export function videoPoster(src: string): string {
     return src.replace(/\.[^./]+$/, '.poster.webp');
 }
+
+/** The still shown for a project before anything plays: a video's poster, an image, or a gallery's first picture. */
+export const still = (p: ProjectEntry): string =>
+    p.media.type === 'video'
+        ? videoPoster(p.media.src)
+        : p.media.type === 'image'
+          ? p.media.src
+          : p.media.images[0].src;
 
 export function prefersReducedMotion(): boolean {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;

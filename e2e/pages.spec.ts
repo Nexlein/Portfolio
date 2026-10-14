@@ -3,7 +3,8 @@ import { test, expect } from './fixtures';
 const pages = ['', '/fr'].flatMap((prefix) => [
     { path: `${prefix}/`, heading: prefix ? 'fiable' : 'reliable' },
     { path: `${prefix}/cv.html`, heading: 'Nielsen' },
-    { path: `${prefix}/projects/zappy.html`, heading: 'Zappy' }
+    { path: `${prefix}/projects/zappy.html`, heading: 'Zappy' },
+    { path: `${prefix}/404.html`, heading: prefix ? 'Rien' : 'Nothing' }
 ]);
 
 for (const { path, heading } of pages) {
@@ -54,4 +55,16 @@ test('the CV sheet wears the chosen theme on screen and prints as white paper', 
     await expect(sheet).toHaveCSS('background-color', 'rgb(18, 24, 33)');
     await page.emulateMedia({ media: 'print' });
     await expect(sheet).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+});
+
+test.describe('404 page', () => {
+    test.use({ locale: 'fr-FR' });
+
+    test('stays where it is for a French browser (no redirect loop) and leads home', async ({ page }) => {
+        await page.goto('/404.html');
+        await expect(page).toHaveURL(/\/404\.html$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+        await page.locator('#nf-home').click();
+        await expect(page).toHaveURL(/\/$/);
+    });
 });

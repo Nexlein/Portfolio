@@ -1,0 +1,55 @@
+<!doctype html>
+<!--
+    Template for /404.html and /fr/404.html: Vercel serves /404.html for every URL that matches nothing.
+    Not in the sitemap, not indexed. data-static keeps the head script from redirecting a French browser
+    to /fr/<bad path>, which would be a 404 again.
+-->
+<html lang="en" data-static>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="noindex" />
+        <title>Page not found — Nexlein</title>
+        <meta name="description" content="" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Nexlein" />
+        <meta property="og:title" content="" />
+        <meta property="og:description" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="" />
+        <meta name="twitter:card" content="summary_large_image" />
+
+        <link rel="stylesheet" href="/src/styles/base.css" />
+        <link rel="stylesheet" href="/src/components/Nav/Nav.css" />
+        <link rel="stylesheet" href="/src/components/Footer/Footer.css" />
+        <link rel="stylesheet" href="/src/pages/notfound/notfound.css" />
+    </head>
+    <body>
+        <div data-render="nav"></div>
+
+        <main id="main" class="notfound wrap">
+            <p class="eyebrow mono">404</p>
+            <h1 class="headline">
+                <span data-i18n="notFound.line1">Nothing here.</span>
+                <span class="recede" data-i18n="notFound.line2">That page does not exist.</span>
+            </h1>
+            <p class="lede" data-i18n="notFound.text">
+                The link may be old or mistyped. Everything lives on the home page.
+            </p>
+            <div class="actions">
+                <a id="nf-home" class="btn press" href="/" data-i18n="notFound.home">Back home</a>
+                <a id="nf-work" class="link" href="/#work"
+                    ><span data-i18n="notFound.work">See the work</span> <span aria-hidden="true">›</span></a
+                >
+            </div>
+        </main>
+
+        <div data-render="footer"></div>
+
+        <script type="module" src="/src/pages/notfound/notfound.ts"></script>
+    </body>
+</html>

@@ -22,6 +22,9 @@ export function countUp(el: HTMLElement): void {
     requestAnimationFrame(step);
 }
 
+/** How far (in chart units) the crosshair reaches for a checkpoint. */
+const SNAP = 14;
+
 export function initPathChart(): void {
     const host = document.querySelector<HTMLElement>('.path-chart');
     if (!host) return;
@@ -42,11 +45,15 @@ export function initPathChart(): void {
         };
         const samples = pathSamples(points, t0, now, total);
         const span = PATH.W - PATH.L - PATH.R;
+        const marks = points.filter((p) => p.m && p.t >= t0).map((p) => PATH.L + ((p.t - t0) / (now - t0)) * span);
         // The marks sit above the plot, so the crosshair listens on the whole svg and the plot's own bounds decide
         svg.addEventListener('pointermove', (e) => {
             const r = svg.getBoundingClientRect(),
-                sx = ((e.clientX - r.left) / r.width) * PATH.W;
-            if (sx < PATH.L || sx > PATH.L + span) return hide();
+                px = ((e.clientX - r.left) / r.width) * PATH.W;
+            if (px < PATH.L || px > PATH.L + span) return hide();
+            // Marks close together are fiddly to hit: the crosshair snaps to the nearest one within reach
+            const closest = marks.reduce((best, x) => (Math.abs(x - px) < Math.abs(best - px) ? x : best), Infinity);
+            const sx = Math.abs(closest - px) <= SNAP ? closest : px;
             // Follow the pointer along the line: interpolate between the two samples around it
             let i = 1;
             while (i < samples.length - 1 && samples[i][0] < sx) i++;

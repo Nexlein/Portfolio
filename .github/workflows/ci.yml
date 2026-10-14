@@ -2,8 +2,11 @@ name: CI
 
 on:
     push:
-        branches: [main]
+        branches: [main, dev]
     pull_request:
+
+permissions:
+    contents: read
 
 concurrency:
     group: ci-${{ github.ref }}
@@ -61,8 +64,8 @@ jobs:
                   name: dist
                   path: dist
 
-            # Audits every page in dist/: accessibility, best practices and SEO must stay >= 95,
-            # performance below 80 only warns (shared CI runners make it noisy).
+            # Audits every page in dist/ (median of 3 runs): accessibility, best practices and SEO must stay >= 95,
+            # performance >= 85 (it scores 94 to 99 locally; the margin is for shared CI runners).
             - uses: treosh/lighthouse-ci-action@v12
               with:
                   configPath: ./lighthouserc.json
@@ -88,10 +91,10 @@ jobs:
                   name: dist
                   path: dist
 
-            - name: Install Chromium
-              run: npx playwright install --with-deps chromium
+            - name: Install browsers
+              run: npx playwright install --with-deps chromium firefox webkit
 
-            # Desktop and mobile Chromium against the production build, served with the production headers
+            # Desktop and mobile Chromium, plus Firefox and WebKit, against the production build, served with the production headers
             - name: Run Playwright
               run: npx playwright test
 

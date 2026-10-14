@@ -81,35 +81,47 @@ export function valueIteration(s: Stage): void {
             }
     };
 
+    // Arrows are batched: one path per (colour, brightness) bucket instead of a save/rotate/stroke per arrow
+    const LEVELS = 8;
     const draw = () => {
         ctx.clearRect(0, 0, s.width, s.height);
         ctx.lineWidth = 1.6;
+        ctx.fillStyle = colors.line;
+        ctx.globalAlpha = 1;
+        const buckets = Array.from({ length: 2 * LEVELS }, () => new Path2D());
         for (let y = 0; y < rows; y++)
             for (let x = 0; x < cols; x++) {
                 const i = y * cols + x;
                 if (wall[i]) {
-                    ctx.globalAlpha = 1;
-                    ctx.fillStyle = colors.line;
                     ctx.fillRect(x * CELL + 3, y * CELL + 3, CELL - 6, CELL - 6);
                     continue;
                 }
                 const v = V[i];
                 if (v <= 0) continue;
-                const len = 5 + 8 * Math.sqrt(v);
-                ctx.save();
-                ctx.translate(x * CELL + CELL / 2, y * CELL + CELL / 2);
-                ctx.rotate(angle[i]);
-                ctx.globalAlpha = 0.25 + 0.75 * Math.sqrt(v);
-                ctx.strokeStyle = v > 0.55 ? colors.signal : colors.cold;
-                ctx.beginPath();
-                ctx.moveTo(-len / 2, 0);
-                ctx.lineTo(len / 2, 0);
-                ctx.lineTo(len / 2 - 3, -3);
-                ctx.moveTo(len / 2, 0);
-                ctx.lineTo(len / 2 - 3, 3);
-                ctx.stroke();
-                ctx.restore();
+                const root = Math.sqrt(v),
+                    half = (5 + 8 * root) / 2,
+                    c = Math.cos(angle[i]),
+                    n = Math.sin(angle[i]),
+                    cx = x * CELL + CELL / 2,
+                    cy = y * CELL + CELL / 2,
+                    tipX = cx + c * half,
+                    tipY = cy + n * half,
+                    // barbs: 3px back along the arrow, 3px to either side
+                    bx = tipX - c * 3,
+                    by = tipY - n * 3;
+                const path = buckets[(v > 0.55 ? LEVELS : 0) + Math.round(root * (LEVELS - 1))];
+                path.moveTo(cx - c * half, cy - n * half);
+                path.lineTo(tipX, tipY);
+                path.lineTo(bx + n * 3, by - c * 3);
+                path.moveTo(tipX, tipY);
+                path.lineTo(bx - n * 3, by + c * 3);
             }
+        buckets.forEach((path, k) => {
+            const level = k % LEVELS;
+            ctx.strokeStyle = k >= LEVELS ? colors.signal : colors.cold;
+            ctx.globalAlpha = 0.25 + 0.75 * (level / (LEVELS - 1));
+            ctx.stroke(path);
+        });
         ctx.globalAlpha = 1;
         ctx.fillStyle = colors.signal;
         ctx.beginPath();

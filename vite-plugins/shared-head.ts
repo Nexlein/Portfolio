@@ -6,7 +6,8 @@ import type { HtmlTagDescriptor, Plugin } from 'vite';
  *    else Daylight for a light system preference, else Midnight. CSS keys every theme on html[data-theme].
  *    Also marks html.js, so content waiting for a scroll reveal stays visible without JavaScript.
  * 2. Language: first visit from a French browser to an English page redirects to the French page. It never runs
- *    on French pages (a shared /fr/ link stays French), inside the CV iframe, or once the visitor picked a
+ *    on French pages (a shared /fr/ link stays French), inside the CV iframe, on data-static pages (the 404:
+ *    /fr/<bad path> would be a 404 again), or once the visitor picked a
  *    language with the toggle (stored in localStorage).
  *
  * Inline code must match a sha256 hash in the Content-Security-Policy (vercel.json).
@@ -21,7 +22,7 @@ export const HEAD_SCRIPT = `(function () {
     }
     root.setAttribute('data-theme', theme);
     root.classList.add('js');
-    if (root.lang !== 'en' || window.top !== window.self) return;
+    if (root.lang !== 'en' || window.top !== window.self || root.hasAttribute('data-static')) return;
     if (chosen || navigator.language.slice(0, 2) !== 'fr') return;
     root.style.visibility = 'hidden';
     location.replace('/fr' + location.pathname + location.search + location.hash);
@@ -35,9 +36,33 @@ export function sharedHead(): Plugin {
             attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' },
             injectTo: 'head'
         },
+        // Browser chrome follows the system scheme, like the theme the head script picks on a first visit
+        {
+            tag: 'meta',
+            attrs: { name: 'theme-color', content: '#0a0e14', media: '(prefers-color-scheme: dark)' },
+            injectTo: 'head'
+        },
+        {
+            tag: 'meta',
+            attrs: { name: 'theme-color', content: '#fafaf9', media: '(prefers-color-scheme: light)' },
+            injectTo: 'head'
+        },
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }, injectTo: 'head' },
         { tag: 'script', children: HEAD_SCRIPT, injectTo: 'head' }
     ];
 
-    return { name: 'shared-head', transformIndexHtml: () => tags };
+    return {
+        name: 'shared-head',
+        transformIndexHtml: (_html, ctx) => [
+            ...tags,
+            // The two weights the first screen is set in load with the CSS instead of after it (build only: dev has no bundle)
+            ...Object.keys(ctx.bundle ?? {})
+                .filter((f) => /schibsted-grotesk-latin-(400|700)-normal-.*\.woff2$/.test(f))
+                .map((f): HtmlTagDescriptor => ({
+                    tag: 'link',
+                    attrs: { rel: 'preload', as: 'font', type: 'font/woff2', crossorigin: '', href: `/${f}` },
+                    injectTo: 'head'
+                }))
+        ]
+    };
 }

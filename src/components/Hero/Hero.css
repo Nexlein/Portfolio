@@ -46,6 +46,11 @@
     will-change: transform;
 }
 
+/* The title's lines already slide in: the block around them does not also fade, so the words are never half-seen */
+.js .hero-copy.reveal:not(.in) {
+    opacity: 1;
+}
+
 .avail {
     display: inline-flex;
     align-items: center;
@@ -136,6 +141,12 @@
     }
 }
 
+@media (pointer: coarse) {
+    .hero-dot {
+        padding: 18px 12px;
+    }
+}
+
 @media (width <= 760px) {
     .hero-hint {
         display: none;
@@ -187,5 +198,16 @@
 @media (prefers-reduced-motion: reduce) {
     .scroll-cue {
         animation: none;
+    }
+}
+
+/* Small or short screens: the words fill the viewport, so the cue goes and the pager keeps its own band */
+@media (width <= 600px), (height <= 700px) {
+    .scroll-cue {
+        display: none;
+    }
+
+    .hero-copy {
+        padding-bottom: 64px;
     }
 }
