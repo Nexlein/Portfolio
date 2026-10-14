@@ -170,3 +170,4 @@ Because of the CSP:
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
+- **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`.
