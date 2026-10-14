@@ -25,9 +25,16 @@ export default defineConfig({
     preview: { headers: securityHeaders },
     test: {
         include: ['src/**/*.test.ts'], // e2e/ holds Playwright browser tests
+        // Pages parsed in tests link to files that no server serves: skip them, and do not report that as an error
         environmentOptions: {
-            happyDOM: { settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true } }
-        } // pages parsed in tests link to files that no server serves
+            happyDOM: {
+                settings: {
+                    disableCSSFileLoading: true,
+                    disableJavaScriptFileLoading: true,
+                    handleDisabledFileLoadingAsSuccess: true
+                }
+            }
+        }
     },
     resolve: {
         alias: { '@': resolve(import.meta.dirname, 'src') }
