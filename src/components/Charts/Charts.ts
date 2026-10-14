@@ -91,7 +91,10 @@ export function initPathChart(): void {
             // The headline follows the range: what changed since it began, like a price chart's 1M / 1Y / Max
             const delta = host.querySelector<HTMLElement>('.path-delta')!;
             const change = changeText(lang, range, points, t0);
-            delta.textContent = change.text;
+            const over = document.createElement('span');
+            over.className = 'sr-only';
+            over.textContent = ` ${change.over}`;
+            delta.replaceChildren(change.text, over);
             delta.classList.toggle('flat', !change.up);
             plot.querySelector('svg')!.outerHTML = pathSvg(lang, points, t0, now);
             host.classList.remove('drawn');
