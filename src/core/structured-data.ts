@@ -28,6 +28,14 @@ export function profilePage(lang: Lang): JsonLd {
         '@type': 'ProfilePage',
         url: SITE + localizedPath('/', lang),
         inLanguage: lang,
+        // The site itself, so search engines can show "Nexlein" as its name
+        isPartOf: {
+            '@type': 'WebSite',
+            '@id': `${SITE}/#website`,
+            name: OWNER.alias,
+            alternateName: OWNER.name,
+            url: SITE + '/'
+        },
         mainEntity: person(lang)
     };
 }
@@ -45,6 +53,7 @@ export function projectSource(project: ProjectEntry, lang: Lang, description: st
         url: SITE + localizedPath(`/projects/${project.id}.html`, lang),
         image,
         inLanguage: lang,
+        dateCreated: project.date, // 'YYYY-MM', a valid partial ISO date
         keywords: project.tags.join(', '),
         ...(project.github ? { codeRepository: project.github } : {}),
         author: { '@type': 'Person', '@id': `${SITE}/#person`, name: OWNER.name, url: SITE + '/' }

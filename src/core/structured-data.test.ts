@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS } from '@/data/projects';
-import { projectSource } from './structured-data';
+import { profilePage, projectSource } from './structured-data';
 
 describe('projectSource', () => {
     const image = 'https://example.test/og.jpg';
@@ -17,5 +17,17 @@ describe('projectSource', () => {
         expect(fr.url).toBe(`https://nexlein.vercel.app/fr/projects/${PROJECTS[0].id}.html`);
         expect(fr.inLanguage).toBe('fr');
         expect(fr.keywords).toBe(PROJECTS[0].tags.join(', '));
+    });
+});
+
+describe('the structured data adds', () => {
+    it('the month a project was started', () => {
+        expect(projectSource(PROJECTS[0], 'en', 'd', 'https://example.test/og.jpg').dateCreated).toBe(PROJECTS[0].date);
+    });
+
+    it('the website to the home page, with the same id in both languages', () => {
+        const [en, fr] = (['en', 'fr'] as const).map((lang) => profilePage(lang).isPartOf as Record<string, string>);
+        expect(en).toMatchObject({ '@type': 'WebSite', name: 'Nexlein', url: 'https://nexlein.vercel.app/' });
+        expect(fr['@id']).toBe(en['@id']);
     });
 });

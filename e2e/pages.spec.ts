@@ -81,40 +81,43 @@ test.describe('404 page', () => {
     });
 });
 
-// WCAG reflow: at 320px wide (a 1280px window at 400% zoom) nothing may make the page scroll sideways, touch hit areas included
-test.describe('at 320px wide on a touch screen', () => {
-    test.use({ viewport: { width: 320, height: 640 }, hasTouch: true, isMobile: true });
+// WCAG reflow: at 320px wide (a 1280px window at 400% zoom) nothing may make the page scroll sideways, touch hit areas
+// included. 280px (a folded phone) holds too.
+for (const width of [320, 280])
+    test.describe(`at ${width}px wide on a touch screen`, () => {
+        test.use({ viewport: { width, height: 640 }, hasTouch: true, isMobile: true });
 
-    for (const { path } of pages)
-        test(`${path} does not scroll sideways`, async ({ page }) => {
-            await page.goto(path, { waitUntil: 'networkidle' });
-            await page.evaluate(async () => {
-                await document.fonts.ready; // text widths settle once the web fonts are in
-                document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+        for (const { path } of pages)
+            test(`${path} does not scroll sideways`, async ({ page }) => {
+                await page.goto(path, { waitUntil: 'networkidle' });
+                await page.evaluate(async () => {
+                    await document.fonts.ready; // text widths settle once the web fonts are in
+                    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+                });
+                const { scroll, client } = await page.evaluate(() => ({
+                    scroll: document.documentElement.scrollWidth,
+                    client: document.documentElement.clientWidth // not innerWidth: a mobile browser widens that to fit the overflow
+                }));
+                expect(scroll).toBeLessThanOrEqual(client);
             });
-            const { scroll, width } = await page.evaluate(() => ({
-                scroll: document.documentElement.scrollWidth,
-                width: document.documentElement.clientWidth // not innerWidth: a mobile browser widens that to fit the overflow
-            }));
-            expect(scroll).toBeLessThanOrEqual(width);
-        });
 
-    // A project name with no place to break (a long compound word) must wrap, not widen the page
-    const long = 'Supercalifragilisticexpialidocious-extremely-long-project-name-0123456789-abcdefghijklmnopqrstuvwxyz';
-    for (const [path, selector] of [
-        ['/projects/zappy.html', '#project-title'],
-        ['/', '.project-list strong']
-    ])
-        test(`a very long project name breaks inside its box (${selector})`, async ({ page }) => {
-            await page.goto(path, { waitUntil: 'networkidle' });
-            await page
-                .locator(selector)
-                .first()
-                .evaluate((el, text) => (el.textContent = text), long);
-            const [scroll, width] = await page.evaluate(() => [
-                document.documentElement.scrollWidth,
-                document.documentElement.clientWidth
-            ]);
-            expect(scroll).toBeLessThanOrEqual(width);
-        });
-});
+        // A project name with no place to break (a long compound word) must wrap, not widen the page
+        const long =
+            'Supercalifragilisticexpialidocious-extremely-long-project-name-0123456789-abcdefghijklmnopqrstuvwxyz';
+        for (const [path, selector] of [
+            ['/projects/zappy.html', '#project-title'],
+            ['/', '.project-list strong']
+        ])
+            test(`a very long project name breaks inside its box (${selector})`, async ({ page }) => {
+                await page.goto(path, { waitUntil: 'networkidle' });
+                await page
+                    .locator(selector)
+                    .first()
+                    .evaluate((el, text) => (el.textContent = text), long);
+                const [scroll, client] = await page.evaluate(() => [
+                    document.documentElement.scrollWidth,
+                    document.documentElement.clientWidth
+                ]);
+                expect(scroll).toBeLessThanOrEqual(client);
+            });
+    });

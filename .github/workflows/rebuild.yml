@@ -1,0 +1,32 @@
+name: Weekly rebuild
+
+# The charts, "past 12 months" and "learned this year" are computed when the site is built, so a site that is
+# not deployed for months shows an old "today". This rebuilds production once a week.
+#
+# One-time setup: in Vercel (Project, Settings, Git, Deploy Hooks) create a hook for the `main` branch, then add its
+# URL as the repository secret VERCEL_DEPLOY_HOOK (GitHub, Settings, Secrets and variables, Actions).
+# Without the secret this job only prints a warning. Scheduled workflows run from the default branch.
+
+on:
+    schedule:
+        - cron: '0 5 * * 1' # Mondays, 05:00 UTC
+    workflow_dispatch:
+
+permissions: {}
+
+jobs:
+    rebuild:
+        name: Rebuild production
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - name: Trigger the Vercel deploy hook
+              env:
+                  HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+              run: |
+                  if [ -z "$HOOK" ]; then
+                    echo "::warning::VERCEL_DEPLOY_HOOK is not set, nothing was rebuilt (see the setup note at the top of this file)"
+                    exit 0
+                  fi
+                  curl --fail --silent --show-error -X POST "$HOOK" > /dev/null
+                  echo "Rebuild requested"
