@@ -185,7 +185,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **gallery.ts** (25) — Gallery on a project page: arrows, dots, arrow keys and a "2 / 4" counter.
   - exports: initGallery
   - ← pages/project/project
-- **project.css** (344) — Project page: a header, the media, a spec strip, then the projects the map links it to.
+- **project.css** (352) — Project page: a header, the media, a spec strip, then the projects the map links it to.
   - ← project.html
 - **project.ts** (32) — Project page entry point.
   - → core/analytics, components/Nav/Nav, components/Charts/Charts, ui/video, pages/project/gallery
