@@ -42,13 +42,6 @@
     background: #000;
 }
 
-.feature-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: scale 900ms var(--ease-out);
-}
-
 .feature-body {
     display: flex;
     flex-direction: column;

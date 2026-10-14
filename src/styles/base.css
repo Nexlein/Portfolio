@@ -332,6 +332,15 @@ button {
         box-shadow 260ms ease;
 }
 
+/* The cover picture of a card: fills its frame, zooms a little on hover (see each card's hover rule) */
+.feature-media img,
+.related-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 900ms var(--ease-out);
+}
+
 /* ...and their hover (after the rules above that share the element, for the order stylelint wants) */
 .exp-nav button:not(:disabled):hover,
 .numbers-nav button:not(:disabled):hover {
