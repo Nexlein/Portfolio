@@ -67,4 +67,39 @@ describe('valueIteration', () => {
         });
         expect(toward.length / arrows.length).toBeGreaterThan(0.9);
     });
+
+    it('still has a reward after the window turns from landscape to portrait (reduced motion redraws only on resize)', () => {
+        RecordingPath.arrows = [];
+        vi.stubGlobal('Path2D', RecordingPath);
+        const ctx = { clearRect() {}, fillRect() {}, beginPath() {}, stroke() {}, arc() {}, fill() {} };
+        const size = { width: 844, height: 390 };
+        let draw: ((t: number) => void) | undefined;
+        const resizers: (() => void)[] = [];
+        const stage = {
+            ctx: ctx as unknown as CanvasRenderingContext2D,
+            colors: { line: '#000', cold: '#000', signal: '#000' },
+            get width() {
+                return size.width;
+            },
+            get height() {
+                return size.height;
+            },
+            pointer: () => null,
+            wander: () => ({ x: 0, y: 0 }),
+            onClick: () => {},
+            onResize: (fn: () => void) => resizers.push(fn),
+            dispose: () => {},
+            loop: (frame: (t: number) => void) => {
+                draw = frame;
+                frame(0);
+            },
+            reduced: true
+        } satisfies Stage;
+        valueIteration(stage);
+        Object.assign(size, { width: 390, height: 844 }); // a phone turned upright
+        resizers.forEach((fn) => fn());
+        RecordingPath.arrows = [];
+        draw!(0);
+        expect(RecordingPath.arrows.length).toBeGreaterThan(100);
+    });
 });

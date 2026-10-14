@@ -68,14 +68,14 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: SIMS, runSim
   - → components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/neural, components/Hero/sims/stage, components/Hero/sims/value-iteration
   - ← components/Hero/Hero
-- **neural.ts** (113) — A drifting network: neurons link when they are close.
+- **neural.ts** (116) — A drifting network: neurons link when they are close.
   - exports: Link, propagate, neural
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
 - **stage.ts** (118) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
   - exports: Point, Stage, stage
   - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/neural, components/Hero/sims/value-iteration
-- **value-iteration.ts** (166) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
+- **value-iteration.ts** (167) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
   - exports: valueIteration
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index

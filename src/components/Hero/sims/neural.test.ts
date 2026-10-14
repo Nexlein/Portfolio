@@ -53,4 +53,47 @@ describe('neural', () => {
         expect(fills).toContain('signal');
         vi.restoreAllMocks();
     });
+
+    it('walks neurons back inside when the window shrinks (they used to flip in place, outside)', () => {
+        vi.spyOn(Math, 'random').mockReturnValue(0.9); // every neuron at 90% of the width, drifting right and down
+        const xs: number[] = [];
+        const ctx = new Proxy(
+            {},
+            {
+                get: (_, key) => (key === 'arc' ? (x: number) => xs.push(x) : () => {}),
+                set: () => true
+            }
+        ) as unknown as CanvasRenderingContext2D;
+        const size = { width: 800, height: 400 };
+        let frame: ((t: number) => void) | undefined;
+        neural({
+            ctx,
+            colors: { line: 'line', cold: 'cold', signal: 'signal' },
+            get width() {
+                return size.width;
+            },
+            get height() {
+                return size.height;
+            },
+            pointer: () => null,
+            wander: () => ({ x: 0, y: 0 }),
+            onClick: () => {},
+            onResize: () => {},
+            dispose: () => {},
+            loop: (f) => (frame = f),
+            reduced: false
+        });
+        size.width = 100; // the neurons are now far outside
+        const meanX = () => {
+            const seen = xs.splice(0);
+            return seen.reduce((a, b) => a + b, 0) / (seen.length || 1);
+        };
+        frame!(0);
+        const first = meanX();
+        for (let t = 1; t < 60; t++) frame!(t);
+        xs.length = 0;
+        frame!(60);
+        expect(meanX()).toBeLessThan(first);
+        vi.restoreAllMocks();
+    });
 });

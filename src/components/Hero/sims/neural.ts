@@ -92,8 +92,11 @@ export function neural(s: Stage): void {
         for (const n of neurons) {
             n.x += n.vx;
             n.y += n.vy;
-            if (n.x < 0 || n.x > W) n.vx *= -1;
-            if (n.y < 0 || n.y > H) n.vy *= -1;
+            // Turn towards the inside rather than flip: after the window shrinks, a neuron outside would flip every frame, stuck
+            if (n.x < 0) n.vx = Math.abs(n.vx);
+            else if (n.x > W) n.vx = -Math.abs(n.vx);
+            if (n.y < 0) n.vy = Math.abs(n.vy);
+            else if (n.y > H) n.vy = -Math.abs(n.vy);
             n.pulse += 0.03;
         }
         const pointer = s.pointer();

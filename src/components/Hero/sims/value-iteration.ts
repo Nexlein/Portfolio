@@ -45,6 +45,8 @@ export function valueIteration(s: Stage): void {
                 if (cx < cols && cy < rows) wall[cy * cols + cx] = 1;
             }
         }
+        // The old reward cell may not exist on the new grid (a phone turned upright): put it back where it starts
+        setGoal({ x: s.width * 0.7, y: s.height * 0.35 });
     };
 
     const sweep = () => {
@@ -149,7 +151,6 @@ export function valueIteration(s: Stage): void {
     });
     s.onResize(grid);
     grid();
-    setGoal({ x: s.width * 0.7, y: s.height * 0.35 });
 
     let t = 0;
     s.loop(() => {
