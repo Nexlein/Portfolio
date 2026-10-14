@@ -735,6 +735,36 @@
 
 /* On a phone the checkpoint names would be 5px tall: the story under the chart tells them, the dots stay */
 @media (width <= 600px) {
+    /* The range buttons sit on the total's row, on the right, so the chart keeps its height:
+       the symbol on top, the total and the buttons together, the change under them */
+    .path-ticker {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 0 12px;
+    }
+
+    .path-ticker > div:first-child,
+    .path-total {
+        display: contents;
+    }
+
+    .path-symbol {
+        grid-column: 1 / -1;
+    }
+
+    .path-total .count {
+        grid-area: 2 / 1;
+    }
+
+    .path-range {
+        grid-area: 2 / 2;
+    }
+
+    .path-delta {
+        grid-column: 1 / -1;
+    }
+
     .path-svg text {
         font-size: 30px;
     }
