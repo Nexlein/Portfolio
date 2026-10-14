@@ -24,7 +24,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Charts
 - **Charts.css** (750) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (296) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
+- **Charts.ts** (303) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
   - exports: countUp, initPathChart, initPathStory, initNumbers, initReveals
   - → core/i18n, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
@@ -46,7 +46,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render
 
 ## src/components/Hero
-- **Hero.css** (192) — Sparser simulations get more presence
+- **Hero.css** (214) — Sparser simulations get more presence
   - ← index.html
 - **Hero.ts** (108) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
   - exports: initHero
@@ -177,7 +177,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render, pages/home/home, pages/project/render
 - **home.css** (681) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (213) — Home page.
+- **home.ts** (227) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 
@@ -196,7 +196,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← vite-plugins/pages
 
 ## src/styles
-- **base.css** (269) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (294) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← cv.html, index.html, project.html
 - **tokens.css** (91) — Design tokens.
