@@ -161,7 +161,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: experience, skills, education, certifications, projectBlocks, contact
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
-- **cv.css** (344) — CV: a sheet on the site's stage.
+- **cv.css** (352) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav
@@ -221,5 +221,5 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **pages.ts** (217) — One page of the site, in every language.
   - exports: PageSpec, PAGES, outputFile, renderPage, sitemap, sitePages
   - → data/projects, core/site, core/structured-data, core/translate, pages/content/render, pages/project/render
-- **shared-head.ts** (55) — Runs in <head> before first paint, on every page: 1.
+- **shared-head.ts** (68) — Runs in <head> before first paint, on every page: 1.
   - exports: HEAD_SCRIPT, sharedHead
