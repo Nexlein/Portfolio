@@ -107,8 +107,7 @@ test.describe('project map', () => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded(); // the map is drawn as the section comes into view
         const card = page.locator('.nm-card[data-id="starttrek"]');
-        await card.scrollIntoViewIfNeeded();
-        await card.focus();
+        await card.focus(); // scrolls it into view (Playwright's own scroll waits for a card that never stops drifting)
         await expect(card).toHaveClass(/open/);
         await card.press('Enter');
         await expect(page).toHaveURL(/\/projects\/starttrek\.html$/);

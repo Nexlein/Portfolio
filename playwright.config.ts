@@ -25,6 +25,13 @@ export default defineConfig({
     },
     projects: [
         { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
-        { name: 'mobile', use: { ...devices['Pixel 7'] } }
+        { name: 'mobile', use: { ...devices['Pixel 7'] } },
+        // The other engines run in CI only (locally: npx playwright install firefox webkit, then CI=1 npx playwright test)
+        ...(CI
+            ? [
+                  { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+                  { name: 'webkit', use: { ...devices['Desktop Safari'] } }
+              ]
+            : [])
     ]
 });
