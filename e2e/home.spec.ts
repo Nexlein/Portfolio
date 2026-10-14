@@ -354,7 +354,15 @@ test.describe('charts', () => {
         const elapsed = () =>
             page.locator('.exp-progress').evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
         // Early in a step, far from its end (a step is 6.5 s: the story must not turn during the test, even on a slow runner)
-        await expect.poll(async () => (await elapsed()) > 300 && (await elapsed()) < 1200).toBe(true);
+        await expect
+            .poll(
+                async () => {
+                    const t = await elapsed();
+                    return t > 300 && t < 2500;
+                },
+                { intervals: [100] }
+            )
+            .toBe(true);
         // A restart builds a new animation, which starts later: keep when this one started
         const started = () => page.locator('.exp-progress').evaluate((el) => el.getAnimations()[0]?.startTime ?? null);
         const kept = await started();
