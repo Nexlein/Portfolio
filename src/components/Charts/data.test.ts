@@ -157,7 +157,8 @@ const TODAY = thisMonth(new Date('2026-10-14'));
 /** The headline of the chart for a range, as the page prints it. */
 const headline = (lang: 'en' | 'fr', points: ReturnType<typeof skillSeries>, id: string) => {
     const r = RANGES.find((x) => x.id === id)!;
-    return changeText(lang, r, points, rangeStart(r, points, TODAY)).text;
+    const { text, over } = changeText(lang, r, points, rangeStart(r, points, TODAY));
+    return `${text} ${over}`; // what a screen reader says: the shown change, then its range
 };
 const range = (id: string) => RANGES.find((r) => r.id === id)!;
 
@@ -212,11 +213,17 @@ describe('the change over a range (the headline of the path chart)', () => {
         expect(headline('fr', points, 'max')).toMatch(/depuis juil\. 2024$/);
     });
 
+    it('shows only the numbers: no words about the range', () => {
+        for (const r of RANGES)
+            expect(changeText('en', r, points, rangeStart(r, points, TODAY)).text).toMatch(/^[▲ +\d()%]+$/);
+    });
+
     it('says 0, without an arrow, when nothing was gained', () => {
         const later = skillSeries(PROJECTS, 2099);
         const r = range('1y');
-        const { text, up } = changeText('en', r, later, rangeStart(r, later, 2099));
-        expect(text).toBe('0 (0 %) past 12 months');
+        const { text, over, up } = changeText('en', r, later, rangeStart(r, later, 2099));
+        expect(text).toBe('0 (0 %)');
+        expect(over).toBe('past 12 months');
         expect(up).toBe(false);
     });
 });

@@ -50,7 +50,13 @@ export function phaseLabel(lang: Lang, year: number, start: number, short = fals
 }
 
 /** The change since the start of a range, as the chart's headline says it: "▲ +37 (176 %) past 12 months". */
-export function changeText(lang: Lang, range: Range, points: Point[], t0: number): { text: string; up: boolean } {
+/** The change over a range: `text` is what is shown (`▲ +21 (58 %)`), `over` names the range for screen readers (`past 12 months`). */
+export function changeText(
+    lang: Lang,
+    range: Range,
+    points: Point[],
+    t0: number
+): { text: string; over: string; up: boolean } {
     const { delta, pct } = changeSince(points, t0);
     const over =
         range.months === null
@@ -58,8 +64,8 @@ export function changeText(lang: Lang, range: Range, points: Point[], t0: number
             : range.months === 1
               ? t(lang, 'path.over1')
               : t(lang, 'path.over').replace('{n}', String(range.months));
-    const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${pct} %)`} ${over}`;
-    return { text, up: delta > 0 };
+    const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${pct} %)`}`;
+    return { text, over, up: delta > 0 };
 }
 
 export const PATH = { W: 1080, H: 360, L: 44, R: 60, T: 84, B: 30 };
@@ -154,7 +160,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
     return `<div class="path-chart surface reveal" data-now="${now}">
   <div class="path-ticker">
     <div><p class="path-symbol">${t(lang, 'path.symbol')}</p>
-      <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta${change.up ? '' : ' flat'}" aria-live="polite">${change.text}</span></p></div>
+      <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta${change.up ? '' : ' flat'}" aria-live="polite">${change.text}<span class="sr-only"> ${change.over}</span></span></p></div>
     <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}">${RANGES.map((r) => `<button type="button" data-range="${r.id}"${r === first ? ' aria-pressed="true"' : ''}>${r.label}</button>`).join('')}</div>
   </div>
   <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" role="status" hidden></div></div>
