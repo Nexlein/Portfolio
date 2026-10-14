@@ -19,6 +19,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: home.spec.ts, not-found.spec.ts, pages.spec.ts, project.spec.ts
 
 ## scripts
+- **brand-images.ts** (69) — Social preview of the home page (public/og-image.png, 1200x630, what LinkedIn and X expect) and the icons (favicon.png 32x32, apple-touch...
+  - → data/profile
 - **codemap.ts** (114) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
 - **cv-pdf.ts** (59) — Render the CV page to PDF in every language, from the production build (run `vite build` first).
   - exports: PDFS
@@ -140,7 +142,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **profile.ts** (380) — Everything the site says about its owner, written once in every language.
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
-  - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
+  - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
 - **projects.ts** (344) — Single source of truth for all portfolio projects.
   - exports: ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
