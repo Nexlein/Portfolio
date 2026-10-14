@@ -201,10 +201,6 @@ export const en = {
             badge2: 'Full-Time Intern (Mar–Aug 2027)',
             badge3: 'Freelance'
         },
-        toolbox: {
-            total: '{n} skills used in projects',
-            recent: '+{n} in the last 12 months'
-        },
         sections: {
             experience: 'Experience',
             expertise: 'Core Expertise',
