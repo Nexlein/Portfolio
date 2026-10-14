@@ -399,6 +399,14 @@ test.describe('charts', () => {
         await page.goto('/#numbers');
         await expect(page.locator('.numbers-row')).toBeInViewport();
     });
+
+    // The browser scrolls before the script trims the project list: the target must still end up on screen
+    for (const id of ['path', 'hire'])
+        test(`a link to /#${id} lands on its section after the page has settled`, async ({ page }) => {
+            await page.goto(`/#${id}`);
+            await page.waitForLoadState('load');
+            await expect(page.locator(`#${id} h2`)).toBeInViewport();
+        });
 });
 
 test('copy email says what happened', async ({ page, context, browserName }) => {

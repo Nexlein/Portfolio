@@ -205,6 +205,23 @@ function initSpotlight(): void {
     });
 }
 
+/**
+ * A #hash link makes the browser scroll as soon as the HTML is parsed, before the script above trims the project list
+ * (all rows -> a page) and swaps in the map: the sections below move up and the visitor lands past their target.
+ * Scroll to it again once the layout has settled, unless the visitor already moved the page.
+ */
+function settleHash(): void {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id ? document.getElementById(id) : null;
+    if (!target) return;
+    let moved = false;
+    for (const type of ['wheel', 'touchstart', 'keydown', 'pointerdown'])
+        addEventListener(type, () => (moved = true), { once: true, passive: true });
+    const again = () => moved || target.scrollIntoView();
+    again();
+    addEventListener('load', again, { once: true }); // images and fonts can still move things
+}
+
 function bootstrap(): void {
     // Old links (/?project=<id>) opened a modal; projects now have their own page
     const linked = PROJECTS.find((p) => p.id === new URLSearchParams(location.search).get('project'));
@@ -221,6 +238,7 @@ function bootstrap(): void {
     initReveals();
     initCopyEmail();
     initSpotlight();
+    settleHash();
 }
 
 bootstrap();
