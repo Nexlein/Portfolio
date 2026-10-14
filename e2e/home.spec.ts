@@ -528,6 +528,19 @@ test.describe('scroll polish', () => {
         await expect(page.locator('#work')).toBeFocused();
     });
 
+    test('a wheel turn during a glide hands the page back to the visitor', async ({ page }) => {
+        await page.goto('/');
+        // Timed inside the page (a test runner's round trips would make the moment of the wheel depend on the machine)
+        const top = await page.evaluate(async () => {
+            document.querySelector<HTMLElement>('.hero .btn[href="#work"]')!.click();
+            await new Promise((resolve) => setTimeout(resolve, 120));
+            window.dispatchEvent(new WheelEvent('wheel', { deltaY: 30 })); // the glide stops here
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            return Math.round(document.getElementById('work')!.getBoundingClientRect().top);
+        });
+        expect(top).toBeGreaterThan(200); // not at its end (about 50): the glide let go
+    });
+
     test('the scroll cue shows at the top and fades once the page scrolls', async ({ page }) => {
         await page.goto('/');
         const cue = page.locator('.scroll-cue');

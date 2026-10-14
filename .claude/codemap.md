@@ -14,7 +14,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
 
 ## e2e
-- **fixtures.ts** (23) — `page` that fails the test on any console error, uncaught exception or CSP violation, so every scenario also checks that nothing broke si...
+- **fixtures.ts** (27) — `page` that fails the test on any console error, uncaught exception or CSP violation, so every scenario also checks that nothing broke si...
   - exports: test
 - tests: home.spec.ts, pages.spec.ts, project.spec.ts
 
@@ -26,7 +26,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Charts
 - **Charts.css** (770) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (303) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
+- **Charts.ts** (304) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
   - exports: countUp, initPathChart, initPathStory, initNumbers, initReveals
   - → core/i18n, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
@@ -179,7 +179,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render, pages/home/home
 - **home.css** (681) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (245) — Home page.
+- **home.ts** (250) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 
@@ -191,10 +191,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← 404.html
 
 ## src/pages/project
-- **gallery.ts** (25) — Gallery on a project page: arrows, dots, arrow keys and a "2 / 4" counter.
+- **gallery.ts** (34) — Gallery on a project page: arrows, dots, arrow keys and a "2 / 4" counter.
   - exports: initGallery
   - ← pages/project/project
-- **project.css** (352) — Project page: a header, the media, a spec strip, then the projects the map links it to.
+- **project.css** (356) — Project page: a header, the media, a spec strip, then the projects the map links it to.
   - ← project.html
 - **project.ts** (32) — Project page entry point.
   - → core/analytics, components/Nav/Nav, components/Charts/Charts, ui/video, pages/project/gallery
@@ -212,7 +212,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← styles/base.css
 
 ## src/ui
-- **glide.ts** (41) — In-page links glide to their section instead of jumping (about 0.7 s, eased).
+- **glide.ts** (48) — In-page links glide to their section instead of jumping (about 0.7 s, eased).
   - exports: ease, initGlide
   - ← pages/home/home
 - **icons.ts** (18) — Inline SVG icons shared across components.

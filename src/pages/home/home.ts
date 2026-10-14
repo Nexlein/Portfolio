@@ -211,7 +211,12 @@ function initSpotlight(): void {
  * Scroll to it again once the layout has settled, unless the visitor already moved the page.
  */
 function settleHash(): void {
-    const id = decodeURIComponent(location.hash.slice(1));
+    let id = '';
+    try {
+        id = decodeURIComponent(location.hash.slice(1));
+    } catch {
+        return; // a malformed link (#%): nothing to scroll to
+    }
     const target = id ? document.getElementById(id) : null;
     if (!target) return;
     let moved = false;

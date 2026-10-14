@@ -14,6 +14,22 @@ test.describe('project page', () => {
         await expect(page.locator('#project-media video')).toHaveJSProperty('paused', false);
     });
 
+    test('the gallery fetches only the pictures it shows or is next to, and a screen reader reads one', async ({
+        page
+    }) => {
+        const loaded: string[] = [];
+        page.on('response', (r) => /\/projects\/[^/]+\/[^/]+\.webp$/.test(r.url()) && loaded.push(r.url()));
+        await page.goto(`/projects/${gallery.id}.html`, { waitUntil: 'networkidle' });
+        const pictures = gallery.media.type === 'gallery' ? gallery.media.images.length : 0;
+        const own = loaded.filter((u) => u.includes(`/projects/${gallery.id}/`));
+        expect(own.length).toBeGreaterThan(0);
+        expect(own.length).toBeLessThan(pictures); // not all of them at load
+        await expect(page.locator('#project-media .gallery img[aria-hidden="false"]')).toHaveCount(1);
+        await expect(page.locator('#project-media .gallery img[aria-hidden="true"]')).toHaveCount(pictures - 1);
+        await page.locator('.gallery-dots button').last().click();
+        await expect(page.locator('#project-media .gallery img.active')).toHaveJSProperty('complete', true);
+    });
+
     test('the gallery moves with its arrows, dots and keys', async ({ page }) => {
         await page.goto(`/projects/${gallery.id}.html`);
         const active = page.locator('#project-media .gallery img.active');

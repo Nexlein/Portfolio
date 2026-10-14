@@ -14,11 +14,18 @@ function glideTo(target: HTMLElement): void {
     const from = scrollY;
     const to = Math.max(0, target.getBoundingClientRect().top + scrollY - margin);
     const start = performance.now();
+    // The visitor takes over: a wheel, a touch or a key ends the glide where it is (it would fight them otherwise)
+    let cancelled = false;
+    const cancel = () => (cancelled = true);
+    for (const type of ['wheel', 'touchstart', 'keydown'])
+        addEventListener(type, cancel, { once: true, passive: true });
     const step = (now: number) => {
+        if (cancelled) return;
         const t = Math.min(1, (now - start) / DURATION);
         scrollTo(0, from + (to - from) * ease(t));
         if (t < 1) requestAnimationFrame(step);
         else {
+            for (const type of ['wheel', 'touchstart', 'keydown']) removeEventListener(type, cancel);
             target.tabIndex = -1;
             target.focus({ preventScroll: true });
         }

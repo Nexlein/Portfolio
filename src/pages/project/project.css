@@ -71,6 +71,10 @@
     transition: opacity 500ms ease;
 }
 
+.gallery img[hidden] {
+    display: none; /* not fetched yet (lazy) until it is shown or next to the one shown: see gallery.ts */
+}
+
 .gallery img.active {
     opacity: 1;
 }
