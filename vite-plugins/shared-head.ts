@@ -35,6 +35,17 @@ export function sharedHead(): Plugin {
             attrs: { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' },
             injectTo: 'head'
         },
+        // Browser chrome follows the system scheme, like the theme the head script picks on a first visit
+        {
+            tag: 'meta',
+            attrs: { name: 'theme-color', content: '#0a0e14', media: '(prefers-color-scheme: dark)' },
+            injectTo: 'head'
+        },
+        {
+            tag: 'meta',
+            attrs: { name: 'theme-color', content: '#fafaf9', media: '(prefers-color-scheme: light)' },
+            injectTo: 'head'
+        },
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' }, injectTo: 'head' },
         { tag: 'script', children: HEAD_SCRIPT, injectTo: 'head' }
     ];

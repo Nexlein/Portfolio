@@ -221,5 +221,5 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **pages.ts** (217) — One page of the site, in every language.
   - exports: PageSpec, PAGES, outputFile, renderPage, sitemap, sitePages
   - → data/projects, core/site, core/structured-data, core/translate, pages/content/render, pages/project/render
-- **shared-head.ts** (44) — Runs in <head> before first paint, on every page: 1.
+- **shared-head.ts** (55) — Runs in <head> before first paint, on every page: 1.
   - exports: HEAD_SCRIPT, sharedHead
