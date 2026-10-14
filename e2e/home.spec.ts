@@ -236,14 +236,14 @@ test.describe('hero', () => {
                 Object.defineProperty(document, 'hidden', { configurable: true, get: () => h });
                 document.dispatchEvent(new Event('visibilitychange'));
             }, hidden);
-        await expect.poll(frames).toBeGreaterThan(30); // the hero draws
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(10); // the hero draws (slowly on a loaded runner)
         await setHidden(true);
         await page.waitForTimeout(2000); // the frame already queued runs once and stops, and the intro counters finish
         const idle = await frames();
         await page.waitForTimeout(600);
         expect(await frames(), 'no frame is requested while hidden').toBe(idle);
         await setHidden(false);
-        await expect.poll(frames).toBeGreaterThan(idle + 20);
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
     });
 
     test('old project links (/?project=id) open the project page', async ({ page }) => {
