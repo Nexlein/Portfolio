@@ -104,7 +104,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/translate, data/profile, data/projects, ui/icons, ui/video, components/NeuralMap/graph
   - ← pages/home/home
-- **graph.ts** (152) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
+- **graph.ts** (175) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
   - exports: Period, periodOf, ORBIT, CARD, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
   - → data/projects
   - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render

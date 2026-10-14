@@ -24,7 +24,7 @@ export function skillSet(p: ProjectEntry): Set<string> {
     for (const raw of p.tags)
         for (const part of raw.toLowerCase().split('/')) {
             const t = part.trim();
-            out.add(RL.has(t) ? 'reinforcement learning' : t);
+            if (t) out.add(RL.has(t) ? 'reinforcement learning' : t);
         }
     out.add(`domain:${p.category}`);
     return out;
@@ -96,7 +96,9 @@ export function layout(W: number, H: number, fit: { rx: number; ry: number }, it
         return { p, x: cx + Math.cos(angle) * fit.rx * r, y: cy + Math.sin(angle) * fit.ry * r };
     });
     const { w, h, gap } = CARD;
-    for (let pass = 0; pass < 240; pass++) {
+    /** One round of pushing overlapping cards apart along the axis with the smaller overlap. */
+    const separate = () => {
+        let moved = false;
         for (let i = 0; i < stars.length; i++)
             for (let j = i + 1; j < stars.length; j++) {
                 const a = stars[i],
@@ -106,6 +108,7 @@ export function layout(W: number, H: number, fit: { rx: number; ry: number }, it
                 const ox = w + gap - Math.abs(dx),
                     oy = h + gap - Math.abs(dy);
                 if (ox <= 0 || oy <= 0) continue;
+                moved = true;
                 if (ox / w < oy / h) {
                     a.x -= (ox / 2) * Math.sign(dx || 1);
                     b.x += (ox / 2) * Math.sign(dx || 1);
@@ -114,6 +117,20 @@ export function layout(W: number, H: number, fit: { rx: number; ry: number }, it
                     b.y += (oy / 2) * Math.sign(dy || 1);
                 }
             }
+        return moved;
+    };
+    /** Clear of the "Now" block in the middle. */
+    const clearOfNow = (s: Star) => {
+        const dx = s.x - cx,
+            dy = s.y - cy,
+            d = Math.hypot(dx / 1.6, dy);
+        if (d < 120) {
+            s.x = cx + (dx / (d || 1)) * 120 * 1.6;
+            s.y = cy + (dy / (d || 1)) * 120;
+        }
+    };
+    for (let pass = 0; pass < 240; pass++) {
+        separate();
         for (const s of stars) {
             // Inside the ellipse, and clear of the "Now" block in the middle
             const n = Math.hypot((s.x - cx) / fit.rx, (s.y - cy) / fit.ry);
@@ -121,13 +138,19 @@ export function layout(W: number, H: number, fit: { rx: number; ry: number }, it
                 s.x = cx + (s.x - cx) / n;
                 s.y = cy + (s.y - cy) / n;
             }
-            const dx = s.x - cx,
-                dy = s.y - cy,
-                d = Math.hypot(dx / 1.6, dy);
-            if (d < 120) {
-                s.x = cx + (dx / (d || 1)) * 120 * 1.6;
-                s.y = cy + (dy / (d || 1)) * 120;
-            }
+            clearOfNow(s);
+        }
+    }
+    // Where the ellipse is too tight for every card, overlap is worse than leaving it: keep separating, now only
+    // held inside the board
+    const touching = () =>
+        stars.some((a, i) => stars.slice(i + 1).some((b) => Math.abs(a.x - b.x) < w && Math.abs(a.y - b.y) < h));
+    for (let pass = 0; pass < 400 && touching(); pass++) {
+        separate();
+        for (const s of stars) {
+            s.x = Math.min(W - w / 2, Math.max(w / 2, s.x));
+            s.y = Math.min(H - h / 2, Math.max(h / 2, s.y));
+            clearOfNow(s);
         }
     }
     return stars;
