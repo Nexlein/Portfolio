@@ -74,6 +74,15 @@
     --c4: var(--third);
 }
 
+/* Browsers without relative colours (Safari before 16.4, Firefox before 128): the two hue shifts fall back to their source */
+@supports not (color: oklch(from red l c h)) {
+    :root,
+    [data-theme] {
+        --d-graphical: var(--signal);
+        --d-devops: var(--cold);
+    }
+}
+
 :root {
     /* Type */
     --font-sans: 'Schibsted Grotesk', system-ui, sans-serif;
