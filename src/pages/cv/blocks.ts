@@ -1,6 +1,6 @@
 /**
  * CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching
- * data-render names). The same HTML is the web page and, printed by scripts/cv-pdf.mjs, the PDF.
+ * data-render names). The same HTML is the web page and, printed by scripts/cv-pdf.ts, the PDF.
  * Relative imports only: rendered from Node.
  */
 import { CV_PROJECTS, EDUCATION, EXPERIENCES, SKILLS } from '../../data/profile.ts';

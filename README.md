@@ -16,6 +16,8 @@ Every page also exists in French under `/fr/`. `/availability.html` redirects to
 
 The home page is one scroll: hero (a live simulation), selected work, every project on the neural map, the path chart, the numbers, and the two ways to hire. Project pages go deeper on one project; the CV is the printable format.
 
+Unknown addresses get `404.html` (Vercel serves it with status 404 at the address that was asked for; there is one file, so the English one). It is not in the sitemap and is marked `noindex`. Under `/fr/` the head script moves the visitor to `/fr/404.html`, the French copy of the same page; `data-static` on the page keeps the language redirect from looping.
+
 ## Getting started
 
 Requires Node 22 (see `.nvmrc`).
@@ -100,6 +102,8 @@ Facts live in data files, written once with English and French side by side (`{ 
 Templates mark where content goes with `data-render="<block>"` (home sections, CV sections); `src/pages/content/render.ts` fills them at build time, so crawlers and the CV PDF see real text. `src/i18n/{en,fr}.ts` only holds interface text (navigation, headings, buttons). Text may use `<strong>`/`<br>`, never CSS classes.
 
 To add a job: append it to `EXPERIENCES`. It appears under the path chart, on the CV and in the CV PDF. Milestones without a project (school, certifications) go in `CHECKPOINTS` and show on the path chart.
+
+The path chart opens on Max; its buttons (1M, 6M, 1Y, Max, in `RANGES` in `src/components/Charts/data.ts`) change the headline (skills gained and the percentage over that range) and zoom the height on what changed. Steps are whole months, so there is no 1D or 1W. The band along its bottom counts Epitech school years (September to August) from the date of the `epitech` checkpoint: keep that checkpoint.
 
 ## Project pages
 

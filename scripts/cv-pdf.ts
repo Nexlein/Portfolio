@@ -1,5 +1,5 @@
 // Render the CV page to PDF in every language, from the production build (run `vite build` first).
-// Usage: npm run cv:pdf   -> cv-pdf/Nielsen-Combe-Bracciale-CV-{EN,FR}.pdf
+// Usage: npm run cv:pdf   (Node runs this TypeScript file as it is) -> cv-pdf/Nielsen-Combe-Bracciale-CV-{EN,FR}.pdf
 // CI publishes these files to the rolling `cv` GitHub release; /cv.pdf and /fr/cv.pdf redirect there (vercel.json).
 import { mkdir } from 'node:fs/promises';
 import { chromium } from '@playwright/test';

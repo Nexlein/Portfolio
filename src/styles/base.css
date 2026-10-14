@@ -225,6 +225,18 @@ button {
     }
 }
 
+/* Round arrow buttons: the path story's and the numbers deck's (the size and the rest stay with each) */
+.exp-nav button,
+.numbers-nav button {
+    border: 1px solid var(--hair);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 200ms;
+}
+
 /* Segmented control: a row of options in a pill (path range, ask the network) */
 .segmented {
     display: inline-flex;
@@ -296,4 +308,32 @@ button {
         position: absolute;
         inset: var(--hit, -12px -8px);
     }
+}
+
+/* Small mono caps label: the path chart's title, the project page's spec names */
+.path-symbol,
+.specs dt {
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Cards that rise into view and lift on hover share one transition */
+.chart-card,
+.related-card,
+.feature,
+.tile {
+    transition:
+        opacity 700ms var(--ease-out),
+        translate 700ms var(--ease-out),
+        transform 260ms var(--ease-out),
+        box-shadow 260ms ease;
+}
+
+/* ...and their hover (after the rules above that share the element, for the order stylelint wants) */
+.exp-nav button:not(:disabled):hover,
+.numbers-nav button:not(:disabled):hover {
+    border-color: var(--signal);
 }

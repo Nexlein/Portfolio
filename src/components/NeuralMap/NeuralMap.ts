@@ -11,9 +11,11 @@
  */
 import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/translate';
+import { firstSentence } from '@/core/text';
 import { NOW } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
+import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { still } from '@/ui/video';
 import { fitFor, layout, neighbours, ORBIT, periodOf, pickShown, similarity, type Period, type Star } from './graph';
 
@@ -22,7 +24,6 @@ const OPEN_W = 330;
 const HALF = { w: 95, h: 26 }; // card half size, for ports
 const ATTN_REACH = 340;
 const NEURONS = 72;
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const f1 = (n: number) => n.toFixed(1);
 
 /** The drifting map redraws about 30 times a second: every redraw restyles dozens of cards and hundreds of lines. */
@@ -128,13 +129,12 @@ function seeded(seed: number): () => number {
 
 function cardHtml(p: ProjectEntry): string {
     const lang = i18n.getLang();
-    const line = p.description[lang].split('. ')[0].replace(/\.$/, '');
     return `<a class="nm-card" href="${localizedPath(projectPath(p.id), lang)}" data-id="${p.id}" data-domain="${p.category}">
 <span class="nm-head"><span class="nm-ico">${domainIcon(p.category)}</span>
 <span class="nm-txt"><strong>${p.title}</strong><span class="mono">${p.tags.slice(0, 2).join(' · ')}</span></span></span>
 <span class="nm-more"><span class="nm-inner">
   <span class="nm-media"><img src="${still(p)}" alt="" loading="lazy" /></span>
-  <span class="nm-desc">${line}.</span>
+  <span class="nm-desc">${firstSentence(p.description[lang])}</span>
   <span class="mono nm-skills">${i18n.t(`home.work.periods.${periodOf(p)}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
   <span class="nm-go">${i18n.t('home.work.open')} <span aria-hidden="true">→</span></span>
 </span></span></a>`;

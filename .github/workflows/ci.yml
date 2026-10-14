@@ -36,6 +36,10 @@ jobs:
             - name: Lint
               run: npm run lint
 
+            # Unused files, exports and dependencies (knip.json); new dead code fails the build
+            - name: Dead code
+              run: npm run knip
+
             - name: Typecheck
               run: npm run typecheck
 

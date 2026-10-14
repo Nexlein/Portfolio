@@ -22,7 +22,7 @@ export function projectDescription(project: ProjectEntry, lang: Lang): string {
 }
 
 /** The media frame: a lazy video (started on screen by playVideosWhenVisible), an image, or a gallery. */
-export function mediaHtml(media: ProjectMedia, lang: Lang): string {
+function mediaHtml(media: ProjectMedia, lang: Lang): string {
     switch (media.type) {
         case 'video':
             return `<video loop muted playsinline preload="none" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
@@ -75,7 +75,7 @@ function sharedTags(project: ProjectEntry, other: ProjectEntry): string[] {
 }
 
 /** The three projects the map links this one to, with how much they overlap and why. */
-export function related(project: ProjectEntry, lang: Lang): string {
+function related(project: ProjectEntry, lang: Lang): string {
     return neighbours(project, PROJECTS)
         .map(({ q, s }) => {
             const shared = sharedTags(project, q);

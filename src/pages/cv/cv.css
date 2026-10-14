@@ -1,6 +1,6 @@
 /*
  * CV: a sheet on the site's stage. On screen it wears the chosen theme; printed (and in the PDF) it is always
- * clean white paper. It is all that prints: scripts/cv-pdf.mjs prints it to one A4 page and fails the build if
+ * clean white paper. It is all that prints: scripts/cv-pdf.ts prints it to one A4 page and fails the build if
  * it no longer fits.
  */
 .sheet {

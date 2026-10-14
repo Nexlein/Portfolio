@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CHECKPOINTS, EXPERIENCES } from '@/data/profile';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
 import { periodOf } from '../NeuralMap/graph';
-import { pathChart, numbers } from './render';
+import { changeText, numbers, pathChart, pathSvg, phaseLabel } from './render';
 import {
     distinctSkills,
     domainAxes,
@@ -10,12 +10,20 @@ import {
     languageOf,
     learnedSince,
     newSkillsPerPeriod,
+    phasesIn,
+    RANGES,
+    rangeStart,
+    changeSince,
+    schoolYearAt,
     skillSeries,
     skills,
     thisMonth,
+    timeTicks,
     topSkills,
     valueAt,
-    yearOf
+    yDomain,
+    yearOf,
+    yTicks
 } from './data';
 
 /** The skills known at the end of a series. */
@@ -128,15 +136,7 @@ describe('group counts', () => {
     });
 });
 
-/** The text next to the toolbox total ("▲ +37 (176 %) past 12 months"). */
-const delta = (now: number) => /class="path-delta">([^<]*)</.exec(pathChart('en', PROJECTS, now))![1];
-
 describe('the charts at any date', () => {
-    it('says "▲ +n" while the toolbox grows, and just 0 when a year brought nothing new', () => {
-        expect(delta(thisMonth(new Date('2026-10-14')))).toMatch(/^▲ \+\d+ \(\d+ %\)/);
-        expect(delta(2099)).toBe('0 (0 %) past 12 months');
-    });
-
     it.each([2023, 2024.5, 2026.9, 2027, 2030, 2099])(
         'draws without NaN, Infinity or gaps in the text at %s',
         (now) => {
@@ -149,5 +149,162 @@ describe('the charts at any date', () => {
 
     it('draws with no projects at all', () => {
         expect(pathChart('en', [], 2026.5) + numbers('en', [], 2026.5)).not.toMatch(/NaN|Infinity|undefined/);
+    });
+});
+
+const TODAY = thisMonth(new Date('2026-10-14'));
+
+/** The headline of the chart for a range, as the page prints it. */
+const headline = (lang: 'en' | 'fr', points: ReturnType<typeof skillSeries>, id: string) => {
+    const r = RANGES.find((x) => x.id === id)!;
+    return changeText(lang, r, points, rangeStart(r, points, TODAY)).text;
+};
+const range = (id: string) => RANGES.find((r) => r.id === id)!;
+
+describe('the ranges, as on a price chart', () => {
+    it('go from a month to everything, each button naming its own range', () => {
+        expect(RANGES.map((r) => r.label)).toEqual(['1M', '6M', '1Y', 'Max']);
+        expect(new Set(RANGES.map((r) => r.id)).size).toBe(RANGES.length);
+        expect(RANGES[RANGES.length - 1].months).toBeNull();
+    });
+
+    it('start that many months back, or at the first step for Max', () => {
+        const points = skillSeries(PROJECTS, TODAY);
+        expect(rangeStart(range('1y'), points, TODAY)).toBeCloseTo(TODAY - 1);
+        expect(rangeStart(range('6m'), points, TODAY)).toBeCloseTo(TODAY - 0.5);
+        expect(rangeStart(range('max'), points, TODAY)).toBe(points[0].t);
+    });
+});
+
+describe('the change over a range (the headline of the path chart)', () => {
+    const points = skillSeries(PROJECTS, TODAY);
+    const since = (id: string) => changeSince(points, rangeStart(range(id), points, TODAY));
+
+    it('is the skills gained since the range began, with a percentage of what there was', () => {
+        const total = last(points);
+        for (const id of ['1m', '6m', '1y']) {
+            const { delta, pct } = since(id);
+            const base = total - delta;
+            expect(delta).toBeGreaterThanOrEqual(0);
+            if (base > 0) expect(pct).toBe(Math.round((delta / base) * 100));
+        }
+        expect(since('1y').delta).toBe(last(points) - valueAt(points, TODAY - 1));
+    });
+
+    it('differs from one range to the next (a longer range gains at least as much)', () => {
+        const deltas = RANGES.map((r) => since(r.id).delta);
+        expect(deltas).toEqual([...deltas].sort((a, b) => a - b)); // eslint-disable-line -- test-only copy
+        expect(new Set(deltas).size).toBeGreaterThan(1);
+    });
+
+    it('has no percentage when the range starts from nothing (Max)', () => {
+        expect(since('max').pct).toBeNull();
+        expect(since('max').delta).toBe(last(points));
+    });
+
+    it('reads as a sentence in both languages', () => {
+        expect(headline('en', points, '1y')).toMatch(/^▲ \+\d+ \(\d+ %\) past 12 months$/);
+        expect(headline('en', points, '6m')).toMatch(/past 6 months$/);
+        expect(headline('en', points, '1m')).toMatch(/past month$/);
+        expect(headline('en', points, 'max')).toMatch(/^▲ \+\d+ since Jul 2024$/);
+        expect(headline('fr', points, '1y')).toMatch(/sur 12 mois$/);
+        expect(headline('fr', points, '1m')).toMatch(/sur 1 mois$/);
+        expect(headline('fr', points, 'max')).toMatch(/depuis juil\. 2024$/);
+    });
+
+    it('says 0, without an arrow, when nothing was gained', () => {
+        const later = skillSeries(PROJECTS, 2099);
+        const r = range('1y');
+        const { text, up } = changeText('en', r, later, rangeStart(r, later, 2099));
+        expect(text).toBe('0 (0 %) past 12 months');
+        expect(up).toBe(false);
+    });
+});
+
+describe('where the visitor was', () => {
+    it('counts Epitech school years from September: before it 0, then 1, 2, 3', () => {
+        expect(schoolYearAt(yearOf('2024-07'))).toBe(0);
+        expect(schoolYearAt(yearOf('2024-09'))).toBe(1);
+        expect(schoolYearAt(yearOf('2025-08'))).toBe(1);
+        expect(schoolYearAt(yearOf('2025-09'))).toBe(2);
+        expect(schoolYearAt(yearOf('2026-05'))).toBe(2);
+        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: Tek 3
+    });
+
+    it('covers the whole window with consecutive phases, clipped to it', () => {
+        const points = skillSeries(PROJECTS, TODAY);
+        for (const t0 of [points[0].t, TODAY - 1, TODAY - 0.5, TODAY - 1 / 12]) {
+            const phases = phasesIn(t0, TODAY);
+            expect(phases[0].from).toBeCloseTo(t0);
+            expect(phases[phases.length - 1].to).toBeCloseTo(TODAY);
+            phases.slice(1).forEach((p, i) => expect(p.from).toBeCloseTo(phases[i].to));
+        }
+        expect(phasesIn(points[0].t, TODAY).map((p) => p.year)).toEqual([0, 1, 2, 3]);
+    });
+
+    it('names a phase the way the chart prints it', () => {
+        expect(phaseLabel('en', 2, 2025)).toBe('Tek 2 · 2025–26');
+        expect(phaseLabel('en', 2, 2025, true)).toBe('Tek 2');
+        expect(phaseLabel('fr', 0, 0)).toBe('Avant Epitech');
+    });
+});
+
+describe('the axes of the path chart', () => {
+    it('puts month ticks inside the window, in order, with January always on the grid', () => {
+        for (const [t0, now] of [
+            [2024.5, TODAY],
+            [TODAY - 1, TODAY],
+            [TODAY - 0.5, TODAY],
+            [TODAY - 1 / 12, TODAY]
+        ]) {
+            const ticks = timeTicks(t0, now);
+            expect(ticks.length).toBeGreaterThan(0);
+            ticks.forEach((tk, i) => {
+                expect(tk.t).toBeGreaterThanOrEqual(t0 - 1e-6);
+                expect(tk.t).toBeLessThanOrEqual(now + 1e-6);
+                if (i) expect(tk.t).toBeGreaterThan(ticks[i - 1].t);
+            });
+            expect(ticks.length).toBeLessThanOrEqual(13);
+        }
+        expect(timeTicks(2024.5, TODAY).some((tk) => tk.month === 0)).toBe(true);
+    });
+
+    it('ticks every month on a short window and spreads out on a long one', () => {
+        expect(timeTicks(TODAY - 0.5, TODAY).length).toBeGreaterThanOrEqual(6);
+        expect(timeTicks(2024.5, TODAY).length).toBeLessThan(12);
+    });
+
+    it('starts the height at nothing for Max and zooms on the change for the other ranges', () => {
+        const points = skillSeries(PROJECTS, TODAY);
+        expect(yDomain(points, points[0].t).lo).toBe(0);
+        const year = yDomain(points, TODAY - 1);
+        expect(year.lo).toBeGreaterThan(0);
+        expect(year.lo).toBeLessThan(valueAt(points, TODAY - 1));
+        expect(year.hi).toBeGreaterThan(last(points));
+        const flat = yDomain(skillSeries(PROJECTS, 2099), 2099 - 1);
+        expect(flat.hi - flat.lo).toBeGreaterThan(0); // a window where nothing changed still has a height
+    });
+
+    it('draws a handful of round gridlines inside the height', () => {
+        for (const [lo, hi] of [
+            [0, 62.6],
+            [15, 60],
+            [58, 62],
+            [0, 1.2]
+        ]) {
+            const ticks = yTicks(lo, hi);
+            expect(ticks.length).toBeGreaterThan(0);
+            expect(ticks.length).toBeLessThanOrEqual(7);
+            expect(ticks.every((v) => v >= lo && v <= hi)).toBe(true);
+        }
+    });
+});
+
+describe('checkpoint names on the plot', () => {
+    it('stay inside the picture when a checkpoint sits at the start of a range', () => {
+        const points = skillSeries(PROJECTS, TODAY);
+        const month = pathSvg('en', points, TODAY - 1 / 12, TODAY); // the Issanka checkpoint is dated September 2026
+        expect(month).toMatch(/<text class="start"[^>]*>AI developer, Issanka<\/text>/);
+        expect(pathSvg('en', points, points[0].t, TODAY)).not.toContain('class="start"'); // nothing sticks out on Max
     });
 });

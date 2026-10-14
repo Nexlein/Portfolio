@@ -3,6 +3,8 @@
  * hero's empty space, and a frame loop that pauses off-screen, stops when the canvas is swapped out, and draws a
  * single still frame for reduced motion.
  */
+import { prefersReducedMotion } from '@/ui/motion';
+
 export interface Point {
     x: number;
     y: number;
@@ -66,14 +68,24 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         },
         { signal }
     );
-    window.addEventListener('resize', size, { signal });
+    // Resizing a canvas clears and reallocates it: once the window stops moving, not on every event
+    let resizeTimer = 0;
+    window.addEventListener(
+        'resize',
+        () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(size, 120);
+        },
+        { signal }
+    );
+    signal.addEventListener('abort', () => clearTimeout(resizeTimer));
     let seen = true;
     const visibility = new IntersectionObserver(([e]) => (seen = e.isIntersecting));
     visibility.observe(canvas);
     signal.addEventListener('abort', () => visibility.disconnect());
     read();
     size();
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduced = prefersReducedMotion();
 
     return {
         ctx,
