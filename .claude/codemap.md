@@ -139,7 +139,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **projects.ts** (344) — Single source of truth for all portfolio projects.
   - exports: ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
-  - ← components/Charts/Charts, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/home/home, pages/project/render, vite-plugins/pages
+  - ← components/Charts/Charts, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/home/home, pages/project/render, ui/video, vite-plugins/pages
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
@@ -173,10 +173,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: headers.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (153) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
-  - exports: MAP_MAX, still, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
+- **blocks.ts** (146) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+  - exports: MAP_MAX, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
-  - ← pages/content/render, pages/home/home, pages/project/render
+  - ← pages/content/render, pages/home/home
 - **home.css** (681) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
 - **home.ts** (227) — Home page.
@@ -199,9 +199,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **project.ts** (32) — Project page entry point.
   - → core/analytics, components/Nav/Nav, components/Charts/Charts, ui/video, pages/project/gallery
   - ← project.html
-- **render.ts** (112) — Fill the project page template (project.html) for one project, at build time.
+- **render.ts** (111) — Fill the project page template (project.html) for one project, at build time.
   - exports: projectDescription, mediaHtml, related, fillProjectPage
-  - → data/projects, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph, pages/home/blocks
+  - → data/projects, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← vite-plugins/pages
 
 ## src/styles
@@ -218,8 +218,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **icons.ts** (18) — Inline SVG icons shared across components.
   - exports: Icons, domainIcon
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
-- **video.ts** (41) — MIME type for a project video, from its extension.
-  - exports: videoType, videoPoster, prefersReducedMotion, playVideosWhenVisible
+- **video.ts** (51) — MIME type for a project video, from its extension.
+  - exports: videoType, videoPoster, still, prefersReducedMotion, playVideosWhenVisible
+  - → data/projects
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
 - tests: glide.test.ts, video.dom.test.ts, video.test.ts
 

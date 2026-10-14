@@ -140,7 +140,7 @@ export const en = {
             growth: 'Growth',
             growthTitle: 'New skills, by period',
             mostUsed: 'Most used',
-            distinct: '{n} distinct skills',
+            distinct: '{n} skills across projects',
             thisYear: 'This year',
             newSkills: '{n} new skills in 12 months'
         },
