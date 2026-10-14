@@ -29,21 +29,22 @@ npm run dev
 
 ## Scripts
 
-| Script                  | Description                                         |
-| ----------------------- | --------------------------------------------------- |
-| `npm run dev`           | Start the Vite dev server                           |
-| `npm run build`         | Typecheck and build to `dist/`                      |
-| `npm run preview`       | Serve the production build locally                  |
-| `npm run typecheck`     | Run `tsc --noEmit`                                  |
-| `npm test`              | Run Vitest                                          |
-| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                |
-| `npm run lint:fix`      | Lint and autofix                                    |
-| `npm run media:posters` | Generate missing video posters (ffmpeg)             |
-| `npm run media:og`      | Generate missing per-project social images (ffmpeg) |
-| `npm run media:video`   | Re-encode a video for the web (ffmpeg)              |
-| `npm run audit`         | Dependency audit (`audit-ci.jsonc`)                 |
-| `npm run format`        | Format all files with Prettier                      |
-| `npm run format:check`  | Check formatting without writing                    |
+| Script                  | Description                                                      |
+| ----------------------- | ---------------------------------------------------------------- |
+| `npm run dev`           | Start the Vite dev server                                        |
+| `npm run build`         | Typecheck and build to `dist/`                                   |
+| `npm run preview`       | Serve the production build locally                               |
+| `npm run typecheck`     | Run `tsc --noEmit`                                               |
+| `npm test`              | Run Vitest                                                       |
+| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                             |
+| `npm run lint:fix`      | Lint and autofix                                                 |
+| `npm run media:posters` | Generate missing video posters (ffmpeg)                          |
+| `npm run media:og`      | Generate missing per-project social images (ffmpeg)              |
+| `npm run media:brand`   | Redraw the home social image and the icons (Chromium, no ffmpeg) |
+| `npm run media:video`   | Re-encode a video for the web (ffmpeg)                           |
+| `npm run audit`         | Dependency audit (`audit-ci.jsonc`)                              |
+| `npm run format`        | Format all files with Prettier                                   |
+| `npm run format:check`  | Check formatting without writing                                 |
 
 ## Project structure
 

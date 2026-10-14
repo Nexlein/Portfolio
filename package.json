@@ -19,6 +19,7 @@
         "knip": "knip",
         "media:posters": "bash scripts/make-posters.sh",
         "media:og": "bash scripts/make-og-images.sh",
+        "media:brand": "node scripts/brand-images.ts",
         "media:video": "bash scripts/optimize-video.sh",
         "prepare": "husky"
     },
