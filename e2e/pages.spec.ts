@@ -26,6 +26,18 @@ for (const { path, heading } of pages) {
     });
 }
 
+// The preload is picked by file name from the build (vite-plugins/shared-head.ts): a font package that renames its files
+// would drop it silently
+for (const path of ['/', '/fr/', '/projects/zappy.html'])
+    test(`${path} preloads the two fonts the first screen uses, and both exist`, async ({ page, request }) => {
+        await page.goto(path);
+        const hrefs = await page
+            .locator('link[rel="preload"][as="font"]')
+            .evaluateAll((links) => links.map((link) => link.getAttribute('href')!));
+        expect(hrefs).toHaveLength(2);
+        for (const href of hrefs) expect((await request.get(href)).status()).toBe(200);
+    });
+
 test('no request leaves our own origin', async ({ page, baseURL }) => {
     const external: string[] = [];
     page.on('request', (req) => {
