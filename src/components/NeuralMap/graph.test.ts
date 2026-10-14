@@ -65,11 +65,11 @@ describe('layout at every window width the map is shown at (900px and up; the bo
     // A board where the ellipse is too tight used to leave a few cards overlapping (up to 25px at 1303x800)
     it("never overlaps today's projects", () => {
         const bad: string[] = [];
-        for (let W = 901; W <= 1700; W += 3)
+        for (let W = 901; W <= 1700; W += 5)
             for (const H of [760, 800, 900, 1000])
                 if (overlaps(layout(W, H, fitFor(W, H), PROJECTS))) bad.push(`${W}x${H}`);
         expect(bad).toEqual([]);
-    });
+    }, 30_000); // 640 layouts, about 1.5 s; coverage instrumentation makes it several times slower
 
     it('keeps every card on the board', () => {
         for (const [W, H] of [

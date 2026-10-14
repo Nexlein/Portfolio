@@ -38,6 +38,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: monthName, PATH, pathSamples, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data
   - ← components/Charts/Charts, pages/home/blocks, pages/project/render
+- tests: data.test.ts
 
 ## src/components/Footer
 - **Footer.css** (35)
@@ -129,7 +130,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Lang, LANGS, Text, DEFAULT_LANG, lookup, translateTree, langOfPath, localizedPath
   - → i18n/en, i18n/fr
   - ← components/Charts/render, components/Footer/render, components/Nav/render, components/NeuralMap/NeuralMap, core/i18n, core/structured-data, data/profile, data/projects, pages/content/render, pages/cv/blocks, pages/home/blocks, pages/home/home, pages/project/render, vite-plugins/pages
-- tests: analytics.test.ts, i18n.test.ts, translate.test.ts
+- tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, translate.test.ts
 
 ## src/data
 - **profile.ts** (380) — Everything the site says about its owner, written once in every language.
