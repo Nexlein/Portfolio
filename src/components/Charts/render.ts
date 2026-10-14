@@ -16,12 +16,20 @@ import {
     newSkillsPerPeriod,
     OTHER,
     periodsIn,
+    phasesIn,
     prettySkill,
+    RANGES,
+    changeSince,
+    rangeStart,
     skillSeries,
+    timeTicks,
     topSkills,
     valueAt,
+    yDomain,
     yearOf,
-    type Point
+    yTicks,
+    type Point,
+    type Range
 } from './data.ts';
 
 const f1 = (n: number) => n.toFixed(1);
@@ -35,14 +43,38 @@ export const monthName = (time: number, lang: Lang) =>
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
+/** Where the visitor was: "Tek 2 · 2025–26" (or "Tek 2"), and "Before Epitech" for school year 0. */
+export function phaseLabel(lang: Lang, year: number, start: number, short = false): string {
+    if (year === 0) return t(lang, 'path.beforeEpitech');
+    return short ? `Tek ${year}` : `Tek ${year} · ${start}–${String(start + 1).slice(2)}`;
+}
+
+/** The change since the start of a range, as the chart's headline says it: "▲ +37 (176 %) past 12 months". */
+export function changeText(lang: Lang, range: Range, points: Point[], t0: number): { text: string; up: boolean } {
+    const { delta, pct } = changeSince(points, t0);
+    const over =
+        range.months === null
+            ? t(lang, 'path.since').replace('{d}', monthName(points[0].t + 2 / 12, lang)) // the first step is two months in
+            : range.months === 1
+              ? t(lang, 'path.over1')
+              : t(lang, 'path.over').replace('{n}', String(range.months));
+    const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${pct} %)`} ${over}`;
+    return { text, up: delta > 0 };
+}
+
 export const PATH = { W: 1080, H: 360, L: 44, R: 60, T: 84, B: 30 };
 const smooth = (u: number) => u * u * (3 - 2 * u);
 
 /** Sampled smooth steps between milestones: the line, the hover dot and the tooltip all use these. */
-export function pathSamples(points: Point[], t0: number, now: number, total: number): [number, number][] {
+export function pathSamples(
+    points: Point[],
+    t0: number,
+    now: number,
+    domain: { lo: number; hi: number }
+): [number, number][] {
     const { W, H, L, R, T, B } = PATH;
     const x = (time: number) => L + ((time - t0) / (now - t0)) * (W - L - R);
-    const y = (v: number) => H - B - (v / (total * 1.08 || 1)) * (H - T - B);
+    const y = (v: number) => H - B - ((v - domain.lo) / (domain.hi - domain.lo || 1)) * (H - T - B);
     const vis = [{ t: t0, v: valueAt(points, t0) }, ...points.filter((p) => p.t > t0)];
     const out: [number, number][] = [];
     vis.forEach((p, i) => {
@@ -60,18 +92,34 @@ export function pathSamples(points: Point[], t0: number, now: number, total: num
 export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): string {
     const { W, H, L, R, T, B } = PATH;
     const total = points[points.length - 1].v;
+    const domain = yDomain(points, t0);
     const x = (time: number) => L + ((time - t0) / (now - t0)) * (W - L - R);
-    const y = (v: number) => H - B - (v / (total * 1.08 || 1)) * (H - T - B);
-    const samples = pathSamples(points, t0, now, total);
+    const y = (v: number) => H - B - ((v - domain.lo) / (domain.hi - domain.lo || 1)) * (H - T - B);
+    const samples = pathSamples(points, t0, now, domain);
     const line = samples.map(([px, py], i) => `${i ? 'L' : 'M'}${f1(px)} ${f1(py)}`).join('');
-    const step = total > 40 ? 20 : 10;
-    const ticks: number[] = [];
-    for (let v = 0; v <= total * 1.08; v += step) ticks.push(v);
-    const years: number[] = [];
-    for (let yr = Math.ceil(t0); yr <= now; yr++) years.push(yr);
+    const ticks = yTicks(domain.lo, domain.hi);
+    const axis = timeTicks(t0, now);
+    // The band of life along the bottom: before Epitech, then each school year (a label only where it fits)
+    const phases = phasesIn(t0, now)
+        .map((ph, i) => {
+            const x0 = x(ph.from),
+                x1 = x(ph.to),
+                mid = (x0 + x1) / 2,
+                room = x1 - x0;
+            const long = phaseLabel(lang, ph.year, ph.start),
+                short = phaseLabel(lang, ph.year, ph.start, true);
+            const text =
+                room > long.length * 7.5
+                    ? `<text class="phase-label" x="${f1(mid)}" y="${H - B - 6}">${long}</text>`
+                    : room > short.length * 7.5
+                      ? `<text class="phase-label" x="${f1(mid)}" y="${H - B - 6}">${short}</text>`
+                      : '';
+            return `<g class="phase${i % 2 ? ' odd' : ''}"><rect x="${f1(x0)}" y="${H - B - 18}" width="${f1(room)}" height="18" />${text}</g>`;
+        })
+        .join('');
     // Checkpoint labels take the first free row; when none is free the checkpoint keeps a dot and a tooltip
     const rowsEnd = [-Infinity, -Infinity, -Infinity];
-    const marks = CHECKPOINTS.filter((c) => yearOf(c.date) >= t0 && yearOf(c.date) <= now)
+    const marks = CHECKPOINTS.filter((c) => yearOf(c.date) >= t0 - 1e-9 && yearOf(c.date) <= now)
         .map((c) => {
             const label = c.label[lang],
                 mx = x(yearOf(c.date)),
@@ -81,13 +129,16 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
             if (row < 0)
                 return `<g class="mark" data-cp="${c.id}"><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle></g>`;
             rowsEnd[row] = mx + half;
-            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
+            // A checkpoint at the very start or end of a range keeps its name inside the picture
+            const anchor = mx - half < 0 ? ' start' : mx + half > W ? ' end' : '';
+            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text class="${anchor.trim()}" x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
         })
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
-<g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${years.map((yr) => `<text class="year" x="${f1(x(yr))}" y="${H - 8}">${yr}</text>`).join('')}</g>
+<g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
+<g class="phases">${phases}</g>
 <path class="line" pathLength="1" d="${line}" />
 <circle class="now" cx="${f1(x(now))}" cy="${f1(y(total))}" r="4.5" />
 <g class="cross" visibility="hidden"><line class="cross-x" y1="${T - 10}" y2="${H - B}" /><circle class="cross-dot" r="4.5" /></g>
@@ -97,15 +148,14 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
 
 export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): string {
     const points = skillSeries(projects, now);
-    const total = points[points.length - 1].v,
-        yearAgo = valueAt(points, now - 1),
-        delta = total - yearAgo;
-    const pct = Math.round((delta / Math.max(1, yearAgo)) * 100);
+    const total = points[points.length - 1].v;
+    const first = RANGES[RANGES.length - 1]; // opens on everything, like a price chart's Max
+    const change = changeText(lang, first, points, rangeStart(first, points, now));
     return `<div class="path-chart surface reveal" data-now="${now}">
   <div class="path-ticker">
     <div><p class="path-symbol">${t(lang, 'path.symbol')}</p>
-      <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta">${delta > 0 ? '▲ +' : ''}${delta} (${pct} %) ${t(lang, 'path.delta')}</span></p></div>
-    <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}"><button type="button" data-range="1">1Y</button><button type="button" data-range="2">2Y</button><button type="button" data-range="max" aria-pressed="true">Max</button></div>
+      <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta${change.up ? '' : ' flat'}" aria-live="polite">${change.text}</span></p></div>
+    <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}">${RANGES.map((r) => `<button type="button" data-range="${r.id}"${r === first ? ' aria-pressed="true"' : ''}>${r.label}</button>`).join('')}</div>
   </div>
   <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" role="status" hidden></div></div>
 </div>`;

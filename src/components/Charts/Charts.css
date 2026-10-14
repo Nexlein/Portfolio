@@ -41,6 +41,11 @@
     letter-spacing: 0;
 }
 
+/* Nothing gained over the range */
+.path-delta.flat {
+    color: var(--muted);
+}
+
 .path-range button {
     padding: 6px 14px;
     font-size: 12px;
@@ -67,8 +72,24 @@
     font-size: 12px;
 }
 
-.path-svg .year {
+.path-svg .tick {
     text-anchor: middle;
+}
+
+/* Where the visitor was: a band along the bottom of the plot, one block per school year (before Epitech first) */
+.path-svg .phase rect {
+    fill: var(--ink);
+    fill-opacity: 0.05;
+}
+
+.path-svg .phase.odd rect {
+    fill-opacity: 0.1;
+}
+
+.path-svg .phase-label {
+    text-anchor: middle;
+    font-size: 11px;
+    letter-spacing: 0.04em;
 }
 
 .path-svg .mark line {
@@ -82,6 +103,14 @@
     font-family: var(--font-sans);
     font-size: 12px;
     text-anchor: middle;
+}
+
+.path-svg .mark text.start {
+    text-anchor: start;
+}
+
+.path-svg .mark text.end {
+    text-anchor: end;
 }
 
 .path-svg .mark-dot {
@@ -698,6 +727,10 @@
     .path-svg .mark text {
         font-size: 15px;
     }
+
+    .path-svg .phase-label {
+        font-size: 14px;
+    }
 }
 
 /* On a phone the checkpoint names would be 5px tall: the story under the chart tells them, the dots stay */
@@ -706,7 +739,13 @@
         font-size: 30px;
     }
 
-    .path-svg .mark text {
+    .path-svg .mark text,
+    .path-svg .phase-label {
+        display: none; /* the tooltip on a tap names the checkpoint and the school year */
+    }
+
+    /* A long range has too many month labels for a phone: the Januaries and the first one stay */
+    .path-svg .tick.minor {
         display: none;
     }
 }

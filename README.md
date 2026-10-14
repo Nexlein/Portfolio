@@ -101,6 +101,8 @@ Templates mark where content goes with `data-render="<block>"` (home sections, C
 
 To add a job: append it to `EXPERIENCES`. It appears under the path chart, on the CV and in the CV PDF. Milestones without a project (school, certifications) go in `CHECKPOINTS` and show on the path chart.
 
+The path chart opens on Max; its buttons (1M, 6M, 1Y, Max, in `RANGES` in `src/components/Charts/data.ts`) change the headline (skills gained and the percentage over that range) and zoom the height on what changed. Steps are whole months, so there is no 1D or 1W. The band along its bottom counts Epitech school years (September to August) from the date of the `epitech` checkpoint: keep that checkpoint.
+
 ## Project pages
 
 Every project in `src/data/projects.ts` gets its own page, `/projects/<id>.html` and `/fr/projects/<id>.html`, rendered at build time from `project.html` (`src/pages/project/render.ts`): media, specs, and the three projects the map links it to. Adding a project adds its page, sitemap entry and structured data automatically; it only needs a social image: run `npm run media:og` (creates `public/projects/<id>/og.jpg`, 1200×630).
