@@ -51,7 +51,7 @@
 :root,
 [data-theme] {
     --raised: color-mix(in oklab, var(--surface) 92%, var(--ink));
-    --muted: color-mix(in oklab, var(--ink) 62%, var(--bg));
+    --muted: color-mix(in oklab, var(--ink) 66%, var(--bg));
     --line: color-mix(in oklab, var(--ink) 11%, var(--bg));
     --hair: color-mix(in oklab, var(--ink) 10%, transparent);
     --pos: var(--third);
