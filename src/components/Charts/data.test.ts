@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { CHECKPOINTS, EXPERIENCES } from '@/data/profile';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
 import { periodOf } from '../NeuralMap/graph';
+import { pathChart, numbers } from './render';
 import {
     distinctSkills,
     domainAxes,
@@ -124,5 +125,29 @@ describe('group counts', () => {
     it('counts every project in one domain axis', () => {
         const { counts } = domainAxes(PROJECTS);
         expect(counts.reduce((a, b) => a + b, 0)).toBe(PROJECTS.length);
+    });
+});
+
+/** The text next to the toolbox total ("▲ +37 (176 %) past 12 months"). */
+const delta = (now: number) => /class="path-delta">([^<]*)</.exec(pathChart('en', PROJECTS, now))![1];
+
+describe('the charts at any date', () => {
+    it('says "▲ +n" while the toolbox grows, and just 0 when a year brought nothing new', () => {
+        expect(delta(thisMonth(new Date('2026-10-14')))).toMatch(/^▲ \+\d+ \(\d+ %\)/);
+        expect(delta(2099)).toBe('0 (0 %) past 12 months');
+    });
+
+    it.each([2023, 2024.5, 2026.9, 2027, 2030, 2099])(
+        'draws without NaN, Infinity or gaps in the text at %s',
+        (now) => {
+            for (const lang of ['en', 'fr'] as const) {
+                const html = pathChart(lang, PROJECTS, now) + numbers(lang, PROJECTS, now);
+                expect(html).not.toMatch(/NaN|Infinity|undefined|\{[a-z]+\}/);
+            }
+        }
+    );
+
+    it('draws with no projects at all', () => {
+        expect(pathChart('en', [], 2026.5) + numbers('en', [], 2026.5)).not.toMatch(/NaN|Infinity|undefined/);
     });
 });

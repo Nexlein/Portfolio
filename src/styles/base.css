@@ -273,6 +273,12 @@ button {
         --hit: -9px -4px;
     }
 
+    /* Links that can end at the screen's edge (the hire row at 320px) grow upwards and downwards only: a hit area
+       sticking out sideways makes the page scroll sideways */
+    .link {
+        --hit: -12px 0;
+    }
+
     .nav-name,
     .nav-link,
     .nav-lang a,

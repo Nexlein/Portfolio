@@ -178,7 +178,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: MAP_MAX, availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← pages/content/render, pages/home/home
-- **home.css** (681) — Home sections that are not components of their own: selected work, the project list, experience, hire.
+- **home.css** (685) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
 - **home.ts** (250) — Home page.
   - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
@@ -195,7 +195,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **gallery.ts** (34) — Gallery on a project page: arrows, dots, arrow keys and a "2 / 4" counter.
   - exports: initGallery
   - ← pages/project/project
-- **project.css** (356) — Project page: a header, the media, a spec strip, then the projects the map links it to.
+- **project.css** (357) — Project page: a header, the media, a spec strip, then the projects the map links it to.
   - ← project.html
 - **project.ts** (32) — Project page entry point.
   - → core/analytics, components/Nav/Nav, components/Charts/Charts, ui/video, pages/project/gallery
@@ -206,7 +206,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← vite-plugins/pages
 
 ## src/styles
-- **base.css** (294) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (300) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← 404.html, cv.html, index.html, project.html
 - **tokens.css** (100) — Design tokens.

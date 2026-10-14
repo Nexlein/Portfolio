@@ -143,6 +143,10 @@
     min-width: 0;
 }
 
+.list-txt strong {
+    overflow-wrap: anywhere;
+}
+
 .list-txt span {
     overflow: hidden;
     color: var(--muted);
