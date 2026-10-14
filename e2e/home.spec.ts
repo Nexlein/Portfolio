@@ -317,15 +317,17 @@ test.describe('charts', () => {
         await page.mouse.move(2, 2);
         const elapsed = () =>
             page.locator('.exp-progress').evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
-        await expect.poll(elapsed).toBeGreaterThan(900);
+        // Some way into a step, but far from its end (a step is 6.5 s: the story must not turn during the test)
+        await expect.poll(async () => (await elapsed()) > 900 && (await elapsed()) < 3500).toBe(true);
+        const before = await elapsed();
         // The pointer crosses the numbers part (index, arrows, section text)
         await page.locator('.numbers-sub').hover();
         await page.locator('.numbers-index button').nth(2).hover();
         await page.locator('.numbers-nav button').first().hover();
-        await page.mouse.move(2, 2, { steps: 3 });
+        await page.mouse.move(2, 2); // one jump: a few steps in between could cross the chart or the story, which does pause it
         await page.evaluate(() => window.dispatchEvent(new Event('blur')));
         await page.evaluate(() => window.dispatchEvent(new Event('focus')));
-        expect(await elapsed()).toBeGreaterThan(1200);
+        expect(await elapsed()).toBeGreaterThanOrEqual(before); // still the same step: the timer did not restart
     });
 
     test('the timers pause only on the chart plot, the range buttons and the panel, not on the rest of the block', async ({

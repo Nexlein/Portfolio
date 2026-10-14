@@ -14,6 +14,7 @@ import { localizedPath } from '@/core/translate';
 import { NOW } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
+import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { still } from '@/ui/video';
 import { fitFor, layout, neighbours, ORBIT, periodOf, pickShown, similarity, type Period, type Star } from './graph';
 
@@ -22,7 +23,6 @@ const OPEN_W = 330;
 const HALF = { w: 95, h: 26 }; // card half size, for ports
 const ATTN_REACH = 340;
 const NEURONS = 72;
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const f1 = (n: number) => n.toFixed(1);
 
 /** The drifting map redraws about 30 times a second: every redraw restyles dozens of cards and hundreds of lines. */

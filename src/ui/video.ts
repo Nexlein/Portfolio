@@ -1,4 +1,5 @@
 import type { ProjectEntry } from '../data/projects.ts';
+import { prefersReducedMotion } from './motion';
 
 /** MIME type for a project video, from its extension. */
 export function videoType(src: string): string {
@@ -17,10 +18,6 @@ export const still = (p: ProjectEntry): string =>
         : p.media.type === 'image'
           ? p.media.src
           : p.media.images[0].src;
-
-export function prefersReducedMotion(): boolean {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-}
 
 let observer: IntersectionObserver | undefined;
 

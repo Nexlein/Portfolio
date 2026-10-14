@@ -5,7 +5,8 @@
 import { initAnalytics } from '@/core/analytics';
 import { initNav } from '@/components/Nav/Nav';
 import { initReveals } from '@/components/Charts/Charts';
-import { playVideosWhenVisible, prefersReducedMotion } from '@/ui/video';
+import { prefersReducedMotion } from '@/ui/motion';
+import { playVideosWhenVisible } from '@/ui/video';
 import { initGallery } from './gallery';
 
 /** Overlap bars fill to their share once revealed (CSSOM: the CSP forbids style attributes). */
