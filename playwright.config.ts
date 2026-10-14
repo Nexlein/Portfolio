@@ -12,7 +12,7 @@ export default defineConfig({
     testDir: 'e2e',
     fullyParallel: true,
     forbidOnly: CI,
-    retries: CI ? 1 : 0,
+    retries: 0, // a test that needs a second try is a bug to fix, not noise to hide
     reporter: CI ? [['github'], ['html', { open: 'never' }]] : 'list',
     use: {
         baseURL: `http://localhost:${PORT}`,

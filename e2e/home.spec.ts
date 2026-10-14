@@ -353,9 +353,12 @@ test.describe('charts', () => {
         await page.mouse.move(2, 2);
         const elapsed = () =>
             page.locator('.exp-progress').evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
-        // Some way into a step, but far from its end (a step is 6.5 s: the story must not turn during the test)
-        await expect.poll(async () => (await elapsed()) > 900 && (await elapsed()) < 3500).toBe(true);
-        const before = await elapsed();
+        // Early in a step, far from its end (a step is 6.5 s: the story must not turn during the test, even on a slow runner)
+        await expect.poll(async () => (await elapsed()) > 300 && (await elapsed()) < 1200).toBe(true);
+        // A restart builds a new animation, so keep this one to tell them apart
+        await page.locator('.exp-progress').evaluate((el) => {
+            (window as unknown as { kept: Animation }).kept = el.getAnimations()[0];
+        });
         // The pointer crosses the numbers part (index, arrows, section text)
         await page.locator('.numbers-sub').hover();
         await page.locator('.numbers-index button').nth(2).hover();
@@ -363,7 +366,10 @@ test.describe('charts', () => {
         await page.mouse.move(2, 2); // one jump: a few steps in between could cross the chart or the story, which does pause it
         await page.evaluate(() => window.dispatchEvent(new Event('blur')));
         await page.evaluate(() => window.dispatchEvent(new Event('focus')));
-        expect(await elapsed()).toBeGreaterThanOrEqual(before); // still the same step: the timer did not restart
+        const same = await page
+            .locator('.exp-progress')
+            .evaluate((el) => el.getAnimations()[0] === (window as unknown as { kept: Animation }).kept);
+        expect(same, 'the timer did not restart').toBe(true);
     });
 
     test('the timers pause only on the chart plot, the range buttons and the panel, not on the rest of the block', async ({
