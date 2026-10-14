@@ -9,7 +9,7 @@ import { skillSeries, valueAt, type Point } from './data';
 import { monthName, PATH, pathSamples, pathSvg } from './render';
 
 /** Count up `.count[data-to]` from 0 once. */
-export function countUp(el: HTMLElement): void {
+function countUp(el: HTMLElement): void {
     if (reduced()) return;
     const to = Number(el.dataset.to),
         start = performance.now();
@@ -238,7 +238,11 @@ export function initNumbers(): void {
         ...cards.map((c, i) => {
             const b = document.createElement('button');
             b.type = 'button';
-            b.innerHTML = `<span>${c.querySelector('.card-k')!.textContent}</span><small>${c.querySelector('.card-v')!.textContent}</small>`;
+            const name = document.createElement('span'),
+                value = document.createElement('small');
+            name.textContent = c.querySelector('.card-k')!.textContent;
+            value.textContent = c.querySelector('.card-v')!.textContent;
+            b.append(name, value);
             b.addEventListener('click', () => show(i, true));
             return b;
         })

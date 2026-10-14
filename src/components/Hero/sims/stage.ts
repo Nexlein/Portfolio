@@ -68,7 +68,17 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         },
         { signal }
     );
-    window.addEventListener('resize', size, { signal });
+    // Resizing a canvas clears and reallocates it: once the window stops moving, not on every event
+    let resizeTimer = 0;
+    window.addEventListener(
+        'resize',
+        () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(size, 120);
+        },
+        { signal }
+    );
+    signal.addEventListener('abort', () => clearTimeout(resizeTimer));
     let seen = true;
     const visibility = new IntersectionObserver(([e]) => (seen = e.isIntersecting));
     visibility.observe(canvas);

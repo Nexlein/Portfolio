@@ -1,5 +1,5 @@
 import type { ProjectEntry } from '../data/projects.ts';
-import { prefersReducedMotion } from './motion';
+import { prefersReducedMotion } from './motion.ts';
 
 /** MIME type for a project video, from its extension. */
 export function videoType(src: string): string {
