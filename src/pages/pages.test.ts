@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
-import { outputFile, PAGES, renderPage, sitemap, type PageSpec } from '../../vite-plugins/pages';
+import { NOT_FOUND, outputFile, PAGES, renderPage, sitemap, type PageSpec } from '../../vite-plugins/pages';
 import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
 import { PROJECTS } from '@/data/projects';
 import { SITE } from '@/core/site';
@@ -146,5 +146,20 @@ describe('outputFile', () => {
         ['/fr/projects/zappy.html', 'fr/projects/zappy.html']
     ])('%s -> %s', (path, file) => {
         expect(outputFile(path)).toBe(file);
+    });
+});
+
+describe('404 page', () => {
+    it.each(LANGS)('is a noindex page that stays out of the sitemap and keeps its language in %s', (lang) => {
+        const doc = render(NOT_FOUND, lang);
+        expect(doc.documentElement.lang).toBe(lang);
+        expect(doc.documentElement.hasAttribute('data-static')).toBe(true); // the head script must not redirect it
+        expect(doc.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe('noindex');
+        expect(doc.querySelector('link[rel="canonical"]')).toBeNull();
+        expect(doc.querySelectorAll('link[rel="alternate"][hreflang]')).toHaveLength(0);
+        expect(doc.getElementById('nf-home')!.getAttribute('href')).toBe(localizedPath('/', lang));
+        expect(doc.getElementById('nf-work')!.getAttribute('href')).toBe(`${localizedPath('/', lang)}#work`);
+        expect(doc.title).toBe(lookup(lang, 'meta.notFound.title'));
+        expect(sitemap()).not.toContain(localizedPath(NOT_FOUND.path, lang));
     });
 });

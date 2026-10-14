@@ -28,6 +28,8 @@ export interface PageSpec {
     image: string;
     imageAlt: (lang: Lang) => string;
     jsonLd?: (lang: Lang) => object;
+    /** Served as the 404: no canonical or language alternates, not in the sitemap. */
+    unlisted?: boolean;
     /** Fill template-specific content before translation (project pages). */
     fill?: (document: Document, lang: Lang) => void;
 }
@@ -65,6 +67,25 @@ export const PAGES: PageSpec[] = [
         }
     }))
 ];
+
+/** The page Vercel serves for every unknown URL (/404.html, and /fr/404.html for the French copy). */
+export const NOT_FOUND: PageSpec = {
+    path: '/404.html',
+    template: '404.html',
+    title: (lang) => lookup(lang, 'meta.notFound.title'),
+    description: (lang) => lookup(lang, 'meta.notFound.description'),
+    image: DEFAULT_IMAGE,
+    imageAlt: (lang) => lookup(lang, 'meta.imageAlt'),
+    unlisted: true,
+    fill: (document, lang) => {
+        renderContent(document, lang, '/404.html'); // nav and footer
+        document.getElementById('nf-home')!.setAttribute('href', localizedPath('/', lang));
+        document.getElementById('nf-work')!.setAttribute('href', `${localizedPath('/', lang)}#work`);
+    }
+};
+
+/** Everything the build renders; only PAGES are in the sitemap. */
+const RENDERED = [...PAGES, NOT_FOUND];
 
 /** Output file for a URL path: '/' -> 'index.html', '/fr/' -> 'fr/index.html'. */
 export function outputFile(path: string): string {
@@ -119,8 +140,10 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
 
     head.querySelector('link[rel="canonical"]')?.setAttribute('href', url(lang));
     head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-    for (const l of LANGS) appendHead('link', { rel: 'alternate', hreflang: l, href: url(l) });
-    appendHead('link', { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LANG) });
+    if (!page.unlisted) {
+        for (const l of LANGS) appendHead('link', { rel: 'alternate', hreflang: l, href: url(l) });
+        appendHead('link', { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LANG) });
+    }
 
     if (page.jsonLd) {
         // A data block, never executed, so the CSP's script-src does not apply. Escape '<' so text can't close the tag.
@@ -156,7 +179,7 @@ export function sitemap(pages: PageSpec[] = PAGES): string {
 /** Find the page and language a request path serves, in dev. */
 function pageForPath(path: string): { page: PageSpec; lang: Lang } | undefined {
     const lang = langOfPath(path);
-    const page = PAGES.find((p) => localizedPath(p.path, lang) === path || (p.path === '/' && path === `/${lang}`));
+    const page = RENDERED.find((p) => localizedPath(p.path, lang) === path || (p.path === '/' && path === `/${lang}`));
     return page && { page, lang };
 }
 
@@ -172,14 +195,14 @@ export function sitePages(): Plugin {
 
         generateBundle(_options, bundle) {
             const templates = new Map<string, string>();
-            for (const page of PAGES) {
+            for (const page of RENDERED) {
                 const built = bundle[page.template];
                 if (built?.type !== 'asset') this.error(`missing built template ${page.template}`);
                 templates.set(page.template, String(built.source));
             }
             delete bundle['project.html'];
 
-            for (const page of PAGES) {
+            for (const page of RENDERED) {
                 for (const lang of LANGS) {
                     const source = renderPage(templates.get(page.template)!, page, lang);
                     const fileName = outputFile(localizedPath(page.path, lang));

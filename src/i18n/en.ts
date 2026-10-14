@@ -10,6 +10,10 @@ export const en = {
             title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
                 'CV of Nielsen COMBE--BRACCIALE, AI, data and software engineer: TDD, agentic workflows, autonomous decision systems and real-time simulation engines.'
+        },
+        notFound: {
+            title: 'Page not found — Nexlein',
+            description: 'This page does not exist. Back to the portfolio of Nielsen COMBE--BRACCIALE (Nexlein).'
         }
     },
     site: {
@@ -171,6 +175,13 @@ export const en = {
             copy: 'Copy email',
             copied: 'Email copied'
         }
+    },
+    notFound: {
+        line1: 'Nothing here.',
+        line2: 'That page does not exist.',
+        text: 'The link may be old or mistyped. Everything lives on the home page.',
+        home: 'Back home',
+        work: 'See the work'
     },
     projectPage: {
         back: 'All projects',

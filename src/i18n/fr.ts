@@ -10,6 +10,10 @@ export const fr = {
             title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
                 'CV de Nielsen COMBE--BRACCIALE, ingénieur IA, data et logiciel : TDD, workflows agentiques, systèmes de décision autonomes et moteurs de simulation temps réel.'
+        },
+        notFound: {
+            title: 'Page introuvable — Nexlein',
+            description: "Cette page n'existe pas. Retour au portfolio de Nielsen COMBE--BRACCIALE (Nexlein)."
         }
     },
     site: {
@@ -171,6 +175,13 @@ export const fr = {
             copy: "Copier l'e-mail",
             copied: 'E-mail copié'
         }
+    },
+    notFound: {
+        line1: 'Rien ici.',
+        line2: "Cette page n'existe pas.",
+        text: "Le lien est peut-être ancien ou mal tapé. Tout se trouve sur la page d'accueil.",
+        home: "Retour à l'accueil",
+        work: 'Voir les projets'
     },
     projectPage: {
         back: 'Tous les projets',

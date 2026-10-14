@@ -29,6 +29,7 @@ export default defineConfig({
             input: {
                 main: resolve(import.meta.dirname, 'index.html'),
                 cv: resolve(import.meta.dirname, 'cv.html'),
+                notfound: resolve(import.meta.dirname, '404.html'),
                 project: resolve(import.meta.dirname, 'project.html') // template for /projects/<id>.html
             }
         }

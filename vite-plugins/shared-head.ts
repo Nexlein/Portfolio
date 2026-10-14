@@ -6,7 +6,8 @@ import type { HtmlTagDescriptor, Plugin } from 'vite';
  *    else Daylight for a light system preference, else Midnight. CSS keys every theme on html[data-theme].
  *    Also marks html.js, so content waiting for a scroll reveal stays visible without JavaScript.
  * 2. Language: first visit from a French browser to an English page redirects to the French page. It never runs
- *    on French pages (a shared /fr/ link stays French), inside the CV iframe, or once the visitor picked a
+ *    on French pages (a shared /fr/ link stays French), inside the CV iframe, on data-static pages (the 404:
+ *    /fr/<bad path> would be a 404 again), or once the visitor picked a
  *    language with the toggle (stored in localStorage).
  *
  * Inline code must match a sha256 hash in the Content-Security-Policy (vercel.json).
@@ -21,7 +22,7 @@ export const HEAD_SCRIPT = `(function () {
     }
     root.setAttribute('data-theme', theme);
     root.classList.add('js');
-    if (root.lang !== 'en' || window.top !== window.self) return;
+    if (root.lang !== 'en' || window.top !== window.self || root.hasAttribute('data-static')) return;
     if (chosen || navigator.language.slice(0, 2) !== 'fr') return;
     root.style.visibility = 'hidden';
     location.replace('/fr' + location.pathname + location.search + location.hash);
