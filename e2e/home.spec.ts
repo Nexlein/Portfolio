@@ -553,3 +553,60 @@ test.describe('hero title', () => {
         await expect.poll(() => line.textContent(), { timeout: 12_000 }).not.toBe(first);
     });
 });
+
+const painted = (page: import('@playwright/test').Page) =>
+    page.evaluate(() => {
+        const canvas = document.querySelector<HTMLCanvasElement>('.hero-field')!;
+        const data = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data;
+        for (let i = 3; i < data.length; i += 4) if (data[i] > 0) return true;
+        return false;
+    });
+
+test.describe('hero with reduced motion', () => {
+    test.use({ reducedMotion: 'reduce' });
+
+    test('the still picture is drawn again after a resize and a theme change', async ({ page }) => {
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/');
+        await expect.poll(() => painted(page)).toBe(true);
+        await page.setViewportSize({ width: 1100, height: 700 }); // resizing clears a canvas
+        await expect.poll(() => painted(page)).toBe(true);
+        await page.locator('.nav-theme-btn').click();
+        await page.locator('[data-theme-id="daylight"]').click();
+        await expect.poll(() => painted(page)).toBe(true);
+    });
+});
+
+test.describe('nav', () => {
+    test('marks the section in view, and nothing again once the visitor is back at the hero', async ({ page }) => {
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/');
+        const current = page.locator('.nav-link[aria-current]');
+        await expect(current).toHaveCount(0);
+        await page.locator('#hire').scrollIntoViewIfNeeded();
+        await expect(current).toHaveAttribute('data-section', 'hire');
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await expect(current).toHaveCount(0);
+    });
+
+    test('the theme menu moves with the arrows, Home and End, and Escape returns to its button', async ({ page }) => {
+        await page.goto('/');
+        const button = page.locator('.nav-theme-btn');
+        const items = page.locator('[data-theme-id]');
+        await button.focus();
+        await page.keyboard.press('Enter');
+        await expect(page.locator('[data-theme-id][aria-checked="true"]')).toBeFocused(); // opens on the current theme
+        await page.keyboard.press('End');
+        await expect(items.last()).toBeFocused();
+        await page.keyboard.press('ArrowDown'); // wraps round to the first
+        await expect(items.first()).toBeFocused();
+        await page.keyboard.press('ArrowUp'); // and back to the last
+        await expect(items.last()).toBeFocused();
+        await page.keyboard.press('Home');
+        await expect(items.first()).toBeFocused();
+        await page.keyboard.press('Escape');
+        await expect(button).toBeFocused();
+        await expect(button).toHaveAttribute('aria-expanded', 'false');
+    });
+});

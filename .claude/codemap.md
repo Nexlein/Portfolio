@@ -72,7 +72,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Link, propagate, neural
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
-- **stage.ts** (105) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
+- **stage.ts** (118) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
   - exports: Point, Stage, stage
   - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/neural, components/Hero/sims/value-iteration
 - **value-iteration.ts** (166) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
@@ -84,7 +84,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Nav
 - **Nav.css** (231) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← 404.html, cv.html, index.html, project.html
-- **Nav.ts** (128) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
+- **Nav.ts** (138) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav
   - → components/Nav/themes
   - ← pages/cv/cv, pages/home/home, pages/notfound/notfound, pages/project/project
