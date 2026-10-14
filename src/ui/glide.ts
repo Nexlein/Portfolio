@@ -2,6 +2,8 @@
  * In-page links glide to their section instead of jumping (about 0.7 s, eased). With reduced motion they jump,
  * as the browser would. The address bar still gets the #hash, and the section takes focus for keyboard users.
  */
+import { prefersReducedMotion } from './motion';
+
 const DURATION = 700;
 
 /** Ease in and out (cubic): gentle start, gentle landing. */
@@ -39,7 +41,7 @@ export function initGlide(root: ParentNode = document): void {
         const link = (e.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
         const id = link?.getAttribute('href')?.slice(1);
         const target = id ? document.getElementById(id) : null;
-        if (!link || !target || e.defaultPrevented || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (!link || !target || e.defaultPrevented || prefersReducedMotion()) return;
         e.preventDefault();
         history.replaceState(null, '', `#${id}`);
         glideTo(target);

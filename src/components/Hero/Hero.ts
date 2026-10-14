@@ -1,4 +1,5 @@
 import { i18n } from '@/core/i18n';
+import { prefersReducedMotion } from '@/ui/motion';
 import { runSim, SIMS } from './sims';
 
 /**
@@ -52,7 +53,7 @@ export function initHero(): void {
     show(current, false);
     pager.hidden = false;
 
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (prefersReducedMotion()) return;
     rotateTitle(hero);
     let ticking = false;
     let progress = 0;

@@ -3,11 +3,10 @@
  * arrows, and count-ups when they come into view. The SVG is already in the page; this only adds behaviour.
  */
 import { i18n } from '@/core/i18n';
+import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { PROJECTS } from '@/data/projects';
 import { skillSeries, valueAt, type Point } from './data';
 import { monthName, PATH, pathSamples, pathSvg } from './render';
-
-const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Count up `.count[data-to]` from 0 once. */
 export function countUp(el: HTMLElement): void {
@@ -105,6 +104,61 @@ const DECK_HOLD = '.numbers-stage, .numbers-index, .numbers-nav';
 const STEP_MS = 6500;
 
 /**
+ * Something that turns by itself (the path story, the numbers deck): `step` runs every STEP_MS while `host` is at
+ * least `threshold` on screen and untouched. A mouse on a `hold` part, the keyboard inside `host`, a hidden tab and
+ * reduced motion all pause it. `host` carries the class `playing` while it runs (the fill line is animated from it).
+ * `arm(true)` starts a fresh step (call it when one begins); `arm()` only reacts to a change in what pauses it, so
+ * calls that change nothing (alt-tab, focus moving inside, the pointer moving about) leave the timer running.
+ */
+function autoplay(o: {
+    host: HTMLElement;
+    /** Where the mouse is looked for: `hold` parts inside it pause the timer. */
+    pointerRoot: HTMLElement;
+    hold: string;
+    /** Focus moving between things matching this is not leaving (a click on a button moves focus between buttons). */
+    focusWithin: string;
+    threshold: number;
+    step: () => void;
+}): (restart?: boolean) => void {
+    const { host, pointerRoot, hold, focusWithin } = o;
+    let timer = 0,
+        visible = false,
+        hover = false, // the pointer is on a part that pauses it
+        focus = false; // the keyboard is on one
+    const arm = (restart = false) => {
+        const run = visible && !hover && !focus && !document.hidden && !reduced();
+        if (run && !restart && host.classList.contains('playing')) return;
+        clearTimeout(timer);
+        host.classList.remove('playing');
+        void host.offsetWidth; // restart the fill line together with the timer
+        host.classList.toggle('playing', run);
+        if (run) timer = window.setTimeout(o.step, STEP_MS);
+    };
+    pointerRoot.addEventListener('pointerover', (e) => {
+        if (e.pointerType !== 'mouse' || !within(e.target, hold)) return;
+        hover = true;
+        arm();
+    });
+    pointerRoot.addEventListener('pointerout', (e) => {
+        if (e.pointerType !== 'mouse' || !within(e.target, hold) || within(e.relatedTarget, hold)) return;
+        hover = false;
+        arm();
+    });
+    host.addEventListener('focusin', (e) => {
+        focus = (e.target as Element).matches(':focus-visible');
+        arm();
+    });
+    host.addEventListener('focusout', (e) => {
+        if (within(e.relatedTarget, focusWithin)) return;
+        focus = false;
+        arm();
+    });
+    document.addEventListener('visibilitychange', () => arm());
+    new IntersectionObserver(([e]) => ((visible = e.isIntersecting), arm()), { threshold: o.threshold }).observe(host);
+    return arm;
+}
+
+/**
  * The story under the path chart: one checkpoint is selected at a time, lit on the chart and told in the panel
  * below. It moves on by itself while it is on screen and untouched; a mouse over a checkpoint selects it for as
  * long as it stays there, and leaving resumes from that point with a full step. Taps, the arrows and the range buttons work too
@@ -118,24 +172,17 @@ export function initPathStory(): void {
         count = card.querySelector<HTMLElement>('.exp-count')!;
     nav.hidden = false;
     card.classList.add('live');
-    let current = '',
-        timer = 0,
-        visible = false,
-        hover = false, // the pointer is on a part that pauses the story
-        focus = false; // the keyboard is on one
+    let current = '';
 
     const ids = () => [...section.querySelectorAll<SVGElement>('.path-svg .mark')].map((m) => m.dataset.cp!);
-    // The timer and the fill line start together, and only when a step begins (a selection) or playing resumes
-    // after a pause: calls that change nothing (alt-tab, focus, the pointer moving about) leave them running
-    const arm = (restart = false) => {
-        const run = visible && !hover && !focus && !document.hidden && !reduced();
-        if (run && !restart && card.classList.contains('playing')) return;
-        clearTimeout(timer);
-        card.classList.remove('playing');
-        void card.offsetWidth;
-        card.classList.toggle('playing', run);
-        if (run) timer = window.setTimeout(() => step(1), STEP_MS);
-    };
+    const arm = autoplay({
+        host: card,
+        pointerRoot: section,
+        hold: STORY_HOLD,
+        focusWithin: '.exp-card',
+        threshold: 0.5,
+        step: () => step(1)
+    });
     function select(id: string, force = false) {
         const all = ids();
         card!.hidden = !all.length; // a range with no checkpoint (a quiet year) has nothing to tell
@@ -158,41 +205,18 @@ export function initPathStory(): void {
         if (e.pointerType !== 'mouse') return;
         const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
         if (mark) select(mark.dataset.cp!);
-        if (within(e.target, STORY_HOLD)) {
-            hover = true;
-            arm();
-        }
-    });
-    section.addEventListener('pointerout', (e) => {
-        if (e.pointerType !== 'mouse' || !within(e.target, STORY_HOLD) || within(e.relatedTarget, STORY_HOLD)) return;
-        hover = false;
-        arm();
     });
     section.addEventListener('click', (e) => {
         const mark = (e.target as Element).closest<SVGElement>('.mark[data-cp]');
         if (mark) select(mark.dataset.cp!);
-    });
-    // Focus moving between the card's own buttons is not a pause or a resume: only leaving the card is
-    card.addEventListener('focusin', (e) => {
-        focus = (e.target as Element).matches(':focus-visible');
-        arm();
-    });
-    card.addEventListener('focusout', (e) => {
-        if (within(e.relatedTarget, '.exp-card')) return;
-        focus = false;
-        arm();
     });
     nav.querySelector('.exp-prev')!.addEventListener('click', () => step(-1));
     nav.querySelector('.exp-next')!.addEventListener('click', () => step(1));
     new MutationObserver(() => select(current, true)).observe(section.querySelector('.path-plot')!, {
         childList: true
     });
-    document.addEventListener('visibilitychange', () => arm());
-    new IntersectionObserver(([e]) => ((visible = e.isIntersecting), arm()), { threshold: 0.5 }).observe(card);
     select(ids()[0], true);
 }
-
-const DECK_MS = 6500;
 
 /**
  * The numbers as a deck: one chart in front, two peeking behind. Arrows, the index on the left and a click on
@@ -220,21 +244,15 @@ export function initNumbers(): void {
         })
     );
     const items = [...index.children] as HTMLButtonElement[];
-    let cur = -1,
-        timer = 0,
-        visible = false,
-        hover = false, // the pointer is on a card, the index or the arrows
-        focus = false; // the keyboard is on one
-
-    const arm = (restart = false) => {
-        const run = visible && !hover && !focus && !document.hidden && !reduced();
-        if (run && !restart && root.classList.contains('playing')) return; // nothing changed: keep running
-        clearTimeout(timer);
-        root.classList.remove('playing');
-        void root.offsetWidth; // restart the fill line together with the timer
-        root.classList.toggle('playing', run);
-        if (run) timer = window.setTimeout(() => show(cur + 1), DECK_MS);
-    };
+    let cur = -1;
+    const arm = autoplay({
+        host: root,
+        pointerRoot: root,
+        hold: DECK_HOLD,
+        focusWithin: '.numbers',
+        threshold: 0.4,
+        step: () => show(cur + 1)
+    });
     function show(to: number, user = false) {
         const next = (to + n) % n;
         if (next === cur) return;
@@ -260,29 +278,6 @@ export function initNumbers(): void {
         const card = (e.target as Element).closest<HTMLElement>('.chart-card');
         if (card && card !== cards[cur]) show(cards.indexOf(card), true);
     });
-    // Paused while the pointer is on a card, the index or the arrows (or the keyboard is on them), not the whole block
-    root.addEventListener('pointerover', (e) => {
-        if (e.pointerType !== 'mouse' || !within(e.target, DECK_HOLD)) return;
-        hover = true;
-        arm();
-    });
-    root.addEventListener('pointerout', (e) => {
-        if (e.pointerType !== 'mouse' || !within(e.target, DECK_HOLD) || within(e.relatedTarget, DECK_HOLD)) return;
-        hover = false;
-        arm();
-    });
-    // Clicking an index entry moves focus between buttons: that must not look like leaving
-    root.addEventListener('focusin', (e) => {
-        focus = (e.target as Element).matches(':focus-visible');
-        arm();
-    });
-    root.addEventListener('focusout', (e) => {
-        if (within(e.relatedTarget, '.numbers')) return;
-        focus = false;
-        arm();
-    });
-    document.addEventListener('visibilitychange', () => arm());
-    new IntersectionObserver(([e]) => ((visible = e.isIntersecting), arm()), { threshold: 0.4 }).observe(root);
     show(0);
 }
 

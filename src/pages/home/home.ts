@@ -9,6 +9,7 @@ import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/translate';
 import { PROJECTS, projectPath } from '@/data/projects';
 import { initGlide } from '@/ui/glide';
+import { prefersReducedMotion } from '@/ui/motion';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
 import { initNumbers, initPathChart, initPathStory, initReveals } from '@/components/Charts/Charts';
@@ -19,7 +20,6 @@ const MAP_MIN_WIDTH = 900;
 /** Rows of the list shown at first, and added by each "Show more". */
 const LIST_PAGE = 6;
 const VIEW_KEY = 'work-view';
-const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const savedView = () => {
     try {
@@ -78,7 +78,7 @@ function initWork(): void {
             shown += LIST_PAGE;
             renderList(true);
             // The block grows with its rows instead of jumping (the page below follows smoothly)
-            if (!reducedMotion())
+            if (!prefersReducedMotion())
                 list.animate(
                     [
                         { height: `${from}px`, overflow: 'clip' },
@@ -92,7 +92,7 @@ function initWork(): void {
         } else {
             shown = LIST_PAGE;
             renderList();
-            list.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
+            list.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
         }
     });
     list.addEventListener('animationend', (e) => (e.target as HTMLElement).classList.remove('row-in'));
@@ -164,7 +164,7 @@ function initWork(): void {
             map?.query(domain);
             renderList();
             if (on && view === 'map')
-                host.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' });
+                host.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
         });
     });
 

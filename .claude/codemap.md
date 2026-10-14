@@ -26,9 +26,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Charts
 - **Charts.css** (770) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (304) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
+- **Charts.ts** (299) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
   - exports: countUp, initPathChart, initPathStory, initNumbers, initReveals
-  - → core/i18n, data/projects, components/Charts/data, components/Charts/render
+  - → core/i18n, ui/motion, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
 - **data.ts** (174) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
   - exports: yearOf, thisMonth, skills, prettySkill, Milestone, milestones, Point, skillSeries, valueAt, firstSeen, learnedSince, PERIODS, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
@@ -51,9 +51,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Hero
 - **Hero.css** (214) — Sparser simulations get more presence
   - ← index.html
-- **Hero.ts** (108) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
+- **Hero.ts** (109) — Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as the page scrolls (the field rec...
   - exports: initHero
-  - → core/i18n, components/Hero/sims/index
+  - → core/i18n, ui/motion, components/Hero/sims/index
   - ← pages/home/home
 
 ## src/components/Hero/sims
@@ -73,8 +73,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Link, propagate, neural
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
-- **stage.ts** (118) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
+- **stage.ts** (120) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
   - exports: Point, Stage, stage
+  - → ui/motion
   - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/neural, components/Hero/sims/value-iteration
 - **value-iteration.ts** (167) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
   - exports: valueIteration
@@ -103,7 +104,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← index.html
 - **NeuralMap.ts** (762) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
-  - → core/i18n, core/translate, data/profile, data/projects, ui/icons, ui/video, components/NeuralMap/graph
+  - → core/i18n, core/translate, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
   - ← pages/home/home
 - **graph.ts** (175) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
   - exports: Period, periodOf, ORBIT, CARD, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
@@ -181,7 +182,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **home.css** (685) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
 - **home.ts** (250) — Home page.
-  - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
+  - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, ui/motion, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, pages/home/blocks, components/NeuralMap/NeuralMap
   - ← index.html
 
 ## src/pages/notfound
@@ -197,8 +198,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/project/project
 - **project.css** (357) — Project page: a header, the media, a spec strip, then the projects the map links it to.
   - ← project.html
-- **project.ts** (32) — Project page entry point.
-  - → core/analytics, components/Nav/Nav, components/Charts/Charts, ui/video, pages/project/gallery
+- **project.ts** (33) — Project page entry point.
+  - → core/analytics, components/Nav/Nav, components/Charts/Charts, ui/motion, ui/video, pages/project/gallery
   - ← project.html
 - **render.ts** (111) — Fill the project page template (project.html) for one project, at build time.
   - exports: projectDescription, mediaHtml, related, fillProjectPage
@@ -213,15 +214,19 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← styles/base.css
 
 ## src/ui
-- **glide.ts** (48) — In-page links glide to their section instead of jumping (about 0.7 s, eased).
+- **glide.ts** (50) — In-page links glide to their section instead of jumping (about 0.7 s, eased).
   - exports: ease, initGlide
+  - → ui/motion
   - ← pages/home/home
 - **icons.ts** (18) — Inline SVG icons shared across components.
   - exports: Icons, domainIcon
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
-- **video.ts** (51) — MIME type for a project video, from its extension.
-  - exports: videoType, videoPoster, still, prefersReducedMotion, playVideosWhenVisible
-  - → data/projects
+- **motion.ts** (5) — True when the visitor asked for less motion: nothing moves by itself, and pictures are drawn once.
+  - exports: prefersReducedMotion
+  - ← components/Charts/Charts, components/Hero/Hero, components/Hero/sims/stage, components/NeuralMap/NeuralMap, pages/home/home, pages/project/project, ui/glide, ui/video
+- **video.ts** (48) — MIME type for a project video, from its extension.
+  - exports: videoType, videoPoster, still, playVideosWhenVisible
+  - → data/projects, ui/motion
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
 - tests: glide.test.ts, video.dom.test.ts, video.test.ts
 
