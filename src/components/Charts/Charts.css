@@ -20,11 +20,6 @@
 
 .path-symbol {
     margin: 0;
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
 }
 
 .path-total {
@@ -256,21 +251,11 @@
 .numbers-nav button {
     width: 36px;
     height: 36px;
-    border: 1px solid var(--hair);
-    border-radius: 50%;
-    background: var(--surface);
-    color: var(--ink);
     font-size: 18px;
-    line-height: 1;
     rotate: 90deg;
-    cursor: pointer;
     transition:
         opacity 200ms ease,
         border-color 200ms;
-}
-
-.numbers-nav button:not(:disabled):hover {
-    border-color: var(--signal);
 }
 
 .numbers-nav button:disabled {
@@ -434,11 +419,6 @@
     overflow: hidden;
     padding: 24px;
     border-radius: 24px;
-    transition:
-        opacity 700ms var(--ease-out),
-        translate 700ms var(--ease-out),
-        transform 260ms var(--ease-out),
-        box-shadow 260ms ease;
 }
 
 .card-k {
