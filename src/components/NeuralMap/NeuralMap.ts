@@ -14,7 +14,7 @@ import { localizedPath } from '@/core/translate';
 import { NOW } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
-import { videoPoster } from '@/ui/video';
+import { still } from '@/ui/video';
 import { fitFor, layout, neighbours, ORBIT, periodOf, pickShown, similarity, type Period, type Star } from './graph';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -125,13 +125,6 @@ function breeze(x: number, y: number, s: number): Pt {
 function seeded(seed: number): () => number {
     return () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 }
-
-const still = (p: ProjectEntry) =>
-    p.media.type === 'video'
-        ? videoPoster(p.media.src)
-        : p.media.type === 'image'
-          ? p.media.src
-          : p.media.images[0].src;
 
 function cardHtml(p: ProjectEntry): string {
     const lang = i18n.getLang();
@@ -539,7 +532,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     const rotate = (t: number) => {
         if (!hidden.length || opened || pointer || reduced() || t < Math.max(nextSwap, bootEnd + 4000)) return;
         nextSwap = t + 8000;
-        const pool = cards.filter((c) => !c.star.p.featured && c.act < 0.3);
+        const pool = cards.filter((c) => !c.star.p.featured && c.act < 0.3 && !c.el.classList.contains('leaving'));
         if (!pool.length) return;
         const out = pool[Math.floor(Math.random() * pool.length)];
         const score = (q: ProjectEntry) => similarity(out.star.p, q) + (periodOf(q) === periodOf(out.star.p) ? 0.5 : 0);
@@ -737,7 +730,14 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             const taken = new Set<Card>();
             calls.forEach((p, i) => {
                 const out = cards
-                    .filter((c) => c.star.p.category !== domain && !c.star.p.featured && c !== opened && !taken.has(c))
+                    .filter(
+                        (c) =>
+                            c.star.p.category !== domain &&
+                            !c.star.p.featured &&
+                            c !== opened &&
+                            !taken.has(c) &&
+                            !c.el.classList.contains('leaving')
+                    )
                     .reduce<Card | null>(
                         (a, c) => (!a || similarity(c.star.p, p) > similarity(a.star.p, p) ? c : a),
                         null

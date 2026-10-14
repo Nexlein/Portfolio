@@ -8,7 +8,7 @@ import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
-import { videoPoster } from '../../ui/video.ts';
+import { still } from '../../ui/video.ts';
 import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
 import { thisMonth, yearOf } from '../../components/Charts/data.ts';
 import { pickShown } from '../../components/NeuralMap/graph.ts';
@@ -17,13 +17,6 @@ import { pickShown } from '../../components/NeuralMap/graph.ts';
 export const MAP_MAX = 24;
 
 const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
-
-export const still = (p: ProjectEntry) =>
-    p.media.type === 'video'
-        ? videoPoster(p.media.src)
-        : p.media.type === 'image'
-          ? p.media.src
-          : p.media.images[0].src;
 
 /** First sentence of the description. */
 const oneLiner = (p: ProjectEntry, lang: Lang) => `${p.description[lang].split('. ')[0].replace(/\.$/, '')}.`;
