@@ -9,6 +9,8 @@ import type { HtmlTagDescriptor, Plugin } from 'vite';
  *    on French pages (a shared /fr/ link stays French), inside the CV iframe, on data-static pages (the 404:
  *    /fr/<bad path> would be a 404 again), or once the visitor picked a
  *    language with the toggle (stored in localStorage).
+ * 3. The 404: Vercel serves the one English /404.html for every unknown URL, so under /fr/ it moves on to the
+ *    French 404 page (/fr/404.html), which is not itself under /fr/<bad path>.
  *
  * Inline code must match a sha256 hash in the Content-Security-Policy (vercel.json).
  * Editing it changes the hash: update vercel.json too (headers.test.ts prints the expected value).
@@ -22,6 +24,11 @@ export const HEAD_SCRIPT = `(function () {
     }
     root.setAttribute('data-theme', theme);
     root.classList.add('js');
+    if (root.hasAttribute('data-static') && root.lang === 'en' && /^\\/fr(\\/|$)/.test(location.pathname)) {
+        root.style.visibility = 'hidden';
+        location.replace('/fr/404.html');
+        return;
+    }
     if (root.lang !== 'en' || window.top !== window.self || root.hasAttribute('data-static')) return;
     if (chosen || navigator.language.slice(0, 2) !== 'fr') return;
     root.style.visibility = 'hidden';

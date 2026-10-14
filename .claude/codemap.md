@@ -16,7 +16,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## e2e
 - **fixtures.ts** (27) — `page` that fails the test on any console error, uncaught exception or CSP violation, so every scenario also checks that nothing broke si...
   - exports: test
-- tests: home.spec.ts, pages.spec.ts, project.spec.ts
+- tests: home.spec.ts, not-found.spec.ts, pages.spec.ts, project.spec.ts
 
 ## scripts
 - **codemap.ts** (114) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
@@ -175,7 +175,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← cv.html
 
 ## src/pages
-- tests: headers.test.ts, node-safe.test.ts, pages.test.ts, seo.test.ts
+- tests: head-script.test.ts, headers.test.ts, node-safe.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
 - **blocks.ts** (143) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
@@ -240,5 +240,5 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **pages.ts** (240) — One page of the site, in every language.
   - exports: PageSpec, PAGES, NOT_FOUND, outputFile, renderPage, sitemap, sitePages
   - → data/projects, core/site, core/structured-data, core/translate, pages/content/render, pages/project/render
-- **shared-head.ts** (69) — Runs in <head> before first paint, on every page: 1.
+- **shared-head.ts** (76) — Runs in <head> before first paint, on every page: 1.
   - exports: HEAD_SCRIPT, sharedHead
