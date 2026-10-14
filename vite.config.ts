@@ -24,7 +24,10 @@ export default defineConfig({
     define: { IS_VERCEL_BUILD: JSON.stringify(process.env.VERCEL === '1') },
     preview: { headers: securityHeaders },
     test: {
-        include: ['src/**/*.test.ts'] // e2e/ holds Playwright browser tests
+        include: ['src/**/*.test.ts'], // e2e/ holds Playwright browser tests
+        environmentOptions: {
+            happyDOM: { settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true } }
+        } // pages parsed in tests link to files that no server serves
     },
     resolve: {
         alias: { '@': resolve(import.meta.dirname, 'src') }
