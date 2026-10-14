@@ -23,6 +23,8 @@ test.describe('project map', () => {
     test.beforeEach(({ isMobile }) => test.skip(isMobile, 'phones get the list'));
 
     test('a domain chip filters the map, and the same chip clears it', async ({ page }) => {
+        // The first click scrolls the map into view: smooth, it would still be moving under the second click
+        await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded();
         await expect(page.locator('.nm.booted')).toHaveCount(1);

@@ -26,9 +26,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: PDFS
 
 ## src/components/Charts
-- **Charts.css** (819) — Path chart and the numbers deck.
+- **Charts.css** (824) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (310) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
+- **Charts.ts** (313) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
   - exports: initPathChart, initPathStory, initNumbers, initReveals
   - → core/i18n, ui/motion, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
@@ -36,7 +36,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yDomain, yTicks, valueAt, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, components/NeuralMap/graph
   - ← components/Charts/Charts, components/Charts/render, pages/home/blocks, pages/project/render
-- **render.ts** (356) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+- **render.ts** (362) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
   - exports: monthName, phaseLabel, changeText, PATH, pathSamples, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data
   - ← components/Charts/Charts, pages/home/blocks, pages/project/render

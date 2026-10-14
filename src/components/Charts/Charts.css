@@ -14,7 +14,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-start; /* the range buttons sit top right, level with the symbol */
+    align-items: flex-end; /* the range buttons sit on the right, level with the total */
     gap: 16px;
 }
 
@@ -24,9 +24,9 @@
 
 .path-total {
     display: flex;
-    flex-direction: column; /* the change over the range sits under the total */
-    align-items: flex-start;
-    gap: 2px;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 10px; /* the change over the range, small, to the right of the total */
     margin: 6px 0 0;
     font-size: 44px;
     font-weight: 700;
@@ -36,7 +36,7 @@
 
 .path-delta {
     color: var(--pos);
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 0;
 }
@@ -735,17 +735,16 @@
 
 /* On a phone the checkpoint names would be 5px tall: the story under the chart tells them, the dots stay */
 @media (width <= 600px) {
-    /* The range buttons sit on the total's row, on the right, so the chart keeps its height:
-       the symbol on top, the total and the buttons together, the change under them */
+    /* The symbol on top, then the total with its change on the left and the range buttons on the right: the chart
+       keeps its height. The change wraps under the total when there is no room for both */
     .path-ticker {
         display: grid;
         grid-template-columns: 1fr auto;
-        align-items: center;
+        align-items: end;
         gap: 0 12px;
     }
 
-    .path-ticker > div:first-child,
-    .path-total {
+    .path-ticker > div:first-child {
         display: contents;
     }
 
@@ -753,16 +752,22 @@
         grid-column: 1 / -1;
     }
 
-    .path-total .count {
+    .path-total {
         grid-area: 2 / 1;
+        column-gap: 8px;
     }
 
     .path-range {
         grid-area: 2 / 2;
     }
 
+    .path-range button {
+        padding: 6px 7px;
+        font-size: 11px;
+    }
+
     .path-delta {
-        grid-column: 1 / -1;
+        font-size: 12px;
     }
 
     .path-svg text {
