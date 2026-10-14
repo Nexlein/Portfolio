@@ -14,7 +14,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start; /* the range buttons sit top right, level with the symbol */
     gap: 16px;
 }
 
@@ -24,9 +24,9 @@
 
 .path-total {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 14px;
+    flex-direction: column; /* the change over the range sits under the total */
+    align-items: flex-start;
+    gap: 2px;
     margin: 6px 0 0;
     font-size: 44px;
     font-weight: 700;

@@ -222,6 +222,30 @@ test.describe('hero', () => {
         await expect(page.locator('.hero-dot[aria-pressed="true"]')).toHaveCount(1);
     });
 
+    test('stops asking for frames while the tab is hidden, and resumes when it is shown again', async ({ page }) => {
+        await page.addInitScript(() => {
+            const w = window as unknown as { frames: number };
+            w.frames = 0;
+            const raf = window.requestAnimationFrame.bind(window);
+            window.requestAnimationFrame = (cb) => (w.frames++, raf(cb));
+        });
+        await page.goto('/');
+        const frames = () => page.evaluate(() => (window as unknown as { frames: number }).frames);
+        const setHidden = (hidden: boolean) =>
+            page.evaluate((h) => {
+                Object.defineProperty(document, 'hidden', { configurable: true, get: () => h });
+                document.dispatchEvent(new Event('visibilitychange'));
+            }, hidden);
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(10); // the hero draws (slowly on a loaded runner)
+        await setHidden(true);
+        await page.waitForTimeout(2000); // the frame already queued runs once and stops, and the intro counters finish
+        const idle = await frames();
+        await page.waitForTimeout(600);
+        expect(await frames(), 'no frame is requested while hidden').toBe(idle);
+        await setHidden(false);
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
+    });
+
     test('old project links (/?project=id) open the project page', async ({ page }) => {
         await page.goto('/?project=arcade');
         await expect(page).toHaveURL(/\/projects\/arcade\.html$/);
@@ -353,9 +377,29 @@ test.describe('charts', () => {
         await page.mouse.move(2, 2);
         const elapsed = () =>
             page.locator('.exp-progress').evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
-        // Some way into a step, but far from its end (a step is 6.5 s: the story must not turn during the test)
-        await expect.poll(async () => (await elapsed()) > 900 && (await elapsed()) < 3500).toBe(true);
-        const before = await elapsed();
+        // Early in a step, far from its end (a step is 6.5 s: the story must not turn during the test, even on a slow runner)
+        await expect
+            .poll(
+                async () => {
+                    const t = await elapsed();
+                    return t > 300 && t < 2500;
+                },
+                { intervals: [100] }
+            )
+            .toBe(true);
+        // A restart builds a new animation, which starts later: keep when this one started
+        const started = () => page.locator('.exp-progress').evaluate((el) => el.getAnimations()[0]?.startTime ?? null);
+        const kept = await started();
+        await page.evaluate(() => {
+            const log: string[] = [];
+            for (const type of ['pointerover', 'pointerout', 'focusin', 'focusout', 'visibilitychange'])
+                document.addEventListener(
+                    type,
+                    (e) => log.push(`${type} ${(e.target as Element)?.className ?? ''}`),
+                    true
+                );
+            (window as unknown as { log: string[] }).log = log;
+        });
         // The pointer crosses the numbers part (index, arrows, section text)
         await page.locator('.numbers-sub').hover();
         await page.locator('.numbers-index button').nth(2).hover();
@@ -363,7 +407,9 @@ test.describe('charts', () => {
         await page.mouse.move(2, 2); // one jump: a few steps in between could cross the chart or the story, which does pause it
         await page.evaluate(() => window.dispatchEvent(new Event('blur')));
         await page.evaluate(() => window.dispatchEvent(new Event('focus')));
-        expect(await elapsed()).toBeGreaterThanOrEqual(before); // still the same step: the timer did not restart
+        const log = await page.evaluate(() => (window as unknown as { log: string[] }).log);
+        expect(kept).not.toBeNull();
+        expect(await started(), `the timer did not restart: ${log.join(' | ')}`).toBe(kept);
     });
 
     test('the timers pause only on the chart plot, the range buttons and the panel, not on the rest of the block', async ({

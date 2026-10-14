@@ -29,21 +29,22 @@ npm run dev
 
 ## Scripts
 
-| Script                  | Description                                         |
-| ----------------------- | --------------------------------------------------- |
-| `npm run dev`           | Start the Vite dev server                           |
-| `npm run build`         | Typecheck and build to `dist/`                      |
-| `npm run preview`       | Serve the production build locally                  |
-| `npm run typecheck`     | Run `tsc --noEmit`                                  |
-| `npm test`              | Run Vitest                                          |
-| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                |
-| `npm run lint:fix`      | Lint and autofix                                    |
-| `npm run media:posters` | Generate missing video posters (ffmpeg)             |
-| `npm run media:og`      | Generate missing per-project social images (ffmpeg) |
-| `npm run media:video`   | Re-encode a video for the web (ffmpeg)              |
-| `npm run audit`         | Dependency audit (`audit-ci.jsonc`)                 |
-| `npm run format`        | Format all files with Prettier                      |
-| `npm run format:check`  | Check formatting without writing                    |
+| Script                  | Description                                                      |
+| ----------------------- | ---------------------------------------------------------------- |
+| `npm run dev`           | Start the Vite dev server                                        |
+| `npm run build`         | Typecheck and build to `dist/`                                   |
+| `npm run preview`       | Serve the production build locally                               |
+| `npm run typecheck`     | Run `tsc --noEmit`                                               |
+| `npm test`              | Run Vitest                                                       |
+| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                             |
+| `npm run lint:fix`      | Lint and autofix                                                 |
+| `npm run media:posters` | Generate missing video posters (ffmpeg)                          |
+| `npm run media:og`      | Generate missing per-project social images (ffmpeg)              |
+| `npm run media:brand`   | Redraw the home social image and the icons (Chromium, no ffmpeg) |
+| `npm run media:video`   | Re-encode a video for the web (ffmpeg)                           |
+| `npm run audit`         | Dependency audit (`config/audit-ci.jsonc`)                       |
+| `npm run format`        | Format all files with Prettier                                   |
+| `npm run format:check`  | Check formatting without writing                                 |
 
 ## Project structure
 
@@ -165,7 +166,8 @@ Because of the CSP:
 - **Pre-commit** (Husky + lint-staged): Oxlint/Stylelint autofix and Prettier on staged files, then typecheck and tests.
 - **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build; then browser tests and Lighthouse on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
-- **Audit**: fails on high/critical advisories. Accepted exceptions live in `audit-ci.jsonc`, each with a reason.
-- **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `lighthouserc.json`). Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
+- **Audit**: fails on high/critical advisories. Accepted exceptions live in `config/audit-ci.jsonc`, each with a reason.
+- **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
+- **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`.

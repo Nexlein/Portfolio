@@ -109,7 +109,8 @@ for (const width of [320, 280])
             ['/', '.project-list strong']
         ])
             test(`a very long project name breaks inside its box (${selector})`, async ({ page }) => {
-                await page.goto(path, { waitUntil: 'networkidle' });
+                await page.goto(path); // not 'networkidle': a project's video keeps the network busy
+                await page.evaluate(() => document.fonts.ready);
                 await page
                     .locator(selector)
                     .first()

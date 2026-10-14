@@ -345,9 +345,11 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         ([e]) => {
             visible = e.isIntersecting;
             if (visible) boot(performance.now());
+            wake();
         },
         { threshold: 0.35 }
     ).observe(web);
+    document.addEventListener('visibilitychange', () => wake());
 
     let pointer: Pt | null = null;
     web.addEventListener('pointermove', (e) => {
@@ -543,8 +545,10 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     };
 
     let last = performance.now();
+    let running = false; // a frame is queued
     const frame = (t: number) => {
-        if (!web.isConnected) return;
+        // Scrolled away or tab hidden: stop asking for frames until `wake`
+        if (!web.isConnected || !visible || document.hidden) return void (running = false);
         if (t - last < FRAME_MS) return void requestAnimationFrame(frame); // 30 fps is plenty for a slow drift
         const dt = Math.min(50, t - last);
         last = t;
@@ -717,7 +721,13 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             build();
         }, 150);
     });
-    requestAnimationFrame(frame);
+    function wake() {
+        if (running) return;
+        running = true;
+        last = performance.now();
+        requestAnimationFrame(frame);
+    }
+    wake();
 
     return {
         shown: shown.length,
