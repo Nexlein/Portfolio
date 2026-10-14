@@ -83,6 +83,96 @@ export function skillSeries(projects: ProjectEntry[], now: number): Point[] {
     return points;
 }
 
+/** The ranges of the path chart, as on a price chart. Steps are whole months, so there is no 1D or 1W. */
+export interface Range {
+    id: string;
+    /** Text on the button. */
+    label: string;
+    /** Months back from today; null is everything (from the first step). */
+    months: number | null;
+}
+
+export const RANGES: Range[] = [
+    { id: '1m', label: '1M', months: 1 },
+    { id: '6m', label: '6M', months: 6 },
+    { id: '1y', label: '1Y', months: 12 },
+    { id: 'max', label: 'Max', months: null }
+];
+
+/** Where a range starts. */
+export const rangeStart = (range: Range, points: Point[], now: number) =>
+    range.months === null ? points[0].t : now - range.months / 12;
+
+/** How the toolbox changed from `t0` to the end: skills gained, and the percentage when there was something to start from. */
+export function changeSince(points: Point[], t0: number): { delta: number; pct: number | null } {
+    const base = valueAt(points, t0 + 1e-9); // a step in the very month the range starts is already in the base
+    const delta = points[points.length - 1].v - base;
+    return { delta, pct: base > 0 ? Math.round((delta / base) * 100) : null };
+}
+
+/** Epitech's school years run September to August, counted from the month the first one started (the 'epitech' checkpoint). */
+const EPITECH_START = yearOf(CHECKPOINTS.find((c) => c.id === 'epitech')!.date);
+
+/** The school year a time falls in: 0 before Epitech, then 1, 2, 3... */
+export const schoolYearAt = (time: number) => (time < EPITECH_START ? 0 : Math.floor(time - EPITECH_START + 1e-9) + 1);
+
+export interface Phase {
+    /** 0 is the time before Epitech, then the school years 1, 2, 3... */
+    year: number;
+    /** The window's part this phase covers. */
+    from: number;
+    to: number;
+    /** Calendar year the school year starts in (2025 for 2025-26); 0 before Epitech. */
+    start: number;
+}
+
+/** The phases of life a window [t0, now] touches, oldest first, each clipped to the window. */
+export function phasesIn(t0: number, now: number): Phase[] {
+    const out: Phase[] = [];
+    if (t0 < EPITECH_START) out.push({ year: 0, from: t0, to: Math.min(now, EPITECH_START), start: 0 });
+    for (let n = 1; EPITECH_START + n - 1 < now; n++) {
+        const from = EPITECH_START + n - 1,
+            to = EPITECH_START + n;
+        if (to > t0)
+            out.push({ year: n, from: Math.max(from, t0), to: Math.min(to, now), start: Math.floor(from + 1e-9) });
+    }
+    return out;
+}
+
+export interface Tick {
+    t: number;
+    /** 0 (January) to 11. */
+    month: number;
+    year: number;
+}
+
+/** Month ticks for the x axis: every month on a short window, then every 2, 3 or 6 months, always counting from January. */
+export function timeTicks(t0: number, now: number): Tick[] {
+    const span = (now - t0) * 12;
+    const step = span <= 8 ? 1 : span <= 16 ? 2 : span <= 36 ? 3 : 6;
+    const out: Tick[] = [];
+    for (let k = Math.ceil(t0 * 12 - 1e-6); k <= Math.floor(now * 12 + 1e-6); k++)
+        if ((k % 12) % step === 0) out.push({ t: k / 12, month: k % 12, year: Math.floor(k / 12) });
+    return out;
+}
+
+/** The values the chart's height covers for a range: from nothing for the full range, else zoomed on what changed. */
+export function yDomain(points: Point[], t0: number): { lo: number; hi: number } {
+    const total = points[points.length - 1].v,
+        base = valueAt(points, t0 + 1e-9);
+    if (base === 0) return { lo: 0, hi: total * 1.08 || 1 };
+    const span = Math.max(total - base, 2); // a window where nothing changed still gets a visible line
+    return { lo: Math.max(0, base - span * 0.25), hi: base + span * 1.08 };
+}
+
+/** Gridline values inside [lo, hi]: a round step giving about five lines. */
+export function yTicks(lo: number, hi: number): number[] {
+    const step = [1, 2, 5, 10, 20, 50, 100].find((s) => (hi - lo) / s <= 5) ?? 100;
+    const out: number[] = [];
+    for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) out.push(v);
+    return out;
+}
+
 /** Value at t (the last step at or before t). */
 export const valueAt = (points: Point[], t: number) => points.reduce((v, p) => (p.t <= t ? p.v : v), 0);
 

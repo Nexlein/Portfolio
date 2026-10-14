@@ -5,8 +5,8 @@
 import { i18n } from '@/core/i18n';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { PROJECTS } from '@/data/projects';
-import { skillSeries, valueAt, type Point } from './data';
-import { monthName, PATH, pathSamples, pathSvg } from './render';
+import { RANGES, rangeStart, schoolYearAt, skillSeries, valueAt, yDomain, type Point } from './data';
+import { changeText, monthName, PATH, pathSamples, pathSvg, phaseLabel } from './render';
 
 /** Count up `.count[data-to]` from 0 once. */
 function countUp(el: HTMLElement): void {
@@ -30,7 +30,6 @@ export function initPathChart(): void {
     const lang = i18n.getLang();
     const now = Number(host.dataset.now);
     const points: Point[] = skillSeries(PROJECTS, now);
-    const total = points[points.length - 1].v;
     const plot = host.querySelector<HTMLElement>('.path-plot')!,
         tip = host.querySelector<HTMLElement>('.path-tip')!;
     let t0 = points[0].t;
@@ -42,9 +41,11 @@ export function initPathChart(): void {
             cross.setAttribute('visibility', 'hidden');
             tip.hidden = true;
         };
-        const samples = pathSamples(points, t0, now, total);
+        const samples = pathSamples(points, t0, now, yDomain(points, t0));
         const span = PATH.W - PATH.L - PATH.R;
-        const marks = points.filter((p) => p.m && p.t >= t0).map((p) => PATH.L + ((p.t - t0) / (now - t0)) * span);
+        const marks = points
+            .filter((p) => p.m && p.t >= t0 - 1e-9)
+            .map((p) => PATH.L + ((p.t - t0) / (now - t0)) * span);
         // The marks sit above the plot, so the crosshair listens on the whole svg and the plot's own bounds decide
         svg.addEventListener('pointermove', (e) => {
             const r = svg.getBoundingClientRect(),
@@ -74,7 +75,7 @@ export function initPathChart(): void {
                 : last.m?.project
                   ? i18n.t('home.path.shipped').replace('{p}', last.m.project.title)
                   : '';
-            tip.innerHTML = `<span class="mono">${monthName(time, lang)}</span><strong>${i18n.t('home.path.skills').replace('{n}', String(valueAt(points, time)))}</strong><span>${what}</span>`;
+            tip.innerHTML = `<span class="mono">${monthName(time, lang)} · ${phaseLabel(lang, schoolYearAt(time), 0, true)}</span><strong>${i18n.t('home.path.skills').replace('{n}', String(valueAt(points, time)))}</strong><span>${what}</span>`;
             tip.hidden = false;
             tip.style.left = `${(sx / PATH.W) * 100}%`;
             tip.style.top = `${(py / PATH.H) * 100}%`;
@@ -85,7 +86,13 @@ export function initPathChart(): void {
     host.querySelectorAll<HTMLButtonElement>('.path-range button').forEach((b) =>
         b.addEventListener('click', () => {
             host.querySelectorAll('.path-range button').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
-            t0 = b.dataset.range === 'max' ? points[0].t : now - Number(b.dataset.range);
+            const range = RANGES.find((r) => r.id === b.dataset.range)!;
+            t0 = rangeStart(range, points, now);
+            // The headline follows the range: what changed since it began, like a price chart's 1M / 1Y / Max
+            const delta = host.querySelector<HTMLElement>('.path-delta')!;
+            const change = changeText(lang, range, points, t0);
+            delta.textContent = change.text;
+            delta.classList.toggle('flat', !change.up);
             plot.querySelector('svg')!.outerHTML = pathSvg(lang, points, t0, now);
             host.classList.remove('drawn');
             void host.offsetWidth; // restart the draw-in

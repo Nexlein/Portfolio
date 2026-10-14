@@ -24,18 +24,18 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: PDFS
 
 ## src/components/Charts
-- **Charts.css** (750) — Path chart and the numbers deck.
+- **Charts.css** (789) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (303) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
+- **Charts.ts** (310) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
   - exports: initPathChart, initPathStory, initNumbers, initReveals
   - → core/i18n, ui/motion, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
-- **data.ts** (174) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
-  - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, valueAt, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
+- **data.ts** (264) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
+  - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yDomain, yTicks, valueAt, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, components/NeuralMap/graph
   - ← components/Charts/Charts, components/Charts/render, pages/home/blocks, pages/project/render
-- **render.ts** (306) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
-  - exports: monthName, PATH, pathSamples, pathSvg, pathChart, numbers
+- **render.ts** (356) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+  - exports: monthName, phaseLabel, changeText, PATH, pathSamples, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data
   - ← components/Charts/Charts, pages/home/blocks, pages/project/render
 - tests: data.test.ts
@@ -148,10 +148,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (225)
+- **en.ts** (228)
   - exports: en
   - ← core/translate
-- **fr.ts** (225)
+- **fr.ts** (228)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts

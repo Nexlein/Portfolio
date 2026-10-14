@@ -233,8 +233,8 @@ test.describe('charts', () => {
         await page.goto('/');
         const chart = page.locator('.path-chart');
         await chart.scrollIntoViewIfNeeded();
-        await chart.locator('.path-range button[data-range="1"]').click();
-        await expect(chart.locator('.path-range button[data-range="1"]')).toHaveAttribute('aria-pressed', 'true');
+        await chart.locator('.path-range button[data-range="1y"]').click();
+        await expect(chart.locator('.path-range button[data-range="1y"]')).toHaveAttribute('aria-pressed', 'true');
         if (!isMobile) {
             await expect(chart).toHaveClass(/\bin\b/); // revealed: no longer moving
             const hit = chart.locator('.hit');
@@ -242,6 +242,42 @@ test.describe('charts', () => {
             await hit.hover({ position: { x: box.width * 0.6, y: box.height / 2 }, force: true });
             await expect(chart.locator('.path-tip')).toBeVisible();
         }
+    });
+
+    test('the headline follows the range, like a price chart', async ({ page }) => {
+        await page.goto('/');
+        const chart = page.locator('.path-chart');
+        await chart.scrollIntoViewIfNeeded();
+        const delta = chart.locator('.path-delta');
+        const texts: Record<string, string> = {};
+        for (const [range, words] of [
+            ['max', /^▲ \+\d+ since /],
+            ['1y', /^▲ \+\d+ \(\d+ %\) past 12 months$/],
+            ['6m', /past 6 months$/],
+            ['1m', /past month$/]
+        ] as const) {
+            await chart.locator(`.path-range [data-range="${range}"]`).click();
+            await expect(chart.locator(`.path-range [data-range="${range}"]`)).toHaveAttribute('aria-pressed', 'true');
+            await expect(delta).toHaveText(words);
+            texts[range] = (await delta.textContent())!;
+        }
+        expect(new Set(Object.values(texts)).size).toBe(4); // each range says its own thing
+        await expect(chart.locator('.path-total .count')).toHaveText(/^\d+$/); // the total itself stays the total
+    });
+
+    test('the chart shows where the visitor was, and the tooltip names the school year', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'needs a mouse and room for the labels');
+        await page.setViewportSize({ width: 1280, height: 900 });
+        await page.goto('/');
+        const chart = page.locator('.path-chart');
+        await chart.scrollIntoViewIfNeeded();
+        await expect(chart.locator('.phase')).toHaveCount(4); // before Epitech, then Tek 1, 2 and 3
+        await expect(chart.locator('.phase-label', { hasText: 'Tek 2 · 2025–26' })).toBeVisible();
+        await expect(chart).toHaveClass(/\bin\b/);
+        const hit = chart.locator('.hit');
+        const box = (await hit.boundingBox())!;
+        await hit.hover({ position: { x: box.width * 0.6, y: box.height / 2 }, force: true });
+        await expect(chart.locator('.path-tip .mono')).toHaveText(/\d{4} · (Tek \d|Before Epitech)/);
     });
 
     test('the numbers are a deck: one chart in front, the arrows and the index bring another one forward', async ({
@@ -303,7 +339,7 @@ test.describe('charts', () => {
         await page.mouse.move(2, 2);
         const first = await page.locator('.exp.on').getAttribute('data-cp');
         await expect(page.locator('.exp.on')).not.toHaveAttribute('data-cp', first!, { timeout: 12000 });
-        await page.locator('.path-range [data-range="1"]').click();
+        await page.locator('.path-range [data-range="1y"]').click();
         await expect(page.locator('.exp.on')).toHaveCount(1);
         await expect(page.locator('.path-svg .mark.on')).toHaveCount(1);
         await expect(page.locator('.exp-count')).toHaveText(/^1 \/ \d$/);
