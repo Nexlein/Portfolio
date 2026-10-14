@@ -1,6 +1,6 @@
 // Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and
 // who uses it, in one small Markdown file (.claude/codemap.md). Reading it replaces opening dozens of files.
-// Usage: npm run codemap (the pre-commit hook regenerates it, so it never goes stale).
+// Usage: npm run codemap (Node runs this TypeScript file as it is; the pre-commit hook regenerates it, so it never goes stale).
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, normalize, relative } from 'node:path';
@@ -14,7 +14,7 @@ const files = execFileSync('git', ['ls-files', '-co', '--exclude-standard'], { e
 const known = new Set(files);
 
 /** First sentence of the file's first doc comment (or leading // comment). */
-function purpose(src) {
+function purpose(src: string): string {
     const head = src.split('<html')[0];
     const doc = src.match(/^((?:\/\/.*\n)+)/) ?? src.match(/\/\*\*?([\s\S]*?)\*\//) ?? head.match(/<!--([\s\S]*?)-->/);
     const raw = (doc?.[1] ?? '')
@@ -25,7 +25,7 @@ function purpose(src) {
     return sentence.length > 140 ? `${sentence.slice(0, 137)}...` : sentence;
 }
 
-function exportsOf(src) {
+function exportsOf(src: string): string[] {
     const names = [
         ...src.matchAll(/^export (?:default )?(?:async )?(?:function|const|class|interface|type|let)\s+(\w+)/gm)
     ];
@@ -33,16 +33,16 @@ function exportsOf(src) {
 }
 
 /** Local files this one imports (TS imports, CSS @import, HTML scripts and stylesheets). */
-function importsOf(file, src) {
+function importsOf(file: string, src: string): string[] {
     const specs = [
         ...src.matchAll(/(?:import|export)[^'"`;]*?from\s+['"]([^'"]+)['"]/g),
         ...src.matchAll(/import\s*\(?\s*['"]([^'"]+)['"]/g),
         ...src.matchAll(/@import\s+['"]([^'"]+)['"]/g),
         ...src.matchAll(/(?:src|href)="(\/src\/[^"]+)"/g)
     ].map((m) => m[1]);
-    const out = new Set();
+    const out = new Set<string>();
     for (const spec of specs) {
-        let path;
+        let path: string;
         if (spec.startsWith('@/')) path = join('src', spec.slice(2));
         else if (spec.startsWith('/src/')) path = spec.slice(1);
         else if (spec.startsWith('.')) path = normalize(join(dirname(file), spec));
@@ -53,8 +53,15 @@ function importsOf(file, src) {
     return [...out];
 }
 
-const info = new Map(
-    files.map((f) => {
+interface FileInfo {
+    lines: number;
+    purpose: string;
+    exports: string[];
+    imports: string[];
+}
+
+const info = new Map<string, FileInfo>(
+    files.map((f): [string, FileInfo] => {
         const src = readFileSync(f, 'utf8');
         return [
             f,
@@ -67,15 +74,15 @@ const info = new Map(
         ];
     })
 );
-const usedBy = new Map(files.map((f) => [f, []]));
-for (const [f, i] of info) for (const dep of i.imports) usedBy.get(dep).push(f);
+const usedBy = new Map<string, string[]>(files.map((f) => [f, []]));
+for (const [f, i] of info) for (const dep of i.imports) usedBy.get(dep)!.push(f);
 
-const short = (f) => f.replace(/^src\//, '').replace(/\.ts$/, '');
-const groups = new Map();
+const short = (f: string) => f.replace(/^src\//, '').replace(/\.ts$/, '');
+const groups = new Map<string, string[]>();
 for (const f of files) {
     const dir = f.includes('/') ? dirname(f) : '(root)';
     if (!groups.has(dir)) groups.set(dir, []);
-    groups.get(dir).push(f);
+    groups.get(dir)!.push(f);
 }
 
 const lines = [
@@ -89,13 +96,13 @@ for (const [dir, list] of groups) {
     lines.push(`## ${dir}`);
     const tests = list.filter((f) => /\.(test|spec)\.ts$|\.dom\.test\.ts$/.test(f));
     for (const f of list.filter((x) => !tests.includes(x))) {
-        const i = info.get(f);
+        const i = info.get(f)!;
         const parts = [`- **${relative(dir === '(root)' ? '.' : dir, f)}** (${i.lines})`];
         if (i.purpose) parts.push(`— ${i.purpose}`);
         lines.push(parts.join(' '));
         if (i.exports.length) lines.push(`  - exports: ${i.exports.join(', ')}`);
         if (i.imports.length) lines.push(`  - → ${i.imports.map(short).join(', ')}`);
-        const users = usedBy.get(f).filter((u) => !/\.(test|spec)\.ts$/.test(u));
+        const users = usedBy.get(f)!.filter((u) => !/\.(test|spec)\.ts$/.test(u));
         if (users.length) lines.push(`  - ← ${users.map(short).join(', ')}`);
     }
     if (tests.length) lines.push(`- tests: ${tests.map((t) => relative(dir, t)).join(', ')}`);

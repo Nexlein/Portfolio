@@ -8,7 +8,7 @@ import { localizedPath, lookup, type Lang } from './translate.ts';
 
 type JsonLd = Record<string, unknown>;
 
-export function person(lang: Lang): JsonLd {
+function person(lang: Lang): JsonLd {
     return {
         '@type': 'Person',
         '@id': `${SITE}/#person`,

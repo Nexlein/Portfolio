@@ -25,11 +25,6 @@
     overflow: hidden;
     padding: 10px 16px 10px 10px;
     border-radius: 18px;
-    transition:
-        opacity 700ms var(--ease-out),
-        translate 700ms var(--ease-out),
-        transform 260ms var(--ease-out),
-        box-shadow 260ms ease;
 }
 
 .feature:nth-child(2) {
@@ -307,18 +302,7 @@
 .exp-nav button {
     width: 32px;
     height: 32px;
-    border: 1px solid var(--hair);
-    border-radius: 50%;
-    background: var(--surface);
-    color: var(--ink);
     font-size: 17px;
-    line-height: 1;
-    cursor: pointer;
-    transition: border-color 200ms;
-}
-
-.exp-nav button:hover {
-    border-color: var(--signal);
 }
 
 /* A thin line fills along the bottom while the story turns by itself */
@@ -362,11 +346,6 @@
     overflow: hidden;
     padding: 40px;
     border-radius: 28px;
-    transition:
-        opacity 700ms var(--ease-out),
-        translate 700ms var(--ease-out),
-        transform 260ms var(--ease-out),
-        box-shadow 260ms ease;
 }
 
 .tile h3 {

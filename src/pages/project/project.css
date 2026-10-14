@@ -180,14 +180,6 @@
     padding: 20px 24px 0 0;
 }
 
-.specs dt {
-    color: var(--muted);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
 .specs dd {
     display: flex;
     flex-wrap: wrap;
@@ -218,11 +210,6 @@
     grid-template-rows: auto 1fr;
     overflow: hidden;
     border-radius: 24px;
-    transition:
-        opacity 700ms var(--ease-out),
-        translate 700ms var(--ease-out),
-        transform 260ms var(--ease-out),
-        box-shadow 260ms ease;
 }
 
 .related-card:nth-child(2) {

@@ -11,6 +11,7 @@
  */
 import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/translate';
+import { firstSentence } from '@/core/text';
 import { NOW } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
@@ -128,13 +129,12 @@ function seeded(seed: number): () => number {
 
 function cardHtml(p: ProjectEntry): string {
     const lang = i18n.getLang();
-    const line = p.description[lang].split('. ')[0].replace(/\.$/, '');
     return `<a class="nm-card" href="${localizedPath(projectPath(p.id), lang)}" data-id="${p.id}" data-domain="${p.category}">
 <span class="nm-head"><span class="nm-ico">${domainIcon(p.category)}</span>
 <span class="nm-txt"><strong>${p.title}</strong><span class="mono">${p.tags.slice(0, 2).join(' · ')}</span></span></span>
 <span class="nm-more"><span class="nm-inner">
   <span class="nm-media"><img src="${still(p)}" alt="" loading="lazy" /></span>
-  <span class="nm-desc">${line}.</span>
+  <span class="nm-desc">${firstSentence(p.description[lang])}</span>
   <span class="mono nm-skills">${i18n.t(`home.work.periods.${periodOf(p)}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
   <span class="nm-go">${i18n.t('home.work.open')} <span aria-hidden="true">→</span></span>
 </span></span></a>`;

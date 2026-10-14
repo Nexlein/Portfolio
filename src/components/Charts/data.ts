@@ -28,7 +28,7 @@ export function skills(tags: string[]): string[] {
 /** Display form of a normalised skill. */
 export const prettySkill = (s: string) => (s.length <= 3 ? s.toUpperCase() : s[0].toUpperCase() + s.slice(1));
 
-export interface Milestone {
+interface Milestone {
     t: number;
     /** Checkpoint id, or project id. */
     id: string;
@@ -40,7 +40,7 @@ export interface Milestone {
 const tagsOf = (id: string) => EXPERIENCES.find((e) => e.id === id)?.tags ?? [];
 
 /** Every dated step, oldest first: checkpoints (with their skills) and projects (with their tags). */
-export function milestones(projects: ProjectEntry[]): Milestone[] {
+function milestones(projects: ProjectEntry[]): Milestone[] {
     const all: Milestone[] = [
         ...CHECKPOINTS.map((c) => ({
             t: yearOf(c.date),
@@ -87,7 +87,7 @@ export function skillSeries(projects: ProjectEntry[], now: number): Point[] {
 export const valueAt = (points: Point[], t: number) => points.reduce((v, p) => (p.t <= t ? p.v : v), 0);
 
 /** When each skill was first used. */
-export function firstSeen(projects: ProjectEntry[]): Map<string, number> {
+function firstSeen(projects: ProjectEntry[]): Map<string, number> {
     const seen = new Map<string, number>();
     for (const m of milestones(projects)) for (const s of m.adds) if (!seen.has(s)) seen.set(s, m.t);
     return seen;
@@ -99,7 +99,7 @@ export const learnedSince = (projects: ProjectEntry[], now: number) =>
 
 // ── Group counts ────────────────────────────────────────────────────────────
 
-export const PERIODS: Period[] = ['Tek1', 'Tek2', 'Personal'];
+const PERIODS: Period[] = ['Tek1', 'Tek2', 'Personal'];
 
 /** Periods present in the data, in time order. */
 export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => periodOf(p) === y));
