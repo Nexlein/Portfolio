@@ -222,6 +222,30 @@ test.describe('hero', () => {
         await expect(page.locator('.hero-dot[aria-pressed="true"]')).toHaveCount(1);
     });
 
+    test('stops asking for frames while the tab is hidden, and resumes when it is shown again', async ({ page }) => {
+        await page.addInitScript(() => {
+            const w = window as unknown as { frames: number };
+            w.frames = 0;
+            const raf = window.requestAnimationFrame.bind(window);
+            window.requestAnimationFrame = (cb) => (w.frames++, raf(cb));
+        });
+        await page.goto('/');
+        const frames = () => page.evaluate(() => (window as unknown as { frames: number }).frames);
+        const setHidden = (hidden: boolean) =>
+            page.evaluate((h) => {
+                Object.defineProperty(document, 'hidden', { configurable: true, get: () => h });
+                document.dispatchEvent(new Event('visibilitychange'));
+            }, hidden);
+        await expect.poll(frames).toBeGreaterThan(30); // the hero draws
+        await setHidden(true);
+        await page.waitForTimeout(2000); // the frame already queued runs once and stops, and the intro counters finish
+        const idle = await frames();
+        await page.waitForTimeout(600);
+        expect(await frames(), 'no frame is requested while hidden').toBe(idle);
+        await setHidden(false);
+        await expect.poll(frames).toBeGreaterThan(idle + 20);
+    });
+
     test('old project links (/?project=id) open the project page', async ({ page }) => {
         await page.goto('/?project=arcade');
         await expect(page).toHaveURL(/\/projects\/arcade\.html$/);

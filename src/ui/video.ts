@@ -20,23 +20,36 @@ export const still = (p: ProjectEntry): string =>
           : p.media.images[0].src;
 
 let observer: IntersectionObserver | undefined;
+const onScreen = new Set<HTMLVideoElement>();
+let tabListening = false;
 
 /**
- * Play the videos under `root` only while they are on (or near) screen, and pause them otherwise.
+ * Play the videos under `root` only while they are on (or near) screen and the tab is shown, and pause them otherwise.
  * Videos are rendered with preload="none", so nothing downloads until a video first comes into view.
  * With reduced motion, videos never autoplay and keep showing their poster.
  */
 export function playVideosWhenVisible(root: ParentNode): void {
     observer?.disconnect();
+    onScreen.clear();
     if (prefersReducedMotion()) return;
+    if (!tabListening) {
+        tabListening = true;
+        document.addEventListener('visibilitychange', () => {
+            for (const video of onScreen)
+                if (document.hidden) video.pause();
+                else video.play().catch(() => {});
+        });
+    }
 
     observer = new IntersectionObserver(
         (entries) => {
             for (const entry of entries) {
                 const video = entry.target as HTMLVideoElement;
                 if (entry.isIntersecting) {
-                    video.play().catch(() => {}); // autoplay can be refused (e.g. data saver); the poster stays
+                    onScreen.add(video);
+                    if (!document.hidden) video.play().catch(() => {}); // autoplay can be refused (e.g. data saver); the poster stays
                 } else {
+                    onScreen.delete(video);
                     video.pause();
                 }
             }

@@ -75,7 +75,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Link, propagate, neural
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
-- **stage.ts** (130) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
+- **stage.ts** (142) — What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the hero's empty space, and a ...
   - exports: Point, Stage, stage
   - → ui/motion
   - ← components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/neural, components/Hero/sims/value-iteration
@@ -104,7 +104,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/NeuralMap
 - **NeuralMap.css** (484) — The project map (see NeuralMap.ts).
   - ← index.html
-- **NeuralMap.ts** (762) — The project map: projects as a small neural network.
+- **NeuralMap.ts** (772) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/translate, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
   - ← pages/home/home
@@ -229,7 +229,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **motion.ts** (5) — True when the visitor asked for less motion: nothing moves by itself, and pictures are drawn once.
   - exports: prefersReducedMotion
   - ← components/Charts/Charts, components/Hero/Hero, components/Hero/sims/stage, components/NeuralMap/NeuralMap, pages/home/home, pages/project/project, ui/glide, ui/video
-- **video.ts** (48) — MIME type for a project video, from its extension.
+- **video.ts** (61) — MIME type for a project video, from its extension.
   - exports: videoType, videoPoster, still, playVideosWhenVisible
   - → data/projects, ui/motion
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
