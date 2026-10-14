@@ -16,6 +16,8 @@ Every page also exists in French under `/fr/`. `/availability.html` redirects to
 
 The home page is one scroll: hero (a live simulation), selected work, every project on the neural map, the path chart, the numbers, and the two ways to hire. Project pages go deeper on one project; the CV is the printable format.
 
+Unknown addresses get `404.html` (Vercel serves it with status 404 at the address that was asked for; there is one file, so the English one). It is not in the sitemap and is marked `noindex`. Under `/fr/` the head script moves the visitor to `/fr/404.html`, the French copy of the same page; `data-static` on the page keeps the language redirect from looping.
+
 ## Getting started
 
 Requires Node 22 (see `.nvmrc`).
