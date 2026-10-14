@@ -177,7 +177,7 @@ export const EDUCATION: Education[] = [
         cvHidePeriod: true,
         cvSummary: {
             en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent).',
-            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Bilingue).'
+            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Courant).'
         }
     }
 ];
