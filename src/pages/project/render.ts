@@ -5,11 +5,10 @@
 import { PROJECTS, projectPath, type ProjectEntry, type ProjectMedia } from '../../data/projects.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
-import { videoPoster, videoType } from '../../ui/video.ts';
+import { still, videoPoster, videoType } from '../../ui/video.ts';
 import { monthName } from '../../components/Charts/render.ts';
 import { yearOf } from '../../components/Charts/data.ts';
 import { neighbours, periodOf, skillSet } from '../../components/NeuralMap/graph.ts';
-import { still } from '../home/blocks.ts';
 
 const t = (lang: Lang, key: string) => lookup(lang, `projectPage.${key}`);
 const domainName = (lang: Lang, d: string) => lookup(lang, `home.domains.${d}`);
@@ -34,7 +33,7 @@ export function mediaHtml(media: ProjectMedia, lang: Lang): string {
             const images = media.images
                 .map(
                     (img, i) =>
-                        `<img src="${img.src}" alt="${img.alt}" data-idx="${i}"${i ? ' loading="lazy"' : ' class="active"'} />`
+                        `<img src="${img.src}" alt="${img.alt}" data-idx="${i}"${i ? ' loading="lazy" hidden aria-hidden="true"' : ' class="active"'} />`
                 )
                 .join('');
             const dots = media.images

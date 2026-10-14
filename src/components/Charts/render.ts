@@ -104,7 +104,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
     return `<div class="path-chart surface reveal" data-now="${now}">
   <div class="path-ticker">
     <div><p class="path-symbol">${t(lang, 'path.symbol')}</p>
-      <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta">▲ +${delta} (${pct} %) ${t(lang, 'path.delta')}</span></p></div>
+      <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta">${delta > 0 ? '▲ +' : ''}${delta} (${pct} %) ${t(lang, 'path.delta')}</span></p></div>
     <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}"><button type="button" data-range="1">1Y</button><button type="button" data-range="2">2Y</button><button type="button" data-range="max" aria-pressed="true">Max</button></div>
   </div>
   <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" role="status" hidden></div></div>

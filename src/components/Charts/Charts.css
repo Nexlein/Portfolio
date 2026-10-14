@@ -22,7 +22,7 @@
     margin: 0;
     color: var(--muted);
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -69,7 +69,7 @@
 .path-svg text {
     fill: var(--muted);
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .path-svg .year {
@@ -281,7 +281,7 @@
 /* Without JS: a plain grid of cards */
 .numbers-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: 16px;
 }
 
@@ -325,8 +325,8 @@
 
 .numbers-index button small {
     font-family: var(--font-mono);
-    font-size: 11px;
-    opacity: 0.75;
+    font-size: 12px;
+    opacity: 0.9;
 }
 
 .numbers-index button:hover,
@@ -708,6 +708,26 @@
 
     .path-total {
         font-size: 34px;
+    }
+
+    /* The chart is drawn 1080 wide and scales down with the screen: its labels grow so they stay readable */
+    .path-svg text {
+        font-size: 18px;
+    }
+
+    .path-svg .mark text {
+        font-size: 15px;
+    }
+}
+
+/* On a phone the checkpoint names would be 5px tall: the story under the chart tells them, the dots stay */
+@media (width <= 600px) {
+    .path-svg text {
+        font-size: 30px;
+    }
+
+    .path-svg .mark text {
+        display: none;
     }
 }
 

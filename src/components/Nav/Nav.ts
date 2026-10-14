@@ -60,14 +60,15 @@ function initPill(nav: HTMLElement): void {
     nav.addEventListener('pointerleave', () => moveTo(active));
 
     const sections = links.map((a) => document.getElementById(a.dataset.section!)).filter((s): s is HTMLElement => !!s);
+    // The section under the middle of the screen is the current one; between sections (the hero, the footer) none is
+    const inView = new Set<string>();
     const spy = new IntersectionObserver(
-        (entries) =>
-            entries.forEach((e) => {
-                if (!e.isIntersecting) return;
-                active = links.find((a) => a.dataset.section === e.target.id) ?? null;
-                links.forEach((a) => a.toggleAttribute('aria-current', a === active));
-                if (!nav.matches(':hover')) moveTo(active);
-            }),
+        (entries) => {
+            entries.forEach((e) => (e.isIntersecting ? inView.add(e.target.id) : inView.delete(e.target.id)));
+            active = links.find((a) => inView.has(a.dataset.section!)) ?? null;
+            links.forEach((a) => a.toggleAttribute('aria-current', a === active));
+            if (!nav.matches(':hover')) moveTo(active);
+        },
         { rootMargin: '-45% 0px -50% 0px' }
     );
     sections.forEach((s) => spy.observe(s));
@@ -104,12 +105,21 @@ function initThemes(nav: HTMLElement): void {
             setOpen(false);
             button.focus();
         });
-        // Arrow keys move inside the menu, as in any menu
+        // Arrow keys move inside the menu, Home and End jump to its ends, as in any menu
         b.addEventListener('keydown', (e) => {
-            const step = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0;
-            if (!step) return;
+            const to =
+                e.key === 'ArrowDown'
+                    ? (i + 1) % items.length
+                    : e.key === 'ArrowUp'
+                      ? (i - 1 + items.length) % items.length
+                      : e.key === 'Home'
+                        ? 0
+                        : e.key === 'End'
+                          ? items.length - 1
+                          : -1;
+            if (to < 0) return;
             e.preventDefault();
-            items[(i + step + items.length) % items.length].focus();
+            items[to].focus();
         });
     });
     document.addEventListener('pointerdown', (e) => {

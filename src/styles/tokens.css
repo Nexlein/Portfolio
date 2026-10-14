@@ -41,7 +41,7 @@
     --ink: #111827;
     --signal: #4f46e5;
     --cold: #64748b;
-    --third: #059669;
+    --third: #047857;
     --depth: 0.06;
 
     color-scheme: light;
@@ -51,7 +51,7 @@
 :root,
 [data-theme] {
     --raised: color-mix(in oklab, var(--surface) 92%, var(--ink));
-    --muted: color-mix(in oklab, var(--ink) 62%, var(--bg));
+    --muted: color-mix(in oklab, var(--ink) 66%, var(--bg));
     --line: color-mix(in oklab, var(--ink) 11%, var(--bg));
     --hair: color-mix(in oklab, var(--ink) 10%, transparent);
     --pos: var(--third);
@@ -72,6 +72,15 @@
     --c2: color-mix(in oklab, var(--cold) 45%, var(--bg));
     --c3: color-mix(in oklab, var(--ink) 35%, var(--bg));
     --c4: var(--third);
+}
+
+/* Browsers without relative colours (Safari before 16.4, Firefox before 128): the two hue shifts fall back to their source */
+@supports not (color: oklch(from red l c h)) {
+    :root,
+    [data-theme] {
+        --d-graphical: var(--signal);
+        --d-devops: var(--cold);
+    }
 }
 
 :root {

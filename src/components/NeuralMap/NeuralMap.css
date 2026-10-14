@@ -380,7 +380,7 @@
     background: var(--signal);
     color: var(--bg);
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
 }
 

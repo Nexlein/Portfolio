@@ -59,7 +59,7 @@ button {
 
 .mono {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.03em;
     color: var(--muted);
 }
@@ -264,5 +264,36 @@ button {
 @media (hover: hover) and (pointer: fine) {
     .segmented button:hover {
         color: var(--ink);
+    }
+}
+
+/* Touch: small links and chips get a hit area of 44px without changing how they look */
+@media (pointer: coarse) {
+    .nav-lang a {
+        --hit: -9px -4px;
+    }
+
+    /* Links that can end at the screen's edge (the hire row at 320px) grow upwards and downwards only: a hit area
+       sticking out sideways makes the page scroll sideways */
+    .link {
+        --hit: -12px 0;
+    }
+
+    .nav-name,
+    .nav-link,
+    .nav-lang a,
+    .link,
+    .footer nav a {
+        position: relative;
+    }
+
+    .nav-name::after,
+    .nav-link::after,
+    .nav-lang a::after,
+    .link::after,
+    .footer nav a::after {
+        content: '';
+        position: absolute;
+        inset: var(--hit, -12px -8px);
     }
 }

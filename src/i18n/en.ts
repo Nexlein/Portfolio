@@ -10,6 +10,10 @@ export const en = {
             title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
                 'CV of Nielsen COMBE--BRACCIALE, AI, data and software engineer: TDD, agentic workflows, autonomous decision systems and real-time simulation engines.'
+        },
+        notFound: {
+            title: 'Page not found — Nexlein',
+            description: 'This page does not exist. Back to the portfolio of Nielsen COMBE--BRACCIALE (Nexlein).'
         }
     },
     site: {
@@ -136,7 +140,7 @@ export const en = {
             growth: 'Growth',
             growthTitle: 'New skills, by period',
             mostUsed: 'Most used',
-            distinct: '{n} distinct skills',
+            distinct: '{n} skills across projects',
             thisYear: 'This year',
             newSkills: '{n} new skills in 12 months'
         },
@@ -172,6 +176,13 @@ export const en = {
             copied: 'Email copied'
         }
     },
+    notFound: {
+        line1: 'Nothing here.',
+        line2: 'That page does not exist.',
+        text: 'The link may be old or mistyped. Everything lives on the home page.',
+        home: 'Back home',
+        work: 'See the work'
+    },
     projectPage: {
         back: 'All projects',
         code: 'View the code',
@@ -200,10 +211,6 @@ export const en = {
                 'Building reliable software at the speed of AI, with TDD and agentic workflows. Focused on autonomous decision systems, real-time simulation engines, and high-performance C++.',
             badge2: 'Full-Time Intern (Mar–Aug 2027)',
             badge3: 'Freelance'
-        },
-        toolbox: {
-            total: '{n} skills used in projects',
-            recent: '+{n} in the last 12 months'
         },
         sections: {
             experience: 'Experience',

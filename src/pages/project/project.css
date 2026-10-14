@@ -27,6 +27,7 @@
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 1;
+    overflow-wrap: anywhere; /* a long compound name breaks instead of pushing the page sideways */
 }
 
 .project-desc {
@@ -69,6 +70,10 @@
     inset: 0;
     opacity: 0;
     transition: opacity 500ms ease;
+}
+
+.gallery img[hidden] {
+    display: none; /* not fetched yet (lazy) until it is shown or next to the one shown: see gallery.ts */
 }
 
 .gallery img.active {
@@ -155,6 +160,14 @@
     color: rgb(255 255 255 / 70%);
 }
 
+/* A long row of dots would run under the counter on phones: it moves to the top corner */
+@media (width <= 600px) {
+    .gallery-count {
+        top: 14px;
+        bottom: auto;
+    }
+}
+
 /* ── Spec strip: label over value, four columns ── */
 .specs {
     display: grid;
@@ -170,7 +183,7 @@
 .specs dt {
     color: var(--muted);
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }

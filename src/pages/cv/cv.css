@@ -341,3 +341,11 @@
         box-shadow: none;
     }
 }
+
+/* On screen the contact links are real targets: room around the 10px type (paper keeps its tight list) */
+@media screen {
+    .sheet-contact a {
+        display: inline-block;
+        padding-block: 6px;
+    }
+}
