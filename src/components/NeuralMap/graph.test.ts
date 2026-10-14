@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
-import { CARD, fitFor, layout, neighbours, periodOf, pickShown, similarity } from './graph';
+import { CARD, fitFor, layout, mds, neighbours, periodOf, pickShown, similarity, skillSet } from './graph';
 
 /** `n` projects made from the real ones (same skills, other ids), as when the portfolio grows. */
 function grown(n: number): ProjectEntry[] {
@@ -58,6 +58,51 @@ describe.each([
         const stars = layout(W, H, fit, shown);
         expect(overlaps(stars)).toBe(0);
         expect(stars.every(inside)).toBe(true);
+    });
+});
+
+describe('layout at every window width the map is shown at (900px and up; the board is at least 760px tall)', () => {
+    // A board where the ellipse is too tight used to leave a few cards overlapping (up to 25px at 1303x800)
+    it("never overlaps today's projects", () => {
+        const bad: string[] = [];
+        for (let W = 901; W <= 1700; W += 5)
+            for (const H of [760, 800, 900, 1000])
+                if (overlaps(layout(W, H, fitFor(W, H), PROJECTS))) bad.push(`${W}x${H}`);
+        expect(bad).toEqual([]);
+    }, 30_000); // 640 layouts, about 1.5 s; coverage instrumentation makes it several times slower
+
+    it('keeps every card on the board', () => {
+        for (const [W, H] of [
+            [901, 760],
+            [1024, 768],
+            [1303, 800]
+        ])
+            for (const s of layout(W, H, fitFor(W, H), PROJECTS)) {
+                expect(s.x - CARD.w / 2).toBeGreaterThanOrEqual(-1);
+                expect(s.x + CARD.w / 2).toBeLessThanOrEqual(W + 1);
+                expect(s.y - CARD.h / 2).toBeGreaterThanOrEqual(-1);
+                expect(s.y + CARD.h / 2).toBeLessThanOrEqual(H + 1);
+            }
+    });
+});
+
+describe('small inputs', () => {
+    it('lays out zero, one and two projects without NaN', () => {
+        for (const n of [0, 1, 2]) {
+            const items = PROJECTS.slice(0, n);
+            expect(mds(items).flat().every(Number.isFinite)).toBe(true);
+            expect(layout(1280, 760, fitFor(1280, 760), items).every((s) => Number.isFinite(s.x + s.y))).toBe(true);
+        }
+    });
+
+    it('ignores empty skills ("C/" or a blank tag)', () => {
+        const odd = { ...PROJECTS[0], tags: ['C/', ' ', 'Net / work'] };
+        expect([...skillSet(odd)]).not.toContain('');
+    });
+
+    it('finds fewer than three neighbours when the pool is small', () => {
+        expect(neighbours(PROJECTS[0], PROJECTS.slice(0, 2))).toHaveLength(1);
+        expect(neighbours(PROJECTS[0], [PROJECTS[0]])).toHaveLength(0);
     });
 });
 

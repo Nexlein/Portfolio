@@ -138,6 +138,7 @@ export function initPathStory(): void {
     };
     function select(id: string, force = false) {
         const all = ids();
+        card!.hidden = !all.length; // a range with no checkpoint (a quiet year) has nothing to tell
         const next = all.includes(id) ? id : all[0];
         if (next === current && !force) return;
         current = next;

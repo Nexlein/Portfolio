@@ -67,4 +67,85 @@ describe('valueIteration', () => {
         });
         expect(toward.length / arrows.length).toBeGreaterThan(0.9);
     });
+
+    it('still has a reward after the window turns from landscape to portrait (reduced motion redraws only on resize)', () => {
+        RecordingPath.arrows = [];
+        vi.stubGlobal('Path2D', RecordingPath);
+        const ctx = { clearRect() {}, fillRect() {}, beginPath() {}, stroke() {}, arc() {}, fill() {} };
+        const size = { width: 844, height: 390 };
+        let draw: ((t: number) => void) | undefined;
+        const resizers: (() => void)[] = [];
+        const stage = {
+            ctx: ctx as unknown as CanvasRenderingContext2D,
+            colors: { line: '#000', cold: '#000', signal: '#000' },
+            get width() {
+                return size.width;
+            },
+            get height() {
+                return size.height;
+            },
+            pointer: () => null,
+            wander: () => ({ x: 0, y: 0 }),
+            onClick: () => {},
+            onResize: (fn: () => void) => resizers.push(fn),
+            dispose: () => {},
+            loop: (frame: (t: number) => void) => {
+                draw = frame;
+                frame(0);
+            },
+            reduced: true
+        } satisfies Stage;
+        valueIteration(stage);
+        Object.assign(size, { width: 390, height: 844 }); // a phone turned upright
+        resizers.forEach((fn) => fn());
+        RecordingPath.arrows = [];
+        draw!(0);
+        expect(RecordingPath.arrows.length).toBeGreaterThan(100);
+    });
+
+    it('a click toggles a wall (never on the reward) and the arrows re-plan around it', () => {
+        RecordingPath.arrows = [];
+        vi.stubGlobal('Path2D', RecordingPath);
+        let walls = 0;
+        const ctx = {
+            clearRect() {},
+            fillRect: () => walls++,
+            beginPath() {},
+            stroke() {},
+            arc() {},
+            fill() {}
+        };
+        let click: ((p: { x: number; y: number }) => void) | undefined;
+        let draw: ((t: number) => void) | undefined;
+        const stage = {
+            ctx: ctx as unknown as CanvasRenderingContext2D,
+            colors: { line: '#000', cold: '#000', signal: '#000' },
+            width: 600,
+            height: 400,
+            pointer: () => null,
+            wander: () => ({ x: 0, y: 0 }),
+            onClick: (fn: (p: { x: number; y: number }) => void) => (click = fn),
+            onResize: () => {},
+            dispose: () => {},
+            loop: (frame: (t: number) => void) => {
+                draw = frame;
+                frame(0);
+            },
+            reduced: true
+        } satisfies Stage;
+        valueIteration(stage);
+        const drawnWalls = () => {
+            walls = 0;
+            draw!(0);
+            return walls;
+        };
+        const before = drawnWalls();
+        click!({ x: 100, y: 300 }); // a free spot far from the reward: one wall more (or one less, if it was one)
+        const after = drawnWalls();
+        expect(Math.abs(after - before)).toBe(1);
+        click!({ x: 100, y: 300 }); // the same spot again puts it back
+        expect(drawnWalls()).toBe(before);
+        click!({ x: 600 * 0.7, y: 400 * 0.35 }); // on the reward: nothing happens
+        expect(drawnWalls()).toBe(before);
+    });
 });

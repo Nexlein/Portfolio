@@ -27,6 +27,7 @@
     font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 1;
+    overflow-wrap: anywhere; /* a long compound name breaks instead of pushing the page sideways */
 }
 
 .project-desc {
@@ -69,6 +70,10 @@
     inset: 0;
     opacity: 0;
     transition: opacity 500ms ease;
+}
+
+.gallery img[hidden] {
+    display: none; /* not fetched yet (lazy) until it is shown or next to the one shown: see gallery.ts */
 }
 
 .gallery img.active {

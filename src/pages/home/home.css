@@ -143,6 +143,10 @@
     min-width: 0;
 }
 
+.list-txt strong {
+    overflow-wrap: anywhere;
+}
+
 .list-txt span {
     overflow: hidden;
     color: var(--muted);
@@ -346,7 +350,7 @@
 /* ── Hire ── */
 .tiles {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 20px;
     margin-top: 56px;
 }

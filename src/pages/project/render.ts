@@ -33,7 +33,7 @@ export function mediaHtml(media: ProjectMedia, lang: Lang): string {
             const images = media.images
                 .map(
                     (img, i) =>
-                        `<img src="${img.src}" alt="${img.alt}" data-idx="${i}"${i ? ' loading="lazy"' : ' class="active"'} />`
+                        `<img src="${img.src}" alt="${img.alt}" data-idx="${i}"${i ? ' loading="lazy" hidden aria-hidden="true"' : ' class="active"'} />`
                 )
                 .join('');
             const dots = media.images

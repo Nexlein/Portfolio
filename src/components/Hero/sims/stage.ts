@@ -38,12 +38,15 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         colors.signal = s.getPropertyValue('--signal').trim();
     };
     const resizers: (() => void)[] = [];
+    // With reduced motion nothing animates: the single frame is drawn again whenever the canvas is cleared or recoloured
+    let redraw: (() => void) | undefined;
     const size = () => {
         const dpr = Math.min(1.5, devicePixelRatio || 1); // abstract art: no need for full Retina pixels
         canvas.width = canvas.clientWidth * dpr;
         canvas.height = canvas.clientHeight * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         resizers.forEach((fn) => fn());
+        redraw?.();
     };
     let pointer: Point | null = null;
     const local = (e: PointerEvent | MouseEvent): Point => {
@@ -55,7 +58,14 @@ export function stage(canvas: HTMLCanvasElement): Stage {
     const { signal } = life;
     host.addEventListener('pointermove', (e) => (pointer = local(e)), { signal });
     host.addEventListener('pointerleave', () => (pointer = null), { signal });
-    window.addEventListener('themechange', read, { signal });
+    window.addEventListener(
+        'themechange',
+        () => {
+            read();
+            redraw?.();
+        },
+        { signal }
+    );
     window.addEventListener('resize', size, { signal });
     let seen = true;
     const visibility = new IntersectionObserver(([e]) => (seen = e.isIntersecting));
@@ -91,7 +101,10 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         onResize: (fn) => resizers.push(fn),
         dispose: () => life.abort(),
         loop: (frame) => {
-            if (reduced) return frame(performance.now());
+            if (reduced) {
+                redraw = () => frame(performance.now());
+                return redraw();
+            }
             const tick = (t: number) => {
                 if (!canvas.isConnected) return; // another simulation took its place
                 if (seen) frame(t);
