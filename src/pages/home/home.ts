@@ -73,8 +73,22 @@ function initWork(): void {
     moreBtn.addEventListener('click', () => {
         const left = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain).length - shown;
         if (left > 0) {
+            list.getAnimations().forEach((a) => a.cancel()); // a running one would pin the height being measured
+            const from = list.offsetHeight;
             shown += LIST_PAGE;
             renderList(true);
+            // The block grows with its rows instead of jumping (the page below follows smoothly)
+            if (!reducedMotion())
+                list.animate(
+                    [
+                        { height: `${from}px`, overflow: 'clip' },
+                        { height: `${list.offsetHeight}px`, overflow: 'clip' }
+                    ],
+                    {
+                        duration: 420,
+                        easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
+                    }
+                );
         } else {
             shown = LIST_PAGE;
             renderList();
