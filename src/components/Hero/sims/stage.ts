@@ -24,7 +24,7 @@ export interface Stage {
     onResize: (fn: () => void) => void;
     /** Remove every listener and observer this stage added (the canvas is being swapped out). */
     dispose: () => void;
-    /** Run `frame` every animation frame while visible; once only with reduced motion. */
+    /** Run `frame` every animation frame while on screen and the tab is shown; once only with reduced motion. */
     loop: (frame: (t: number) => void) => void;
     reduced: boolean;
 }
@@ -80,9 +80,14 @@ export function stage(canvas: HTMLCanvasElement): Stage {
     );
     signal.addEventListener('abort', () => clearTimeout(resizeTimer));
     let seen = true;
-    const visibility = new IntersectionObserver(([e]) => (seen = e.isIntersecting));
+    let wake: (() => void) | undefined; // restarts the frame loop once it has stopped (set by `loop`)
+    const visibility = new IntersectionObserver(([e]) => {
+        seen = e.isIntersecting;
+        wake?.();
+    });
     visibility.observe(canvas);
     signal.addEventListener('abort', () => visibility.disconnect());
+    document.addEventListener('visibilitychange', () => wake?.(), { signal });
     read();
     size();
     const reduced = prefersReducedMotion();
@@ -117,12 +122,19 @@ export function stage(canvas: HTMLCanvasElement): Stage {
                 redraw = () => frame(performance.now());
                 return redraw();
             }
+            let running = false; // a frame is queued
             const tick = (t: number) => {
-                if (!canvas.isConnected) return; // another simulation took its place
-                if (seen) frame(t);
+                // Scrolled away, tab hidden or replaced by another simulation: stop asking for frames until `wake`
+                if (!canvas.isConnected || !seen || document.hidden) return void (running = false);
+                frame(t);
                 requestAnimationFrame(tick);
             };
-            requestAnimationFrame(tick);
+            wake = () => {
+                if (running) return;
+                running = true;
+                requestAnimationFrame(tick);
+            };
+            wake();
         },
         reduced
     };
