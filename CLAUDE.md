@@ -1,6 +1,6 @@
 # Portfolio
 
-Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.vercel.app. Vanilla TypeScript + Vite 8, no framework, Vercel. EN + FR. Node 22 (`.nvmrc`).
+Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.vercel.app. Vanilla TypeScript + Vite 8, no framework, Vercel. EN + FR. Node 24 (`.nvmrc`).
 
 ## Start here (save tokens)
 

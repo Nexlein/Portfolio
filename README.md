@@ -20,7 +20,7 @@ Unknown addresses get `404.html` (Vercel serves it with status 404 at the addres
 
 ## Getting started
 
-Requires Node 22 (see `.nvmrc`).
+Requires Node 24 (see `.nvmrc`).
 
 ```bash
 npm ci
