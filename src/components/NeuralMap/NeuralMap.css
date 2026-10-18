@@ -331,6 +331,11 @@
     order: 2;
 }
 
+/* The details sit at the top then: give the image the same margin as the card's other edges */
+.nm-card.open[data-dir='up'] .nm-inner {
+    padding-top: 12px;
+}
+
 .nm-card.open .nm-more {
     grid-template-rows: 1fr;
 }
