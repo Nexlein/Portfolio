@@ -17,6 +17,9 @@ securityHeaders['Content-Security-Policy'] = securityHeaders['Content-Security-P
     '; upgrade-insecure-requests',
     ''
 );
+// Playwright's WebKit stalls on the process swap a COOP page triggers: the navigation is answered but never commits, or
+// the page URL reads "" after a redirect. Its e2e server runs without COOP (playwright.config.ts); the other engines keep it
+if (process.env.PREVIEW_WITHOUT_COOP) delete securityHeaders['Cross-Origin-Opener-Policy'];
 
 export default defineConfig({
     plugins: [sharedHead(), sitePages()],

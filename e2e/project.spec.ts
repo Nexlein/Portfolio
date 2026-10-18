@@ -5,13 +5,17 @@ const video = PROJECTS.find((p) => p.media.type === 'video' && p.github)!;
 const gallery = PROJECTS.find((p) => p.media.type === 'gallery')!;
 
 test.describe('project page', () => {
-    test('renders the project, plays its video and links to GitHub', async ({ page }) => {
-        await page.goto(`/projects/${video.id}.html`);
-        await expect(page).toHaveTitle(`${video.title} — Nexlein`);
-        await expect(page.locator('h1')).toHaveText(video.title);
-        await expect(page.locator('#project-desc')).toHaveText(video.description.en);
-        await expect(page.locator('#project-github')).toHaveAttribute('href', video.github);
-        await expect(page.locator('#project-media video')).toHaveJSProperty('paused', false);
+    test.describe(() => {
+        test.use({ playVideos: true }); // WebKit plays no video otherwise (playwright.config.ts)
+
+        test('renders the project, plays its video and links to GitHub', async ({ page }) => {
+            await page.goto(`/projects/${video.id}.html`);
+            await expect(page).toHaveTitle(`${video.title} — Nexlein`);
+            await expect(page.locator('h1')).toHaveText(video.title);
+            await expect(page.locator('#project-desc')).toHaveText(video.description.en);
+            await expect(page.locator('#project-github')).toHaveAttribute('href', video.github);
+            await expect(page.locator('#project-media video')).toHaveJSProperty('paused', false);
+        });
     });
 
     test('the gallery fetches only the pictures it shows or is next to, and a screen reader reads one', async ({

@@ -14,8 +14,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
 
 ## e2e
-- **fixtures.ts** (27) — `page` that fails the test on any console error, uncaught exception or CSP violation, so every scenario also checks that nothing broke si...
-  - exports: test
+- **fixtures.ts** (35) — `page` that fails the test on any console error, uncaught exception or CSP violation, so every scenario also checks that nothing broke si...
+  - exports: VideoOptions, test
 - tests: home.spec.ts, not-found.spec.ts, pages.spec.ts, project.spec.ts
 
 ## scripts
