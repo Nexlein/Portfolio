@@ -1,5 +1,7 @@
 import { test as base, expect } from '@playwright/test';
 
+export type VideoOptions = { playVideos: boolean };
+
 /**
  * `page` that fails the test on any console error, uncaught exception or CSP violation,
  * so every scenario also checks that nothing broke silently.
@@ -8,9 +10,15 @@ import { test as base, expect } from '@playwright/test';
 const abortedByNavigation = (text: string) =>
     text.includes('downloadable font: download failed') && text.includes('status=2152398850');
 
-export const test = base.extend<{ consoleErrors: string[] }>({
+export const test = base.extend<VideoOptions & { consoleErrors: string[] }>({
+    // false: video.play() resolves without playing, so videos keep their poster and download nothing
+    playVideos: [true, { option: true }],
     consoleErrors: [
-        async ({ page }, use) => {
+        async ({ page, playVideos }, use) => {
+            if (!playVideos)
+                await page.addInitScript(() => {
+                    HTMLMediaElement.prototype.play = () => Promise.resolve();
+                });
             const errors: string[] = [];
             page.on('console', (msg) => {
                 if (msg.type() === 'error' && !abortedByNavigation(msg.text())) errors.push(msg.text());
