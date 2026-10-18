@@ -146,6 +146,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Python', 'Machine Learning', 'Data Science', 'scikit-learn', 'NLP'],
         category: 'ai',
         date: '2026-02',
+        team: {
+            size: 2,
+            role: {
+                en: 'Models (KNN, Random Forest, PCA, SVM) and how their results are shown, the data preparation (cleaning, filtering, normalization), and the whole unsupervised part with its NLP.',
+                fr: "Des modèles (KNN, Random Forest, PCA, SVM) et l'affichage de leurs résultats, la préparation des données (nettoyage, filtrage, normalisation), et toute la partie non supervisée avec son NLP."
+            }
+        },
         github: 'https://github.com/Nexlein/Cvrie',
         media: {
             type: 'image',
@@ -218,6 +225,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['N8N', 'Python', 'Mistral AI', 'Supabase', 'Docker'],
         category: 'ai',
         date: '2026-05',
+        team: {
+            size: 2,
+            role: {
+                en: 'The scripts that start n8n locally with our credentials, the Supabase setup, and some of the workflow tools.',
+                fr: 'Les scripts qui lancent n8n en local avec nos identifiants, la mise en place de Supabase, et une partie des outils du workflow.'
+            }
+        },
         github: 'https://github.com/Nexlein/Persona',
         media: {
             type: 'image',
@@ -239,6 +253,13 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'ai',
         date: '2026-03',
         featured: true,
+        team: {
+            size: 2,
+            role: {
+                en: 'Both of us wrote the attack prompt, the defense prompt and the tests together.',
+                fr: "Nous avons écrit à deux le prompt d'attaque, le prompt de défense et les tests."
+            }
+        },
         github: 'https://github.com/Nexlein/Codename',
         media: {
             type: 'image',
@@ -286,6 +307,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Ansible', 'IaC', 'PostgreSQL', 'Redis', 'Linux'],
         category: 'devops',
         date: '2026-05',
+        team: {
+            size: 2,
+            role: {
+                en: 'The base, Redis and PostgreSQL roles, the poll, worker and service roles, and the firewall.',
+                fr: 'Les rôles base, Redis et PostgreSQL, les rôles poll, worker et service, et le pare-feu.'
+            }
+        },
         github: 'https://github.com/Nexlein/Octopus',
         media: {
             type: 'image',
@@ -306,6 +334,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C++', 'OOP', 'Simulation', 'Algorithms'],
         category: 'architecture',
         date: '2026-02',
+        team: {
+            size: 2,
+            role: {
+                en: 'The 4094 and 4512 chips, and many smaller pieces around the simulator.',
+                fr: 'Les puces 4094 et 4512, et beaucoup de petites pièces autour du simulateur.'
+            }
+        },
         github: 'https://github.com/Nexlein/NanoTekSpice',
         media: {
             type: 'image',
@@ -327,6 +362,13 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'graphical',
         year: 'Tek1',
         date: '2025-03',
+        team: {
+            size: 1,
+            role: {
+                en: 'Everything.',
+                fr: 'Tout.'
+            }
+        },
         github: 'https://github.com/Nexlein/Myradar',
         media: {
             type: 'video',
@@ -344,6 +386,13 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'ai',
         year: 'Tek1',
         date: '2025-06',
+        team: {
+            size: 3,
+            role: {
+                en: 'The prediction model, written from scratch, and the database cleaning.',
+                fr: 'Le modèle de prédiction, écrit de zéro, et le nettoyage de la base de données.'
+            }
+        },
         github: 'https://github.com/Nexlein/Tardis',
         media: {
             type: 'image',
@@ -365,6 +414,13 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'systems',
         year: 'Tek1',
         date: '2025-03',
+        team: {
+            size: 1,
+            role: {
+                en: 'Everything.',
+                fr: 'Tout.'
+            }
+        },
         github: 'https://github.com/Nexlein/Mytop',
         media: {
             type: 'video',
@@ -382,6 +438,13 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'systems',
         year: 'Tek1',
         date: '2025-03',
+        team: {
+            size: 2,
+            role: {
+                en: 'Insertion and deletion, error handling, the memory-leak fixes, and the unit tests.',
+                fr: "L'insertion et la suppression, la gestion des erreurs, la correction des fuites mémoire, et les tests unitaires."
+            }
+        },
         github: 'https://github.com/Nexlein/Secured',
         media: {
             type: 'image',
