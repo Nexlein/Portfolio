@@ -62,7 +62,7 @@
             ]
         },
         {
-            "source": "/projects/(.*)",
+            "source": "/projects/:id/(.*)",
             "headers": [
                 {
                     "key": "Cache-Control",

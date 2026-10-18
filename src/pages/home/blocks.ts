@@ -66,7 +66,7 @@ export function projectList(lang: Lang): string {
 export function mapMore(lang: Lang): string {
     const { shown } = pickShown(PROJECTS, MAP_MAX);
     if (shown.length === PROJECTS.length) return '';
-    return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all" aria-expanded="false">${t(lang, 'work.seeAll')}</button>`;
+    return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all">${t(lang, 'work.seeAll')}</button>`;
 }
 
 /**

@@ -163,7 +163,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
       <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta${change.up ? '' : ' flat'}" aria-live="polite">${change.text}<span class="sr-only"> ${change.over}</span></span></p></div>
     <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}">${RANGES.map((r) => `<button type="button" data-range="${r.id}"${r === first ? ' aria-pressed="true"' : ''}>${r.label}</button>`).join('')}</div>
   </div>
-  <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" role="status" hidden></div></div>
+  <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" aria-hidden="true" hidden></div></div>
 </div>`;
 }
 
@@ -353,7 +353,7 @@ export function numbers(lang: Lang, projects: ProjectEntry[], now: number): stri
     return `<div class="numbers" id="numbers">
 <div class="numbers-head"><p class="numbers-sub">${t(lang, 'numbers.sub')}</p></div>
 <div class="numbers-body"><div class="numbers-nav" hidden><button type="button" class="numbers-prev" aria-label="${t(lang, 'numbers.prev')}">‹</button><button type="button" class="numbers-next" aria-label="${t(lang, 'numbers.next')}">›</button></div>
-<div class="numbers-index" aria-label="${t(lang, 'numbers.sub')}"></div>
+<div class="numbers-index" role="group" aria-label="${t(lang, 'numbers.sub')}"></div>
 <div class="numbers-stage"><div class="numbers-row">
 ${cards}
 </div></div></div>

@@ -283,7 +283,9 @@ export function initNumbers(): void {
             front.classList.add('in');
             front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
         }
-        items.forEach((b, i) => b.toggleAttribute('aria-current', i === cur));
+        items.forEach((b, i) =>
+            i === cur ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')
+        );
         arm(true);
     }
     nav.querySelector('.numbers-prev')!.addEventListener('click', () => show(cur - 1, true));

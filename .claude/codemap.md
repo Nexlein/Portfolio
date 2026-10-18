@@ -28,7 +28,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Charts
 - **Charts.css** (824) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (313) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
+- **Charts.ts** (315) — Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's arrows, and count-ups when they c...
   - exports: initPathChart, initPathStory, initNumbers, initReveals
   - → core/i18n, ui/motion, data/projects, components/Charts/data, components/Charts/render
   - ← pages/home/home, pages/project/project
@@ -88,7 +88,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Nav
 - **Nav.css** (231) — Thin frosted bar: name on the left, sections, language, theme and CV on the right.
   - ← 404.html, cv.html, index.html, project.html
-- **Nav.ts** (138) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
+- **Nav.ts** (141) — Behaviour of the build-time nav: a pill that slides to the hovered link and rests on the section in view, the theme menu, and remembering...
   - exports: initNav
   - → components/Nav/themes
   - ← pages/cv/cv, pages/home/home, pages/notfound/notfound, pages/project/project

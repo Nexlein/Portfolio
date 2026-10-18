@@ -323,7 +323,7 @@ test.describe('charts', () => {
         const third = page.locator('.numbers-index button').nth(3);
         if (await third.isVisible()) {
             await third.click(); // the index is desktop only
-            await expect(third).toHaveAttribute('aria-current', '');
+            await expect(third).toHaveAttribute('aria-current', 'true');
         }
         await expect(page.locator('.chart-card[data-pos="0"]')).toHaveCount(1);
         expect(await stage.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
@@ -465,7 +465,7 @@ test.describe('charts', () => {
         await entries.nth(4).click();
         await page.waitForTimeout(700);
         await expect(deck).not.toHaveClass(/playing/);
-        await expect(entries.nth(4)).toHaveAttribute('aria-current', '');
+        await expect(entries.nth(4)).toHaveAttribute('aria-current', 'true');
         await page.locator('.numbers-sub').hover();
         await expect(deck).toHaveClass(/playing/);
     });
