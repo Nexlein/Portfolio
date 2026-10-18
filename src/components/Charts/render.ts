@@ -1,7 +1,8 @@
 /**
  * Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
  * No inline styles anywhere (the CSP forbids them): colours come from classes, sizes from attributes.
- * Relative imports only: rendered from Node by vite-plugins/pages.ts, and again in the browser for interactions.
+ * Relative imports only: rendered from Node by vite-plugins/pages.ts. The browser never loads this file: what its
+ * interactions need is rendered ahead (every range of the path chart) or embedded as JSON (PathData).
  */
 import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
@@ -20,6 +21,7 @@ import {
     prettySkill,
     RANGES,
     changeSince,
+    EPITECH_START,
     rangeStart,
     skillSeries,
     timeTicks,
@@ -31,6 +33,7 @@ import {
     type Point,
     type Range
 } from './data.ts';
+import { monthLabel, PATH, pathSamples, type PathData } from './series.ts';
 
 const f1 = (n: number) => n.toFixed(1);
 const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
@@ -38,8 +41,7 @@ const MONTHS: Record<Lang, string[]> = {
     en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     fr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
 };
-export const monthName = (time: number, lang: Lang) =>
-    `${MONTHS[lang][Math.min(11, Math.round((time % 1) * 12))]} ${Math.floor(time + 1e-6)}`;
+export const monthName = (time: number, lang: Lang) => monthLabel(time, MONTHS[lang]);
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
@@ -66,32 +68,6 @@ export function changeText(
               : t(lang, 'path.over').replace('{n}', String(range.months));
     const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${pct} %)`}`;
     return { text, over, up: delta > 0 };
-}
-
-export const PATH = { W: 1080, H: 360, L: 44, R: 60, T: 84, B: 30 };
-const smooth = (u: number) => u * u * (3 - 2 * u);
-
-/** Sampled smooth steps between milestones: the line, the hover dot and the tooltip all use these. */
-export function pathSamples(
-    points: Point[],
-    t0: number,
-    now: number,
-    domain: { lo: number; hi: number }
-): [number, number][] {
-    const { W, H, L, R, T, B } = PATH;
-    const x = (time: number) => L + ((time - t0) / (now - t0)) * (W - L - R);
-    const y = (v: number) => H - B - ((v - domain.lo) / (domain.hi - domain.lo || 1)) * (H - T - B);
-    const vis = [{ t: t0, v: valueAt(points, t0) }, ...points.filter((p) => p.t > t0)];
-    const out: [number, number][] = [];
-    vis.forEach((p, i) => {
-        if (i === 0) return void out.push([x(p.t), y(p.v)]);
-        const a = vis[i - 1];
-        for (let k = 1; k <= 14; k++) {
-            const u = k / 14;
-            out.push([x(a.t + (p.t - a.t) * u), y(a.v + (p.v - a.v) * smooth(u))]);
-        }
-    });
-    return out;
 }
 
 /** The plot itself, for a range starting at t0. */
@@ -152,18 +128,50 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
 <g class="marks">${marks}</g></svg>`;
 }
 
+/** What a step is, in words: a checkpoint's name, "<project> started", or nothing (the start and end points). */
+function whatOf(lang: Lang, p: Point): string {
+    if (p.m?.checkpoint) return p.m.checkpoint.label[lang];
+    return p.m?.project ? t(lang, 'path.shipped').replace('{p}', p.m.project.title) : '';
+}
+
+/**
+ * The path chart. The full range is drawn in the page; the other ranges wait in <template>s (rendered here too, so
+ * switching is a swap, not a redraw), and the series the crosshair reads is embedded as JSON (PathData).
+ */
 export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): string {
     const points = skillSeries(projects, now);
     const total = points[points.length - 1].v;
     const first = RANGES[RANGES.length - 1]; // opens on everything, like a price chart's Max
-    const change = changeText(lang, first, points, rangeStart(first, points, now));
-    return `<div class="path-chart surface reveal" data-now="${now}">
+    const ranges = RANGES.map((r) => {
+        const t0 = rangeStart(r, points, now);
+        return { r, t0, change: changeText(lang, r, points, t0) };
+    });
+    const change = ranges[ranges.length - 1].change;
+    const data: PathData = {
+        now,
+        epitech: EPITECH_START,
+        months: MONTHS[lang],
+        before: t(lang, 'path.beforeEpitech'),
+        skills: t(lang, 'path.skills'),
+        points: points.map((p) => ({ t: p.t, v: p.v, what: whatOf(lang, p) })),
+        ranges: Object.fromEntries(
+            ranges.map(({ r, t0, change: c }) => [r.id, { t0, text: c.text, over: c.over, up: c.up }])
+        )
+    };
+    // A data block, never executed (the CSP's script-src does not apply). Escape '<' so text can't close the tag.
+    const json = JSON.stringify(data).replace(/</g, '\\u003c');
+    const later = ranges
+        .filter(({ r }) => r !== first)
+        .map(({ r, t0 }) => `<template data-range="${r.id}">${pathSvg(lang, points, t0, now)}</template>`)
+        .join('');
+    return `<div class="path-chart surface reveal">
   <div class="path-ticker">
     <div><p class="path-symbol">${t(lang, 'path.symbol')}</p>
       <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta${change.up ? '' : ' flat'}" aria-live="polite">${change.text}<span class="sr-only"> ${change.over}</span></span></p></div>
-    <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}">${RANGES.map((r) => `<button type="button" data-range="${r.id}"${r === first ? ' aria-pressed="true"' : ''}>${r.label}</button>`).join('')}</div>
+    <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}">${RANGES.map((r) => `<button type="button" data-range="${r.id}"${r === first ? ' aria-pressed="true"' : ''}>${t(lang, `path.ranges.${r.id}`)}</button>`).join('')}</div>
   </div>
   <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" aria-hidden="true" hidden></div></div>
+  ${later}<script type="application/json" class="path-data">${json}</script>
 </div>`;
 }
 

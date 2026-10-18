@@ -311,6 +311,13 @@ test.describe('charts', () => {
             const box = (await hit.boundingBox())!;
             await hit.hover({ position: { x: box.width * 0.6, y: box.height / 2 }, force: true });
             await expect(chart.locator('.path-tip')).toBeVisible();
+            // Back and forth: each range keeps its plot, and the one that comes back still answers the pointer
+            await chart.locator('.path-range button[data-range="max"]').click();
+            await chart.locator('.path-range button[data-range="1y"]').click();
+            await expect(chart.locator('.path-tip')).toBeHidden();
+            await expect(chart.locator('.path-svg')).toHaveCount(1);
+            await chart.locator('.hit').hover({ position: { x: box.width * 0.3, y: box.height / 2 }, force: true });
+            await expect(chart.locator('.path-tip')).toBeVisible();
         }
     });
 
@@ -571,6 +578,24 @@ test.describe('theme', () => {
 });
 
 test.describe('language', () => {
+    test("scripts carry no dictionary: the page's own strings are embedded in it, in its language", async ({
+        page
+    }) => {
+        const scripts: Promise<string>[] = [];
+        page.on('response', (r) => r.request().resourceType() === 'script' && scripts.push(r.text()));
+        await page.goto('/fr/');
+        await page.locator('#work').scrollIntoViewIfNeeded(); // the map's code too, on wide screens
+        await page.waitForLoadState('networkidle');
+        const code = (await Promise.all(scripts)).join('\n');
+        expect(code).not.toContain(en.home.hero.title2b);
+        expect(code).not.toContain(fr.home.hero.title2b);
+        await page.locator('.copy-email').click();
+        await expect(page.locator('.toast')).toHaveText(new RegExp(`${fr.home.hire.copied}|@`));
+        await page.locator('.path-range [data-range="1y"]').click();
+        await expect(page.locator('.path-range [data-range="1y"]')).toHaveText(fr.home.path.ranges['1y']);
+        await expect(page.locator('.path-delta')).toContainText(fr.home.path.over.replace('{n}', '12'));
+    });
+
     test('the switch opens the same page in the other language and remembers it', async ({ page }) => {
         await page.goto('/');
         await expect(page.locator('html')).toHaveAttribute('lang', 'en');

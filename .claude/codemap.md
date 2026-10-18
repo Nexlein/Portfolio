@@ -28,18 +28,21 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/Charts
 - **Charts.css** (824) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (288) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
+- **Charts.ts** (292) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
   - exports: initPathChart, initPathStory, initNumbers
-  - → core/i18n, ui/motion, ui/reveal, data/projects, components/Charts/data, components/Charts/render
+  - → ui/motion, ui/reveal, components/Charts/series
   - ← pages/home/home
-- **data.ts** (264) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
-  - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yDomain, yTicks, valueAt, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
-  - → data/profile, data/projects, components/NeuralMap/graph
-  - ← components/Charts/Charts, components/Charts/render, pages/home/blocks, pages/project/render
-- **render.ts** (362) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
-  - exports: monthName, phaseLabel, changeText, PATH, pathSamples, pathSvg, pathChart, numbers
-  - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data
-  - ← components/Charts/Charts, pages/home/blocks, pages/project/render
+- **data.ts** (254) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
+  - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
+  - → data/profile, data/projects, components/NeuralMap/graph, components/Charts/series
+  - ← components/Charts/render, pages/home/blocks, pages/project/render
+- **render.ts** (370) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+  - exports: monthName, phaseLabel, changeText, pathSvg, pathChart, numbers
+  - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data, components/Charts/series
+  - ← pages/home/blocks, pages/project/render
+- **series.ts** (73) — The path chart's geometry and the few rules the browser needs for its crosshair: pure functions of a series of steps, with no data imported.
+  - exports: Step, valueAt, yDomain, schoolYear, monthLabel, PATH, pathSamples, PathData
+  - ← components/Charts/Charts, components/Charts/data, components/Charts/render
 - tests: data.test.ts
 
 ## src/components/Footer
@@ -106,22 +109,28 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← index.html
 - **NeuralMap.ts** (779) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
-  - → core/i18n, core/translate, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
+  - → core/i18n, core/lang, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
   - ← pages/home/home
-- **graph.ts** (178) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
-  - exports: Period, periodOf, ORBIT, CARD, skillSet, similarity, neighbours, mds, Star, layout, fitFor, MAP_MAX, pickShown
+- **graph.ts** (175) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
+  - exports: Period, periodOf, ORBIT, CARD, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
   - → data/projects
-  - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/home/home, pages/project/render
+  - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
+- **limits.ts** (3) — Most projects the map shows at once (the rest rotate in).
+  - exports: MAP_MAX
+  - ← pages/home/blocks, pages/home/home
 - tests: graph.test.ts
 
 ## src/core
 - **analytics.ts** (19) — Vercel Web Analytics: cookie-free page views, enabled in the Vercel dashboard (Project → Analytics).
   - exports: ANALYTICS_SCRIPT, initAnalytics
   - ← pages/cv/cv, pages/home/home, pages/notfound/notfound, pages/project/project
-- **i18n.ts** (24) — Each page is built once per language (vite-plugins/pages.ts) and its <html lang> says which one.
+- **i18n.ts** (38) — The strings embedded in the page, or nothing (a page that needs none, a test).
   - exports: i18n
-  - → core/translate
-  - ← components/Charts/Charts, components/Hero/Hero, components/NeuralMap/NeuralMap, pages/home/home
+  - → core/lang
+  - ← components/Hero/Hero, components/NeuralMap/NeuralMap, pages/home/home
+- **lang.ts** (37) — Languages and localized paths: pure, with no dictionary attached, so browser code can use them without downloading every translation (the...
+  - exports: Lang, LANGS, Text, DEFAULT_LANG, langOfPath, localizedPath, STRINGS_ID, lookupIn
+  - ← components/NeuralMap/NeuralMap, core/i18n, core/translate, vite-plugins/pages
 - **site.ts** (13) — Facts about the site and its owner, shared by the build (SEO, sitemap, structured data) and tests.
   - exports: SITE, OWNER
   - ← components/Footer/render, core/structured-data, pages/cv/blocks, pages/home/blocks, vite-plugins/pages
@@ -132,10 +141,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **text.ts** (8) — First sentence of a text, without HTML tags, ending in one full stop ("A.
   - exports: firstSentence
   - ← components/NeuralMap/NeuralMap, pages/home/blocks
-- **translate.ts** (47) — Pure translation helpers, shared by the browser (src/core/i18n.ts) and the build (vite-plugins/pages.ts, which pre-renders every page in ...
-  - exports: Lang, LANGS, Text, DEFAULT_LANG, lookup, translateTree, langOfPath, localizedPath
-  - → i18n/en, i18n/fr
-  - ← components/Charts/render, components/Footer/render, components/Nav/render, components/NeuralMap/NeuralMap, core/i18n, core/structured-data, data/profile, data/projects, pages/content/render, pages/cv/blocks, pages/home/blocks, pages/home/home, pages/project/render, vite-plugins/pages
+- **translate.ts** (34) — Translation helpers for the build (vite-plugins/pages.ts, which pre-renders every page in every language) and for tests.
+  - exports: lookup, clientStrings, translateTree
+  - → i18n/en, i18n/fr, core/lang
+  - ← components/Charts/render, components/Footer/render, components/Nav/render, core/structured-data, data/profile, data/projects, pages/content/render, pages/cv/blocks, pages/home/blocks, pages/project/render, vite-plugins/pages
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, translate.test.ts
 
 ## src/data
@@ -146,14 +155,14 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **projects.ts** (344) — Single source of truth for all portfolio projects.
   - exports: ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
-  - ← components/Charts/Charts, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/home/home, pages/project/render, ui/video, vite-plugins/pages
+  - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/video, vite-plugins/pages
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (229)
+- **en.ts** (230)
   - exports: en
   - ← core/translate
-- **fr.ts** (229)
+- **fr.ts** (230)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -180,14 +189,14 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: head-script.test.ts, headers.test.ts, node-safe.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (140) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+- **blocks.ts** (141) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
   - exports: availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
-  - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, core/text, components/NeuralMap/graph
+  - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, core/text, components/NeuralMap/graph, components/NeuralMap/limits
   - ← pages/content/render
 - **home.css** (657) — Home sections that are not components of their own: selected work, the project list, experience, hire.
   - ← index.html
-- **home.ts** (254) — Home page.
-  - → core/analytics, core/i18n, core/translate, data/projects, ui/glide, ui/motion, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, components/NeuralMap/graph, ui/boot, ui/reveal, components/NeuralMap/NeuralMap
+- **home.ts** (255) — Home page.
+  - → core/analytics, core/i18n, ui/glide, ui/motion, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, components/NeuralMap/limits, ui/boot, ui/reveal, components/NeuralMap/NeuralMap
   - ← index.html
 
 ## src/pages/notfound
@@ -246,8 +255,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **vite-env.d.ts** (10) — / <reference types="vite/client" />
 
 ## vite-plugins
-- **pages.ts** (240) — One page of the site, in every language.
+- **pages.ts** (256) — One page of the site, in every language.
   - exports: PageSpec, PAGES, NOT_FOUND, outputFile, renderPage, sitemap, sitePages
-  - → data/projects, core/site, core/structured-data, core/translate, pages/content/render, pages/project/render
+  - → data/projects, core/site, core/structured-data, core/translate, core/lang, pages/content/render, pages/project/render
 - **shared-head.ts** (76) — Runs in <head> before first paint, on every page: 1.
   - exports: HEAD_SCRIPT, sharedHead

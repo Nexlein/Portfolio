@@ -119,6 +119,7 @@ export const fr = {
             since: 'depuis {d}',
             beforeEpitech: 'Avant Epitech',
             range: 'Période',
+            ranges: { '1m': '1M', '6m': '6M', '1y': '1A', max: 'Max' },
             aria: "Compétences distinctes au fil du temps : {n} aujourd'hui.",
             skills: '{n} compétences',
             shipped: '{p} démarré',

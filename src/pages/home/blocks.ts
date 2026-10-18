@@ -12,7 +12,8 @@ import { still } from '../../ui/video.ts';
 import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
 import { thisMonth, yearOf } from '../../components/Charts/data.ts';
 import { firstSentence } from '../../core/text.ts';
-import { MAP_MAX, pickShown } from '../../components/NeuralMap/graph.ts';
+import { pickShown } from '../../components/NeuralMap/graph.ts';
+import { MAP_MAX } from '../../components/NeuralMap/limits.ts';
 
 const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
 
@@ -54,7 +55,7 @@ export function projectList(lang: Lang): string {
     return PROJECTS.map(
         (
             p
-        ) => `<li><a href="${localizedPath(projectPath(p.id), lang)}" data-domain="${p.category}"><span class="list-ico">${domainIcon(p.category)}</span>
+        ) => `<li><a href="${localizedPath(projectPath(p.id), lang)}" data-id="${p.id}" data-domain="${p.category}"><span class="list-ico">${domainIcon(p.category)}</span>
 <span class="list-txt"><strong>${p.title}</strong><span>${oneLiner(p, lang)}</span></span><span class="list-chev" aria-hidden="true">›</span></a></li>`
     ).join('');
 }

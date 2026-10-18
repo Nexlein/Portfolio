@@ -142,7 +142,11 @@ describe('the charts at any date', () => {
         (now) => {
             for (const lang of ['en', 'fr'] as const) {
                 const html = pathChart(lang, PROJECTS, now) + numbers(lang, PROJECTS, now);
-                expect(html).not.toMatch(/NaN|Infinity|undefined|\{[a-z]+\}/);
+                // The crosshair's data carries its own templates ("{n} skills"): checked on its own
+                const json = /<script type="application\/json" class="path-data">(.*?)<\/script>/s.exec(html)![1];
+                expect(html.replace(json, '')).not.toMatch(/NaN|Infinity|undefined|\{[a-z]+\}/);
+                expect(json).not.toMatch(/null|undefined/); // NaN and Infinity turn into null in JSON
+                expect(Object.keys(JSON.parse(json).ranges)).toEqual(['1m', '6m', '1y', 'max']);
             }
         }
     );
@@ -164,7 +168,7 @@ const range = (id: string) => RANGES.find((r) => r.id === id)!;
 
 describe('the ranges, as on a price chart', () => {
     it('go from a month to everything, each button naming its own range', () => {
-        expect(RANGES.map((r) => r.label)).toEqual(['1M', '6M', '1Y', 'Max']);
+        expect(RANGES.map((r) => r.id)).toEqual(['1m', '6m', '1y', 'max']);
         expect(new Set(RANGES.map((r) => r.id)).size).toBe(RANGES.length);
         expect(RANGES[RANGES.length - 1].months).toBeNull();
     });

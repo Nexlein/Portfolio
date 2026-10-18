@@ -119,6 +119,7 @@ export const en = {
             since: 'since {d}',
             beforeEpitech: 'Before Epitech',
             range: 'Time range',
+            ranges: { '1m': '1M', '6m': '6M', '1y': '1Y', max: 'Max' },
             aria: 'Distinct skills over time: {n} today.',
             skills: '{n} skills',
             shipped: '{p} started',

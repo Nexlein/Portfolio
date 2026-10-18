@@ -162,9 +162,6 @@ export function fitFor(W: number, H: number): { rx: number; ry: number } {
     return { rx: Math.min(W / 2 - 22, ry * 1.75) - 125, ry: ry - 44 };
 }
 
-/** Most projects the map shows at once (the rest rotate in). */
-export const MAP_MAX = 24;
-
 /** Which projects the map shows when it can hold `max`: featured first, then the most recent periods. */
 export function pickShown(projects: ProjectEntry[], max: number): { shown: ProjectEntry[]; hidden: ProjectEntry[] } {
     const ranked = [

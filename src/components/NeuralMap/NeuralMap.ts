@@ -10,7 +10,7 @@
  * The static project list stays the source of truth (no JavaScript, phones); this map is drawn on top of it.
  */
 import { i18n } from '@/core/i18n';
-import { localizedPath } from '@/core/translate';
+import { localizedPath } from '@/core/lang';
 import { firstSentence } from '@/core/text';
 import { NOW } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';

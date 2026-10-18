@@ -6,6 +6,7 @@ import { PROJECTS, projectPath } from '../src/data/projects.ts';
 import { SITE } from '../src/core/site.ts';
 import { cvPerson, profilePage, projectSource } from '../src/core/structured-data.ts';
 import {
+    clientStrings,
     DEFAULT_LANG,
     LANGS,
     langOfPath,
@@ -14,6 +15,7 @@ import {
     translateTree,
     type Lang
 } from '../src/core/translate.ts';
+import { STRINGS_ID } from '../src/core/lang.ts';
 import { renderContent } from '../src/pages/content/render.ts';
 import { fillProjectPage, projectDescription } from '../src/pages/project/render.ts';
 
@@ -32,14 +34,23 @@ export interface PageSpec {
     unlisted?: boolean;
     /** Fill template-specific content before translation (project pages). */
     fill?: (document: Document, lang: Lang) => void;
+    /** The page's scripts write text at runtime: embed their strings (src/core/i18n.ts). */
+    strings?: boolean;
 }
 
 const OG_LOCALE: Record<Lang, string> = { en: 'en_US', fr: 'fr_FR' };
 const DEFAULT_IMAGE = `${SITE}/og-image.png`;
 
-const fixedPage = (path: string, template: string, key: string, jsonLd?: PageSpec['jsonLd']): PageSpec => ({
+const fixedPage = (
+    path: string,
+    template: string,
+    key: string,
+    jsonLd?: PageSpec['jsonLd'],
+    strings = false
+): PageSpec => ({
     path,
     template,
+    strings,
     title: (lang) => lookup(lang, `meta.${key}.title`),
     description: (lang) => lookup(lang, `meta.${key}.description`),
     image: DEFAULT_IMAGE,
@@ -50,7 +61,7 @@ const fixedPage = (path: string, template: string, key: string, jsonLd?: PageSpe
 
 /** Every page of the site. Adding a project to src/data/projects.ts adds its page here. */
 export const PAGES: PageSpec[] = [
-    fixedPage('/', 'index.html', 'home', profilePage),
+    fixedPage('/', 'index.html', 'home', profilePage, true),
     fixedPage('/cv.html', 'cv.html', 'cv', cvPerson),
     ...PROJECTS.map((project): PageSpec => ({
         path: projectPath(project.id),
@@ -149,6 +160,11 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
         // A data block, never executed, so the CSP's script-src does not apply. Escape '<' so text can't close the tag.
         const script = appendHead('script', { type: 'application/ld+json' });
         script.textContent = JSON.stringify(page.jsonLd(lang)).replace(/</g, '\\u003c');
+    }
+
+    if (page.strings) {
+        const script = appendHead('script', { type: 'application/json', id: STRINGS_ID });
+        script.textContent = JSON.stringify(clientStrings(lang)).replace(/</g, '\\u003c');
     }
 
     const out = `<!doctype html>\n${document.documentElement.outerHTML}\n`;

@@ -6,14 +6,12 @@
  */
 import { initAnalytics } from '@/core/analytics';
 import { i18n } from '@/core/i18n';
-import { localizedPath } from '@/core/translate';
-import { PROJECTS, projectPath } from '@/data/projects';
 import { initGlide } from '@/ui/glide';
 import { prefersReducedMotion } from '@/ui/motion';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
 import { initNumbers, initPathChart, initPathStory } from '@/components/Charts/Charts';
-import { MAP_MAX } from '@/components/NeuralMap/graph';
+import { MAP_MAX } from '@/components/NeuralMap/limits';
 import { boot } from '@/ui/boot';
 import { initReveals } from '@/ui/reveal';
 
@@ -230,9 +228,12 @@ function settleHash(): void {
 }
 
 function bootstrap(): void {
-    // Old links (/?project=<id>) opened a modal; projects now have their own page
-    const linked = PROJECTS.find((p) => p.id === new URLSearchParams(location.search).get('project'));
-    if (linked) return location.replace(localizedPath(projectPath(linked.id), i18n.getLang()));
+    // Old links (/?project=<id>) opened a modal; projects now have their own page, which the list links to
+    const id = new URLSearchParams(location.search).get('project');
+    const linked = [...document.querySelectorAll<HTMLAnchorElement>('.project-list a[data-id]')].find(
+        (a) => a.dataset.id === id
+    );
+    if (linked) return location.replace(linked.href);
 
     boot(
         initAnalytics,
