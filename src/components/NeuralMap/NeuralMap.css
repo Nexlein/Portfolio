@@ -176,6 +176,7 @@
 /* ── Cards: a glass pill that unfolds in place ── */
 .nm-card {
     --dx: 0px;
+    --h0: 52px;
     --act: 0;
 
     position: absolute;
@@ -322,13 +323,19 @@
     transform: translate(calc(-50% + var(--dx)), -26px);
 }
 
-/* Near the bottom, unfold upward: the title row stays under the cursor */
+/* Near the bottom, unfold upward: the title row stays under the cursor, and the bottom edge stays where the closed
+   card's was (--h0, its closed height) */
 .nm-card.open[data-dir='up'] {
-    transform: translate(calc(-50% + var(--dx)), calc(26px - 100%));
+    transform: translate(calc(-50% + var(--dx)), calc(var(--h0) - 26px - 100%));
 }
 
 .nm-card.open[data-dir='up'] .nm-head {
     order: 2;
+}
+
+/* The details sit at the top then: give the image the same margin as the card's other edges */
+.nm-card.open[data-dir='up'] .nm-inner {
+    padding-top: 12px;
 }
 
 .nm-card.open .nm-more {
