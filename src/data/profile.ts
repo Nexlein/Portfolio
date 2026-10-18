@@ -139,16 +139,16 @@ export const EDUCATION: Education[] = [
     },
     {
         id: 'google-cloud',
-        title: { en: 'Google Cloud & Generative AI Certifications', fr: 'Certifications Google Cloud & IA Générative' },
+        title: { en: 'Google Cloud: Generative AI Leader', fr: 'Google Cloud : Generative AI Leader' },
         cvTitle: { en: 'Google Cloud', fr: 'Google Cloud' },
         period: { en: '2026', fr: '2026' },
         summary: {
-            en: 'Certified in <strong>Google Cloud Computing Foundations</strong> and <strong>Generative AI Leader</strong>. Solidified expertise in modern cloud infrastructure and AI deployment.',
-            fr: "Certifié <strong>Google Cloud Computing Foundations</strong> et <strong>Generative AI Leader</strong>. Expertise renforcée en infrastructure cloud et déploiement de modèles d'IA."
+            en: 'Certified <strong>Generative AI Leader</strong> by Google Cloud, after completing the <strong>Google Cloud Computing Foundations</strong> learning path on cloud infrastructure.',
+            fr: "Certifié <strong>Generative AI Leader</strong> par Google Cloud, après le parcours <strong>Google Cloud Computing Foundations</strong> sur l'infrastructure cloud."
         },
         cvSummary: {
-            en: 'Cloud Computing Foundations & Generative AI Leader Certifications.',
-            fr: 'Certifications Google Cloud Computing Foundations & Generative AI Leader.'
+            en: 'Generative AI Leader certification; Cloud Computing Foundations path.',
+            fr: 'Certification Generative AI Leader ; parcours Cloud Computing Foundations.'
         }
     },
     {
@@ -355,8 +355,8 @@ export const OFFERS: Offer[] = [
                     fr: 'Min. légal : 4,50 €/h (taux 2026, 650–700 €/mois).'
                 },
                 note: {
-                    en: 'No school fees covered by the company.<br />Seeking competitive compensation.',
-                    fr: "Aucun frais de scolarité à la charge de l'entreprise.<br />Je souhaite une rémunération compétitive."
+                    en: 'Seeking competitive compensation.',
+                    fr: 'Je souhaite une rémunération compétitive.'
                 }
             }
         ]
