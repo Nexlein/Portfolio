@@ -16,7 +16,7 @@ import { NOW } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
-import { still } from '@/ui/video';
+import { stillAttrs } from '@/ui/video';
 import { fitFor, layout, neighbours, ORBIT, periodOf, pickShown, similarity, type Period, type Star } from './graph';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -133,7 +133,7 @@ function cardHtml(p: ProjectEntry): string {
 <span class="nm-head"><span class="nm-ico">${domainIcon(p.category)}</span>
 <span class="nm-txt"><strong>${p.title}</strong><span class="mono">${p.tags.slice(0, 2).join(' · ')}</span></span></span>
 <span class="nm-more"><span class="nm-inner">
-  <span class="nm-media"><img src="${still(p)}" alt="" loading="lazy" /></span>
+  <span class="nm-media"><img ${stillAttrs(p, '164px')} alt="" loading="lazy" /></span>
   <span class="nm-desc">${firstSentence(p.description[lang])}</span>
   <span class="mono nm-skills">${i18n.t(`home.work.periods.${periodOf(p)}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
   <span class="nm-go">${i18n.t('home.work.open')} <span aria-hidden="true">→</span></span>

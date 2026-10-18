@@ -39,6 +39,7 @@ npm run dev
 | `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                             |
 | `npm run lint:fix`      | Lint and autofix                                                 |
 | `npm run media:posters` | Generate missing video posters (ffmpeg)                          |
+| `npm run media:thumbs`  | Generate missing card-sized copies of project images (ffmpeg)    |
 | `npm run media:og`      | Generate missing per-project social images (ffmpeg)              |
 | `npm run media:brand`   | Redraw the home social image and the icons (Chromium, no ffmpeg) |
 | `npm run media:video`   | Re-encode a video for the web (ffmpeg)                           |
@@ -77,7 +78,7 @@ Conventions:
 
 1. Put the media in `public/projects/<id>/` (see Media).
 2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), and `featured: true` for the three on the home page.
-3. Run `npm run media:og` for its social image.
+3. Run `npm run media:og` for its social image, and `npm run media:thumbs` if its still is an image.
 
 The map, the list, the charts, the counts, its page, the sitemap and the structured data follow.
 
@@ -138,6 +139,7 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 - **Images**: WebP, at most 1200px on the long side (`ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_ratio=decrease" -quality 80 out.webp`).
 - **Videos**: H.264 MP4 without audio, at most 960px wide, `faststart`. Run `npm run media:video -- public/projects/<id>/<name>.mp4` to re-encode in place.
 - **Posters**: every video needs `<name>.poster.webp`. Run `npm run media:posters` to generate missing ones.
+- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist).
 
 Videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion` they never autoplay: they keep their poster and show controls.
 

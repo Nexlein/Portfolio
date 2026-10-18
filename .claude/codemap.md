@@ -24,6 +24,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **codemap.ts** (114) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
 - **cv-pdf.ts** (59) — Render the CV page to PDF in every language, from the production build (run `vite build` first).
   - exports: PDFS
+- **make-thumbs.ts** (37) — Card-sized copies of every project still that is an image: public/projects/<id>/<name>.webp -> <name>.320.webp and <name>.640.webp.
+  - → data/projects, ui/video
 
 ## src/components/Charts
 - **Charts.css** (824) — Path chart and the numbers deck.
@@ -155,7 +157,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **projects.ts** (344) — Single source of truth for all portfolio projects.
   - exports: ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
-  - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/video, vite-plugins/pages
+  - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/video, vite-plugins/pages
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
@@ -245,10 +247,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: countUp, initReveals
   - → ui/motion
   - ← components/Charts/Charts, pages/home/home, pages/project/project
-- **video.ts** (61) — MIME type for a project video, from its extension.
-  - exports: videoType, videoPoster, still, playVideosWhenVisible
+- **video.ts** (87) — MIME type for a project video, from its extension.
+  - exports: videoType, videoPoster, THUMB_WIDTHS, thumbOf, stillImage, still, stillAttrs, playVideosWhenVisible
   - → data/projects, ui/motion
-  - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
+  - ← scripts/make-thumbs, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
 - tests: glide.test.ts, video.dom.test.ts, video.test.ts
 
 ## src

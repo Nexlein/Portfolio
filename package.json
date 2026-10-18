@@ -18,6 +18,7 @@
         "audit": "audit-ci --config config/audit-ci.jsonc",
         "knip": "knip --config config/knip.json",
         "media:posters": "bash scripts/make-posters.sh",
+        "media:thumbs": "node scripts/make-thumbs.ts",
         "media:og": "bash scripts/make-og-images.sh",
         "media:brand": "node scripts/brand-images.ts",
         "media:video": "bash scripts/optimize-video.sh",

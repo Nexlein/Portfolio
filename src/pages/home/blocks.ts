@@ -8,7 +8,7 @@ import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
-import { still } from '../../ui/video.ts';
+import { stillAttrs } from '../../ui/video.ts';
 import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
 import { thisMonth, yearOf } from '../../components/Charts/data.ts';
 import { firstSentence } from '../../core/text.ts';
@@ -30,7 +30,7 @@ export function featured(lang: Lang): string {
     return PROJECTS.filter((p) => p.featured)
         .map(
             (p) => `<a class="feature surface reveal" href="${localizedPath(projectPath(p.id), lang)}">
-<span class="feature-media"><img src="${still(p)}" alt="" loading="lazy" width="640" height="400" /></span>
+<span class="feature-media"><img ${stillAttrs(p, '104px')} alt="" loading="lazy" width="640" height="400" /></span>
 <span class="feature-body"><span class="eyebrow">${domainName(lang, p.category)}</span><strong>${p.title}</strong></span></a>`
         )
         .join('');
