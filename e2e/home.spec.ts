@@ -377,21 +377,9 @@ test.describe('charts', () => {
         await page.goto('/');
         await page.locator('#numbers').scrollIntoViewIfNeeded();
         await page.mouse.move(2, 2);
-        const elapsed = () =>
-            page.locator('.exp-progress').evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
-        // Early in a step, far from its end (a step is 6.5 s: the story must not turn during the test, even on a slow runner)
-        await expect
-            .poll(
-                async () => {
-                    const t = await elapsed();
-                    return t > 300 && t < 2500;
-                },
-                { intervals: [100] }
-            )
-            .toBe(true);
-        // A restart builds a new animation, which starts later: keep when this one started
-        const started = () => page.locator('.exp-progress').evaluate((el) => el.getAnimations()[0]?.startTime ?? null);
-        const kept = await started();
+        await expect(page.locator('.exp-card')).toHaveClass(/playing/); // the timer runs
+        // Every restart drops `playing` for a moment. On a slow runner the step can end during the test, and the story
+        // turns (its count changes): only a restart without a turn is a bug
         await page.evaluate(() => {
             const log: string[] = [];
             for (const type of ['pointerover', 'pointerout', 'focusin', 'focusout', 'visibilitychange'])
@@ -400,7 +388,17 @@ test.describe('charts', () => {
                     (e) => log.push(`${type} ${(e.target as Element)?.className ?? ''}`),
                     true
                 );
-            (window as unknown as { log: string[] }).log = log;
+            const w = window as unknown as { log: string[]; restarts: number };
+            w.log = log;
+            w.restarts = 0;
+            const card = document.querySelector('.exp-card')!;
+            const count = card.querySelector('.exp-count')!;
+            let seen = count.textContent;
+            new MutationObserver((records) => {
+                const turned = count.textContent !== seen;
+                seen = count.textContent;
+                if (!turned && records.some((r) => /\bplaying\b/.test(r.oldValue ?? ''))) w.restarts++;
+            }).observe(card, { attributeFilter: ['class'], attributeOldValue: true });
         });
         // The pointer crosses the numbers part (index, arrows, section text)
         await page.locator('.numbers-sub').hover();
@@ -409,9 +407,11 @@ test.describe('charts', () => {
         await page.mouse.move(2, 2); // one jump: a few steps in between could cross the chart or the story, which does pause it
         await page.evaluate(() => window.dispatchEvent(new Event('blur')));
         await page.evaluate(() => window.dispatchEvent(new Event('focus')));
-        const log = await page.evaluate(() => (window as unknown as { log: string[] }).log);
-        expect(kept).not.toBeNull();
-        expect(await started(), `the timer did not restart: ${log.join(' | ')}`).toBe(kept);
+        const { log, restarts } = await page.evaluate(() => {
+            const w = window as unknown as { log: string[]; restarts: number };
+            return { log: w.log, restarts: w.restarts };
+        });
+        expect(restarts, `the timer did not restart: ${log.join(' | ')}`).toBe(0);
     });
 
     test('the timers pause only on the chart plot, the range buttons and the panel, not on the rest of the block', async ({
@@ -422,9 +422,14 @@ test.describe('charts', () => {
         await page.setViewportSize({ width: 1280, height: 2400 });
         await page.goto('/');
         await expect(page.locator('.work')).toHaveAttribute('data-view', 'map'); // the layout above has settled
-        // The chart, the story and the deck all fit on screen from here. The hovers are forced: the chart is still
-        // sliding in (a reveal), and waiting for it to be "stable" made Playwright scroll the story out of view
-        await page.locator('.path-chart').evaluate((el) => scrollTo(0, el.getBoundingClientRect().top + scrollY - 120)); // clear of the sticky nav
+        // The chart, the story and the deck all fit on screen from here. The hovers are forced: waiting for the chart
+        // to be "stable" made Playwright scroll the story out of view
+        const chart = page.locator('.path-chart');
+        await chart.evaluate((el) => scrollTo(0, el.getBoundingClientRect().top + scrollY - 120)); // clear of the sticky nav
+        // A forced hover aims where the target is when it starts: let the chart finish sliding in (its reveal) first,
+        // or the pointer can land beside a range button that is still moving, and the story plays on
+        await expect(chart).toHaveClass(/\bin\b/);
+        await chart.evaluate((el) => Promise.allSettled(el.getAnimations().map((a) => a.finished)).then(() => {}));
         await page.mouse.move(2, 2);
         const story = page.locator('.exp-card');
         await expect(story).toHaveClass(/playing/);
