@@ -146,6 +146,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Python', 'Machine Learning', 'Data Science', 'scikit-learn', 'NLP'],
         category: 'ai',
         date: '2026-02',
+        team: {
+            size: 2,
+            role: {
+                en: 'Models (KNN, Random Forest, PCA, SVM) and how their results are shown, the data preparation (cleaning, filtering, normalization), and the whole unsupervised part with its NLP.',
+                fr: "Des modèles (KNN, Random Forest, PCA, SVM) et l'affichage de leurs résultats, la préparation des données (nettoyage, filtrage, normalisation), et toute la partie non supervisée avec son NLP."
+            }
+        },
         github: 'https://github.com/Nexlein/Cvrie',
         media: {
             type: 'image',
@@ -218,6 +225,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['N8N', 'Python', 'Mistral AI', 'Supabase', 'Docker'],
         category: 'ai',
         date: '2026-05',
+        team: {
+            size: 2,
+            role: {
+                en: 'The scripts that start n8n locally with our credentials, the Supabase setup, and some of the workflow tools.',
+                fr: 'Les scripts qui lancent n8n en local avec nos identifiants, la mise en place de Supabase, et une partie des outils du workflow.'
+            }
+        },
         github: 'https://github.com/Nexlein/Persona',
         media: {
             type: 'image',
@@ -239,6 +253,13 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'ai',
         date: '2026-03',
         featured: true,
+        team: {
+            size: 2,
+            role: {
+                en: 'Both of us wrote the attack prompt, the defense prompt and the tests together.',
+                fr: "Nous avons écrit à deux le prompt d'attaque, le prompt de défense et les tests."
+            }
+        },
         github: 'https://github.com/Nexlein/Codename',
         media: {
             type: 'image',
@@ -286,6 +307,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Ansible', 'IaC', 'PostgreSQL', 'Redis', 'Linux'],
         category: 'devops',
         date: '2026-05',
+        team: {
+            size: 2,
+            role: {
+                en: 'The base, Redis and PostgreSQL roles, the poll, worker and service roles, and the firewall.',
+                fr: 'Les rôles base, Redis et PostgreSQL, les rôles poll, worker et service, et le pare-feu.'
+            }
+        },
         github: 'https://github.com/Nexlein/Octopus',
         media: {
             type: 'image',
@@ -306,6 +334,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C++', 'OOP', 'Simulation', 'Algorithms'],
         category: 'architecture',
         date: '2026-02',
+        team: {
+            size: 2,
+            role: {
+                en: 'The 4094 and 4512 chips, and many smaller pieces around the simulator.',
+                fr: 'Les puces 4094 et 4512, et beaucoup de petites pièces autour du simulateur.'
+            }
+        },
         github: 'https://github.com/Nexlein/NanoTekSpice',
         media: {
             type: 'image',
@@ -314,23 +349,6 @@ export const PROJECTS: ProjectEntry[] = [
                 en: 'A NanoTekSpice circuit file wiring a clock and a reset input to a 4040 binary counter, next to a real simulator session where the outputs count up to 3 and return to 0 after reset.',
                 fr: "Un fichier de circuit NanoTekSpice reliant une horloge et une entrée de remise à zéro à un compteur binaire 4040, à côté d'une vraie session du simulateur où les sorties comptent jusqu'à 3 puis reviennent à 0 après la remise à zéro."
             }
-        }
-    },
-    {
-        id: 'myradar',
-        title: 'MyRadar',
-        description: {
-            en: 'A 2D graphical air traffic control simulator built in C using CSFML. Simulates planes navigating between control towers with complex collision detection and sector-based grid optimization.',
-            fr: "Un simulateur graphique 2D de contrôle aérien construit en C avec CSFML. Simule la navigation d'avions, avec une détection de collisions poussée et une optimisation spatiale par secteurs."
-        },
-        tags: ['C', 'CSFML', 'Graphics', 'Simulation', 'Algorithms'],
-        category: 'graphical',
-        year: 'Tek1',
-        date: '2025-03',
-        github: 'https://github.com/Nexlein/Myradar',
-        media: {
-            type: 'video',
-            src: '/projects/myradar/myradar.mp4'
         }
     },
     {
@@ -344,6 +362,13 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'ai',
         year: 'Tek1',
         date: '2025-06',
+        team: {
+            size: 3,
+            role: {
+                en: 'The prediction model, written from scratch, and the database cleaning.',
+                fr: 'Le modèle de prédiction, écrit de zéro, et le nettoyage de la base de données.'
+            }
+        },
         github: 'https://github.com/Nexlein/Tardis',
         media: {
             type: 'image',
@@ -351,44 +376,6 @@ export const PROJECTS: ProjectEntry[] = [
             alt: {
                 en: 'Screenshot of the Tardis data analytics dashboard',
                 fr: "Capture d'écran du tableau de bord d'analyse de données Tardis"
-            }
-        }
-    },
-    {
-        id: 'mytop',
-        title: 'MyTop',
-        description: {
-            en: 'A customized clone of the Unix top utility. Features real-time system monitoring, process listing, memory metrics, and CPU usage, built with C and the ncurses library.',
-            fr: "Un clone sur mesure de l'utilitaire Unix top. Surveille le système en temps réel : liste des processus, utilisation du CPU et de la RAM. Développé en C avec ncurses."
-        },
-        tags: ['C', 'ncurses', 'Unix', 'System Programming'],
-        category: 'systems',
-        year: 'Tek1',
-        date: '2025-03',
-        github: 'https://github.com/Nexlein/Mytop',
-        media: {
-            type: 'video',
-            src: '/projects/mytop/mytop.mp4'
-        }
-    },
-    {
-        id: 'secured',
-        title: 'Secured',
-        description: {
-            en: 'A C library implementing a hash table: a custom hash function, separate chaining (a linked list per bucket), and 36 unit tests.',
-            fr: 'Une bibliothèque C qui implémente une table de hachage : une fonction de hachage maison, le chaînage séparé (une liste chaînée par case) et 36 tests unitaires.'
-        },
-        tags: ['C', 'Data Structures', 'Algorithms', 'Security'],
-        category: 'systems',
-        year: 'Tek1',
-        date: '2025-03',
-        github: 'https://github.com/Nexlein/Secured',
-        media: {
-            type: 'image',
-            src: '/projects/secured/secured.webp',
-            alt: {
-                en: 'Terminal output of a demo of the Secured C hash table library: eight entries dumped across eight buckets, searches, a deletion and the table dumped again, above a unit-test summary of 36 out of 36 passing.',
-                fr: "Sortie terminal d'une démo de la bibliothèque de table de hachage Secured en C : huit entrées réparties dans huit cases, des recherches, une suppression puis un nouvel affichage de la table, au-dessus d'un résumé de 36 tests unitaires sur 36 réussis."
             }
         }
     },

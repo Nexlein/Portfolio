@@ -288,10 +288,14 @@ describe('the axes of the path chart', () => {
     it('starts the height at nothing for Max and zooms on the change for the other ranges', () => {
         const points = skillSeries(PROJECTS, TODAY);
         expect(yDomain(points, points[0].t).lo).toBe(0);
+        // The 6-month window zooms in; a longer one may reach back far enough to start at 0 again
+        const half = yDomain(points, TODAY - 0.5);
+        expect(half.lo).toBeGreaterThan(0);
+        expect(half.lo).toBeLessThan(valueAt(points, TODAY - 0.5));
+        expect(half.hi).toBeGreaterThan(last(points));
         const year = yDomain(points, TODAY - 1);
-        expect(year.lo).toBeGreaterThan(0);
-        expect(year.lo).toBeLessThan(valueAt(points, TODAY - 1));
-        expect(year.hi).toBeGreaterThan(last(points));
+        expect(year.lo).toBeGreaterThanOrEqual(0);
+        expect(year.lo).toBeLessThanOrEqual(valueAt(points, TODAY - 1));
         const flat = yDomain(skillSeries(PROJECTS, 2099), 2099 - 1);
         expect(flat.hi - flat.lo).toBeGreaterThan(0); // a window where nothing changed still has a height
     });
