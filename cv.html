@@ -36,7 +36,7 @@
         <main class="cv-stage" id="main">
             <!-- On screen only: what this is, and the two ways to take it away -->
             <div class="cv-bar wrap">
-                <p class="mono">Curriculum vitae · A4</p>
+                <p class="mono" data-i18n="cv.controls.label">Curriculum vitae · A4</p>
                 <div class="cv-actions">
                     <button type="button" id="cv-print-btn" class="link">
                         <span data-i18n="cv.controls.print">Print</span>
@@ -65,7 +65,13 @@
                     </div>
                     <div class="sheet-contact">
                         <ul data-render="cv-contact"></ul>
-                        <img src="/qrcode.svg" alt="Portfolio QR code" width="64" height="64" />
+                        <img
+                            src="/qrcode.svg"
+                            alt="Portfolio QR code"
+                            data-i18n-alt="cv.controls.qr"
+                            width="64"
+                            height="64"
+                        />
                     </div>
                 </header>
 

@@ -1,7 +1,8 @@
 /**
  * Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
  * No inline styles anywhere (the CSP forbids them): colours come from classes, sizes from attributes.
- * Relative imports only: rendered from Node by vite-plugins/pages.ts, and again in the browser for interactions.
+ * Relative imports only: rendered from Node by vite-plugins/pages.ts. The browser never loads this file: what its
+ * interactions need is rendered ahead (every range of the path chart) or embedded as JSON (PathData).
  */
 import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
@@ -20,6 +21,7 @@ import {
     prettySkill,
     RANGES,
     changeSince,
+    EPITECH_START,
     rangeStart,
     skillSeries,
     timeTicks,
@@ -29,8 +31,10 @@ import {
     yearOf,
     yTicks,
     type Point,
-    type Range
+    type Range,
+    type Tick
 } from './data.ts';
+import { monthLabel, PATH, pathSamples, type PathData } from './series.ts';
 
 const f1 = (n: number) => n.toFixed(1);
 const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
@@ -38,8 +42,7 @@ const MONTHS: Record<Lang, string[]> = {
     en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     fr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
 };
-export const monthName = (time: number, lang: Lang) =>
-    `${MONTHS[lang][Math.min(11, Math.round((time % 1) * 12))]} ${Math.floor(time + 1e-6)}`;
+export const monthName = (time: number, lang: Lang) => monthLabel(time, MONTHS[lang]);
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
@@ -68,30 +71,19 @@ export function changeText(
     return { text, over, up: delta > 0 };
 }
 
-export const PATH = { W: 1080, H: 360, L: 44, R: 60, T: 84, B: 30 };
-const smooth = (u: number) => u * u * (3 - 2 * u);
-
-/** Sampled smooth steps between milestones: the line, the hover dot and the tooltip all use these. */
-export function pathSamples(
-    points: Point[],
-    t0: number,
-    now: number,
-    domain: { lo: number; hi: number }
-): [number, number][] {
-    const { W, H, L, R, T, B } = PATH;
-    const x = (time: number) => L + ((time - t0) / (now - t0)) * (W - L - R);
-    const y = (v: number) => H - B - ((v - domain.lo) / (domain.hi - domain.lo || 1)) * (H - T - B);
-    const vis = [{ t: t0, v: valueAt(points, t0) }, ...points.filter((p) => p.t > t0)];
-    const out: [number, number][] = [];
-    vis.forEach((p, i) => {
-        if (i === 0) return void out.push([x(p.t), y(p.v)]);
-        const a = vis[i - 1];
-        for (let k = 1; k <= 14; k++) {
-            const u = k / 14;
-            out.push([x(a.t + (p.t - a.t) * u), y(a.v + (p.v - a.v) * smooth(u))]);
-        }
-    });
-    return out;
+/**
+ * The month labels a phone keeps (CSS hides the others there): about three, never closer than a third of the range,
+ * and a January (it names its year) wins over the first label when the two are close.
+ */
+function narrowTicks(axis: Tick[], t0: number, now: number): Set<Tick> {
+    const gap = (now - t0) / 3.2;
+    const kept: Tick[] = [];
+    for (const tk of axis) {
+        const last = kept[kept.length - 1];
+        if (!last || tk.t - last.t >= gap - 1e-9) kept.push(tk);
+        else if (tk.month === 0 && last.month !== 0 && kept.length === 1) kept[0] = tk;
+    }
+    return new Set(kept);
 }
 
 /** The plot itself, for a range starting at t0. */
@@ -105,6 +97,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
     const line = samples.map(([px, py], i) => `${i ? 'L' : 'M'}${f1(px)} ${f1(py)}`).join('');
     const ticks = yTicks(domain.lo, domain.hi);
     const axis = timeTicks(t0, now);
+    const narrow = narrowTicks(axis, t0, now);
     // The band of life along the bottom: before Epitech, then each school year (a label only where it fits)
     const phases = phasesIn(t0, now)
         .map((ph, i) => {
@@ -142,7 +135,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
-<g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
+<g class="grid">${ticks.map((v, i) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text${ticks.length > 3 && i % 2 ? ' class="value-minor"' : ''} x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}${narrow.has(tk) ? '' : ' wide'}${x(tk.t) < L + 40 ? ' first' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
 <g class="phases">${phases}</g>
 <path class="line" pathLength="1" d="${line}" />
@@ -152,18 +145,50 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
 <g class="marks">${marks}</g></svg>`;
 }
 
+/** What a step is, in words: a checkpoint's name, "<project> started", or nothing (the start and end points). */
+function whatOf(lang: Lang, p: Point): string {
+    if (p.m?.checkpoint) return p.m.checkpoint.label[lang];
+    return p.m?.project ? t(lang, 'path.shipped').replace('{p}', p.m.project.title) : '';
+}
+
+/**
+ * The path chart. The full range is drawn in the page; the other ranges wait in <template>s (rendered here too, so
+ * switching is a swap, not a redraw), and the series the crosshair reads is embedded as JSON (PathData).
+ */
 export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): string {
     const points = skillSeries(projects, now);
     const total = points[points.length - 1].v;
     const first = RANGES[RANGES.length - 1]; // opens on everything, like a price chart's Max
-    const change = changeText(lang, first, points, rangeStart(first, points, now));
-    return `<div class="path-chart surface reveal" data-now="${now}">
+    const ranges = RANGES.map((r) => {
+        const t0 = rangeStart(r, points, now);
+        return { r, t0, change: changeText(lang, r, points, t0) };
+    });
+    const change = ranges[ranges.length - 1].change;
+    const data: PathData = {
+        now,
+        epitech: EPITECH_START,
+        months: MONTHS[lang],
+        before: t(lang, 'path.beforeEpitech'),
+        skills: t(lang, 'path.skills'),
+        points: points.map((p) => ({ t: p.t, v: p.v, what: whatOf(lang, p) })),
+        ranges: Object.fromEntries(
+            ranges.map(({ r, t0, change: c }) => [r.id, { t0, text: c.text, over: c.over, up: c.up }])
+        )
+    };
+    // A data block, never executed (the CSP's script-src does not apply). Escape '<' so text can't close the tag.
+    const json = JSON.stringify(data).replace(/</g, '\\u003c');
+    const later = ranges
+        .filter(({ r }) => r !== first)
+        .map(({ r, t0 }) => `<template data-plot="${r.id}">${pathSvg(lang, points, t0, now)}</template>`)
+        .join('');
+    return `<div class="path-chart surface reveal">
   <div class="path-ticker">
     <div><p class="path-symbol">${t(lang, 'path.symbol')}</p>
       <p class="path-total"><span class="count" data-to="${total}">${total}</span><span class="path-delta${change.up ? '' : ' flat'}" aria-live="polite">${change.text}<span class="sr-only"> ${change.over}</span></span></p></div>
-    <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}">${RANGES.map((r) => `<button type="button" data-range="${r.id}"${r === first ? ' aria-pressed="true"' : ''}>${r.label}</button>`).join('')}</div>
+    <div class="segmented path-range" role="group" aria-label="${t(lang, 'path.range')}">${RANGES.map((r) => `<button type="button" data-range="${r.id}"${r === first ? ' aria-pressed="true"' : ''}>${t(lang, `path.ranges.${r.id}`)}</button>`).join('')}</div>
   </div>
-  <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" role="status" hidden></div></div>
+  <div class="path-plot">${pathSvg(lang, points, points[0].t, now)}<div class="path-tip" aria-hidden="true" hidden></div></div>
+  ${later}<script type="application/json" class="path-data">${json}</script>
 </div>`;
 }
 
@@ -305,7 +330,7 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
     const max = Math.max(...grid.flat(), 1);
     const W = 300,
         H = 220,
-        left = 92,
+        left = 100,
         cw = (W - left - 4) / pers.length,
         ch = Math.min(30, (H - 44) / keys.length);
     const cells = keys
@@ -353,7 +378,7 @@ export function numbers(lang: Lang, projects: ProjectEntry[], now: number): stri
     return `<div class="numbers" id="numbers">
 <div class="numbers-head"><p class="numbers-sub">${t(lang, 'numbers.sub')}</p></div>
 <div class="numbers-body"><div class="numbers-nav" hidden><button type="button" class="numbers-prev" aria-label="${t(lang, 'numbers.prev')}">‹</button><button type="button" class="numbers-next" aria-label="${t(lang, 'numbers.next')}">›</button></div>
-<div class="numbers-index" aria-label="${t(lang, 'numbers.sub')}"></div>
+<div class="numbers-index" role="group" aria-label="${t(lang, 'numbers.sub')}"></div>
 <div class="numbers-stage"><div class="numbers-row">
 ${cards}
 </div></div></div>

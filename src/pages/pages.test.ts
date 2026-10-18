@@ -68,7 +68,8 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
         });
 
         it('keeps the only executable inline script byte-identical (its CSP hash must match)', () => {
-            const scripts = [...doc.querySelectorAll('script:not([src]):not([type="application/ld+json"])')];
+            // Data blocks (JSON-LD, the strings and chart data scripts read) are never executed
+            const scripts = [...doc.querySelectorAll('script:not([src]):not([type^="application/"])')];
             expect(scripts.map((s) => s.textContent)).toEqual([HEAD_SCRIPT]);
         });
 

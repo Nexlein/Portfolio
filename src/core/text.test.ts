@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { firstSentence } from './text';
+import { attr, firstSentence } from './text';
 
 describe('firstSentence', () => {
     it('keeps the first sentence and ends it with one full stop', () => {
@@ -14,5 +14,11 @@ describe('firstSentence', () => {
 
     it('does not cut at a dot inside a word (C++ 17, v1.2)', () => {
         expect(firstSentence('Built with v1.2 of the engine. Next.')).toBe('Built with v1.2 of the engine.');
+    });
+});
+
+describe('attr', () => {
+    it('escapes quotes and tags but keeps entities', () => {
+        expect(attr('a "quoted" <b> &amp; c')).toBe('a &quot;quoted&quot; &lt;b> &amp; c');
     });
 });

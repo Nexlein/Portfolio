@@ -28,7 +28,7 @@
             "headers": [
                 {
                     "key": "Content-Security-Policy",
-                    "value": "default-src 'self'; script-src 'self' 'sha256-/irLN7URdq9suCPxtx+HhxPgvZkBjaJIfx0e6iHgM4Y='; style-src 'self'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+                    "value": "default-src 'self'; script-src 'self' 'sha256-xzYHCHU2Yey+pHZM2QEEedpeJaiL4yYJ+3m2T+tF90M='; style-src 'self'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
                 },
                 {
                     "key": "X-Content-Type-Options",
@@ -62,7 +62,7 @@
             ]
         },
         {
-            "source": "/projects/(.*)",
+            "source": "/projects/:id/(.*)",
             "headers": [
                 {
                     "key": "Cache-Control",

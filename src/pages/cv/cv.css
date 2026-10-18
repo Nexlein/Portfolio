@@ -51,6 +51,7 @@
 }
 
 .cv-actions button.link {
+    min-height: 32px; /* a real touch target, the text stays where it was */
     padding: 0;
     border: 0;
     background: none;
@@ -298,6 +299,17 @@
     .sheet-side {
         padding-left: 0;
         border-left: 0;
+    }
+
+    /* The A4 type sizes are for paper: on a phone the labels and the contact list come up to a readable size */
+    .sheet h2,
+    .cv-aside,
+    .sheet-contact ul {
+        font-size: 11px;
+    }
+
+    .sheet-badges li {
+        font-size: 12px;
     }
 }
 

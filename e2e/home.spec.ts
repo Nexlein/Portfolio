@@ -105,6 +105,27 @@ test.describe('project map', () => {
         expect(badge.content).toMatch(/\d/);
     });
 
+    test('after a resize in the list view, the map is laid out again for its new width', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm.booted')).toHaveCount(1);
+        await page.locator('.work-view button[data-view="list"]').click();
+        await page.setViewportSize({ width: 1000, height: 900 });
+        await page.waitForTimeout(400); // the map redraws once the window has stopped moving
+        await page.locator('.work-view button[data-view="map"]').click();
+        await page.locator('.nm').scrollIntoViewIfNeeded(); // the cards move only while the map is on screen
+        const outside = () =>
+            page.evaluate(() => {
+                const box = document.querySelector('.nm')!.getBoundingClientRect();
+                return [...document.querySelectorAll('.nm-card:not(.off)')].filter((c) => {
+                    const r = c.getBoundingClientRect();
+                    return r.right > box.right + 8 || r.left < box.left - 8;
+                }).length;
+            });
+        await expect.poll(outside).toBe(0);
+    });
+
     test('a click unfolds, a second click opens the project page', async ({ page }) => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded(); // the map is drawn as the section comes into view
@@ -248,6 +269,29 @@ test.describe('hero', () => {
         await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
     });
 
+    test('the pause button holds the simulation still, and a second press sets it going again', async ({ page }) => {
+        await page.addInitScript(() => {
+            const w = window as unknown as { frames: number };
+            w.frames = 0;
+            const raf = window.requestAnimationFrame.bind(window);
+            window.requestAnimationFrame = (cb) => (w.frames++, raf(cb));
+        });
+        await page.goto('/');
+        const frames = () => page.evaluate(() => (window as unknown as { frames: number }).frames);
+        const pause = page.locator('.hero-pause');
+        await expect(pause).toHaveAccessibleName(en.home.hero.pause);
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(10);
+        await pause.click();
+        await expect(pause).toHaveAttribute('aria-pressed', 'true');
+        await page.waitForTimeout(2000); // the frame already queued runs once and stops, and the intro counters finish
+        const idle = await frames();
+        await page.waitForTimeout(600);
+        expect(await frames(), 'no frame is requested while paused').toBe(idle);
+        await pause.click();
+        await expect(pause).toHaveAttribute('aria-pressed', 'false');
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
+    });
+
     test('old project links (/?project=id) open the project page', async ({ page }) => {
         await page.goto('/?project=arcade');
         await expect(page).toHaveURL(/\/projects\/arcade\.html$/);
@@ -266,6 +310,13 @@ test.describe('charts', () => {
             const hit = chart.locator('.hit');
             const box = (await hit.boundingBox())!;
             await hit.hover({ position: { x: box.width * 0.6, y: box.height / 2 }, force: true });
+            await expect(chart.locator('.path-tip')).toBeVisible();
+            // Back and forth: each range keeps its plot, and the one that comes back still answers the pointer
+            await chart.locator('.path-range button[data-range="max"]').click();
+            await chart.locator('.path-range button[data-range="1y"]').click();
+            await expect(chart.locator('.path-tip')).toBeHidden();
+            await expect(chart.locator('.path-svg')).toHaveCount(1);
+            await chart.locator('.hit').hover({ position: { x: box.width * 0.3, y: box.height / 2 }, force: true });
             await expect(chart.locator('.path-tip')).toBeVisible();
         }
     });
@@ -323,7 +374,7 @@ test.describe('charts', () => {
         const third = page.locator('.numbers-index button').nth(3);
         if (await third.isVisible()) {
             await third.click(); // the index is desktop only
-            await expect(third).toHaveAttribute('aria-current', '');
+            await expect(third).toHaveAttribute('aria-current', 'true');
         }
         await expect(page.locator('.chart-card[data-pos="0"]')).toHaveCount(1);
         expect(await stage.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
@@ -465,7 +516,7 @@ test.describe('charts', () => {
         await entries.nth(4).click();
         await page.waitForTimeout(700);
         await expect(deck).not.toHaveClass(/playing/);
-        await expect(entries.nth(4)).toHaveAttribute('aria-current', '');
+        await expect(entries.nth(4)).toHaveAttribute('aria-current', 'true');
         await page.locator('.numbers-sub').hover();
         await expect(deck).toHaveClass(/playing/);
     });
@@ -527,6 +578,24 @@ test.describe('theme', () => {
 });
 
 test.describe('language', () => {
+    test("scripts carry no dictionary: the page's own strings are embedded in it, in its language", async ({
+        page
+    }) => {
+        const scripts: Promise<string>[] = [];
+        page.on('response', (r) => r.request().resourceType() === 'script' && scripts.push(r.text()));
+        await page.goto('/fr/');
+        await page.locator('#work').scrollIntoViewIfNeeded(); // the map's code too, on wide screens
+        await page.waitForLoadState('networkidle');
+        const code = (await Promise.all(scripts)).join('\n');
+        expect(code).not.toContain(en.home.hero.title2b);
+        expect(code).not.toContain(fr.home.hero.title2b);
+        await page.locator('.copy-email').click();
+        await expect(page.locator('.toast')).toHaveText(new RegExp(`${fr.home.hire.copied}|@`));
+        await page.locator('.path-range [data-range="1y"]').click();
+        await expect(page.locator('.path-range [data-range="1y"]')).toHaveText(fr.home.path.ranges['1y']);
+        await expect(page.locator('.path-delta')).toContainText(fr.home.path.over.replace('{n}', '12'));
+    });
+
     test('the switch opens the same page in the other language and remembers it', async ({ page }) => {
         await page.goto('/');
         await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -655,6 +724,13 @@ test.describe('hero title', () => {
         await page.locator('.hero-copy .link').focus();
         await page.locator('.hero-copy').hover();
         await expect.poll(() => line.textContent(), { timeout: 12_000 }).not.toBe(first);
+    });
+
+    test('screen readers keep the first wording while the line changes', async ({ page }) => {
+        await page.goto('/');
+        const shown = page.locator('.hero h1 [data-i18n="home.hero.title2"]');
+        await expect(shown).not.toHaveText(en.home.hero.title2, { timeout: 12_000 });
+        await expect(page.locator('.hero h1')).toHaveAccessibleName(`${en.home.hero.title1} ${en.home.hero.title2}`);
     });
 });
 

@@ -66,7 +66,10 @@ function initPill(nav: HTMLElement): void {
         (entries) => {
             entries.forEach((e) => (e.isIntersecting ? inView.add(e.target.id) : inView.delete(e.target.id)));
             active = links.find((a) => inView.has(a.dataset.section!)) ?? null;
-            links.forEach((a) => a.toggleAttribute('aria-current', a === active));
+            // aria-current="" means false to screen readers: the value has to be spelled out
+            links.forEach((a) =>
+                a === active ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current')
+            );
             if (!nav.matches(':hover')) moveTo(active);
         },
         { rootMargin: '-45% 0px -50% 0px' }

@@ -1,10 +1,12 @@
 import { i18n } from '@/core/i18n';
 import { prefersReducedMotion } from '@/ui/motion';
 import { runSim, SIMS } from './sims';
+import { pauseSims } from './sims/stage';
 
 /**
- * Hero: a live simulation behind the words (a random one per visit, "↻" for the next), and a gentle exit as
- * the page scrolls (the field recedes, the words lift away).
+ * Hero: a live simulation behind the words (a random one per visit, a dot per simulation to switch), a pause button
+ * for everything that moves on its own here (WCAG 2.2.2), and a gentle exit as the page scrolls (the field recedes,
+ * the words lift away).
  */
 export function initHero(): void {
     const hero = document.querySelector<HTMLElement>('.hero');
@@ -54,7 +56,20 @@ export function initHero(): void {
     pager.hidden = false;
 
     if (prefersReducedMotion()) return;
-    rotateTitle(hero);
+    let paused = false;
+    const pause = document.createElement('button');
+    pause.type = 'button';
+    pause.className = 'hero-pause';
+    pause.title = i18n.t('home.hero.pause');
+    pause.setAttribute('aria-label', i18n.t('home.hero.pause'));
+    pause.setAttribute('aria-pressed', 'false');
+    pause.addEventListener('click', () => {
+        paused = !paused;
+        pause.setAttribute('aria-pressed', String(paused));
+        pauseSims(paused);
+    });
+    pager.append(pause);
+    rotateTitle(hero, () => paused);
     let ticking = false;
     let progress = 0;
     window.addEventListener('resize', () => (height = hero.offsetHeight), { passive: true });
@@ -77,14 +92,22 @@ export function initHero(): void {
     );
 }
 
-/** The title's second line cycles through a few ways to finish the sentence (not while the tab is hidden or the hero is scrolled away). */
-function rotateTitle(hero: HTMLElement): void {
+/**
+ * The title's second line cycles through a few ways to finish the sentence (not while paused, the tab is hidden or the
+ * hero is scrolled away). Screen readers keep the first wording: a heading that changes under them is confusing.
+ */
+function rotateTitle(hero: HTMLElement, paused: () => boolean): void {
     const line = hero.querySelector<HTMLElement>('[data-i18n="home.hero.title2"]');
     if (!line) return;
+    const spoken = document.createElement('span');
+    spoken.className = 'sr-only';
+    spoken.textContent = line.textContent;
+    line.after(spoken);
+    line.setAttribute('aria-hidden', 'true');
     const keys = ['title2', 'title2b', 'title2c'];
     let index = 0;
     window.setInterval(() => {
-        if (document.hidden || scrollY > hero.offsetHeight / 2) return;
+        if (paused() || document.hidden || scrollY > hero.offsetHeight / 2) return;
         line.classList.add('cycling', 'out');
         window.setTimeout(() => {
             index = (index + 1) % keys.length;

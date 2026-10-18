@@ -1,42 +1,33 @@
 /**
- * Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's
- * arrows, and count-ups when they come into view. The SVG is already in the page; this only adds behaviour.
+ * Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's
+ * arrows. The SVG is already in the page; this only adds behaviour (count-ups and reveals: src/ui/reveal.ts).
  */
-import { i18n } from '@/core/i18n';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
-import { PROJECTS } from '@/data/projects';
-import { RANGES, rangeStart, schoolYearAt, skillSeries, valueAt, yDomain, type Point } from './data';
-import { changeText, monthName, PATH, pathSamples, pathSvg, phaseLabel } from './render';
-
-/** Count up `.count[data-to]` from 0 once. */
-function countUp(el: HTMLElement): void {
-    if (reduced()) return;
-    const to = Number(el.dataset.to),
-        start = performance.now();
-    const step = (time: number) => {
-        const u = Math.min(1, (time - start) / 1100);
-        el.textContent = String(Math.round(to * (1 - (1 - u) ** 3)));
-        if (u < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-}
+import { countUp } from '@/ui/reveal';
+import { trackScale } from '@/ui/svg-scale';
+import { monthLabel, PATH, pathSamples, schoolYear, valueAt, yDomain, type PathData } from './series';
 
 /** How far (in chart units) the crosshair reaches for a checkpoint. */
 const SNAP = 14;
 
 export function initPathChart(): void {
     const host = document.querySelector<HTMLElement>('.path-chart');
-    if (!host) return;
-    const lang = i18n.getLang();
-    const now = Number(host.dataset.now);
-    const points: Point[] = skillSeries(PROJECTS, now);
+    const json = host?.querySelector('.path-data')?.textContent;
+    if (!host || !json) return;
+    const data = JSON.parse(json) as PathData;
+    const { now, points } = data;
     const plot = host.querySelector<HTMLElement>('.path-plot')!,
         tip = host.querySelector<HTMLElement>('.path-tip')!;
-    let t0 = points[0].t;
+    const pressed = host.querySelector<HTMLButtonElement>('.path-range [aria-pressed="true"]')!.dataset.range!;
+    // One plot per range: the page draws the first, the others come out of their <template> the first time
+    const views = new Map<string, SVGSVGElement>([[pressed, plot.querySelector('svg')!]]);
+    const bound = new WeakSet<SVGSVGElement>();
+    trackScale(plot, PATH.W); // every range's plot is drawn the same width
 
-    const bind = () => {
-        const svg = plot.querySelector('svg')!,
-            cross = svg.querySelector('.cross')!;
+    const bind = (svg: SVGSVGElement, t0: number) => {
+        if (bound.has(svg)) return;
+        bound.add(svg);
+        const cross = svg.querySelector('.cross')!;
         const hide = () => {
             cross.setAttribute('visibility', 'hidden');
             tip.hidden = true;
@@ -44,7 +35,7 @@ export function initPathChart(): void {
         const samples = pathSamples(points, t0, now, yDomain(points, t0));
         const span = PATH.W - PATH.L - PATH.R;
         const marks = points
-            .filter((p) => p.m && p.t >= t0 - 1e-9)
+            .filter((p) => p.what && p.t >= t0 - 1e-9)
             .map((p) => PATH.L + ((p.t - t0) / (now - t0)) * span);
         // The marks sit above the plot, so the crosshair listens on the whole svg and the plot's own bounds decide
         svg.addEventListener('pointermove', (e) => {
@@ -69,13 +60,9 @@ export function initPathChart(): void {
             const dot = cross.querySelector('.cross-dot')!;
             dot.setAttribute('cx', sx.toFixed(1));
             dot.setAttribute('cy', py.toFixed(1));
-            const last = points.reduce<Point>((l, p) => (p.t <= time && p.m ? p : l), points[0]);
-            const what = last.m?.checkpoint
-                ? last.m.checkpoint.label[lang]
-                : last.m?.project
-                  ? i18n.t('home.path.shipped').replace('{p}', last.m.project.title)
-                  : '';
-            tip.innerHTML = `<span class="mono">${monthName(time, lang)} · ${phaseLabel(lang, schoolYearAt(time), 0, true)}</span><strong>${i18n.t('home.path.skills').replace('{n}', String(valueAt(points, time)))}</strong><span>${what}</span>`;
+            const last = points.reduce((l, p) => (p.t <= time && p.what ? p : l), points[0]);
+            const year = schoolYear(time, data.epitech);
+            tip.innerHTML = `<span class="mono">${monthLabel(time, data.months)} · ${year ? `Tek ${year}` : data.before}</span><strong>${data.skills.replace('{n}', String(valueAt(points, time)))}</strong><span>${last.what}</span>`;
             tip.hidden = false;
             tip.style.left = `${(sx / PATH.W) * 100}%`;
             tip.style.top = `${(py / PATH.H) * 100}%`;
@@ -86,24 +73,31 @@ export function initPathChart(): void {
     host.querySelectorAll<HTMLButtonElement>('.path-range button').forEach((b) =>
         b.addEventListener('click', () => {
             host.querySelectorAll('.path-range button').forEach((o) => o.setAttribute('aria-pressed', String(o === b)));
-            const range = RANGES.find((r) => r.id === b.dataset.range)!;
-            t0 = rangeStart(range, points, now);
+            const id = b.dataset.range!,
+                range = data.ranges[id];
             // The headline follows the range: what changed since it began, like a price chart's 1M / 1Y / Max
             const delta = host.querySelector<HTMLElement>('.path-delta')!;
-            const change = changeText(lang, range, points, t0);
             const over = document.createElement('span');
             over.className = 'sr-only';
-            over.textContent = ` ${change.over}`;
-            delta.replaceChildren(change.text, over);
-            delta.classList.toggle('flat', !change.up);
-            plot.querySelector('svg')!.outerHTML = pathSvg(lang, points, t0, now);
+            over.textContent = ` ${range.over}`;
+            delta.replaceChildren(range.text, over);
+            delta.classList.toggle('flat', !range.up);
+            let svg = views.get(id);
+            if (!svg) {
+                const template = host.querySelector<HTMLTemplateElement>(`template[data-plot="${id}"]`)!;
+                svg = document.importNode(template.content, true).querySelector('svg')!;
+                views.set(id, svg);
+            }
+            svg.querySelector('.cross')!.setAttribute('visibility', 'hidden');
+            tip.hidden = true;
+            plot.querySelector('svg')!.replaceWith(svg);
             host.classList.remove('drawn');
             void host.offsetWidth; // restart the draw-in
             host.classList.add('drawn');
-            bind();
+            bind(svg, range.t0);
         })
     );
-    bind();
+    bind(views.get(pressed)!, data.ranges[pressed].t0);
 }
 
 /** True when `el` is inside something that matches `selector` (the parts that pause a timer while the pointer is on them). */
@@ -241,6 +235,7 @@ export function initNumbers(): void {
     const cards = [...stage.querySelectorAll<HTMLElement>('.chart-card')];
     const n = cards.length;
     const index = root.querySelector<HTMLElement>('.numbers-index')!;
+    for (const svg of stage.querySelectorAll<SVGSVGElement>('svg[viewBox]')) trackScale(svg, svg.viewBox.baseVal.width);
     root.classList.add('deck');
     nav.hidden = false;
     cards.forEach((c) => c.classList.remove('reveal'));
@@ -281,9 +276,12 @@ export function initNumbers(): void {
         const front = cards[cur];
         if (!front.classList.contains('in')) {
             front.classList.add('in');
-            front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
+            // The first card counts up with the deck's own reveal (src/ui/reveal.ts), once it is on screen
+            if (prev >= 0) front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
         }
-        items.forEach((b, i) => b.toggleAttribute('aria-current', i === cur));
+        items.forEach((b, i) =>
+            i === cur ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')
+        );
         arm(true);
     }
     nav.querySelector('.numbers-prev')!.addEventListener('click', () => show(cur - 1, true));
@@ -293,20 +291,4 @@ export function initNumbers(): void {
         if (card && card !== cards[cur]) show(cards.indexOf(card), true);
     });
     show(0);
-}
-
-/** Reveal animations, count-ups and the chart draw-in start once each block comes into view. */
-export function initReveals(): void {
-    const io = new IntersectionObserver(
-        (entries) =>
-            entries.forEach((e) => {
-                if (!e.isIntersecting) return;
-                const n = e.target as HTMLElement;
-                n.classList.add('in', 'drawn');
-                n.querySelectorAll<HTMLElement>('.chart-card .count, .path-total .count').forEach(countUp);
-                io.unobserve(n);
-            }),
-        { rootMargin: '0px 0px -12% 0px' }
-    );
-    document.querySelectorAll('.reveal').forEach((n) => io.observe(n));
 }

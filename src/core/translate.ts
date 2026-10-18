@@ -1,29 +1,27 @@
 /**
- * Pure translation helpers, shared by the browser (src/core/i18n.ts) and the build
- * (vite-plugins/pages.ts, which pre-renders every page in every language).
+ * Translation helpers for the build (vite-plugins/pages.ts, which pre-renders every page in every language) and for
+ * tests. Browser code imports src/core/lang.ts and src/core/i18n.ts instead: this file carries every dictionary.
  * No side effects and no '@/' imports, so Node can load this file from vite.config.ts.
  */
 import { en } from '../i18n/en.ts';
 import { fr } from '../i18n/fr.ts';
+import { lookupIn, type Lang } from './lang.ts';
 
-export type Lang = 'en' | 'fr';
-
-export const LANGS: readonly Lang[] = ['en', 'fr'];
-
-/** Text in every language. A missing language is a type error. */
-export type Text = Record<Lang, string>;
-export const DEFAULT_LANG: Lang = 'en';
+export { DEFAULT_LANG, LANGS, langOfPath, localizedPath, type Lang, type Text } from './lang.ts';
 
 const dictionaries: Record<Lang, typeof en> = { en, fr };
 
 /** Look up a dotted key ('projectPage.back'); falls back to the key itself so gaps are visible. */
 export function lookup(lang: Lang, key: string): string {
-    let node: unknown = dictionaries[lang];
-    for (const part of key.split('.')) {
-        if (!node || typeof node !== 'object') return key;
-        node = (node as Record<string, unknown>)[part];
-    }
-    return typeof node === 'string' ? node : key;
+    return lookupIn(dictionaries[lang], key);
+}
+
+/**
+ * The strings the home page's scripts write at runtime (toasts, labels, the map's cards): the `home` part of one
+ * language, embedded in the page as JSON so the browser never downloads both dictionaries.
+ */
+export function clientStrings(lang: Lang): { home: (typeof en)['home'] } {
+    return { home: dictionaries[lang].home };
 }
 
 /** Fill every [data-i18n] element under `root` with its translation. */
@@ -32,15 +30,8 @@ export function translateTree(root: ParentNode, lang: Lang): void {
         const key = el.getAttribute('data-i18n');
         if (key) el.innerHTML = lookup(lang, key);
     });
-}
-
-/** Language of a URL path: '/fr/...' is French, everything else English. */
-export function langOfPath(path: string): Lang {
-    return path === '/fr' || path.startsWith('/fr/') ? 'fr' : 'en';
-}
-
-/** The same page in another language: '/cv.html' <-> '/fr/cv.html', '/' <-> '/fr/'. */
-export function localizedPath(path: string, lang: Lang): string {
-    const base = langOfPath(path) === 'fr' ? path.replace(/^\/fr(\/|$)/, '/') : path;
-    return lang === DEFAULT_LANG ? base : `/${lang}${base}`;
+    // Image descriptions: a data-i18n-alt key translates the alt attribute
+    root.querySelectorAll<HTMLElement>('[data-i18n-alt]').forEach((el) => {
+        el.setAttribute('alt', lookup(lang, el.getAttribute('data-i18n-alt')!));
+    });
 }
