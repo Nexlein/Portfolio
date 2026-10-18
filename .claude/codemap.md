@@ -10,7 +10,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
 - **index.html** (162)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
-- **project.html** (75) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
+- **project.html** (76) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
 
 ## e2e
@@ -154,17 +154,17 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
-- **projects.ts** (414) — Single source of truth for all portfolio projects.
+- **projects.ts** (418) — Single source of truth for all portfolio projects.
   - exports: ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
   - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/video, vite-plugins/pages
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (232)
+- **en.ts** (237)
   - exports: en
   - ← core/translate
-- **fr.ts** (232)
+- **fr.ts** (237)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -212,18 +212,18 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **gallery.ts** (34) — Gallery on a project page: arrows, dots, arrow keys and a "2 / 4" counter.
   - exports: initGallery
   - ← pages/project/project
-- **project.css** (337) — Project page: a header, the media, a spec strip, then the projects the map links it to.
+- **project.css** (361) — Project page: a header, the media, a spec strip, then the projects the map links it to.
   - ← project.html
 - **project.ts** (29) — Project page entry point.
   - → core/analytics, components/Nav/Nav, ui/boot, ui/reveal, ui/motion, ui/video, pages/project/gallery
   - ← project.html
-- **render.ts** (112) — Fill the project page template (project.html) for one project, at build time.
+- **render.ts** (136) — Fill the project page template (project.html) for one project, at build time.
   - exports: projectDescription, fillProjectPage
   - → data/projects, core/text, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← vite-plugins/pages
 
 ## src/styles
-- **base.css** (349) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (350) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← 404.html, cv.html, index.html, project.html
 - **tokens.css** (97) — Design tokens.

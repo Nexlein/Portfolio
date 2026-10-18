@@ -53,15 +53,36 @@ function mediaHtml(media: ProjectMedia, lang: Lang): string {
     }
 }
 
-/** Started, domain, period, stack: the facts, as a spec strip. */
+/** Started, domain, period, team (when known), stack: the facts, as a spec strip. */
 function specs(project: ProjectEntry, lang: Lang): string {
+    const { team } = project;
     const rows: [string, string][] = [
         [t(lang, 'started'), monthName(yearOf(project.date), lang)],
         [t(lang, 'domain'), domainName(lang, project.category)],
         [t(lang, 'period'), lookup(lang, `home.work.periods.${periodOf(project)}`)],
+        ...(team
+            ? [
+                  [
+                      t(lang, 'team'),
+                      team.size === 1 ? t(lang, 'solo') : t(lang, 'people').replace('{n}', String(team.size))
+                  ]
+              ]
+            : []),
         [t(lang, 'stack'), project.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('')]
-    ];
+    ] as [string, string][];
     return rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+}
+
+/** My part and the result, when the data has them: the answers to "who did what, and did it work?". */
+function story(project: ProjectEntry, lang: Lang): string {
+    const rows: [string, string | undefined][] = [
+        [t(lang, 'role'), project.team?.role[lang]],
+        [t(lang, 'result'), project.result?.[lang]]
+    ];
+    return rows
+        .filter(([, v]) => v)
+        .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`)
+        .join('');
 }
 
 /** The skills two projects share, in the neighbour's own spelling. */
@@ -101,6 +122,9 @@ export function fillProjectPage(document: Document, project: ProjectEntry, lang:
     $('project-desc').innerHTML = project.description[lang];
     $('project-eyebrow').innerHTML = `${domainName(lang, project.category)} · ${monthName(yearOf(project.date), lang)}`;
     $('project-specs').innerHTML = specs(project, lang);
+    const told = story(project, lang);
+    if (told) $('project-story').innerHTML = told;
+    else $('project-story').remove();
     $('project-media').innerHTML = mediaHtml(project.media, lang);
     $('project-related').innerHTML = related(project, lang);
     $('project-back').setAttribute('href', `${localizedPath('/', lang)}#work`);

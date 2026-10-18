@@ -38,6 +38,10 @@ export interface ProjectEntry {
     date: string;
     /** Shown in "Selected work" and always on the map. */
     featured?: true;
+    /** Who built it, from the repository's history: team size (1 = solo) and my own part. Project page. */
+    team?: { size: number; role: Text };
+    /** One concrete outcome the repository shows (tests, scores, features). Project page. */
+    result?: Text;
     github: string; // full URL or '' to hide the link
     media: ProjectMedia;
 }
