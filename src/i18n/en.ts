@@ -48,6 +48,7 @@ export const en = {
             work: 'See the work',
             hire: 'Hire me',
             switch: 'Show another simulation',
+            pause: 'Pause the animation',
             scroll: 'Scroll down',
             sims: {
                 valueIteration: {
@@ -118,6 +119,7 @@ export const en = {
             since: 'since {d}',
             beforeEpitech: 'Before Epitech',
             range: 'Time range',
+            ranges: { '1m': '1M', '6m': '6M', '1y': '1Y', max: 'Max' },
             aria: 'Distinct skills over time: {n} today.',
             skills: '{n} skills',
             shipped: '{p} started',
@@ -205,6 +207,8 @@ export const en = {
     },
     cv: {
         controls: {
+            label: 'Curriculum vitae · A4',
+            qr: 'QR code to the portfolio',
             print: 'Print',
             pdf: 'Download PDF'
         },

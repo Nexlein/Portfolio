@@ -24,6 +24,12 @@ describe('translateTree', () => {
         expect(document.querySelector('h2')!.innerHTML).toBe(fr.projectPage.code);
         expect(document.querySelector('p')!.innerHTML).toBe('missing.key');
     });
+
+    it('translates alt text marked with data-i18n-alt', () => {
+        document.body.innerHTML = '<img src="/qrcode.svg" alt="QR" data-i18n-alt="cv.controls.qr" />';
+        translateTree(document, 'fr');
+        expect(document.querySelector('img')!.alt).toBe(fr.cv.controls.qr);
+    });
 });
 
 describe('localized paths', () => {

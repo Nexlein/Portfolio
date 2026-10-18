@@ -8,14 +8,12 @@ import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
-import { still } from '../../ui/video.ts';
+import { stillAttrs } from '../../ui/video.ts';
 import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
 import { thisMonth, yearOf } from '../../components/Charts/data.ts';
 import { firstSentence } from '../../core/text.ts';
 import { pickShown } from '../../components/NeuralMap/graph.ts';
-
-/** Most projects the map shows at once (the rest rotate in). */
-export const MAP_MAX = 24;
+import { MAP_MAX } from '../../components/NeuralMap/limits.ts';
 
 const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
 
@@ -32,7 +30,7 @@ export function featured(lang: Lang): string {
     return PROJECTS.filter((p) => p.featured)
         .map(
             (p) => `<a class="feature surface reveal" href="${localizedPath(projectPath(p.id), lang)}">
-<span class="feature-media"><img src="${still(p)}" alt="" loading="lazy" width="640" height="400" /></span>
+<span class="feature-media"><img ${stillAttrs(p, '104px')} alt="" loading="lazy" width="640" height="400" /></span>
 <span class="feature-body"><span class="eyebrow">${domainName(lang, p.category)}</span><strong>${p.title}</strong></span></a>`
         )
         .join('');
@@ -57,7 +55,7 @@ export function projectList(lang: Lang): string {
     return PROJECTS.map(
         (
             p
-        ) => `<li><a href="${localizedPath(projectPath(p.id), lang)}" data-domain="${p.category}"><span class="list-ico">${domainIcon(p.category)}</span>
+        ) => `<li><a href="${localizedPath(projectPath(p.id), lang)}" data-id="${p.id}" data-domain="${p.category}"><span class="list-ico">${domainIcon(p.category)}</span>
 <span class="list-txt"><strong>${p.title}</strong><span>${oneLiner(p, lang)}</span></span><span class="list-chev" aria-hidden="true">›</span></a></li>`
     ).join('');
 }
@@ -66,7 +64,7 @@ export function projectList(lang: Lang): string {
 export function mapMore(lang: Lang): string {
     const { shown } = pickShown(PROJECTS, MAP_MAX);
     if (shown.length === PROJECTS.length) return '';
-    return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all" aria-expanded="false">${t(lang, 'work.seeAll')}</button>`;
+    return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all">${t(lang, 'work.seeAll')}</button>`;
 }
 
 /**

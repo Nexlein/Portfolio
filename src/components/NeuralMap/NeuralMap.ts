@@ -10,13 +10,13 @@
  * The static project list stays the source of truth (no JavaScript, phones); this map is drawn on top of it.
  */
 import { i18n } from '@/core/i18n';
-import { localizedPath } from '@/core/translate';
+import { localizedPath } from '@/core/lang';
 import { firstSentence } from '@/core/text';
 import { NOW } from '@/data/profile';
 import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
-import { still } from '@/ui/video';
+import { stillAttrs } from '@/ui/video';
 import { fitFor, layout, neighbours, ORBIT, periodOf, pickShown, similarity, type Period, type Star } from './graph';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -133,7 +133,7 @@ function cardHtml(p: ProjectEntry): string {
 <span class="nm-head"><span class="nm-ico">${domainIcon(p.category)}</span>
 <span class="nm-txt"><strong>${p.title}</strong><span class="mono">${p.tags.slice(0, 2).join(' · ')}</span></span></span>
 <span class="nm-more"><span class="nm-inner">
-  <span class="nm-media"><img src="${still(p)}" alt="" loading="lazy" /></span>
+  <span class="nm-media"><img ${stillAttrs(p, '164px')} alt="" loading="lazy" /></span>
   <span class="nm-desc">${firstSentence(p.description[lang])}</span>
   <span class="mono nm-skills">${i18n.t(`home.work.periods.${periodOf(p)}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
   <span class="nm-go">${i18n.t('home.work.open')} <span aria-hidden="true">→</span></span>
@@ -505,8 +505,12 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     const swap = (out: Card, inP: ProjectEntry) => {
         const outP = out.star.p,
             inEl = elOf(inP);
+        // Swaps are scheduled ahead (a query staggers them): by now the card may already be leaving, or the project
+        // may have come in elsewhere. Swapping again would show a project twice and drop another one
+        if (!cards.includes(out) || out.el.classList.contains('leaving') || !hidden.includes(inP)) return;
         out.el.classList.add('leaving');
         setTimeout(() => {
+            if (!cards.includes(out)) return; // the map was rebuilt meanwhile (a resize): its new cards are in place
             // The leaving card may have been hovered or open meanwhile: leave nothing of that behind
             if (opened === out) close(out);
             clearTimeout(out.timer);
@@ -632,7 +636,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         for (const c of cards) clearTimeout(c.timer);
         if (opened) close(opened);
         for (const el of els) {
-            el.classList.remove('open', 'near');
+            el.classList.remove('open', 'near', 'leaving'); // 'leaving': a swap the rebuild cut short
             delete el.dataset.score;
         }
         web.classList.remove('focus');
@@ -692,7 +696,8 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         });
         a.addEventListener('focus', () => {
             const c = cardOf(a);
-            if (c) open(c);
+            // Keyboard focus only: a tap focuses the link too, and opening there would make the first tap follow it
+            if (c && a.matches(':focus-visible')) open(c);
         });
         a.addEventListener('blur', () => {
             const c = cardOf(a);
@@ -712,7 +717,9 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     build();
     let resizeTimer = 0;
     let size = `${web.clientWidth}x${web.clientHeight}`;
-    window.addEventListener('resize', () => {
+    // The map's own box, not the window: it also changes when the map comes back from the list view (hidden there,
+    // so a window resize meanwhile measured nothing and the cards would keep the old width's places)
+    new ResizeObserver(() => {
         clearTimeout(resizeTimer);
         resizeTimer = window.setTimeout(() => {
             const next = `${web.clientWidth}x${web.clientHeight}`;
@@ -720,7 +727,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             size = next;
             build();
         }, 150);
-    });
+    }).observe(web);
     function wake() {
         if (running) return;
         running = true;

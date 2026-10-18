@@ -8,13 +8,14 @@ import { chromium } from '@playwright/test';
 import { NOW } from '../src/data/profile.ts';
 
 const require = createRequire(import.meta.url);
+const SANS = '@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal';
 const font = (name: string, weight: number, file: string) =>
-    `@font-face { font-family: '${name}'; font-weight: ${weight}; src: url('data:font/woff2;base64,${readFileSync(require.resolve(`@fontsource/${file}.woff2`)).toString('base64')}'); }`;
+    `@font-face { font-family: '${name}'; font-weight: ${weight}; src: url('data:font/woff2;base64,${readFileSync(require.resolve(`${file}.woff2`)).toString('base64')}'); }`;
 
 const html = `<!doctype html><html><head><meta charset="utf-8"><style>
-${font('Schibsted Grotesk', 500, 'schibsted-grotesk/files/schibsted-grotesk-latin-500-normal')}
-${font('Schibsted Grotesk', 700, 'schibsted-grotesk/files/schibsted-grotesk-latin-700-normal')}
-${font('IBM Plex Mono', 400, 'ibm-plex-mono/files/ibm-plex-mono-latin-400-normal')}
+${font('Schibsted Grotesk', 500, SANS)}
+${font('Schibsted Grotesk', 700, SANS)}
+${font('IBM Plex Mono', 400, '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal')}
 :root { --bg: #0a0e14; --surface: #121821; --ink: #e6eaf0; --signal: #ff7a1a; --cold: #4c8dff; --third: #2dd4a0; }
 * { box-sizing: border-box; margin: 0; }
 body { width: 1200px; height: 630px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: 'Schibsted Grotesk', sans-serif; position: relative; }
@@ -41,7 +42,7 @@ h1 { font-size: 104px; line-height: 0.98; font-weight: 700; letter-spacing: -0.0
 </body></html>`;
 
 const icon = (size: number) => `<!doctype html><html><head><meta charset="utf-8"><style>
-${font('Schibsted Grotesk', 700, 'schibsted-grotesk/files/schibsted-grotesk-latin-700-normal')}
+${font('Schibsted Grotesk', 700, SANS)}
 * { margin: 0; }
 body { width: ${size}px; height: ${size}px; background: #0a0e14; display: grid; place-items: center; position: relative; }
 span { font: 700 ${size * 0.66}px/1 'Schibsted Grotesk', sans-serif; color: #e6eaf0; letter-spacing: -0.04em; }

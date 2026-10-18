@@ -14,7 +14,12 @@
 .footer nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 24px;
+    gap: 0 24px;
+}
+
+/* Room around the 13px links, so each is a 24px-plus touch target */
+.footer nav a {
+    padding-block: 4px;
 }
 
 .footer-source {

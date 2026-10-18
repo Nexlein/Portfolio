@@ -5,6 +5,17 @@
  */
 import { prefersReducedMotion } from '@/ui/motion';
 
+/** Set by the hero's pause button: every frame loop holds still until it is cleared. */
+let paused = false;
+/** The wake of every live loop, so that resuming (or turning reduced motion off) restarts them. */
+const wakers = new Set<() => void>();
+
+/** Hold every simulation still, or set them going again. */
+export function pauseSims(on: boolean): void {
+    paused = on;
+    if (!on) wakers.forEach((wake) => wake());
+}
+
 export interface Point {
     x: number;
     y: number;
@@ -88,6 +99,8 @@ export function stage(canvas: HTMLCanvasElement): Stage {
     visibility.observe(canvas);
     signal.addEventListener('abort', () => visibility.disconnect());
     document.addEventListener('visibilitychange', () => wake?.(), { signal });
+    // The setting can change mid-visit: loops hold still while it is on and start again when it is turned off
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => wake?.(), { signal });
     read();
     size();
     const reduced = prefersReducedMotion();
@@ -124,16 +137,21 @@ export function stage(canvas: HTMLCanvasElement): Stage {
             }
             let running = false; // a frame is queued
             const tick = (t: number) => {
-                // Scrolled away, tab hidden or replaced by another simulation: stop asking for frames until `wake`
-                if (!canvas.isConnected || !seen || document.hidden) return void (running = false);
+                // Scrolled away, tab hidden, paused, reduced motion turned on or replaced by another simulation:
+                // stop asking for frames until `wake`
+                if (!canvas.isConnected || !seen || document.hidden || paused || prefersReducedMotion())
+                    return void (running = false);
                 frame(t);
                 requestAnimationFrame(tick);
             };
-            wake = () => {
+            const restart = () => {
                 if (running) return;
                 running = true;
                 requestAnimationFrame(tick);
             };
+            wake = restart;
+            wakers.add(restart);
+            signal.addEventListener('abort', () => wakers.delete(restart));
             wake();
         },
         reduced

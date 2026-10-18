@@ -48,6 +48,7 @@ export const fr = {
             work: 'Voir les projets',
             hire: 'Me recruter',
             switch: 'Changer de simulation',
+            pause: "Mettre l'animation en pause",
             scroll: 'Faire défiler',
             sims: {
                 valueIteration: {
@@ -118,6 +119,7 @@ export const fr = {
             since: 'depuis {d}',
             beforeEpitech: 'Avant Epitech',
             range: 'Période',
+            ranges: { '1m': '1M', '6m': '6M', '1y': '1A', max: 'Max' },
             aria: "Compétences distinctes au fil du temps : {n} aujourd'hui.",
             skills: '{n} compétences',
             shipped: '{p} démarré',
@@ -205,6 +207,8 @@ export const fr = {
     },
     cv: {
         controls: {
+            label: 'Curriculum vitae · A4',
+            qr: 'QR code vers le portfolio',
             print: 'Imprimer',
             pdf: 'Télécharger le PDF'
         },

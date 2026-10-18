@@ -3,9 +3,10 @@
  * Relative imports only: vite-plugins/pages.ts runs this from Node, without the '@/' alias.
  */
 import { PROJECTS, projectPath, type ProjectEntry, type ProjectMedia } from '../../data/projects.ts';
+import { attr } from '../../core/text.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
-import { still, videoPoster, videoType } from '../../ui/video.ts';
+import { stillAttrs, videoPoster, videoType } from '../../ui/video.ts';
 import { monthName } from '../../components/Charts/render.ts';
 import { yearOf } from '../../components/Charts/data.ts';
 import { neighbours, periodOf, skillSet } from '../../components/NeuralMap/graph.ts';
@@ -27,13 +28,13 @@ function mediaHtml(media: ProjectMedia, lang: Lang): string {
         case 'video':
             return `<video loop muted playsinline preload="none" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
         case 'image':
-            return `<img src="${media.src}" alt="${media.alt}" />`;
+            return `<img src="${media.src}" alt="${attr(media.alt[lang])}" />`;
         case 'gallery': {
             const n = media.images.length;
             const images = media.images
                 .map(
                     (img, i) =>
-                        `<img src="${img.src}" alt="${img.alt}" data-idx="${i}"${i ? ' loading="lazy" hidden aria-hidden="true"' : ' class="active"'} />`
+                        `<img src="${img.src}" alt="${attr(img.alt[lang])}" data-idx="${i}"${i ? ' loading="lazy" hidden aria-hidden="true"' : ' class="active"'} />`
                 )
                 .join('');
             const dots = media.images
@@ -84,7 +85,7 @@ function related(project: ProjectEntry, lang: Lang): string {
                 : t(lang, 'sameDomain').replace('{domain}', domainName(lang, q.category));
             const overlap = Math.round(s * 100);
             return `<a class="related-card surface reveal" href="${localizedPath(projectPath(q.id), lang)}">
-<span class="related-media"><img src="${still(q)}" alt="" loading="lazy" width="640" height="400" /></span>
+<span class="related-media"><img ${stillAttrs(q, '(width <= 800px) 92vw, 340px', true)} alt="" loading="lazy" width="640" height="400" /></span>
 <span class="related-body"><span class="related-domain">${domainIcon(q.category)}${domainName(lang, q.category)}</span>
 <strong>${q.title}</strong><span class="related-why">${why}</span>
 <span class="overlap"><span class="overlap-bar"><span class="overlap-fill" data-overlap="${overlap}"></span></span><span class="mono">${t(lang, 'overlap').replace('{n}', String(overlap))}</span></span></span></a>`;

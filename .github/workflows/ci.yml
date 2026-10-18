@@ -46,8 +46,9 @@ jobs:
             - name: Test
               run: npm test
 
+            # Typecheck already ran: only the bundle is left (npm run build would run tsc again)
             - name: Build
-              run: npm run build
+              run: npx vite build
 
             - uses: actions/upload-artifact@v7
               with:
@@ -63,13 +64,21 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
+            - uses: actions/setup-node@v7
+              with:
+                  node-version-file: .nvmrc
+                  cache: npm
+
+            - run: npm ci
+
             - uses: actions/download-artifact@v8
               with:
                   name: dist
                   path: dist
 
-            # Audits every page in dist/ (median of 3 runs): accessibility, best practices and SEO must stay >= 95,
-            # performance >= 85 (it scores 94 to 99 locally; the margin is for shared CI runners).
+            # Audits pages from dist/ served by vite preview with the production headers, CSP included (median of 3
+            # runs): accessibility, best practices and SEO must stay >= 95, performance >= 85 (it scores 94 to 99
+            # locally; the margin is for shared CI runners).
             - uses: treosh/lighthouse-ci-action@v12
               with:
                   configPath: ./config/lighthouserc.json

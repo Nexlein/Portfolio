@@ -76,6 +76,11 @@
     text-anchor: middle;
 }
 
+/* A label at the very start of the plot reads from there, so it never runs past the card's edge */
+.path-svg .tick.first {
+    text-anchor: start;
+}
+
 /* Where the visitor was: a band along the bottom of the plot, one block per school year (before Epitech first) */
 .path-svg .phase rect {
     fill: var(--ink);
@@ -88,7 +93,7 @@
 
 .path-svg .phase-label {
     text-anchor: middle;
-    font-size: 11px;
+    font-size: max(11px, calc(10px / var(--k, 1)));
     letter-spacing: 0.04em;
 }
 
@@ -469,10 +474,12 @@
     height: auto;
 }
 
+/* Labels shrink with their drawing on narrow screens: --k (shown / drawn width, src/ui/svg-scale.ts) keeps them
+   at least about 10.5px on screen. Without JS --k is unset and the sizes below apply as they are */
 .chart-card text {
     fill: var(--muted);
     font-family: var(--font-mono);
-    font-size: 10.5px;
+    font-size: max(10.5px, calc(10.5px / var(--k, 1)));
 }
 
 /* Series colours */
@@ -539,7 +546,7 @@
 }
 
 .radar text {
-    font-size: 16px;
+    font-size: max(16px, calc(10.5px / var(--k, 1)));
 }
 
 .radar :is(.ring, .spoke) {
@@ -611,7 +618,7 @@
 
 .columns .value {
     fill: var(--ink);
-    font-size: 13px;
+    font-size: max(13px, calc(11px / var(--k, 1)));
 }
 
 .columns .bar {
@@ -636,7 +643,7 @@
 .bars .name {
     fill: var(--ink);
     font-family: var(--font-sans);
-    font-size: 13px;
+    font-size: max(13px, calc(11px / var(--k, 1)));
 }
 
 .bars .track {
@@ -719,17 +726,18 @@
         font-size: 34px;
     }
 
-    /* The chart is drawn 1080 wide and scales down with the screen: its labels grow so they stay readable */
+    /* The chart is drawn 1080 wide and scales down with the screen: its labels grow so they stay readable
+       (with JS, --k holds them at about 11px on screen whatever the width: src/ui/svg-scale.ts) */
     .path-svg text {
-        font-size: 18px;
+        font-size: max(18px, calc(11px / var(--k, 1)));
     }
 
     .path-svg .mark text {
-        font-size: 15px;
+        font-size: max(15px, calc(11px / var(--k, 1)));
     }
 
     .path-svg .phase-label {
-        font-size: 14px;
+        font-size: max(14px, calc(10px / var(--k, 1)));
     }
 }
 
@@ -771,7 +779,7 @@
     }
 
     .path-svg text {
-        font-size: 30px;
+        font-size: max(30px, calc(11px / var(--k, 1)));
     }
 
     .path-svg .mark text,
@@ -779,8 +787,8 @@
         display: none; /* the tooltip on a tap names the checkpoint and the school year */
     }
 
-    /* A long range has too many month labels for a phone: the Januaries and the first one stay */
-    .path-svg .tick.minor {
+    /* Too many labels for a phone: about three month labels stay (render.ts, narrowTicks), and every other value */
+    .path-svg :is(.tick.wide, .value-minor) {
         display: none;
     }
 }
@@ -809,11 +817,13 @@
 .heat text {
     fill: var(--muted);
     font-family: var(--font-mono);
-    font-size: 10.5px;
+    font-size: max(10.5px, calc(10.5px / var(--k, 1)));
     text-anchor: middle;
 }
 
 .heat text.row {
+    /* Capped: the longest domain name has to fit in the left margin on a phone */
+    font-size: max(10.5px, min(calc(10.5px / var(--k, 1)), 12.5px));
     text-anchor: end;
 }
 

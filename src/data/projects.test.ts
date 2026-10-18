@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from './projects';
-import { videoPoster } from '@/ui/video';
+import { still, stillImage, THUMB_WIDTHS, thumbOf, videoPoster } from '@/ui/video';
 import { LANGS, lookup } from '@/core/translate';
 import { domainQuery } from '@/pages/home/blocks';
 
@@ -47,6 +47,12 @@ describe('PROJECTS data', () => {
             expect(publicFiles).toContain(src);
         });
 
+        it('has the card-sized copies its cards show (npm run media:thumbs)', () => {
+            const image = stillImage(project);
+            const copies = image ? THUMB_WIDTHS.map((w) => thumbOf(image, w)) : [still(project)];
+            for (const src of copies) expect(publicFiles).toContain(src);
+        });
+
         it('has a description in every language', () => {
             for (const lang of LANGS) expect(project.description[lang].trim().length, lang).toBeGreaterThan(40);
         });
@@ -55,7 +61,7 @@ describe('PROJECTS data', () => {
             const { media } = project;
             const alts =
                 media.type === 'gallery' ? media.images.map((i) => i.alt) : media.type === 'image' ? [media.alt] : [];
-            for (const alt of alts) expect(alt.trim()).not.toBe('');
+            for (const alt of alts) for (const text of Object.values(alt)) expect(text.trim()).not.toBe('');
         });
 
         it('has a start month that is a real, past month', () => {

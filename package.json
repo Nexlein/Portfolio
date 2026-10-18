@@ -18,6 +18,7 @@
         "audit": "audit-ci --config config/audit-ci.jsonc",
         "knip": "knip --config config/knip.json",
         "media:posters": "bash scripts/make-posters.sh",
+        "media:thumbs": "node scripts/make-thumbs.ts",
         "media:og": "bash scripts/make-og-images.sh",
         "media:brand": "node scripts/brand-images.ts",
         "media:video": "bash scripts/optimize-video.sh",
@@ -28,8 +29,8 @@
     "license": "ISC",
     "type": "module",
     "devDependencies": {
+        "@fontsource-variable/schibsted-grotesk": "^5.3.0",
         "@fontsource/ibm-plex-mono": "^5.3.0",
-        "@fontsource/schibsted-grotesk": "^5.3.0",
         "@playwright/test": "^1.64.1",
         "audit-ci": "^7.1.0",
         "happy-dom": "^21.0.1",
@@ -45,6 +46,6 @@
         "vitest": "^5.0.4"
     },
     "engines": {
-        "node": ">=22"
+        "node": ">=24"
     }
 }

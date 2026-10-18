@@ -19,7 +19,7 @@ for (const { path, heading } of pages) {
 
         const fontsLoaded = await page.evaluate(async () => {
             await document.fonts.ready;
-            return document.fonts.check('16px "Schibsted Grotesk"');
+            return document.fonts.check('16px "Schibsted Grotesk Variable"');
         });
         expect(fontsLoaded).toBe(true);
         // The fixture fails the test on console errors or CSP violations
@@ -29,12 +29,12 @@ for (const { path, heading } of pages) {
 // The preload is picked by file name from the build (vite-plugins/shared-head.ts): a font package that renames its files
 // would drop it silently
 for (const path of ['/', '/fr/', '/projects/zappy.html'])
-    test(`${path} preloads the two fonts the first screen uses, and both exist`, async ({ page, request }) => {
+    test(`${path} preloads the font the first screen uses, and it exists`, async ({ page, request }) => {
         await page.goto(path);
         const hrefs = await page
             .locator('link[rel="preload"][as="font"]')
             .evaluateAll((links) => links.map((link) => link.getAttribute('href')!));
-        expect(hrefs).toHaveLength(2);
+        expect(hrefs).toHaveLength(1);
         for (const href of hrefs) expect((await request.get(href)).status()).toBe(200);
     });
 

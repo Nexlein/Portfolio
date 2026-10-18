@@ -37,4 +37,4 @@ Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.
 
 - `main` = production (Vercel). `dev` = integration. Work on `feat/*`, `fix/*`, `chore/*` from `dev`, PR into `dev`; `dev` → `main` to release.
 - Conventional commits (`feat(home): ...`). Pre-commit runs lint-staged, typecheck, tests, codemap; never `--no-verify`.
-- The `cv` GitHub release must stay "Latest" (`/cv.pdf` redirects to it). `v1-classic` = old site, tag `prototype-redesign` = design prototypes.
+- Keep the `cv` GitHub release and its tag: `/cv.pdf` redirects to `releases/download/cv/...` (CI uploads the PDFs there from `main`). `v1-classic` = old site, tag `prototype-redesign` = design prototypes.
