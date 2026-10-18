@@ -177,10 +177,10 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'codename',
         title: 'Codename',
         description: {
-            en: 'A robust testing framework designed to evaluate and fortify Large Language Models against prompt injections and jailbreaks. Integrates adversarial prompting and defensive monitoring to ensure safe LLM deployments.',
-            fr: 'Un framework de test pour évaluer et renforcer la résistance des modèles de langage (LLM) aux injections de prompt et aux jailbreaks. Il combine prompting adverse et surveillance défensive pour sécuriser les déploiements.'
+            en: 'A prompt-injection lab: an attack prompt, a hardened system prompt for a local Ollama model, and a 39-case audit script in 9 attack families (role play, exfiltration tricks, multilingual, near-miss passwords...) that checks whether the secret leaks.',
+            fr: "Un laboratoire d'injection de prompt : un prompt d'attaque, un prompt système durci pour un modèle Ollama local, et un script d'audit de 39 cas en 9 familles d'attaques (jeu de rôle, exfiltration, multilingue, mots de passe presque exacts...) qui vérifie si le secret fuit."
         },
-        tags: ['Security', 'Python', 'LLM', 'Prompt Engineering'],
+        tags: ['Security', 'LLM', 'Prompt Engineering', 'Ollama', 'Bash'],
         category: 'ai',
         date: '2026-03',
         featured: true,
@@ -313,8 +313,8 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'secured',
         title: 'Secured',
         description: {
-            en: 'A robust C library implementing a highly efficient Hash Table data structure. Features custom cryptographic hashing functions and collision resolution strategies to ensure secure and fast data retrieval.',
-            fr: 'Une bibliothèque C qui implémente une table de hachage performante. Avec des fonctions de hachage personnalisées et plusieurs stratégies de résolution de collisions.'
+            en: 'A C library implementing a hash table: a custom hash function, separate chaining (a linked list per bucket), and 36 unit tests.',
+            fr: 'Une bibliothèque C qui implémente une table de hachage : une fonction de hachage maison, le chaînage séparé (une liste chaînée par case) et 36 tests unitaires.'
         },
         tags: ['C', 'Data Structures', 'Algorithms', 'Security', 'Library'],
         category: 'systems',

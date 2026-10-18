@@ -3,7 +3,7 @@
  * data-render names). The same HTML is the web page and, printed by scripts/cv-pdf.ts, the PDF.
  * Relative imports only: rendered from Node.
  */
-import { CV_PROJECTS, EDUCATION, EXPERIENCES, SKILLS } from '../../data/profile.ts';
+import { CV_PROJECTS, EDUCATION, EXPERIENCES, LOCATION, SKILLS } from '../../data/profile.ts';
 import { PROJECTS, projectPath } from '../../data/projects.ts';
 import { OWNER, SITE } from '../../core/site.ts';
 import { localizedPath, type Lang } from '../../core/translate.ts';
@@ -57,8 +57,9 @@ export const projectBlocks = Object.fromEntries(
     ])
 );
 
-/** Email, site, GitHub, LinkedIn. */
+/** Location, then email, site, GitHub, LinkedIn. */
 export const contact = (lang: Lang) =>
+    `<li>${LOCATION[lang]}</li>` +
     [
         [`mailto:${OWNER.email}`, OWNER.email],
         [`${SITE}${localizedPath('/', lang)}`, SITE.replace('https://', '')],

@@ -8,5 +8,7 @@ export const OWNER = {
     linkedin: 'https://www.linkedin.com/in/nielsen-combebracciale/',
     email: 'nielsen.combe-bracciale@epitech.eu',
     source: 'https://github.com/Nexlein/Portfolio',
-    school: 'Epitech'
+    school: 'Epitech',
+    city: 'Montpellier',
+    country: 'FR'
 } as const;

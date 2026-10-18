@@ -91,7 +91,7 @@ export function layout(W: number, H: number, fit: { rx: number; ry: number }, it
     const raw = coords.map(([x, y]) => Math.atan2(y, x));
     const rank = raw.map((a, i) => raw.filter((b, j) => b < a || (b === a && j < i)).length);
     const stars = items.map((p, i) => {
-        const angle = (-Math.PI + (2 * Math.PI * (rank[i] + 0.5)) / raw.length) * 0.7 + raw[i] * 0.3;
+        const angle = (-Math.PI + (2 * Math.PI * (rank[i] + 0.5)) / raw.length) * 0.8 + raw[i] * 0.2;
         const r = ORBIT[periodOf(p)];
         return { p, x: cx + Math.cos(angle) * fit.rx * r, y: cy + Math.sin(angle) * fit.ry * r };
     });

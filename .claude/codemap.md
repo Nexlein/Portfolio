@@ -133,10 +133,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **lang.ts** (37) — Languages and localized paths: pure, with no dictionary attached, so browser code can use them without downloading every translation (the...
   - exports: Lang, LANGS, Text, DEFAULT_LANG, langOfPath, localizedPath, STRINGS_ID, lookupIn
   - ← components/NeuralMap/NeuralMap, core/i18n, core/translate, vite-plugins/pages
-- **site.ts** (13) — Facts about the site and its owner, shared by the build (SEO, sitemap, structured data) and tests.
+- **site.ts** (15) — Facts about the site and its owner, shared by the build (SEO, sitemap, structured data) and tests.
   - exports: SITE, OWNER
   - ← components/Footer/render, core/structured-data, pages/cv/blocks, pages/home/blocks, vite-plugins/pages
-- **structured-data.ts** (62) — schema.org JSON-LD for search engines (rendered into each page at build time).
+- **structured-data.ts** (63) — schema.org JSON-LD for search engines (rendered into each page at build time).
   - exports: profilePage, cvPerson, projectSource
   - → data/projects, core/site, core/translate
   - ← vite-plugins/pages
@@ -150,8 +150,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, translate.test.ts
 
 ## src/data
-- **profile.ts** (379) — Everything the site says about its owner, written once in every language.
-  - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
+- **profile.ts** (395) — Everything the site says about its owner, written once in every language.
+  - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
 - **projects.ts** (368) — Single source of truth for all portfolio projects.
@@ -177,7 +177,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: render.test.ts
 
 ## src/pages/cv
-- **blocks.ts** (70) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+- **blocks.ts** (71) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
   - exports: experience, skills, education, certifications, projectBlocks, contact
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
