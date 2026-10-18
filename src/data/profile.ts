@@ -220,7 +220,7 @@ export const NOW = {
         fr: "Le nouveau site de l'entreprise, en ligne depuis le 9 octobre"
     },
     detail: { en: 'Sept 2026 – Feb 2027 · Epitech year 3', fr: 'Sept 2026 – Fév 2027 · Epitech 3e année' },
-    availability: { en: 'Open to an internship · Mar – Aug', fr: 'Disponible en stage · mars – août' }
+    availability: { en: 'Open to an internship · Mar – Aug 2027', fr: 'Disponible en stage · mars – août 2027' }
 } satisfies Record<string, Text>;
 
 /** Home timeline order (newest first), mixing experiences and education by id. A test checks every entry is listed once. */
@@ -294,7 +294,6 @@ export const CV_PROJECTS: CvProjectGroup[] = [
         projects: [
             {
                 id: 'ai-racing',
-                title: 'AI-Racing',
                 summary: {
                     en: 'RL agent (PPO) navigating a custom kinematic physics environment with raycast sensors.',
                     fr: 'Agent RL (PPO) qui navigue dans un environnement à physique cinématique sur mesure, avec des capteurs à lancer de rayons.'
@@ -332,7 +331,7 @@ export const OFFERS: Offer[] = [
         rows: [
             {
                 label: { en: 'Timeline & Rhythm', fr: 'Période et rythme' },
-                value: { en: 'March 29 to Aug. 27.', fr: '29 Mars au 27 Août.' },
+                value: { en: 'March 29 to Aug. 27, 2027.', fr: 'Du 29 mars au 27 août 2027.' },
                 note: { en: 'At least 4 months (5 days/week).', fr: 'Au moins 4 mois (5 jours/semaine).' }
             },
             {

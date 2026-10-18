@@ -128,7 +128,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'StartTrek',
         description: {
             en: 'Reinforcement Learning agent trained using Deep Q-Networks (DQN) to safely land a lunar module. Features experience replay, target networks, and domain randomization.',
-            fr: "Agent d'apprentissage par renforcement entraîné via Deep Q-Networks (DQN) pour faire atterrir un module lunaire sans encombre. Inclut le rejeu d'expérience et la randomisation de domaine."
+            fr: "Agent d'apprentissage par renforcement entraîné via Deep Q-Networks (DQN) pour faire atterrir un module lunaire sans encombre. Inclut le rejeu d'expérience, des réseaux cibles et la randomisation de domaine."
         },
         tags: ['Python', 'PyTorch', 'RL', 'DQN'],
         category: 'ai',
@@ -158,7 +158,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'Persona',
         description: {
             en: 'Automated, self-hosted AI system delivering personalized news digests based on user topics and timezones. Built with N8N, Supabase, Mistral AI, and NewsAPI. Includes an interactive chatbot and dynamic Python credential mappers.',
-            fr: "Système d'IA automatisé et auto-hébergé qui envoie des résumés d'actualités personnalisés, selon le fuseau horaire de chaque utilisateur. Construit avec N8N, Supabase, Mistral AI et NewsAPI."
+            fr: "Système d'IA automatisé et auto-hébergé qui envoie des résumés d'actualités personnalisés, selon les sujets et le fuseau horaire de chaque utilisateur. Construit avec N8N, Supabase, Mistral AI et NewsAPI. Inclut un chatbot interactif et des mappeurs d'identifiants dynamiques en Python."
         },
         tags: ['N8N', 'Python', 'Mistral AI', 'Supabase', 'Docker'],
         category: 'ai',
@@ -178,7 +178,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'Codename',
         description: {
             en: 'A robust testing framework designed to evaluate and fortify Large Language Models against prompt injections and jailbreaks. Integrates adversarial prompting and defensive monitoring to ensure safe LLM deployments.',
-            fr: 'Un framework de test pour évaluer et renforcer la résistance des modèles de langage (LLM) aux injections de prompt et aux jailbreaks. Il utilise du prompting adverse pour sécuriser les déploiements.'
+            fr: 'Un framework de test pour évaluer et renforcer la résistance des modèles de langage (LLM) aux injections de prompt et aux jailbreaks. Il combine prompting adverse et surveillance défensive pour sécuriser les déploiements.'
         },
         tags: ['Security', 'Python', 'LLM', 'Prompt Engineering'],
         category: 'ai',
@@ -199,7 +199,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'MyMarvin',
         description: {
             en: 'A complete CI/CD pipeline automation project based on Jenkins. Uses Docker, Groovy DSL, and Job DSL plugins to define and provision scalable build jobs automatically upon repository updates.',
-            fr: "Projet complet d'automatisation d'un pipeline CI/CD avec Jenkins. Docker et le DSL Groovy servent à définir et à provisionner dynamiquement les jobs de build."
+            fr: "Projet complet d'automatisation d'un pipeline CI/CD avec Jenkins. Docker, le DSL Groovy et le plugin Job DSL définissent et provisionnent automatiquement les jobs de build à chaque mise à jour du dépôt."
         },
         tags: ['Jenkins', 'Docker', 'CI/CD', 'Groovy', 'YAML'],
         category: 'devops',
@@ -219,7 +219,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'Octopus',
         description: {
             en: 'An infrastructure-as-code automation project. Uses Ansible to provision, configure, and orchestrate complex environments across multiple remote hosts concurrently, ensuring idempotency and rapid scaling.',
-            fr: "Projet d'automatisation Infrastructure-as-Code (IaC). Ansible provisionne, configure et orchestre en parallèle des environnements complexes sur plusieurs hôtes distants."
+            fr: "Projet d'automatisation Infrastructure-as-Code (IaC). Ansible provisionne, configure et orchestre en parallèle des environnements complexes sur plusieurs hôtes distants, de façon idempotente et facile à étendre."
         },
         tags: ['Ansible', 'Vagrant', 'IaC', 'PostgreSQL', 'Redis'],
         category: 'devops',
@@ -239,7 +239,7 @@ export const PROJECTS: ProjectEntry[] = [
         title: 'NanoTekSpice',
         description: {
             en: 'A logic gate simulator built in C++. Models digital electronic components (such as logic gates, clocks, and memory units) using pure Object-Oriented Programming principles.',
-            fr: 'Un simulateur de circuits logiques codé en C++. Il modélise des composants électroniques numériques avec les principes de la programmation orientée objet (POO).'
+            fr: 'Un simulateur de circuits logiques codé en C++. Il modélise des composants électroniques numériques (portes logiques, horloges, mémoires) avec les principes de la programmation orientée objet (POO).'
         },
         tags: ['C++', 'OOP', 'Simulation', 'Algorithms', 'Architecture'],
         category: 'architecture',

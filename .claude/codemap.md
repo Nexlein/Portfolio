@@ -150,7 +150,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, translate.test.ts
 
 ## src/data
-- **profile.ts** (380) — Everything the site says about its owner, written once in every language.
+- **profile.ts** (379) — Everything the site says about its owner, written once in every language.
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
