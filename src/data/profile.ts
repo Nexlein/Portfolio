@@ -143,12 +143,12 @@ export const EDUCATION: Education[] = [
         cvTitle: { en: 'Google Cloud', fr: 'Google Cloud' },
         period: { en: '2026', fr: '2026' },
         summary: {
-            en: 'Certified <strong>Generative AI Leader</strong> by Google Cloud, after completing the <strong>Google Cloud Computing Foundations</strong> learning path on cloud infrastructure.',
-            fr: "Certifié <strong>Generative AI Leader</strong> par Google Cloud, après le parcours <strong>Google Cloud Computing Foundations</strong> sur l'infrastructure cloud."
+            en: 'Certified <strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a></strong> by Google Cloud, after completing the <strong>Google Cloud Computing Foundations</strong> learning path on cloud infrastructure.',
+            fr: "Certifié <strong><a href='https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url'>Generative AI Leader</a></strong> par Google Cloud, après le parcours <strong>Google Cloud Computing Foundations</strong> sur l'infrastructure cloud."
         },
         cvSummary: {
-            en: 'Generative AI Leader certification; Cloud Computing Foundations path.',
-            fr: 'Certification Generative AI Leader ; parcours Cloud Computing Foundations.'
+            en: '<a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a> certification; Cloud Computing Foundations path.',
+            fr: 'Certification <a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a> ; parcours Cloud Computing Foundations.'
         }
     },
     {
