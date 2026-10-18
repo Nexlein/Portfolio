@@ -31,7 +31,8 @@ import {
     yearOf,
     yTicks,
     type Point,
-    type Range
+    type Range,
+    type Tick
 } from './data.ts';
 import { monthLabel, PATH, pathSamples, type PathData } from './series.ts';
 
@@ -70,6 +71,21 @@ export function changeText(
     return { text, over, up: delta > 0 };
 }
 
+/**
+ * The month labels a phone keeps (CSS hides the others there): about three, never closer than a third of the range,
+ * and a January (it names its year) wins over the first label when the two are close.
+ */
+function narrowTicks(axis: Tick[], t0: number, now: number): Set<Tick> {
+    const gap = (now - t0) / 3.2;
+    const kept: Tick[] = [];
+    for (const tk of axis) {
+        const last = kept[kept.length - 1];
+        if (!last || tk.t - last.t >= gap - 1e-9) kept.push(tk);
+        else if (tk.month === 0 && last.month !== 0 && kept.length === 1) kept[0] = tk;
+    }
+    return new Set(kept);
+}
+
 /** The plot itself, for a range starting at t0. */
 export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): string {
     const { W, H, L, R, T, B } = PATH;
@@ -81,6 +97,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
     const line = samples.map(([px, py], i) => `${i ? 'L' : 'M'}${f1(px)} ${f1(py)}`).join('');
     const ticks = yTicks(domain.lo, domain.hi);
     const axis = timeTicks(t0, now);
+    const narrow = narrowTicks(axis, t0, now);
     // The band of life along the bottom: before Epitech, then each school year (a label only where it fits)
     const phases = phasesIn(t0, now)
         .map((ph, i) => {
@@ -118,7 +135,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
-<g class="grid">${ticks.map((v) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
+<g class="grid">${ticks.map((v, i) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text${ticks.length > 3 && i % 2 ? ' class="value-minor"' : ''} x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}${narrow.has(tk) ? '' : ' wide'}${x(tk.t) < L + 40 ? ' first' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
 <g class="phases">${phases}</g>
 <path class="line" pathLength="1" d="${line}" />
@@ -162,7 +179,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
     const json = JSON.stringify(data).replace(/</g, '\\u003c');
     const later = ranges
         .filter(({ r }) => r !== first)
-        .map(({ r, t0 }) => `<template data-range="${r.id}">${pathSvg(lang, points, t0, now)}</template>`)
+        .map(({ r, t0 }) => `<template data-plot="${r.id}">${pathSvg(lang, points, t0, now)}</template>`)
         .join('');
     return `<div class="path-chart surface reveal">
   <div class="path-ticker">
@@ -313,7 +330,7 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
     const max = Math.max(...grid.flat(), 1);
     const W = 300,
         H = 220,
-        left = 92,
+        left = 100,
         cw = (W - left - 4) / pers.length,
         ch = Math.min(30, (H - 44) / keys.length);
     const cells = keys

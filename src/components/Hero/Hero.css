@@ -244,3 +244,15 @@
         padding-bottom: 64px;
     }
 }
+
+/* Phones held sideways: the words cover most of the field, so the simulation steps back behind them */
+@media (height <= 500px) {
+    .hero-field,
+    .hero-field[data-sim] {
+        opacity: 0.25;
+    }
+
+    .hero-field.incoming {
+        opacity: 0;
+    }
+}

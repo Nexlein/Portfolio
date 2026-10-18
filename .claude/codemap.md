@@ -28,17 +28,17 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - → data/projects, ui/video
 
 ## src/components/Charts
-- **Charts.css** (824) — Path chart and the numbers deck.
+- **Charts.css** (834) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (292) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
+- **Charts.ts** (295) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
   - exports: initPathChart, initPathStory, initNumbers
-  - → ui/motion, ui/reveal, components/Charts/series
+  - → ui/motion, ui/reveal, ui/svg-scale, components/Charts/series
   - ← pages/home/home
 - **data.ts** (254) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
   - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, components/NeuralMap/graph, components/Charts/series
   - ← components/Charts/render, pages/home/blocks, pages/project/render
-- **render.ts** (370) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+- **render.ts** (387) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
   - exports: monthName, phaseLabel, changeText, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data, components/Charts/series
   - ← pages/home/blocks, pages/project/render
@@ -48,7 +48,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: data.test.ts
 
 ## src/components/Footer
-- **Footer.css** (35)
+- **Footer.css** (40) — Room around the 13px links, so each is a 24px-plus touch target
   - ← 404.html, cv.html, index.html, project.html
 - **render.ts** (20) — Site footer, rendered at build time (data-render="footer").
   - exports: renderFooter
@@ -56,7 +56,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render
 
 ## src/components/Hero
-- **Hero.css** (247) — Sparser simulations get more presence
+- **Hero.css** (259) — Sparser simulations get more presence
   - ← index.html
 - **Hero.ts** (132) — Hero: a live simulation behind the words (a random one per visit, a dot per simulation to switch), a pause button for everything that mov...
   - exports: initHero
@@ -181,7 +181,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: experience, skills, education, certifications, projectBlocks, contact
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
-- **cv.css** (352) — CV: a sheet on the site's stage.
+- **cv.css** (364) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav
@@ -247,6 +247,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: countUp, initReveals
   - → ui/motion
   - ← components/Charts/Charts, pages/home/home, pages/project/project
+- **svg-scale.ts** (12) — SVG text scales with its drawing: a chart drawn 1080 wide and shown 300px wide has labels 3.6 times smaller.
+  - exports: trackScale
+  - ← components/Charts/Charts
 - **video.ts** (87) — MIME type for a project video, from its extension.
   - exports: videoType, videoPoster, THUMB_WIDTHS, thumbOf, stillImage, still, stillAttrs, playVideosWhenVisible
   - → data/projects, ui/motion

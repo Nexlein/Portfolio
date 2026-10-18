@@ -4,6 +4,7 @@
  */
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { countUp } from '@/ui/reveal';
+import { trackScale } from '@/ui/svg-scale';
 import { monthLabel, PATH, pathSamples, schoolYear, valueAt, yDomain, type PathData } from './series';
 
 /** How far (in chart units) the crosshair reaches for a checkpoint. */
@@ -21,6 +22,7 @@ export function initPathChart(): void {
     // One plot per range: the page draws the first, the others come out of their <template> the first time
     const views = new Map<string, SVGSVGElement>([[pressed, plot.querySelector('svg')!]]);
     const bound = new WeakSet<SVGSVGElement>();
+    trackScale(plot, PATH.W); // every range's plot is drawn the same width
 
     const bind = (svg: SVGSVGElement, t0: number) => {
         if (bound.has(svg)) return;
@@ -82,7 +84,7 @@ export function initPathChart(): void {
             delta.classList.toggle('flat', !range.up);
             let svg = views.get(id);
             if (!svg) {
-                const template = host.querySelector<HTMLTemplateElement>(`template[data-range="${id}"]`)!;
+                const template = host.querySelector<HTMLTemplateElement>(`template[data-plot="${id}"]`)!;
                 svg = document.importNode(template.content, true).querySelector('svg')!;
                 views.set(id, svg);
             }
@@ -233,6 +235,7 @@ export function initNumbers(): void {
     const cards = [...stage.querySelectorAll<HTMLElement>('.chart-card')];
     const n = cards.length;
     const index = root.querySelector<HTMLElement>('.numbers-index')!;
+    for (const svg of stage.querySelectorAll<SVGSVGElement>('svg[viewBox]')) trackScale(svg, svg.viewBox.baseVal.width);
     root.classList.add('deck');
     nav.hidden = false;
     cards.forEach((c) => c.classList.remove('reveal'));
