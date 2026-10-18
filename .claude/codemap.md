@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **404.html** (56) — Template for /404.html and /fr/404.html: Vercel serves /404.html for every URL that matches nothing.
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/notfound/notfound.css, pages/notfound/notfound
-- **cv.html** (107)
+- **cv.html** (113)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
 - **index.html** (162)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
@@ -140,10 +140,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: profilePage, cvPerson, projectSource
   - → data/projects, core/site, core/translate
   - ← vite-plugins/pages
-- **text.ts** (8) — First sentence of a text, without HTML tags, ending in one full stop ("A.
-  - exports: firstSentence
-  - ← components/NeuralMap/NeuralMap, pages/home/blocks
-- **translate.ts** (34) — Translation helpers for the build (vite-plugins/pages.ts, which pre-renders every page in every language) and for tests.
+- **text.ts** (16) — First sentence of a text, without HTML tags, ending in one full stop ("A.
+  - exports: firstSentence, attr
+  - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
+- **translate.ts** (38) — Translation helpers for the build (vite-plugins/pages.ts, which pre-renders every page in every language) and for tests.
   - exports: lookup, clientStrings, translateTree
   - → i18n/en, i18n/fr, core/lang
   - ← components/Charts/render, components/Footer/render, components/Nav/render, core/structured-data, data/profile, data/projects, pages/content/render, pages/cv/blocks, pages/home/blocks, pages/project/render, vite-plugins/pages
@@ -154,17 +154,17 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
-- **projects.ts** (344) — Single source of truth for all portfolio projects.
+- **projects.ts** (368) — Single source of truth for all portfolio projects.
   - exports: ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
   - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/video, vite-plugins/pages
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (230)
+- **en.ts** (232)
   - exports: en
   - ← core/translate
-- **fr.ts** (230)
+- **fr.ts** (232)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -217,9 +217,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **project.ts** (29) — Project page entry point.
   - → core/analytics, components/Nav/Nav, ui/boot, ui/reveal, ui/motion, ui/video, pages/project/gallery
   - ← project.html
-- **render.ts** (111) — Fill the project page template (project.html) for one project, at build time.
+- **render.ts** (112) — Fill the project page template (project.html) for one project, at build time.
   - exports: projectDescription, fillProjectPage
-  - → data/projects, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
+  - → data/projects, core/text, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← vite-plugins/pages
 
 ## src/styles
@@ -263,5 +263,5 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **pages.ts** (256) — One page of the site, in every language.
   - exports: PageSpec, PAGES, NOT_FOUND, outputFile, renderPage, sitemap, sitePages
   - → data/projects, core/site, core/structured-data, core/translate, core/lang, pages/content/render, pages/project/render
-- **shared-head.ts** (76) — Runs in <head> before first paint, on every page: 1.
+- **shared-head.ts** (75) — Runs in <head> before first paint, on every page: 1.
   - exports: HEAD_SCRIPT, sharedHead

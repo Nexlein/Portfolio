@@ -30,4 +30,8 @@ export function translateTree(root: ParentNode, lang: Lang): void {
         const key = el.getAttribute('data-i18n');
         if (key) el.innerHTML = lookup(lang, key);
     });
+    // Image descriptions: a data-i18n-alt key translates the alt attribute
+    root.querySelectorAll<HTMLElement>('[data-i18n-alt]').forEach((el) => {
+        el.setAttribute('alt', lookup(lang, el.getAttribute('data-i18n-alt')!));
+    });
 }

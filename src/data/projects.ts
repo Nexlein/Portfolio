@@ -3,7 +3,7 @@ import type { Text } from '../core/translate.ts';
 /**
  * Single source of truth for all portfolio projects.
  * To add a project: append one ProjectEntry object to the array below.
- * Cards, the modal, project pages, the sitemap and structured data are all generated from it.
+ * Cards, the map, project pages, the sitemap and structured data are all generated from it.
  * Text fields hold every language ({ en, fr }).
  */
 
@@ -17,12 +17,12 @@ interface ProjectMediaVideo {
 interface ProjectMediaImage {
     type: 'image';
     src: string;
-    alt: string;
+    alt: Text;
 }
 
 interface ProjectMediaGallery {
     type: 'gallery';
-    images: { src: string; alt: string }[];
+    images: { src: string; alt: Text }[];
 }
 
 export type ProjectMedia = ProjectMediaVideo | ProjectMediaImage | ProjectMediaGallery;
@@ -76,17 +76,17 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'gallery',
             images: [
-                { src: '/projects/raytracer/demo.webp', alt: 'Demo' },
-                { src: '/projects/raytracer/fractals.webp', alt: 'Fractals' },
-                { src: '/projects/raytracer/glassBall.webp', alt: 'Glass Ball' },
-                { src: '/projects/raytracer/graphCylinder.webp', alt: 'Graph Cylinder' },
-                { src: '/projects/raytracer/hourglass.webp', alt: 'Hourglass' },
-                { src: '/projects/raytracer/iceCream.webp', alt: 'Ice Cream' },
-                { src: '/projects/raytracer/mirror.webp', alt: 'Mirror Room' },
-                { src: '/projects/raytracer/mobiusStrip.webp', alt: 'Mobius Strip' },
-                { src: '/projects/raytracer/pointLight.webp', alt: 'Point Light' },
-                { src: '/projects/raytracer/tangleCube.webp', alt: 'Tangle Cube' },
-                { src: '/projects/raytracer/random.webp', alt: 'Random shapes' }
+                { src: '/projects/raytracer/demo.webp', alt: { en: 'Demo', fr: 'Démo' } },
+                { src: '/projects/raytracer/fractals.webp', alt: { en: 'Fractals', fr: 'Fractales' } },
+                { src: '/projects/raytracer/glassBall.webp', alt: { en: 'Glass Ball', fr: 'Boule de verre' } },
+                { src: '/projects/raytracer/graphCylinder.webp', alt: { en: 'Graph Cylinder', fr: 'Cylindre graphe' } },
+                { src: '/projects/raytracer/hourglass.webp', alt: { en: 'Hourglass', fr: 'Sablier' } },
+                { src: '/projects/raytracer/iceCream.webp', alt: { en: 'Ice Cream', fr: 'Glace' } },
+                { src: '/projects/raytracer/mirror.webp', alt: { en: 'Mirror Room', fr: 'Salle des miroirs' } },
+                { src: '/projects/raytracer/mobiusStrip.webp', alt: { en: 'Mobius Strip', fr: 'Ruban de Möbius' } },
+                { src: '/projects/raytracer/pointLight.webp', alt: { en: 'Point Light', fr: 'Lumière ponctuelle' } },
+                { src: '/projects/raytracer/tangleCube.webp', alt: { en: 'Tangle Cube', fr: 'Cube entrelacé' } },
+                { src: '/projects/raytracer/random.webp', alt: { en: 'Random shapes', fr: 'Formes aléatoires' } }
             ]
         }
     },
@@ -117,7 +117,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/cvrie/cvrie.webp',
-            alt: 'Abstract visualization of Machine Learning clusters and neural networks'
+            alt: {
+                en: 'Abstract visualization of Machine Learning clusters and neural networks',
+                fr: "Visualisation abstraite de clusters d'apprentissage automatique et de réseaux de neurones"
+            }
         }
     },
     {
@@ -164,7 +167,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/persona/persona.webp',
-            alt: 'Abstract dataflow network representing an automated AI newsletter system'
+            alt: {
+                en: 'Abstract dataflow network representing an automated AI newsletter system',
+                fr: "Réseau de flux de données abstrait représentant un système de newsletter automatisé par l'IA"
+            }
         }
     },
     {
@@ -182,7 +188,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/codename/codename.webp',
-            alt: 'Diagram illustrating a prompt input passing through an AI Security Firewall'
+            alt: {
+                en: 'Diagram illustrating a prompt input passing through an AI Security Firewall',
+                fr: "Schéma d'un prompt qui traverse un pare-feu de sécurité pour l'IA"
+            }
         }
     },
     {
@@ -199,7 +208,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/mymarvin/mymarvin.webp',
-            alt: 'Architecture diagram showing Jenkins automation via Docker and JCasC'
+            alt: {
+                en: 'Architecture diagram showing Jenkins automation via Docker and JCasC',
+                fr: "Schéma d'architecture de l'automatisation Jenkins avec Docker et JCasC"
+            }
         }
     },
     {
@@ -216,7 +228,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/octopus/octopus.webp',
-            alt: 'Diagram showing Ansible automation deploying to multiple virtual machines'
+            alt: {
+                en: 'Diagram showing Ansible automation deploying to multiple virtual machines',
+                fr: "Schéma d'Ansible qui déploie sur plusieurs machines virtuelles"
+            }
         }
     },
     {
@@ -233,7 +248,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/nanotekspice/nanotekspice.webp',
-            alt: 'Vibrant 3D glowing representation of a microchip and electronic circuit board'
+            alt: {
+                en: 'Vibrant 3D glowing representation of a microchip and electronic circuit board',
+                fr: "Représentation 3D lumineuse d'une puce et d'un circuit électronique"
+            }
         }
     },
     {
@@ -268,7 +286,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/tardis/tardis.webp',
-            alt: 'Screenshot of the Tardis data analytics dashboard'
+            alt: {
+                en: 'Screenshot of the Tardis data analytics dashboard',
+                fr: "Capture d'écran du tableau de bord d'analyse de données Tardis"
+            }
         }
     },
     {
@@ -303,7 +324,10 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'image',
             src: '/projects/secured/secured.webp',
-            alt: 'Holographic 3D visualization of a hash table data structure and digital vault'
+            alt: {
+                en: 'Holographic 3D visualization of a hash table data structure and digital vault',
+                fr: "Visualisation 3D holographique d'une table de hachage et d'un coffre-fort numérique"
+            }
         }
     },
     {

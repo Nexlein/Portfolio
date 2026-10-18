@@ -21,7 +21,7 @@ const sources = {
     ...import.meta.glob<string>(['../**/*.ts', '!../**/*.test.ts'], { query: '?raw', import: 'default', eager: true })
 };
 const usedKeys = new Set(
-    Object.values(sources).flatMap((src) => [...src.matchAll(/data-i18n="([^"$]+)"/g)].map((m) => m[1]))
+    Object.values(sources).flatMap((src) => [...src.matchAll(/data-i18n(?:-alt)?="([^"$]+)"/g)].map((m) => m[1]))
 );
 
 describe('translation dictionaries', () => {

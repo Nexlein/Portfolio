@@ -207,6 +207,8 @@ export const fr = {
     },
     cv: {
         controls: {
+            label: 'Curriculum vitae · A4',
+            qr: 'QR code vers le portfolio',
             print: 'Imprimer',
             pdf: 'Télécharger le PDF'
         },

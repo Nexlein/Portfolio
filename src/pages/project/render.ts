@@ -3,6 +3,7 @@
  * Relative imports only: vite-plugins/pages.ts runs this from Node, without the '@/' alias.
  */
 import { PROJECTS, projectPath, type ProjectEntry, type ProjectMedia } from '../../data/projects.ts';
+import { attr } from '../../core/text.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
 import { stillAttrs, videoPoster, videoType } from '../../ui/video.ts';
@@ -27,13 +28,13 @@ function mediaHtml(media: ProjectMedia, lang: Lang): string {
         case 'video':
             return `<video loop muted playsinline preload="none" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
         case 'image':
-            return `<img src="${media.src}" alt="${media.alt}" />`;
+            return `<img src="${media.src}" alt="${attr(media.alt[lang])}" />`;
         case 'gallery': {
             const n = media.images.length;
             const images = media.images
                 .map(
                     (img, i) =>
-                        `<img src="${img.src}" alt="${img.alt}" data-idx="${i}"${i ? ' loading="lazy" hidden aria-hidden="true"' : ' class="active"'} />`
+                        `<img src="${img.src}" alt="${attr(img.alt[lang])}" data-idx="${i}"${i ? ' loading="lazy" hidden aria-hidden="true"' : ' class="active"'} />`
                 )
                 .join('');
             const dots = media.images

@@ -5,3 +5,11 @@ export function firstSentence(text: string): string {
         .replace(/<[^>]+>/g, '')
         .replace(/\.$/, '')}.`;
 }
+
+/**
+ * Safe text for a double-quoted HTML attribute in the build's string templates. Ampersands stay as they are: the
+ * dictionaries already write entities ('IA &amp; RL'), and escaping them again would show '&amp;' on the page.
+ */
+export function attr(text: string): string {
+    return text.replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}

@@ -1,15 +1,16 @@
 {
     "ci": {
         "collect": {
-            "staticDistDir": "./dist",
+            "startServerCommand": "npx vite preview --port 4173 --strictPort",
+            "startServerReadyPattern": "Local",
             "numberOfRuns": 3,
             "url": [
-                "http://localhost/index.html",
-                "http://localhost/cv.html",
-                "http://localhost/projects/zappy.html",
-                "http://localhost/fr/index.html",
-                "http://localhost/fr/cv.html",
-                "http://localhost/fr/projects/zappy.html"
+                "http://localhost:4173/index.html",
+                "http://localhost:4173/cv.html",
+                "http://localhost:4173/projects/zappy.html",
+                "http://localhost:4173/fr/index.html",
+                "http://localhost:4173/fr/cv.html",
+                "http://localhost:4173/fr/projects/zappy.html"
             ]
         },
         "assert": {
