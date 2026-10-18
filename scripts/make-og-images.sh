@@ -13,7 +13,8 @@ for dir in public/projects/*/; do
         continue
     fi
     src=$(ls "$dir"*.poster.webp 2>/dev/null | head -1 || true)
-    [[ -z "$src" ]] && src=$(ls "$dir"*.webp 2>/dev/null | sort | head -1 || true)
+    # The full-size image, not its card thumbnails (<name>.320.webp sorts before <name>.webp)
+    [[ -z "$src" ]] && src=$(ls "$dir"*.webp 2>/dev/null | grep -Ev '\.(320|640)\.webp$' | sort | head -1 || true)
     if [[ -z "$src" ]]; then
         echo "skip: no image in $dir" >&2
         continue
