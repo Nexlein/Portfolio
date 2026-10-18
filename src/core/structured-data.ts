@@ -17,6 +17,7 @@ function person(lang: Lang): JsonLd {
         url: SITE + localizedPath('/', lang),
         jobTitle: lookup(lang, 'cv.hero.role'),
         affiliation: { '@type': 'CollegeOrUniversity', name: OWNER.school },
+        address: { '@type': 'PostalAddress', addressLocality: OWNER.city, addressCountry: OWNER.country },
         sameAs: [OWNER.github, OWNER.linkedin]
     };
 }

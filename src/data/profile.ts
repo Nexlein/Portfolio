@@ -63,13 +63,13 @@ export const EXPERIENCES: Experience[] = [
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
-            en: 'Rebuilt the company website: a new look, faster pages, many bugs fixed. Live since 9 October 2026.',
-            fr: "Refonte du site de l'entreprise : nouveau look, pages plus rapides, de nombreux bugs corrigés. En ligne depuis le 9 octobre 2026."
+            en: 'First mission: rebuilt issanka.com, with a new look, faster pages and many bugs fixed. Live since 9 October 2026.',
+            fr: 'Première mission : refonte de issanka.com, avec un nouveau look, des pages plus rapides et de nombreux bugs corrigés. En ligne depuis le 9 octobre 2026.'
         },
         highlights: [
             {
-                en: 'Rebuilt the company website with the new visual identity: faster, many bugs fixed, live since 9 October 2026.',
-                fr: "Refonte du site de l'entreprise à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis le 9 octobre 2026."
+                en: 'First mission: rebuilt <a href="https://issanka.com">issanka.com</a> with the new visual identity: faster, many bugs fixed, live since 9 October 2026.',
+                fr: 'Première mission : refonte de <a href="https://issanka.com">issanka.com</a> à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis le 9 octobre 2026.'
             },
             {
                 en: 'Replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
@@ -84,8 +84,8 @@ export const EXPERIENCES: Experience[] = [
         org: 'Climb2C (Eliona Conseil)',
         period: { en: 'Sept - Dec 2025', fr: 'Sept - Déc 2025' },
         summary: {
-            en: 'Built my own parts of an internal RAG system and a client questionnaire that drives the offers Climb2C recommends.',
-            fr: "Conception de mes parties d'un système RAG interne et d'un questionnaire client dont les réponses orientent les offres de Climb2C."
+            en: 'Built on my own an internal RAG system and a client questionnaire whose answers drive the offers Climb2C recommends.',
+            fr: "Conception en solo d'un système RAG interne et d'un questionnaire client dont les réponses orientent les offres de Climb2C."
         },
         highlights: [
             {
@@ -139,16 +139,16 @@ export const EDUCATION: Education[] = [
     },
     {
         id: 'google-cloud',
-        title: { en: 'Google Cloud & Generative AI Certifications', fr: 'Certifications Google Cloud & IA Générative' },
+        title: { en: 'Google Cloud: Generative AI Leader', fr: 'Google Cloud : Generative AI Leader' },
         cvTitle: { en: 'Google Cloud', fr: 'Google Cloud' },
         period: { en: '2026', fr: '2026' },
         summary: {
-            en: 'Certified in <strong>Google Cloud Computing Foundations</strong> and <strong>Generative AI Leader</strong>. Solidified expertise in modern cloud infrastructure and AI deployment.',
-            fr: "Certifié <strong>Google Cloud Computing Foundations</strong> et <strong>Generative AI Leader</strong>. Expertise renforcée en infrastructure cloud et déploiement de modèles d'IA."
+            en: 'Certified <strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a></strong> by Google Cloud, after completing the <strong>Google Cloud Computing Foundations</strong> learning path on cloud infrastructure.',
+            fr: "Certifié <strong><a href='https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url'>Generative AI Leader</a></strong> par Google Cloud, après le parcours <strong>Google Cloud Computing Foundations</strong> sur l'infrastructure cloud."
         },
         cvSummary: {
-            en: 'Cloud Computing Foundations & Generative AI Leader Certifications.',
-            fr: 'Certifications Google Cloud Computing Foundations & Generative AI Leader.'
+            en: '<a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a> certification; Cloud Computing Foundations path.',
+            fr: 'Certification <a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a> ; parcours Cloud Computing Foundations.'
         }
     },
     {
@@ -216,12 +216,15 @@ export const CHECKPOINTS: Checkpoint[] = [
 export const NOW = {
     role: { en: 'AI developer at Issanka', fr: 'Développeur IA chez Issanka' },
     focus: {
-        en: "The company's new website, live since 9 October",
-        fr: "Le nouveau site de l'entreprise, en ligne depuis le 9 octobre"
+        en: 'First mission: issanka.com, live since 9 October',
+        fr: 'Première mission : issanka.com, en ligne depuis le 9 octobre'
     },
     detail: { en: 'Sept 2026 – Feb 2027 · Epitech year 3', fr: 'Sept 2026 – Fév 2027 · Epitech 3e année' },
-    availability: { en: 'Open to an internship · Mar – Aug', fr: 'Disponible en stage · mars – août' }
+    availability: { en: 'Open to an internship · Mar – Aug 2027', fr: 'Disponible en stage · mars – août 2027' }
 } satisfies Record<string, Text>;
+
+/** Where the owner works from: the CV header. */
+export const LOCATION: Text = { en: 'Montpellier, France · or remote', fr: 'Montpellier · ou télétravail' };
 
 /** Home timeline order (newest first), mixing experiences and education by id. A test checks every entry is listed once. */
 export const TIMELINE: string[] = [
@@ -294,7 +297,6 @@ export const CV_PROJECTS: CvProjectGroup[] = [
         projects: [
             {
                 id: 'ai-racing',
-                title: 'AI-Racing',
                 summary: {
                     en: 'RL agent (PPO) navigating a custom kinematic physics environment with raycast sensors.',
                     fr: 'Agent RL (PPO) qui navigue dans un environnement à physique cinématique sur mesure, avec des capteurs à lancer de rayons.'
@@ -312,8 +314,8 @@ export const CV_PROJECTS: CvProjectGroup[] = [
             {
                 id: 'blackjack-ai',
                 summary: {
-                    en: 'Deep RL agent (Maskable PPO) learning optimal Blackjack strategy in a custom environment.',
-                    fr: 'Agent RL profond (Maskable PPO) qui apprend la stratégie optimale du blackjack dans un environnement sur mesure.'
+                    en: 'Deep RL agent (Maskable PPO) learning to play Blackjack from the rules alone, in a custom environment.',
+                    fr: 'Agent RL profond (Maskable PPO) qui apprend à jouer au blackjack à partir des seules règles, dans un environnement sur mesure.'
                 },
                 tags: ['Python', 'RL', 'PPO']
             }
@@ -332,8 +334,13 @@ export const OFFERS: Offer[] = [
         rows: [
             {
                 label: { en: 'Timeline & Rhythm', fr: 'Période et rythme' },
-                value: { en: 'March 29 to Aug. 27.', fr: '29 Mars au 27 Août.' },
+                value: { en: 'March 29 to Aug. 27, 2027.', fr: 'Du 29 mars au 27 août 2027.' },
                 note: { en: 'At least 4 months (5 days/week).', fr: 'Au moins 4 mois (5 jours/semaine).' }
+            },
+            {
+                label: { en: 'Location', fr: 'Lieu' },
+                value: { en: 'Montpellier area or remote.', fr: 'Montpellier et alentours, ou télétravail.' },
+                note: { en: 'Remote work welcome.', fr: 'Télétravail bienvenu.' }
             },
             {
                 label: { en: 'Contract Type', fr: 'Type de contrat' },
@@ -348,8 +355,8 @@ export const OFFERS: Offer[] = [
                     fr: 'Min. légal : 4,50 €/h (taux 2026, 650–700 €/mois).'
                 },
                 note: {
-                    en: 'No school fees covered by the company.<br />Seeking competitive compensation.',
-                    fr: "Aucun frais de scolarité à la charge de l'entreprise.<br />Je souhaite une rémunération compétitive."
+                    en: 'Seeking competitive compensation.',
+                    fr: 'Je souhaite une rémunération compétitive.'
                 }
             }
         ]
@@ -363,6 +370,14 @@ export const OFFERS: Offer[] = [
                 label: { en: 'Scope & Availability', fr: 'Périmètre et disponibilité' },
                 value: { en: 'Backend APIs, AI integration.', fr: "API back-end, intégration d'IA." },
                 note: { en: 'Flexible hours, async delivery.', fr: 'Horaires flexibles, livraison asynchrone.' }
+            },
+            {
+                label: { en: 'Location', fr: 'Lieu' },
+                value: {
+                    en: 'Remote, or on site around Montpellier.',
+                    fr: 'À distance, ou sur site autour de Montpellier.'
+                },
+                note: { en: 'Based in Montpellier, France.', fr: 'Basé à Montpellier.' }
             },
             {
                 label: { en: 'Status', fr: 'Statut' },
