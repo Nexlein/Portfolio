@@ -355,8 +355,8 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'tardis',
         title: 'Tardis',
         description: {
-            en: 'Data analysis and visualization project culminating in a comprehensive dashboard. Focuses on data processing, statistical modeling, and extracting actionable insights from large datasets.',
-            fr: "Projet d'analyse et de visualisation de données aboutissant à un tableau de bord complet. Il couvre le traitement des données, la modélisation statistique et l'extraction d'informations."
+            en: 'Predicting train delays from historical SNCF data: cleaning the dataset, comparing three models (linear regression, decision tree, random forest) and presenting the results in an interactive dashboard.',
+            fr: "Prédiction des retards de trains à partir de l'historique SNCF : nettoyage des données, comparaison de trois modèles (régression linéaire, arbre de décision, forêt aléatoire) et présentation des résultats dans un tableau de bord interactif."
         },
         tags: ['Data Science', 'Python'],
         category: 'ai',
@@ -365,8 +365,8 @@ export const PROJECTS: ProjectEntry[] = [
         team: {
             size: 3,
             role: {
-                en: 'The prediction model, written from scratch, and the database cleaning.',
-                fr: 'Le modèle de prédiction, écrit de zéro, et le nettoyage de la base de données.'
+                en: 'The prediction models (linear regression, decision tree, random forest), written from scratch, and the dataset cleaning.',
+                fr: 'Les modèles de prédiction (régression linéaire, arbre de décision, forêt aléatoire), écrits de zéro, et le nettoyage des données.'
             }
         },
         github: 'https://github.com/Nexlein/Tardis',
