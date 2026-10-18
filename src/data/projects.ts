@@ -241,7 +241,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'A logic gate simulator built in C++. Models digital electronic components (such as logic gates, clocks, and memory units) using pure Object-Oriented Programming principles.',
             fr: 'Un simulateur de circuits logiques codé en C++. Il modélise des composants électroniques numériques (portes logiques, horloges, mémoires) avec les principes de la programmation orientée objet (POO).'
         },
-        tags: ['C++', 'OOP', 'Simulation', 'Algorithms', 'Architecture'],
+        tags: ['C++', 'OOP', 'Simulation', 'Algorithms'],
         category: 'architecture',
         date: '2026-02',
         github: 'https://github.com/Nexlein/NanoTekSpice',
@@ -278,7 +278,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'Data analysis and visualization project culminating in a comprehensive dashboard. Focuses on data processing, statistical modeling, and extracting actionable insights from large datasets.',
             fr: "Projet d'analyse et de visualisation de données aboutissant à un tableau de bord complet. Il couvre le traitement des données, la modélisation statistique et l'extraction d'informations."
         },
-        tags: ['Data Science', 'Analytics', 'Dashboard', 'Python'],
+        tags: ['Data Science', 'Python'],
         category: 'ai',
         year: 'Tek1',
         date: '2025-06',
@@ -299,7 +299,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'A customized clone of the Unix top utility. Features real-time system monitoring, process listing, memory metrics, and CPU usage, built with C and the ncurses library.',
             fr: "Un clone sur mesure de l'utilitaire Unix top. Surveille le système en temps réel : liste des processus, utilisation du CPU et de la RAM. Développé en C avec ncurses."
         },
-        tags: ['C', 'ncurses', 'Unix', 'System Programming', 'Terminal'],
+        tags: ['C', 'ncurses', 'Unix', 'System Programming'],
         category: 'systems',
         year: 'Tek1',
         date: '2025-03',
@@ -316,7 +316,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'A C library implementing a hash table: a custom hash function, separate chaining (a linked list per bucket), and 36 unit tests.',
             fr: 'Une bibliothèque C qui implémente une table de hachage : une fonction de hachage maison, le chaînage séparé (une liste chaînée par case) et 36 tests unitaires.'
         },
-        tags: ['C', 'Data Structures', 'Algorithms', 'Security', 'Library'],
+        tags: ['C', 'Data Structures', 'Algorithms', 'Security'],
         category: 'systems',
         year: 'Tek1',
         date: '2025-03',
@@ -362,6 +362,52 @@ export const PROJECTS: ProjectEntry[] = [
         media: {
             type: 'video',
             src: '/projects/ai-racing/ai-racing.mp4'
+        }
+    },
+    {
+        id: 'portfolio',
+        title: 'Portfolio',
+        description: {
+            en: 'This site. Vanilla TypeScript and Vite, every page prerendered in English and French at build time, a strict CSP, and 860+ unit tests plus Playwright browser tests on desktop and mobile in CI. The project map, the charts and the CV are all computed from the same two data files.',
+            fr: 'Ce site. TypeScript sans framework et Vite, chaque page pré-rendue en anglais et en français au build, une CSP stricte, et plus de 860 tests unitaires plus des tests navigateur Playwright sur ordinateur et mobile en CI. La carte des projets, les graphiques et le CV sont tous calculés à partir des deux mêmes fichiers de données.'
+        },
+        tags: ['TypeScript', 'Vite', 'Vitest', 'Playwright', 'CI/CD'],
+        category: 'architecture',
+        year: 'Personal',
+        date: '2026-07',
+        github: 'https://github.com/Nexlein/Portfolio',
+        media: {
+            type: 'gallery',
+            images: [
+                {
+                    src: '/projects/portfolio/home.webp',
+                    alt: {
+                        en: 'Home page of the portfolio: the headline over a live simulation.',
+                        fr: "Page d'accueil du portfolio : le titre sur une simulation en direct."
+                    }
+                },
+                {
+                    src: '/projects/portfolio/map.webp',
+                    alt: {
+                        en: 'The project map: projects as a network, linked where they share skills.',
+                        fr: 'La carte des projets : un réseau où les projets se relient quand ils partagent des compétences.'
+                    }
+                },
+                {
+                    src: '/projects/portfolio/path.webp',
+                    alt: {
+                        en: 'The path chart: distinct skills over time, computed from the projects and jobs.',
+                        fr: 'Le graphique du parcours : les compétences distinctes au fil du temps, calculées à partir des projets et des postes.'
+                    }
+                },
+                {
+                    src: '/projects/portfolio/cv.webp',
+                    alt: {
+                        en: 'The one-page CV, rendered from the same data as the site.',
+                        fr: "Le CV d'une page, rendu à partir des mêmes données que le site."
+                    }
+                }
+            ]
         }
     }
 ];

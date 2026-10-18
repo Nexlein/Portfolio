@@ -145,7 +145,7 @@ export const fr = {
             growth: 'Progression',
             growthTitle: 'Nouvelles compétences, par période',
             mostUsed: 'Les plus utilisées',
-            distinct: '{n} compétences dans les projets',
+            distinct: '{n} dans les projets · {t} au total',
             thisYear: 'Cette année',
             newSkills: '{n} nouvelles compétences en 12 mois'
         },
