@@ -20,6 +20,16 @@
             "source": "/fr/availability.html",
             "destination": "/fr/#hire",
             "permanent": true
+        },
+        {
+            "source": "/projects/:id(myradar|mytop|secured).html",
+            "destination": "/#work",
+            "permanent": true
+        },
+        {
+            "source": "/fr/projects/:id(myradar|mytop|secured).html",
+            "destination": "/fr/#work",
+            "permanent": true
         }
     ],
     "headers": [

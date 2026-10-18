@@ -352,30 +352,6 @@ export const PROJECTS: ProjectEntry[] = [
         }
     },
     {
-        id: 'myradar',
-        title: 'MyRadar',
-        description: {
-            en: 'A 2D graphical air traffic control simulator built in C using CSFML. Simulates planes navigating between control towers with complex collision detection and sector-based grid optimization.',
-            fr: "Un simulateur graphique 2D de contrôle aérien construit en C avec CSFML. Simule la navigation d'avions, avec une détection de collisions poussée et une optimisation spatiale par secteurs."
-        },
-        tags: ['C', 'CSFML', 'Graphics', 'Simulation', 'Algorithms'],
-        category: 'graphical',
-        year: 'Tek1',
-        date: '2025-03',
-        team: {
-            size: 1,
-            role: {
-                en: 'Everything.',
-                fr: 'Tout.'
-            }
-        },
-        github: 'https://github.com/Nexlein/Myradar',
-        media: {
-            type: 'video',
-            src: '/projects/myradar/myradar.mp4'
-        }
-    },
-    {
         id: 'tardis',
         title: 'Tardis',
         description: {
@@ -400,58 +376,6 @@ export const PROJECTS: ProjectEntry[] = [
             alt: {
                 en: 'Screenshot of the Tardis data analytics dashboard',
                 fr: "Capture d'écran du tableau de bord d'analyse de données Tardis"
-            }
-        }
-    },
-    {
-        id: 'mytop',
-        title: 'MyTop',
-        description: {
-            en: 'A customized clone of the Unix top utility. Features real-time system monitoring, process listing, memory metrics, and CPU usage, built with C and the ncurses library.',
-            fr: "Un clone sur mesure de l'utilitaire Unix top. Surveille le système en temps réel : liste des processus, utilisation du CPU et de la RAM. Développé en C avec ncurses."
-        },
-        tags: ['C', 'ncurses', 'Unix', 'System Programming'],
-        category: 'systems',
-        year: 'Tek1',
-        date: '2025-03',
-        team: {
-            size: 1,
-            role: {
-                en: 'Everything.',
-                fr: 'Tout.'
-            }
-        },
-        github: 'https://github.com/Nexlein/Mytop',
-        media: {
-            type: 'video',
-            src: '/projects/mytop/mytop.mp4'
-        }
-    },
-    {
-        id: 'secured',
-        title: 'Secured',
-        description: {
-            en: 'A C library implementing a hash table: a custom hash function, separate chaining (a linked list per bucket), and 36 unit tests.',
-            fr: 'Une bibliothèque C qui implémente une table de hachage : une fonction de hachage maison, le chaînage séparé (une liste chaînée par case) et 36 tests unitaires.'
-        },
-        tags: ['C', 'Data Structures', 'Algorithms', 'Security'],
-        category: 'systems',
-        year: 'Tek1',
-        date: '2025-03',
-        team: {
-            size: 2,
-            role: {
-                en: 'Insertion and deletion, error handling, the memory-leak fixes, and the unit tests.',
-                fr: "L'insertion et la suppression, la gestion des erreurs, la correction des fuites mémoire, et les tests unitaires."
-            }
-        },
-        github: 'https://github.com/Nexlein/Secured',
-        media: {
-            type: 'image',
-            src: '/projects/secured/secured.webp',
-            alt: {
-                en: 'Terminal output of a demo of the Secured C hash table library: eight entries dumped across eight buckets, searches, a deletion and the table dumped again, above a unit-test summary of 36 out of 36 passing.',
-                fr: "Sortie terminal d'une démo de la bibliothèque de table de hachage Secured en C : huit entrées réparties dans huit cases, des recherches, une suppression puis un nouvel affichage de la table, au-dessus d'un résumé de 36 tests unitaires sur 36 réussis."
             }
         }
     },
