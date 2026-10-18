@@ -191,7 +191,7 @@ test.describe('project list', () => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded();
         await page.locator('.work-view [data-view="list"]').click();
-        const domain = PROJECTS.find((p) => p.category === 'systems')!.category;
+        const domain = PROJECTS.find((p) => p.category === 'devops')!.category;
         const expected = PROJECTS.filter((p) => p.category === domain).length;
         await page.locator(`.query button[data-domain="${domain}"]`).click();
         await expect(rows(page)).toHaveCount(Math.min(6, expected));
