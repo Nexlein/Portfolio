@@ -143,7 +143,7 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 
 Videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion` they never autoplay: they keep their poster and show controls.
 
-Fonts are self-hosted with Fontsource (latin subset), so pages make no third-party requests.
+Fonts are self-hosted with Fontsource (latin subset), so pages make no third-party requests. Schibsted Grotesk is the variable font: one file for every weight.
 
 ## Analytics
 

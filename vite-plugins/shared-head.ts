@@ -61,9 +61,9 @@ export function sharedHead(): Plugin {
         name: 'shared-head',
         transformIndexHtml: (_html, ctx) => [
             ...tags,
-            // The two weights the first screen is set in load with the CSS instead of after it (build only: dev has no bundle)
+            // The variable font the first screen is set in loads with the CSS instead of after it (build only: dev has no bundle)
             ...Object.keys(ctx.bundle ?? {})
-                .filter((f) => /schibsted-grotesk-latin-(400|700)-normal-.*\.woff2$/.test(f))
+                .filter((f) => /schibsted-grotesk-latin-wght-normal-.*\.woff2$/.test(f))
                 .map((f): HtmlTagDescriptor => ({
                     tag: 'link',
                     attrs: { rel: 'preload', as: 'font', type: 'font/woff2', crossorigin: '', href: `/${f}` },

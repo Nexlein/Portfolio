@@ -13,10 +13,7 @@
  *   --ink      text                      --third   a third hue: success, "available", a chart series
  *   --depth    shadow strength (0 flat, 0.35 deep)
  */
-@import '@fontsource/schibsted-grotesk/latin-400.css';
-@import '@fontsource/schibsted-grotesk/latin-500.css';
-@import '@fontsource/schibsted-grotesk/latin-600.css';
-@import '@fontsource/schibsted-grotesk/latin-700.css';
+@import '@fontsource-variable/schibsted-grotesk/wght.css';
 @import '@fontsource/ibm-plex-mono/latin-400.css';
 @import '@fontsource/ibm-plex-mono/latin-500.css';
 
@@ -85,7 +82,7 @@
 
 :root {
     /* Type */
-    --font-sans: 'Schibsted Grotesk', system-ui, sans-serif;
+    --font-sans: 'Schibsted Grotesk Variable', system-ui, sans-serif;
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
     /* Motion: strong ease-out for UI, ease-in-out for things moving on screen */

@@ -19,7 +19,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: home.spec.ts, not-found.spec.ts, pages.spec.ts, project.spec.ts
 
 ## scripts
-- **brand-images.ts** (69) — Social preview of the home page (public/og-image.png, 1200x630, what LinkedIn and X expect) and the icons (favicon.png 32x32, apple-touch...
+- **brand-images.ts** (70) — Social preview of the home page (public/og-image.png, 1200x630, what LinkedIn and X expect) and the icons (favicon.png 32x32, apple-touch...
   - → data/profile
 - **codemap.ts** (114) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
 - **cv-pdf.ts** (59) — Render the CV page to PDF in every language, from the production build (run `vite build` first).
@@ -226,7 +226,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **base.css** (349) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← 404.html, cv.html, index.html, project.html
-- **tokens.css** (100) — Design tokens.
+- **tokens.css** (97) — Design tokens.
   - ← styles/base.css
 
 ## src/ui
