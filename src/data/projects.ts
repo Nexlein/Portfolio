@@ -107,10 +107,10 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'cvrie',
         title: 'Cvrie',
         description: {
-            en: 'A comprehensive machine learning laboratory exploring both supervised and unsupervised learning algorithms, leveraging pandas, numpy, and scikit-learn.',
-            fr: "Un laboratoire complet d'apprentissage automatique : algorithmes supervisés et non supervisés, avec pandas, numpy et scikit-learn."
+            en: 'Machine learning in two parts. Supervised: X-ray body-part classification (chest, head, hand, foot) with Random Forest, PCA + SVM and an MLP tuned by grid search, about 99% test accuracy. Unsupervised: clustering 1,010 written symptom descriptions with TF-IDF, sentence embeddings, UMAP, K-Means and HDBSCAN.',
+            fr: 'Apprentissage automatique en deux parties. Supervisé : classification de radiographies par partie du corps (thorax, tête, main, pied) avec Random Forest, PCA + SVM et un MLP réglé par grid search, environ 99 % de précision en test. Non supervisé : regroupement de 1 010 descriptions de symptômes avec TF-IDF, embeddings de phrases, UMAP, K-Means et HDBSCAN.'
         },
-        tags: ['Python', 'Machine Learning', 'Data Science'],
+        tags: ['Python', 'Machine Learning', 'Data Science', 'scikit-learn', 'NLP'],
         category: 'ai',
         date: '2026-02',
         github: 'https://github.com/Nexlein/Cvrie',
@@ -118,8 +118,8 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/cvrie/cvrie.webp',
             alt: {
-                en: 'Abstract visualization of Machine Learning clusters and neural networks',
-                fr: "Visualisation abstraite de clusters d'apprentissage automatique et de réseaux de neurones"
+                en: "Real X-ray samples from Cvrie's dataset (chest, head, hand, foot) with their 64×64 model inputs, the saved MLP's training loss and validation accuracy curves, and a terminal showing all five saved models classifying the 20 repo samples correctly.",
+                fr: 'Radiographies réelles du jeu de données de Cvrie (thorax, tête, main, pied) avec leur version 64×64 donnée au modèle, les courbes de perte et de précision de validation du MLP sauvegardé, et un terminal où les cinq modèles sauvegardés classent correctement les 20 échantillons du dépôt.'
             }
         }
     },
@@ -168,8 +168,8 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/persona/persona.webp',
             alt: {
-                en: 'Abstract dataflow network representing an automated AI newsletter system',
-                fr: "Réseau de flux de données abstrait représentant un système de newsletter automatisé par l'IA"
+                en: "Persona's two real n8n workflows: an hourly news pipeline that loops over users and topics, has a Mistral agent build a NewsAPI query and emails the articles, and a chatbot agent wired to Mistral, a memory buffer and eight Supabase and code tools.",
+                fr: 'Les deux workflows n8n réels de Persona : un pipeline horaire qui parcourt utilisateurs et sujets, fait construire une requête NewsAPI par un agent Mistral et envoie les articles par e-mail, et un agent conversationnel relié à Mistral, à une mémoire et à huit outils Supabase et code.'
             }
         }
     },
@@ -177,10 +177,10 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'codename',
         title: 'Codename',
         description: {
-            en: 'A robust testing framework designed to evaluate and fortify Large Language Models against prompt injections and jailbreaks. Integrates adversarial prompting and defensive monitoring to ensure safe LLM deployments.',
-            fr: 'Un framework de test pour évaluer et renforcer la résistance des modèles de langage (LLM) aux injections de prompt et aux jailbreaks. Il combine prompting adverse et surveillance défensive pour sécuriser les déploiements.'
+            en: 'A prompt-injection lab: an attack prompt, a hardened system prompt for a local Ollama model, and a 39-case audit script in 9 attack families (role play, exfiltration tricks, multilingual, near-miss passwords...) that checks whether the secret leaks.',
+            fr: "Un laboratoire d'injection de prompt : un prompt d'attaque, un prompt système durci pour un modèle Ollama local, et un script d'audit de 39 cas en 9 familles d'attaques (jeu de rôle, exfiltration, multilingue, mots de passe presque exacts...) qui vérifie si le secret fuit."
         },
-        tags: ['Security', 'Python', 'LLM', 'Prompt Engineering'],
+        tags: ['Security', 'LLM', 'Prompt Engineering', 'Ollama', 'Bash'],
         category: 'ai',
         date: '2026-03',
         featured: true,
@@ -189,8 +189,8 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/codename/codename.webp',
             alt: {
-                en: 'Diagram illustrating a prompt input passing through an AI Security Firewall',
-                fr: "Schéma d'un prompt qui traverse un pare-feu de sécurité pour l'IA"
+                en: "Codename's real attack prompt and hardened defense prompt side by side, above the nine attack families of its 39-case audit script.",
+                fr: "Le vrai prompt d'attaque et le prompt de défense durci de Codename côte à côte, au-dessus des neuf familles d'attaques de son script d'audit de 39 cas."
             }
         }
     },
@@ -198,8 +198,8 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'mymarvin',
         title: 'MyMarvin',
         description: {
-            en: 'A complete CI/CD pipeline automation project based on Jenkins. Uses Docker, Groovy DSL, and Job DSL plugins to define and provision scalable build jobs automatically upon repository updates.',
-            fr: "Projet complet d'automatisation d'un pipeline CI/CD avec Jenkins. Docker, le DSL Groovy et le plugin Job DSL définissent et provisionnent automatiquement les jobs de build à chaque mise à jour du dépôt."
+            en: 'Jenkins configured entirely as code (Docker, JCasC, Job DSL): users and roles are set at boot, and a seed job generates a build job for any GitHub repository, which then rebuilds and runs the tests whenever the repository changes.',
+            fr: "Jenkins entièrement configuré as code (Docker, JCasC, Job DSL) : utilisateurs et rôles définis au démarrage, et un job seed qui génère un job de build pour n'importe quel dépôt GitHub, lequel recompile et relance les tests à chaque changement du dépôt."
         },
         tags: ['Jenkins', 'Docker', 'CI/CD', 'Groovy', 'YAML'],
         category: 'devops',
@@ -209,8 +209,8 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/mymarvin/mymarvin.webp',
             alt: {
-                en: 'Architecture diagram showing Jenkins automation via Docker and JCasC',
-                fr: "Schéma d'architecture de l'automatisation Jenkins avec Docker et JCasC"
+                en: 'Diagram of the MyMarvin Jenkins setup, from the Dockerfile through the my_marvin.yml configuration-as-code file to the SEED job that generates a build job for any GitHub repository, next to an excerpt of the Groovy Job DSL template.',
+                fr: "Schéma de l'installation Jenkins de MyMarvin, du Dockerfile au fichier de configuration as code my_marvin.yml jusqu'au job SEED qui génère un job de build pour n'importe quel dépôt GitHub, à côté d'un extrait du modèle Job DSL en Groovy."
             }
         }
     },
@@ -218,10 +218,10 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'octopus',
         title: 'Octopus',
         description: {
-            en: 'An infrastructure-as-code automation project. Uses Ansible to provision, configure, and orchestrate complex environments across multiple remote hosts concurrently, ensuring idempotency and rapid scaling.',
-            fr: "Projet d'automatisation Infrastructure-as-Code (IaC). Ansible provisionne, configure et orchestre en parallèle des environnements complexes sur plusieurs hôtes distants, de façon idempotente et facile à étendre."
+            en: 'Infrastructure as code with Ansible: 7 plays and 56 idempotent tasks deploy a voting app (Python poll, Java worker, Node.js result) with Redis and PostgreSQL on separate host groups, behind a ufw firewall that opens only the ports each service needs.',
+            fr: "Infrastructure as code avec Ansible : 7 plays et 56 tâches idempotentes déploient une application de vote (poll en Python, worker en Java, result en Node.js) avec Redis et PostgreSQL sur des groupes d'hôtes séparés, derrière un pare-feu ufw qui n'ouvre que les ports nécessaires."
         },
-        tags: ['Ansible', 'Vagrant', 'IaC', 'PostgreSQL', 'Redis'],
+        tags: ['Ansible', 'IaC', 'PostgreSQL', 'Redis', 'Linux'],
         category: 'devops',
         date: '2026-05',
         github: 'https://github.com/Nexlein/Octopus',
@@ -229,8 +229,8 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/octopus/octopus.webp',
             alt: {
-                en: 'Diagram showing Ansible automation deploying to multiple virtual machines',
-                fr: "Schéma d'Ansible qui déploie sur plusieurs machines virtuelles"
+                en: 'Terminal listing the seven plays and their tasks from the Octopus Ansible playbook, next to a diagram of the poll, result, worker, Redis and PostgreSQL roles and the ports the firewall opens between them.',
+                fr: "Terminal listant les sept plays du playbook Ansible d'Octopus et leurs tâches, à côté d'un schéma des rôles poll, result, worker, Redis et PostgreSQL et des ports que le pare-feu ouvre entre eux."
             }
         }
     },
@@ -249,8 +249,8 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/nanotekspice/nanotekspice.webp',
             alt: {
-                en: 'Vibrant 3D glowing representation of a microchip and electronic circuit board',
-                fr: "Représentation 3D lumineuse d'une puce et d'un circuit électronique"
+                en: 'A NanoTekSpice circuit file wiring a clock and a reset input to a 4040 binary counter, next to a real simulator session where the outputs count up to 3 and return to 0 after reset.',
+                fr: "Un fichier de circuit NanoTekSpice reliant une horloge et une entrée de remise à zéro à un compteur binaire 4040, à côté d'une vraie session du simulateur où les sorties comptent jusqu'à 3 puis reviennent à 0 après la remise à zéro."
             }
         }
     },
@@ -313,8 +313,8 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'secured',
         title: 'Secured',
         description: {
-            en: 'A robust C library implementing a highly efficient Hash Table data structure. Features custom cryptographic hashing functions and collision resolution strategies to ensure secure and fast data retrieval.',
-            fr: 'Une bibliothèque C qui implémente une table de hachage performante. Avec des fonctions de hachage personnalisées et plusieurs stratégies de résolution de collisions.'
+            en: 'A C library implementing a hash table: a custom hash function, separate chaining (a linked list per bucket), and 36 unit tests.',
+            fr: 'Une bibliothèque C qui implémente une table de hachage : une fonction de hachage maison, le chaînage séparé (une liste chaînée par case) et 36 tests unitaires.'
         },
         tags: ['C', 'Data Structures', 'Algorithms', 'Security', 'Library'],
         category: 'systems',
@@ -325,8 +325,8 @@ export const PROJECTS: ProjectEntry[] = [
             type: 'image',
             src: '/projects/secured/secured.webp',
             alt: {
-                en: 'Holographic 3D visualization of a hash table data structure and digital vault',
-                fr: "Visualisation 3D holographique d'une table de hachage et d'un coffre-fort numérique"
+                en: 'Terminal output of a demo of the Secured C hash table library: eight entries dumped across eight buckets, searches, a deletion and the table dumped again, above a unit-test summary of 36 out of 36 passing.',
+                fr: "Sortie terminal d'une démo de la bibliothèque de table de hachage Secured en C : huit entrées réparties dans huit cases, des recherches, une suppression puis un nouvel affichage de la table, au-dessus d'un résumé de 36 tests unitaires sur 36 réussis."
             }
         }
     },

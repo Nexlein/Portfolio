@@ -63,13 +63,13 @@ export const EXPERIENCES: Experience[] = [
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
-            en: 'Rebuilt the company website: a new look, faster pages, many bugs fixed. Live since 9 October 2026.',
-            fr: "Refonte du site de l'entreprise : nouveau look, pages plus rapides, de nombreux bugs corrigés. En ligne depuis le 9 octobre 2026."
+            en: 'First mission: rebuilt issanka.com, with a new look, faster pages and many bugs fixed. Live since 9 October 2026.',
+            fr: 'Première mission : refonte de issanka.com, avec un nouveau look, des pages plus rapides et de nombreux bugs corrigés. En ligne depuis le 9 octobre 2026.'
         },
         highlights: [
             {
-                en: 'Rebuilt the company website with the new visual identity: faster, many bugs fixed, live since 9 October 2026.',
-                fr: "Refonte du site de l'entreprise à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis le 9 octobre 2026."
+                en: 'First mission: rebuilt <a href="https://issanka.com">issanka.com</a> with the new visual identity: faster, many bugs fixed, live since 9 October 2026.',
+                fr: 'Première mission : refonte de <a href="https://issanka.com">issanka.com</a> à la nouvelle identité visuelle : plus rapide, de nombreux bugs corrigés, en ligne depuis le 9 octobre 2026.'
             },
             {
                 en: 'Replaced paid subscriptions (such as Elementor Pro), which lowers running costs.',
@@ -84,8 +84,8 @@ export const EXPERIENCES: Experience[] = [
         org: 'Climb2C (Eliona Conseil)',
         period: { en: 'Sept - Dec 2025', fr: 'Sept - Déc 2025' },
         summary: {
-            en: 'Built my own parts of an internal RAG system and a client questionnaire that drives the offers Climb2C recommends.',
-            fr: "Conception de mes parties d'un système RAG interne et d'un questionnaire client dont les réponses orientent les offres de Climb2C."
+            en: 'Built on my own an internal RAG system and a client questionnaire whose answers drive the offers Climb2C recommends.',
+            fr: "Conception en solo d'un système RAG interne et d'un questionnaire client dont les réponses orientent les offres de Climb2C."
         },
         highlights: [
             {
@@ -216,12 +216,15 @@ export const CHECKPOINTS: Checkpoint[] = [
 export const NOW = {
     role: { en: 'AI developer at Issanka', fr: 'Développeur IA chez Issanka' },
     focus: {
-        en: "The company's new website, live since 9 October",
-        fr: "Le nouveau site de l'entreprise, en ligne depuis le 9 octobre"
+        en: 'First mission: issanka.com, live since 9 October',
+        fr: 'Première mission : issanka.com, en ligne depuis le 9 octobre'
     },
     detail: { en: 'Sept 2026 – Feb 2027 · Epitech year 3', fr: 'Sept 2026 – Fév 2027 · Epitech 3e année' },
     availability: { en: 'Open to an internship · Mar – Aug 2027', fr: 'Disponible en stage · mars – août 2027' }
 } satisfies Record<string, Text>;
+
+/** Where the owner works from: the CV header. */
+export const LOCATION: Text = { en: 'Montpellier, France · or remote', fr: 'Montpellier · ou télétravail' };
 
 /** Home timeline order (newest first), mixing experiences and education by id. A test checks every entry is listed once. */
 export const TIMELINE: string[] = [
@@ -335,6 +338,11 @@ export const OFFERS: Offer[] = [
                 note: { en: 'At least 4 months (5 days/week).', fr: 'Au moins 4 mois (5 jours/semaine).' }
             },
             {
+                label: { en: 'Location', fr: 'Lieu' },
+                value: { en: 'Montpellier area or remote.', fr: 'Montpellier et alentours, ou télétravail.' },
+                note: { en: 'Remote work welcome.', fr: 'Télétravail bienvenu.' }
+            },
+            {
                 label: { en: 'Contract Type', fr: 'Type de contrat' },
                 value: { en: 'Internship, CDD, or CDI.', fr: 'Stage, CDD ou CDI.' },
                 note: { en: 'Full-time placement.', fr: 'Temps plein.' }
@@ -362,6 +370,14 @@ export const OFFERS: Offer[] = [
                 label: { en: 'Scope & Availability', fr: 'Périmètre et disponibilité' },
                 value: { en: 'Backend APIs, AI integration.', fr: "API back-end, intégration d'IA." },
                 note: { en: 'Flexible hours, async delivery.', fr: 'Horaires flexibles, livraison asynchrone.' }
+            },
+            {
+                label: { en: 'Location', fr: 'Lieu' },
+                value: {
+                    en: 'Remote, or on site around Montpellier.',
+                    fr: 'À distance, ou sur site autour de Montpellier.'
+                },
+                note: { en: 'Based in Montpellier, France.', fr: 'Basé à Montpellier.' }
             },
             {
                 label: { en: 'Status', fr: 'Statut' },
