@@ -76,6 +76,34 @@ test.describe('project map', () => {
         await expect(page.locator('.nm-card.open')).toHaveCount(0);
     });
 
+    test('a card unfolding upward still covers the whole closed card', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'no hover on phones');
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm.booted')).toHaveCount(1);
+        // A pointer resting on a strip the open card leaves uncovered would close it, land on it again and loop
+        const gaps = await page.evaluate(async () => {
+            const mouse = { pointerType: 'mouse' };
+            const found: string[] = [];
+            let up = 0;
+            for (const card of document.querySelectorAll<HTMLElement>('.nm-card:not(.off)')) {
+                const closed = card.getBoundingClientRect();
+                card.dispatchEvent(new PointerEvent('pointerenter', mouse));
+                await new Promise((r) => setTimeout(r, 800));
+                const open = card.getBoundingClientRect();
+                if (card.dataset.dir === 'up') {
+                    up++;
+                    if (open.bottom < closed.bottom - 3) found.push(card.dataset.id!);
+                }
+                card.dispatchEvent(new PointerEvent('pointerleave', mouse));
+                await new Promise((r) => setTimeout(r, 300));
+            }
+            return { found, up };
+        });
+        expect(gaps.up).toBeGreaterThan(0);
+        expect(gaps.found).toEqual([]);
+    });
+
     test('draws every project and unfolds one on hover, with its similar projects', async ({ page }) => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded();

@@ -139,16 +139,16 @@ export const EDUCATION: Education[] = [
     },
     {
         id: 'google-cloud',
-        title: { en: 'Google Cloud: Generative AI Leader', fr: 'Google Cloud : Generative AI Leader' },
+        title: { en: 'Google Cloud Certifications', fr: 'Certifications Google Cloud' },
         cvTitle: { en: 'Google Cloud', fr: 'Google Cloud' },
         period: { en: '2026', fr: '2026' },
         summary: {
-            en: 'Certified <strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a></strong> by Google Cloud, after completing the <strong>Google Cloud Computing Foundations</strong> learning path on cloud infrastructure.',
-            fr: "Certifié <strong><a href='https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url'>Generative AI Leader</a></strong> par Google Cloud, après le parcours <strong>Google Cloud Computing Foundations</strong> sur l'infrastructure cloud."
+            en: '<strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Google Cloud Computing Foundations Certificate</a></strong> on cloud infrastructure, and <strong>Generative AI Leader</strong> certification.',
+            fr: 'Certificat <strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Google Cloud Computing Foundations</a></strong> sur l\'infrastructure cloud, et certification <strong>Generative AI Leader</strong>.'
         },
         cvSummary: {
-            en: '<a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a> certification; Cloud Computing Foundations path.',
-            fr: 'Certification <a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Generative AI Leader</a> ; parcours Cloud Computing Foundations.'
+            en: '<a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Cloud Computing Foundations Certificate</a>; Generative AI Leader certification.',
+            fr: 'Certificat <a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Cloud Computing Foundations</a> ; certification Generative AI Leader.'
         }
     },
     {
@@ -176,8 +176,8 @@ export const EDUCATION: Education[] = [
         },
         cvHidePeriod: true,
         cvSummary: {
-            en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent).',
-            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Courant).'
+            en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent, TEPITECH 835/990, TOEIC format).',
+            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Courant, TEPITECH 835/990, format TOEIC).'
         }
     }
 ];

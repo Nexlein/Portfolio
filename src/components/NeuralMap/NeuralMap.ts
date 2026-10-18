@@ -668,6 +668,9 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         const W = web.clientWidth,
             H = web.clientHeight;
         c.el.dataset.dir = c.star.y > H * 0.58 ? 'up' : 'down';
+        // Unfolding upward keeps the closed card's bottom edge in place: with any gap, a pointer resting there
+        // would leave the open card, close it, land on it again and loop
+        c.el.style.setProperty('--h0', `${c.el.offsetHeight}px`);
         const overflow = Math.max(0, c.star.x + OPEN_W / 2 + 16 - W) - Math.max(0, OPEN_W / 2 + 16 - c.star.x);
         c.el.style.setProperty('--dx', `${-overflow}px`);
         c.el.classList.add('open');
