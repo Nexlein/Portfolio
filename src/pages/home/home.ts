@@ -12,8 +12,10 @@ import { initGlide } from '@/ui/glide';
 import { prefersReducedMotion } from '@/ui/motion';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
-import { initNumbers, initPathChart, initPathStory, initReveals } from '@/components/Charts/Charts';
-import { MAP_MAX } from './blocks';
+import { initNumbers, initPathChart, initPathStory } from '@/components/Charts/Charts';
+import { MAP_MAX } from '@/components/NeuralMap/graph';
+import { boot } from '@/ui/boot';
+import { initReveals } from '@/ui/reveal';
 
 /** The map needs room: below this width the plain list is the better view. */
 const MAP_MIN_WIDTH = 900;
@@ -232,18 +234,20 @@ function bootstrap(): void {
     const linked = PROJECTS.find((p) => p.id === new URLSearchParams(location.search).get('project'));
     if (linked) return location.replace(localizedPath(projectPath(linked.id), i18n.getLang()));
 
-    initAnalytics();
-    initNav();
-    initGlide();
-    initHero();
-    initWork();
-    initPathChart();
-    initPathStory();
-    initNumbers();
-    initReveals();
-    initCopyEmail();
-    initSpotlight();
-    settleHash();
+    boot(
+        initAnalytics,
+        initNav,
+        initGlide,
+        initHero,
+        initWork,
+        initPathChart,
+        initPathStory,
+        initNumbers,
+        initReveals,
+        initCopyEmail,
+        initSpotlight,
+        settleHash
+    );
 }
 
 bootstrap();

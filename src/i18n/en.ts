@@ -48,6 +48,7 @@ export const en = {
             work: 'See the work',
             hire: 'Hire me',
             switch: 'Show another simulation',
+            pause: 'Pause the animation',
             scroll: 'Scroll down',
             sims: {
                 valueIteration: {

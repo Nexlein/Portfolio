@@ -48,6 +48,7 @@ export const fr = {
             work: 'Voir les projets',
             hire: 'Me recruter',
             switch: 'Changer de simulation',
+            pause: "Mettre l'animation en pause",
             scroll: 'Faire défiler',
             sims: {
                 valueIteration: {

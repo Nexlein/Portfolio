@@ -131,9 +131,41 @@
     scale: 1.45;
 }
 
+/* Pause: two bars; once pressed, a play triangle */
+.hero-pause {
+    display: grid;
+    place-items: center;
+    margin-left: 6px;
+    padding: 10px;
+    border: 0;
+    background: none;
+    color: color-mix(in sRGB, var(--muted) 70%, transparent);
+    cursor: pointer;
+}
+
+.hero-pause::before {
+    content: '';
+    box-sizing: border-box;
+    width: 8px;
+    height: 9px;
+    border-inline: 3px solid currentColor;
+}
+
+.hero-pause[aria-pressed='true']::before {
+    width: 0;
+    height: 0;
+    border-block: 5px solid transparent;
+    border-inline: 8px solid currentColor;
+    border-inline-end-width: 0;
+}
+
 @media (hover: hover) and (pointer: fine) {
     .hero-dot:hover::before {
         background: var(--muted);
+    }
+
+    .hero-pause:hover {
+        color: var(--ink);
     }
 
     .avail:hover {
@@ -142,7 +174,8 @@
 }
 
 @media (pointer: coarse) {
-    .hero-dot {
+    .hero-dot,
+    .hero-pause {
         padding: 18px 12px;
     }
 }

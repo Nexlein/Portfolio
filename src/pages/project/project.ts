@@ -4,7 +4,8 @@
  */
 import { initAnalytics } from '@/core/analytics';
 import { initNav } from '@/components/Nav/Nav';
-import { initReveals } from '@/components/Charts/Charts';
+import { boot } from '@/ui/boot';
+import { initReveals } from '@/ui/reveal';
 import { prefersReducedMotion } from '@/ui/motion';
 import { playVideosWhenVisible } from '@/ui/video';
 import { initGallery } from './gallery';
@@ -16,12 +17,7 @@ function initOverlaps(): void {
     });
 }
 
-function bootstrap(): void {
-    initAnalytics();
-    initNav();
-    initOverlaps();
-    initReveals();
-
+function initMedia(): void {
     const media = document.getElementById('project-media')!;
     const gallery = media.querySelector<HTMLElement>('.gallery');
     if (gallery) initGallery(gallery);
@@ -29,4 +25,4 @@ function bootstrap(): void {
     if (prefersReducedMotion()) media.querySelector('video')?.setAttribute('controls', ''); // no autoplay: let them press play
 }
 
-bootstrap();
+boot(initAnalytics, initNav, initOverlaps, initReveals, initMedia);

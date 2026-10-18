@@ -1,25 +1,13 @@
 /**
- * Interactions on the build-time charts: the path chart's range buttons and crosshair, the numbers deck's
- * arrows, and count-ups when they come into view. The SVG is already in the page; this only adds behaviour.
+ * Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's
+ * arrows. The SVG is already in the page; this only adds behaviour (count-ups and reveals: src/ui/reveal.ts).
  */
 import { i18n } from '@/core/i18n';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
+import { countUp } from '@/ui/reveal';
 import { PROJECTS } from '@/data/projects';
 import { RANGES, rangeStart, schoolYearAt, skillSeries, valueAt, yDomain, type Point } from './data';
 import { changeText, monthName, PATH, pathSamples, pathSvg, phaseLabel } from './render';
-
-/** Count up `.count[data-to]` from 0 once. */
-function countUp(el: HTMLElement): void {
-    if (reduced()) return;
-    const to = Number(el.dataset.to),
-        start = performance.now();
-    const step = (time: number) => {
-        const u = Math.min(1, (time - start) / 1100);
-        el.textContent = String(Math.round(to * (1 - (1 - u) ** 3)));
-        if (u < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-}
 
 /** How far (in chart units) the crosshair reaches for a checkpoint. */
 const SNAP = 14;
@@ -281,7 +269,8 @@ export function initNumbers(): void {
         const front = cards[cur];
         if (!front.classList.contains('in')) {
             front.classList.add('in');
-            front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
+            // The first card counts up with the deck's own reveal (src/ui/reveal.ts), once it is on screen
+            if (prev >= 0) front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
         }
         items.forEach((b, i) =>
             i === cur ? b.setAttribute('aria-current', 'true') : b.removeAttribute('aria-current')
@@ -295,20 +284,4 @@ export function initNumbers(): void {
         if (card && card !== cards[cur]) show(cards.indexOf(card), true);
     });
     show(0);
-}
-
-/** Reveal animations, count-ups and the chart draw-in start once each block comes into view. */
-export function initReveals(): void {
-    const io = new IntersectionObserver(
-        (entries) =>
-            entries.forEach((e) => {
-                if (!e.isIntersecting) return;
-                const n = e.target as HTMLElement;
-                n.classList.add('in', 'drawn');
-                n.querySelectorAll<HTMLElement>('.chart-card .count, .path-total .count').forEach(countUp);
-                io.unobserve(n);
-            }),
-        { rootMargin: '0px 0px -12% 0px' }
-    );
-    document.querySelectorAll('.reveal').forEach((n) => io.observe(n));
 }

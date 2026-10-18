@@ -12,10 +12,7 @@ import { still } from '../../ui/video.ts';
 import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
 import { thisMonth, yearOf } from '../../components/Charts/data.ts';
 import { firstSentence } from '../../core/text.ts';
-import { pickShown } from '../../components/NeuralMap/graph.ts';
-
-/** Most projects the map shows at once (the rest rotate in). */
-export const MAP_MAX = 24;
+import { MAP_MAX, pickShown } from '../../components/NeuralMap/graph.ts';
 
 const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
 

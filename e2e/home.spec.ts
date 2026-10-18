@@ -105,6 +105,27 @@ test.describe('project map', () => {
         expect(badge.content).toMatch(/\d/);
     });
 
+    test('after a resize in the list view, the map is laid out again for its new width', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm.booted')).toHaveCount(1);
+        await page.locator('.work-view button[data-view="list"]').click();
+        await page.setViewportSize({ width: 1000, height: 900 });
+        await page.waitForTimeout(400); // the map redraws once the window has stopped moving
+        await page.locator('.work-view button[data-view="map"]').click();
+        await page.locator('.nm').scrollIntoViewIfNeeded(); // the cards move only while the map is on screen
+        const outside = () =>
+            page.evaluate(() => {
+                const box = document.querySelector('.nm')!.getBoundingClientRect();
+                return [...document.querySelectorAll('.nm-card:not(.off)')].filter((c) => {
+                    const r = c.getBoundingClientRect();
+                    return r.right > box.right + 8 || r.left < box.left - 8;
+                }).length;
+            });
+        await expect.poll(outside).toBe(0);
+    });
+
     test('a click unfolds, a second click opens the project page', async ({ page }) => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded(); // the map is drawn as the section comes into view
@@ -245,6 +266,29 @@ test.describe('hero', () => {
         await page.waitForTimeout(600);
         expect(await frames(), 'no frame is requested while hidden').toBe(idle);
         await setHidden(false);
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
+    });
+
+    test('the pause button holds the simulation still, and a second press sets it going again', async ({ page }) => {
+        await page.addInitScript(() => {
+            const w = window as unknown as { frames: number };
+            w.frames = 0;
+            const raf = window.requestAnimationFrame.bind(window);
+            window.requestAnimationFrame = (cb) => (w.frames++, raf(cb));
+        });
+        await page.goto('/');
+        const frames = () => page.evaluate(() => (window as unknown as { frames: number }).frames);
+        const pause = page.locator('.hero-pause');
+        await expect(pause).toHaveAccessibleName(en.home.hero.pause);
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(10);
+        await pause.click();
+        await expect(pause).toHaveAttribute('aria-pressed', 'true');
+        await page.waitForTimeout(2000); // the frame already queued runs once and stops, and the intro counters finish
+        const idle = await frames();
+        await page.waitForTimeout(600);
+        expect(await frames(), 'no frame is requested while paused').toBe(idle);
+        await pause.click();
+        await expect(pause).toHaveAttribute('aria-pressed', 'false');
         await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
     });
 
@@ -655,6 +699,13 @@ test.describe('hero title', () => {
         await page.locator('.hero-copy .link').focus();
         await page.locator('.hero-copy').hover();
         await expect.poll(() => line.textContent(), { timeout: 12_000 }).not.toBe(first);
+    });
+
+    test('screen readers keep the first wording while the line changes', async ({ page }) => {
+        await page.goto('/');
+        const shown = page.locator('.hero h1 [data-i18n="home.hero.title2"]');
+        await expect(shown).not.toHaveText(en.home.hero.title2, { timeout: 12_000 });
+        await expect(page.locator('.hero h1')).toHaveAccessibleName(`${en.home.hero.title1} ${en.home.hero.title2}`);
     });
 });
 
