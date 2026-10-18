@@ -176,8 +176,8 @@ export const EDUCATION: Education[] = [
         },
         cvHidePeriod: true,
         cvSummary: {
-            en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent).',
-            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Courant).'
+            en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent, TEPITECH 835/990, TOEIC format).',
+            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Courant, TEPITECH 835/990, format TOEIC).'
         }
     }
 ];
