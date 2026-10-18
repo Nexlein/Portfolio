@@ -38,6 +38,10 @@ export interface ProjectEntry {
     date: string;
     /** Shown in "Selected work" and always on the map. */
     featured?: true;
+    /** Who built it, from the repository's history: team size (1 = solo) and my own part. Project page. */
+    team?: { size: number; role: Text };
+    /** One concrete outcome the repository shows (tests, scores, features). Project page. */
+    result?: Text;
     github: string; // full URL or '' to hide the link
     media: ProjectMedia;
 }
@@ -52,12 +56,23 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'arcade',
         title: 'Arcade',
         description: {
-            en: 'Modular gaming architecture. Dynamically loads game libraries (Pacman, Nibbler) and graphics backends (SDL2, SFML, ncurses) at runtime via shared objects.',
-            fr: "Architecture de jeu modulaire : les jeux (Pacman, Nibbler) et les moteurs graphiques (SDL2, SFML, ncurses) se chargent dynamiquement à l'exécution, sous forme de bibliothèques partagées."
+            en: 'Modular gaming architecture. Games (Snake, Solarfox) and graphics backends (ncurses, SDL2, Allegro5) are shared libraries loaded at runtime and swapped without restarting.',
+            fr: "Architecture de jeu modulaire : les jeux (Snake, Solarfox) et les moteurs graphiques (ncurses, SDL2, Allegro5) sont des bibliothèques partagées chargées à l'exécution et interchangeables sans redémarrer."
         },
         tags: ['C++', 'OOP', 'Dynamic Loading'],
         category: 'graphical',
         date: '2026-03',
+        team: {
+            size: 2,
+            role: {
+                en: 'The core: runtime loading and swapping of the .so modules, the shared interfaces, the menu, Snake, the ncurses display, CMake and CI (about 60% of the code).',
+                fr: "Le cœur : chargement et bascule à chaud des modules .so, les interfaces communes, le menu, Snake, l'affichage ncurses, CMake et la CI (environ 60 % du code)."
+            }
+        },
+        result: {
+            en: 'Three graphics libraries (ncurses, SDL2, Allegro5) and two games (Snake, Solarfox), swapped while the program runs.',
+            fr: "Trois bibliothèques graphiques (ncurses, SDL2, Allegro5) et deux jeux (Snake, Solarfox), interchangeables pendant l'exécution."
+        },
         github: 'https://github.com/Nexlein/Arcade',
         media: { type: 'video', src: '/projects/arcade/arcade.mp4' }
     },
@@ -72,6 +87,17 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'graphical',
         date: '2026-04',
         featured: true,
+        team: {
+            size: 4,
+            role: {
+                en: 'The architecture: maths, camera, rays, renderer and the .so plugin system; half of the scene parser, the OBJ loader, textures, the sphere, CMake and CI (about 45% of the code).',
+                fr: "L'architecture : maths, caméra, rayons, moteur de rendu et système de plugins .so ; la moitié du parseur de scènes, le chargeur OBJ, les textures, la sphère, CMake et la CI (environ 45 % du code)."
+            }
+        },
+        result: {
+            en: '15 primitives and 39 example scenes.',
+            fr: "15 primitives et 39 scènes d'exemple."
+        },
         github: 'https://github.com/Nexlein/Raytracer',
         media: {
             type: 'gallery',
@@ -100,6 +126,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C++', 'Concurrency', 'IPC'],
         category: 'architecture',
         date: '2026-05',
+        team: {
+            size: 3,
+            role: {
+                en: 'The kitchen processes and their FIFO-based IPC, the pizza model, the status command, idle kitchen shutdown, 50 of the 62 unit tests and the CI.',
+                fr: 'Les processus cuisines et leur communication par FIFO, le modèle des pizzas, la commande status, la fermeture des cuisines inactives, 50 des 62 tests unitaires et la CI.'
+            }
+        },
         github: 'https://github.com/Nexlein/Plazza',
         media: { type: 'video', src: '/projects/plazza/plazza-optimized.mp4' }
     },
@@ -134,6 +167,17 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'ai',
         date: '2026-04',
         featured: true,
+        team: {
+            size: 3,
+            role: {
+                en: 'The DQN, written in PyTorch from scratch; the training, evaluation and baseline scripts, wind and seed randomisation, 95% confidence intervals, and the CI.',
+                fr: "Le DQN, écrit en PyTorch de zéro ; les scripts d'entraînement, d'évaluation et de référence, la randomisation du vent et des graines, les intervalles de confiance à 95 %, et la CI."
+            }
+        },
+        result: {
+            en: 'Average reward of 191 ± 41 over 5 seeds (the environment counts 200 as solved).',
+            fr: "Récompense moyenne de 191 ± 41 sur 5 graines (l'environnement considère 200 comme résolu)."
+        },
         github: 'https://github.com/Nexlein/StartTrek',
         media: { type: 'video', src: '/projects/starttrek/starttrek.mp4' }
     },
@@ -141,12 +185,23 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'zappy',
         title: 'Zappy',
         description: {
-            en: 'Multiplayer network game where teams of autonomous AI compete on a tile-based world. Built in C/C++ with a server, a graphic client, and autonomous clients driven by FSMs and Utility AI.',
-            fr: "Jeu en réseau multijoueur où des équipes d'IA autonomes s'affrontent. Développé en C/C++ avec un serveur, un client graphique et des clients autonomes pilotés par des machines à états (FSM) et une IA à utilité."
+            en: 'Multiplayer network game where teams of autonomous AI compete on a tile-based world. A server and a graphic client in C/C++, and autonomous AI clients in Python driven by FSMs and Utility AI.',
+            fr: "Jeu en réseau multijoueur où des équipes d'IA autonomes s'affrontent. Un serveur et un client graphique en C/C++, et des clients IA autonomes en Python pilotés par des machines à états (FSM) et une IA à utilité."
         },
-        tags: ['C/C++', 'Network', 'FSM', 'Utility AI', 'Game Dev'],
+        tags: ['C/C++', 'Python', 'Network', 'FSM', 'Utility AI', 'Game Dev'],
         category: 'architecture',
         date: '2026-05',
+        team: {
+            size: 5,
+            role: {
+                en: 'The whole Python AI client (three strategies) and 91 of its 121 tests, part of the graphic client (audio, HUD, skybox), and the four CI workflows.',
+                fr: 'Tout le client IA en Python (trois stratégies) et 91 de ses 121 tests, une partie du client graphique (audio, HUD, skybox), et les quatre workflows de CI.'
+            }
+        },
+        result: {
+            en: '593 automated tests across the server, the graphic client and the AI client.',
+            fr: '593 tests automatisés sur le serveur, le client graphique et le client IA.'
+        },
         github: 'https://github.com/Nexlein/Zappy',
         media: {
             type: 'video',
@@ -204,6 +259,13 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Jenkins', 'Docker', 'CI/CD', 'Groovy', 'YAML'],
         category: 'devops',
         date: '2026-03',
+        team: {
+            size: 2,
+            role: {
+                en: 'The bonus (a job for private repositories with gcovr coverage, and a second Jenkins instance), GitHub authentication for private repositories, and the CI.',
+                fr: "Le bonus (un job pour dépôts privés avec couverture gcovr, et une seconde instance Jenkins), l'authentification GitHub pour les dépôts privés, et la CI."
+            }
+        },
         github: 'https://github.com/Nexlein/MyMarvin',
         media: {
             type: 'image',
@@ -241,7 +303,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'A logic gate simulator built in C++. Models digital electronic components (such as logic gates, clocks, and memory units) using pure Object-Oriented Programming principles.',
             fr: 'Un simulateur de circuits logiques codé en C++. Il modélise des composants électroniques numériques (portes logiques, horloges, mémoires) avec les principes de la programmation orientée objet (POO).'
         },
-        tags: ['C++', 'OOP', 'Simulation', 'Algorithms', 'Architecture'],
+        tags: ['C++', 'OOP', 'Simulation', 'Algorithms'],
         category: 'architecture',
         date: '2026-02',
         github: 'https://github.com/Nexlein/NanoTekSpice',
@@ -278,7 +340,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'Data analysis and visualization project culminating in a comprehensive dashboard. Focuses on data processing, statistical modeling, and extracting actionable insights from large datasets.',
             fr: "Projet d'analyse et de visualisation de données aboutissant à un tableau de bord complet. Il couvre le traitement des données, la modélisation statistique et l'extraction d'informations."
         },
-        tags: ['Data Science', 'Analytics', 'Dashboard', 'Python'],
+        tags: ['Data Science', 'Python'],
         category: 'ai',
         year: 'Tek1',
         date: '2025-06',
@@ -299,7 +361,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'A customized clone of the Unix top utility. Features real-time system monitoring, process listing, memory metrics, and CPU usage, built with C and the ncurses library.',
             fr: "Un clone sur mesure de l'utilitaire Unix top. Surveille le système en temps réel : liste des processus, utilisation du CPU et de la RAM. Développé en C avec ncurses."
         },
-        tags: ['C', 'ncurses', 'Unix', 'System Programming', 'Terminal'],
+        tags: ['C', 'ncurses', 'Unix', 'System Programming'],
         category: 'systems',
         year: 'Tek1',
         date: '2025-03',
@@ -316,7 +378,7 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'A C library implementing a hash table: a custom hash function, separate chaining (a linked list per bucket), and 36 unit tests.',
             fr: 'Une bibliothèque C qui implémente une table de hachage : une fonction de hachage maison, le chaînage séparé (une liste chaînée par case) et 36 tests unitaires.'
         },
-        tags: ['C', 'Data Structures', 'Algorithms', 'Security', 'Library'],
+        tags: ['C', 'Data Structures', 'Algorithms', 'Security'],
         category: 'systems',
         year: 'Tek1',
         date: '2025-03',
@@ -334,13 +396,20 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'blackjack-ai',
         title: 'Blackjack AI',
         description: {
-            en: 'A complete ecosystem using Deep Reinforcement Learning (Maskable PPO) to learn and visualize the mathematically optimal Blackjack strategy without any hardcoded rules.',
-            fr: "Un écosystème complet d'apprentissage par renforcement profond (Maskable PPO) qui apprend et visualise la stratégie optimale du blackjack, sans aucune règle codée en dur."
+            en: 'A Deep Reinforcement Learning agent (Maskable PPO) that learns to play Blackjack from the rules alone, with no strategy coded in, and a terminal interface to watch it play and evaluate it.',
+            fr: "Un agent d'apprentissage par renforcement profond (Maskable PPO) qui apprend à jouer au blackjack à partir des seules règles, sans stratégie codée en dur, avec une interface terminal pour le regarder jouer et l'évaluer."
         },
         tags: ['Python', 'Reinforcement Learning', 'Stable-Baselines3', 'Textual', 'Gymnasium'],
         category: 'ai',
         year: 'Personal',
         date: '2026-07',
+        team: {
+            size: 1,
+            role: {
+                en: 'Everything: the game engine, the Gymnasium environment with action masking, training, evaluation and the terminal interface.',
+                fr: "Tout : le moteur de jeu, l'environnement Gymnasium avec masquage des actions, l'entraînement, l'évaluation et l'interface terminal."
+            }
+        },
         github: 'https://github.com/Nexlein/blackjack-ai',
         media: {
             type: 'video',
@@ -358,10 +427,70 @@ export const PROJECTS: ProjectEntry[] = [
         category: 'ai',
         year: 'Personal',
         date: '2026-08',
+        team: {
+            size: 1,
+            role: {
+                en: 'Everything: the Gymnasium environment, the physics and raycast sensors, PPO training, the Pygame viewer with MP4 export, and the CI.',
+                fr: "Tout : l'environnement Gymnasium, la physique et les capteurs à lancer de rayons, l'entraînement PPO, le visualiseur Pygame avec export MP4, et la CI."
+            }
+        },
         github: 'https://github.com/Nexlein/AI-Racing',
         media: {
             type: 'video',
             src: '/projects/ai-racing/ai-racing.mp4'
+        }
+    },
+    {
+        id: 'portfolio',
+        title: 'Portfolio',
+        description: {
+            en: 'This site. Vanilla TypeScript and Vite, every page prerendered in English and French at build time, a strict CSP, and 860+ unit tests plus Playwright browser tests on desktop and mobile in CI. The project map, the charts and the CV are all computed from the same two data files.',
+            fr: 'Ce site. TypeScript sans framework et Vite, chaque page pré-rendue en anglais et en français au build, une CSP stricte, et plus de 860 tests unitaires plus des tests navigateur Playwright sur ordinateur et mobile en CI. La carte des projets, les graphiques et le CV sont tous calculés à partir des deux mêmes fichiers de données.'
+        },
+        tags: ['TypeScript', 'Vite', 'Vitest', 'Playwright', 'CI/CD'],
+        category: 'architecture',
+        year: 'Personal',
+        date: '2026-07',
+        team: {
+            size: 1,
+            role: {
+                en: 'Everything: design, code, content, tests and CI.',
+                fr: 'Tout : le design, le code, le contenu, les tests et la CI.'
+            }
+        },
+        github: 'https://github.com/Nexlein/Portfolio',
+        media: {
+            type: 'gallery',
+            images: [
+                {
+                    src: '/projects/portfolio/home.webp',
+                    alt: {
+                        en: 'Home page of the portfolio: the headline over a live simulation.',
+                        fr: "Page d'accueil du portfolio : le titre sur une simulation en direct."
+                    }
+                },
+                {
+                    src: '/projects/portfolio/map.webp',
+                    alt: {
+                        en: 'The project map: projects as a network, linked where they share skills.',
+                        fr: 'La carte des projets : un réseau où les projets se relient quand ils partagent des compétences.'
+                    }
+                },
+                {
+                    src: '/projects/portfolio/path.webp',
+                    alt: {
+                        en: 'The path chart: distinct skills over time, computed from the projects and jobs.',
+                        fr: 'Le graphique du parcours : les compétences distinctes au fil du temps, calculées à partir des projets et des postes.'
+                    }
+                },
+                {
+                    src: '/projects/portfolio/cv.webp',
+                    alt: {
+                        en: 'The one-page CV, rendered from the same data as the site.',
+                        fr: "Le CV d'une page, rendu à partir des mêmes données que le site."
+                    }
+                }
+            ]
         }
     }
 ];

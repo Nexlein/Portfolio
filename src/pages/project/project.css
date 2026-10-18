@@ -176,8 +176,27 @@
     border-top: 1px solid var(--line);
 }
 
+.specs:has(> div:nth-child(5)) {
+    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+}
+
 .specs > div {
     padding: 20px 24px 0 0;
+}
+
+/* ── My part and the result: two short paragraphs under the strip ── */
+.story {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 48px;
+    margin: 36px 0 0;
+}
+
+.story dd {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.55;
 }
 
 .specs dd {
@@ -310,8 +329,13 @@
 }
 
 @media (width <= 900px) {
-    .specs {
+    .specs,
+    .specs:has(> div:nth-child(5)) {
         grid-template-columns: 1fr 1fr;
+    }
+
+    .story {
+        grid-template-columns: 1fr;
     }
 
     .specs > div:last-child {

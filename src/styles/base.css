@@ -312,7 +312,8 @@ button {
 
 /* Small mono caps label: the path chart's title, the project page's spec names */
 .path-symbol,
-.specs dt {
+.specs dt,
+.story dt {
     color: var(--muted);
     font-family: var(--font-mono);
     font-size: 12px;

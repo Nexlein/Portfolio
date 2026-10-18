@@ -314,8 +314,8 @@ export const CV_PROJECTS: CvProjectGroup[] = [
             {
                 id: 'blackjack-ai',
                 summary: {
-                    en: 'Deep RL agent (Maskable PPO) learning optimal Blackjack strategy in a custom environment.',
-                    fr: 'Agent RL profond (Maskable PPO) qui apprend la stratégie optimale du blackjack dans un environnement sur mesure.'
+                    en: 'Deep RL agent (Maskable PPO) learning to play Blackjack from the rules alone, in a custom environment.',
+                    fr: 'Agent RL profond (Maskable PPO) qui apprend à jouer au blackjack à partir des seules règles, dans un environnement sur mesure.'
                 },
                 tags: ['Python', 'RL', 'PPO']
             }

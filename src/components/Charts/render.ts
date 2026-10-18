@@ -364,12 +364,19 @@ const chartCard = (k: string, v: string, body: string) =>
  */
 export function numbers(lang: Lang, projects: ProjectEntry[], now: number): string {
     const domains = domainAxes(projects).keys.length,
-        recent = learnedSince(projects, now).length;
+        recent = learnedSince(projects, now).length,
+        series = skillSeries(projects, now),
+        total = series[series.length - 1].v;
     const n = (key: string, value: number) => t(lang, `numbers.${key}`).replace('{n}', count(value));
     const cards = [
         chartCard(t(lang, 'numbers.coverage'), n('domains', domains), radar(lang, projects)),
         chartCard(t(lang, 'numbers.languages'), t(lang, 'numbers.languagesTitle'), stackedLanguages(lang, projects)),
-        chartCard(t(lang, 'numbers.mostUsed'), n('distinct', distinctSkills(projects)), topSkillBars(projects)),
+        chartCard(
+            t(lang, 'numbers.mostUsed'),
+            // Projects alone, then with what jobs and certifications add: the path chart's headline number
+            n('distinct', distinctSkills(projects)).replace('{t}', count(total)),
+            topSkillBars(projects)
+        ),
         chartCard(t(lang, 'numbers.heat'), t(lang, 'numbers.heatTitle'), heatmap(lang, projects)),
         chartCard(t(lang, 'numbers.periods'), n('byPeriod', projects.length), donut(lang, projects)),
         chartCard(t(lang, 'numbers.growth'), t(lang, 'numbers.growthTitle'), newSkillColumns(lang, projects)),
