@@ -107,10 +107,10 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'cvrie',
         title: 'Cvrie',
         description: {
-            en: 'A comprehensive machine learning laboratory exploring both supervised and unsupervised learning algorithms, leveraging pandas, numpy, and scikit-learn.',
-            fr: "Un laboratoire complet d'apprentissage automatique : algorithmes supervisés et non supervisés, avec pandas, numpy et scikit-learn."
+            en: 'Machine learning in two parts. Supervised: X-ray body-part classification (chest, head, hand, foot) with Random Forest, PCA + SVM and an MLP tuned by grid search, about 99% test accuracy. Unsupervised: clustering 1,010 written symptom descriptions with TF-IDF, sentence embeddings, UMAP, K-Means and HDBSCAN.',
+            fr: 'Apprentissage automatique en deux parties. Supervisé : classification de radiographies par partie du corps (thorax, tête, main, pied) avec Random Forest, PCA + SVM et un MLP réglé par grid search, environ 99 % de précision en test. Non supervisé : regroupement de 1 010 descriptions de symptômes avec TF-IDF, embeddings de phrases, UMAP, K-Means et HDBSCAN.'
         },
-        tags: ['Python', 'Machine Learning', 'Data Science'],
+        tags: ['Python', 'Machine Learning', 'Data Science', 'scikit-learn', 'NLP'],
         category: 'ai',
         date: '2026-02',
         github: 'https://github.com/Nexlein/Cvrie',

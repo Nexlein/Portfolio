@@ -85,13 +85,47 @@ export interface Star {
  */
 export function layout(W: number, H: number, fit: { rx: number; ry: number }, items: ProjectEntry[]): Star[] {
     const coords = mds(items);
+    // How much the similarity directions bend the even spread round the circle. Settling is a heuristic: when a crowded
+    // board leaves cards overlapping or past the ellipse, a more even start usually settles cleanly, so try in turn
+    let best: { stars: Star[]; cost: number } | undefined;
+    for (const bend of BENDS) {
+        const stars = settle(W, H, fit, items, coords, bend);
+        const cost = layoutCost(W, H, fit, stars);
+        if (cost === 0) return stars;
+        if (!best || cost < best.cost) best = { stars, cost };
+    }
+    return best!.stars;
+}
+
+const BENDS = [0.3, 0.2, 0.1, 0];
+
+/** 0 when no two cards overlap and every card sits inside the ellipse; overlaps weigh more than overflow. */
+function layoutCost(W: number, H: number, fit: { rx: number; ry: number }, stars: Star[]): number {
+    let cost = 0;
+    for (let i = 0; i < stars.length; i++) {
+        const a = stars[i];
+        for (let j = i + 1; j < stars.length; j++)
+            if (Math.abs(a.x - stars[j].x) < CARD.w && Math.abs(a.y - stars[j].y) < CARD.h) cost += 10;
+        cost += Math.max(0, Math.hypot((a.x - W / 2) / fit.rx, (a.y - H / 2) / fit.ry) - 1.001);
+    }
+    return cost;
+}
+
+function settle(
+    W: number,
+    H: number,
+    fit: { rx: number; ry: number },
+    items: ProjectEntry[],
+    coords: [number, number][],
+    bend: number
+): Star[] {
     const cx = W / 2,
         cy = H / 2;
     // Spread directions round the full circle while keeping their order
     const raw = coords.map(([x, y]) => Math.atan2(y, x));
     const rank = raw.map((a, i) => raw.filter((b, j) => b < a || (b === a && j < i)).length);
     const stars = items.map((p, i) => {
-        const angle = (-Math.PI + (2 * Math.PI * (rank[i] + 0.5)) / raw.length) * 0.8 + raw[i] * 0.2;
+        const angle = (-Math.PI + (2 * Math.PI * (rank[i] + 0.5)) / raw.length) * (1 - bend) + raw[i] * bend;
         const r = ORBIT[periodOf(p)];
         return { p, x: cx + Math.cos(angle) * fit.rx * r, y: cy + Math.sin(angle) * fit.ry * r };
     });
