@@ -49,7 +49,7 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
         it('points og:image at a 1200x630 file that exists', () => {
             const image = meta(doc, 'property', 'og:image')!;
             expect(image.startsWith(SITE)).toBe(true);
-            expect(publicFiles, `${image} (npm run media:og)`).toContain(image.slice(SITE.length));
+            expect(publicFiles, `${image} (npm run media:og)`).toContain(new URL(image).pathname);
         });
 
         it('points canonical at itself and lists every language as an alternate', () => {
