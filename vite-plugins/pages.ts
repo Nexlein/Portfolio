@@ -39,7 +39,7 @@ export interface PageSpec {
 }
 
 const OG_LOCALE: Record<Lang, string> = { en: 'en_US', fr: 'fr_FR' };
-const DEFAULT_IMAGE = `${SITE}/og-image.png`;
+const DEFAULT_IMAGE = `${SITE}/og-image.png?v=2`;
 
 const fixedPage = (
     path: string,
