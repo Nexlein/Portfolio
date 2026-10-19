@@ -33,7 +33,7 @@ h1 { font-size: 104px; line-height: 0.98; font-weight: 700; letter-spacing: -0.0
 <div class="glow"></div><div class="dots"></div><div class="bar"></div>
 <div class="frame">
   <div class="mono"><b>●</b>&nbsp; nexlein.vercel.app</div>
-  <div><h1>Nielsen<br>Combe-Bracciale</h1><p class="role">AI, data and software engineer</p></div>
+  <div><h1>Nielsen<br>Combe--Bracciale</h1><p class="role">AI, data and software engineer</p></div>
   <div style="display:flex;justify-content:space-between;align-items:center">
     <span class="pill"><i></i>${NOW.availability.en}</span>
     <span class="mono">Epitech · AI track</span>
