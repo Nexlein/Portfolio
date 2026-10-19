@@ -139,16 +139,16 @@ export const EDUCATION: Education[] = [
     },
     {
         id: 'google-cloud',
-        title: { en: 'Google Cloud Certifications', fr: 'Certifications Google Cloud' },
+        title: { en: 'Google Cloud Certificate', fr: 'Certificat Google Cloud' },
         cvTitle: { en: 'Google Cloud', fr: 'Google Cloud' },
         period: { en: '2026', fr: '2026' },
         summary: {
-            en: '<strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Google Cloud Computing Foundations Certificate</a></strong> on cloud infrastructure, and <strong>Generative AI Leader</strong> certification.',
-            fr: 'Certificat <strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Google Cloud Computing Foundations</a></strong> sur l\'infrastructure cloud, et certification <strong>Generative AI Leader</strong>.'
+            en: '<strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Google Cloud Computing Foundations Certificate</a></strong> on cloud infrastructure.',
+            fr: 'Certificat <strong><a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Google Cloud Computing Foundations</a></strong> sur l\'infrastructure cloud.'
         },
         cvSummary: {
-            en: '<a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Cloud Computing Foundations Certificate</a>; Generative AI Leader certification.',
-            fr: 'Certificat <a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Cloud Computing Foundations</a> ; certification Generative AI Leader.'
+            en: '<a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Cloud Computing Foundations Certificate</a>.',
+            fr: 'Certificat <a href="https://www.credly.com/badges/25761c6f-8125-4058-85ef-7775c40ae8c2/public_url">Cloud Computing Foundations</a>.'
         }
     },
     {
@@ -206,8 +206,8 @@ export const CHECKPOINTS: Checkpoint[] = [
     {
         id: 'google-cloud',
         date: '2026-06',
-        label: { en: 'Google Cloud certified', fr: 'Certifié Google Cloud' },
-        skills: ['Google Cloud', 'Generative AI']
+        label: { en: 'Google Cloud certificate', fr: 'Certificat Google Cloud' },
+        skills: ['Google Cloud']
     },
     { id: 'issanka', date: '2026-09', label: { en: 'AI developer, Issanka', fr: 'Développeur IA, Issanka' } }
 ];
