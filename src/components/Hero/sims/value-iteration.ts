@@ -99,7 +99,8 @@ export function valueIteration(s: Stage): void {
                     continue;
                 }
                 const v = V[i];
-                if (v <= 0) continue;
+                // The reward cell has no arrow: the dot drawn there would not fully cover it
+                if (v <= 0 || (x === goal.x && y === goal.y)) continue;
                 const root = Math.sqrt(v),
                     half = (5 + 8 * root) / 2,
                     c = Math.cos(angle[i]),
