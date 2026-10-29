@@ -200,6 +200,7 @@ button {
 
 /* Things that arrive as you scroll: a short rise and fade, once */
 .reveal {
+    overflow-anchor: none; /* Firefox anchors scrolling to the moving element and drags the page along */
     transition:
         opacity 700ms var(--ease-out),
         translate 700ms var(--ease-out);
