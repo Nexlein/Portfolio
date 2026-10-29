@@ -30,7 +30,10 @@ pnpm-debug.log*
 
 # editor directories and files
 .idea
-.vscode
+# Editor: share debug configs and recommended extensions, keep personal settings local
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
 *.suo
 *.ntvs*
 *.njsproj
