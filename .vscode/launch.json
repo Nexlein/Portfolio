@@ -1,0 +1,37 @@
+{
+    // F5 "Vite: full stack" starts the dev server and opens Brave.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Vite: dev server",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "npm run dev"
+        },
+        {
+            "name": "Vite: browser (Brave)",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5173",
+            "runtimeExecutable": "/usr/bin/brave-browser",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            // Pages are rendered at build time (vite-plugins/pages.ts): break there to debug the HTML output
+            "name": "Vite: build (debug page rendering)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/vite/bin/vite.js",
+            "args": ["build"],
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Vite: full stack",
+            "configurations": ["Vite: dev server", "Vite: browser (Brave)"],
+            "stopAll": true
+        }
+    ]
+}
