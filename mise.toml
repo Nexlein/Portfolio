@@ -1,0 +1,3 @@
+[tools]
+# Same Node locally and in CI (jdx/mise-action)
+node = "24"

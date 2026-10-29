@@ -20,10 +20,13 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: actions/setup-node@v7
+            # Node from mise.toml: same version as local
+            - uses: jdx/mise-action@v5
+
+            - uses: actions/cache@v6
               with:
-                  node-version-file: .nvmrc
-                  cache: npm
+                  path: ~/.npm
+                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
             - run: npm ci
 
@@ -64,10 +67,13 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: actions/setup-node@v7
+            # Node from mise.toml: same version as local
+            - uses: jdx/mise-action@v5
+
+            - uses: actions/cache@v6
               with:
-                  node-version-file: .nvmrc
-                  cache: npm
+                  path: ~/.npm
+                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
             - run: npm ci
 
@@ -92,10 +98,13 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: actions/setup-node@v7
+            # Node from mise.toml: same version as local
+            - uses: jdx/mise-action@v5
+
+            - uses: actions/cache@v6
               with:
-                  node-version-file: .nvmrc
-                  cache: npm
+                  path: ~/.npm
+                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
             - run: npm ci
 
@@ -128,10 +137,13 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            - uses: actions/setup-node@v7
+            # Node from mise.toml: same version as local
+            - uses: jdx/mise-action@v5
+
+            - uses: actions/cache@v6
               with:
-                  node-version-file: .nvmrc
-                  cache: npm
+                  path: ~/.npm
+                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
             - run: npm ci
 
