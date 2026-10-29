@@ -223,7 +223,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← vite-plugins/pages
 
 ## src/styles
-- **base.css** (350) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (351) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← 404.html, cv.html, index.html, project.html
 - **tokens.css** (97) — Design tokens.
