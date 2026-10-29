@@ -84,7 +84,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: pauseSims, Point, Stage, stage
   - → ui/motion
   - ← components/Hero/Hero, components/Hero/sims/descent, components/Hero/sims/flocking, components/Hero/sims/index, components/Hero/sims/neural, components/Hero/sims/value-iteration
-- **value-iteration.ts** (167) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
+- **value-iteration.ts** (168) — Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
   - exports: valueIteration
   - → components/Hero/sims/stage
   - ← components/Hero/sims/index
