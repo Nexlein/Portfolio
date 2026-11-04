@@ -79,12 +79,8 @@ export const PROJECTS: ProjectEntry[] = [
         },
         github: 'https://github.com/Nexlein/Sensai',
         media: {
-            type: 'image',
-            src: '/projects/sensai/sensai.webp',
-            alt: {
-                en: "Sensai's README feature table, the team's RAG benchmark (correct answers from 23% to 82% on 22 questions, keyword-graded) and the pytest line: 1,469 tests collected.",
-                fr: "Le tableau des fonctionnalités du README de Sensai, le benchmark RAG de l'équipe (de 23 % à 82 % de bonnes réponses sur 22 questions, noté par mots-clés) et la ligne de pytest : 1 469 tests collectés."
-            }
+            type: 'video',
+            src: '/projects/sensai/sensai.mp4'
         }
     },
     {

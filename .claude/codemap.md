@@ -154,7 +154,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Experience, Education, SkillGroup, CvProjectGroup, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, core/structured-data, pages/cv/blocks, pages/home/blocks
-- **projects.ts** (661) — Single source of truth for all portfolio projects.
+- **projects.ts** (657) — Single source of truth for all portfolio projects.
   - exports: DOMAINS, ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
   - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/icons, ui/video, vite-plugins/pages
