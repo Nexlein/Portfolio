@@ -22,7 +22,7 @@ export const fr = {
             skip: 'Aller au contenu',
             work: 'Projets',
             path: 'Parcours',
-            hire: 'Recruter',
+            contact: 'Contact',
             cv: 'CV',
             language: 'Langue',
             theme: 'Choisir un thème'
@@ -46,7 +46,7 @@ export const fr = {
             title2c: 'Web testé de bout en bout.',
             lede: "J'écris d'abord les tests et je donne des règles écrites aux agents de codage ; la CI vérifie chaque changement. Étudiant en 3e année à Epitech, développeur IA en stage chez Issanka.",
             work: 'Voir les projets',
-            hire: 'Me recruter',
+            contact: 'Me contacter',
             switch: 'Changer de simulation',
             pause: "Mettre l'animation en pause",
             scroll: 'Faire défiler',
@@ -169,17 +169,10 @@ export const fr = {
             },
             source: 'Voir comment ce site est construit'
         },
-        hire: {
-            title1: 'Deux façons de travailler ensemble.',
-            title2: 'Stage ou freelance.',
-            'full-time': 'Stage',
-            freelance: 'Freelance',
-            cta: {
-                'full-time': "Parler d'un stage",
-                freelance: 'Demander un devis'
-            },
-            talk: 'Dans les deux cas, le plus rapide est un e-mail.',
-            recruiters: 'Pour les recruteurs',
+        contact: {
+            title1: 'Prenons contact.',
+            title2: 'Le plus rapide : un e-mail.',
+            talk: 'Une question sur un projet ? Écrivez-moi.',
             copy: "Copier l'e-mail",
             copied: 'E-mail copié'
         }

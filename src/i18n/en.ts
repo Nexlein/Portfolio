@@ -22,7 +22,7 @@ export const en = {
             skip: 'Skip to content',
             work: 'Work',
             path: 'Path',
-            hire: 'Hire',
+            contact: 'Contact',
             cv: 'CV',
             language: 'Language',
             theme: 'Choose a theme'
@@ -46,7 +46,7 @@ export const en = {
             title2c: 'End-to-end tested apps.',
             lede: 'I write the tests first and give coding agents written rules; CI checks every change. Third-year student at Epitech, AI developer intern at Issanka.',
             work: 'See the work',
-            hire: 'Hire me',
+            contact: 'Contact me',
             switch: 'Show another simulation',
             pause: 'Pause the animation',
             scroll: 'Scroll down',
@@ -169,17 +169,10 @@ export const en = {
             },
             source: 'See how this site is built'
         },
-        hire: {
-            title1: 'Two ways to work together.',
-            title2: 'Internship or freelance.',
-            'full-time': 'Internship',
-            freelance: 'Freelance',
-            cta: {
-                'full-time': 'Discuss an internship',
-                freelance: 'Ask for a quote'
-            },
-            talk: 'Either way, the fastest is an email.',
-            recruiters: 'For recruiters',
+        contact: {
+            title1: 'Get in touch.',
+            title2: 'Email is fastest.',
+            talk: 'Questions about a project? Write to me.',
             copy: 'Copy email',
             copied: 'Email copied'
         }

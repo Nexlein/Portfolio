@@ -3,7 +3,7 @@
  * matching data-render names). Everything a visitor reads is in the HTML; scripts only add motion and interaction.
  * Relative imports only: rendered from Node.
  */
-import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, OFFERS, type Checkpoint, type Offer } from '../../data/profile.ts';
+import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, type Checkpoint } from '../../data/profile.ts';
 import { DOMAINS, PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
@@ -89,31 +89,6 @@ export const pathBlock = (lang: Lang) => pathChart(lang, PROJECTS, thisMonth());
 
 export const numbersBlock = (lang: Lang) => numbers(lang, PROJECTS, thisMonth());
 
-/** Pay and contract details, closed until a recruiter asks for them. */
-const recruiterInfo = (o: Offer, lang: Lang) =>
-    o.rows
-        .filter((r) => r.recruiter)
-        .map(
-            (r) => `<details class="tile-more"><summary>${t(lang, 'hire.recruiters')}</summary>
-<p>${r.value[lang]}</p><p class="tile-note">${r.note[lang]}</p></details>`
-        )
-        .join('');
-
-/** The two ways to work together. */
-export function hire(lang: Lang): string {
-    return OFFERS.map(
-        (o) => `<article class="tile surface reveal">
-<p class="eyebrow">${t(lang, `hire.${o.id}`)}</p><h3>${o.title[lang]}</h3><p class="tile-lede">${o.summary[lang]}</p>
-<dl>${o.rows
-            .filter((r) => !r.recruiter)
-            .map((r) => `<div><dt>${r.label[lang]}</dt><dd>${r.value[lang]}</dd></div>`)
-            .join('')}</dl>
-${recruiterInfo(o, lang)}
-<a class="link" href="mailto:${OWNER.email}">${t(lang, `hire.cta.${o.id}`)} <span aria-hidden="true">›</span></a>
-</article>`
-    ).join('');
-}
-
 /** How I work: three practices in a thin strip; the link to the source of this site is the proof. */
 export function method(lang: Lang): string {
     return (['test', 'agents', 'compound'] as const)
@@ -131,7 +106,7 @@ export const methodSource = (lang: Lang) =>
 
 /** Copy email, LinkedIn, CV. */
 export function contact(lang: Lang): string {
-    return `<button type="button" class="btn copy-email" data-email="${OWNER.email}">${t(lang, 'hire.copy')}</button>
+    return `<button type="button" class="btn copy-email" data-email="${OWNER.email}">${t(lang, 'contact.copy')}</button>
 <a class="link" href="${OWNER.linkedin}">LinkedIn <span aria-hidden="true">›</span></a>
 <a class="link" href="${localizedPath('/cv.html', lang)}">CV <span aria-hidden="true">›</span></a>`;
 }

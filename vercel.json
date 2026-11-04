@@ -13,12 +13,12 @@
         },
         {
             "source": "/availability.html",
-            "destination": "/#hire",
+            "destination": "/#contact",
             "permanent": true
         },
         {
             "source": "/fr/availability.html",
-            "destination": "/fr/#hire",
+            "destination": "/fr/#contact",
             "permanent": true
         },
         {

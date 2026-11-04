@@ -8,7 +8,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/notfound/notfound.css, pages/notfound/notfound
 - **cv.html** (113)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
-- **index.html** (162)
+- **index.html** (161)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
 - **project.html** (76) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
@@ -150,8 +150,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, translate.test.ts
 
 ## src/data
-- **profile.ts** (402) — Everything the site says about its owner, written once in every language.
-  - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
+- **profile.ts** (324) — Everything the site says about its owner, written once in every language.
+  - exports: Experience, Education, SkillGroup, CvProjectGroup, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, core/structured-data, pages/cv/blocks, pages/home/blocks
 - **projects.ts** (653) — Single source of truth for all portfolio projects.
@@ -161,16 +161,16 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (240)
+- **en.ts** (233)
   - exports: en
   - ← core/translate
-- **fr.ts** (240)
+- **fr.ts** (233)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
 
 ## src/pages/content
-- **render.ts** (54) — Render the site's data into the pages at build time (home, CV, nav and footer everywhere).
+- **render.ts** (53) — Render the site's data into the pages at build time (home, CV, nav and footer everywhere).
   - exports: BLOCKS, renderContent
   - → core/translate, components/Nav/render, components/Footer/render, pages/home/blocks, pages/cv/blocks
   - ← vite-plugins/pages
@@ -191,13 +191,13 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: head-script.test.ts, headers.test.ts, node-safe.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (140) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
-  - exports: availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
+- **blocks.ts** (115) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+  - exports: availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, core/text, components/NeuralMap/graph, components/NeuralMap/limits
   - ← pages/content/render
-- **home.css** (657) — Home sections that are not components of their own: selected work, the project list, experience, hire.
+- **home.css** (559) — Home sections that are not components of their own: selected work, the project list, experience, contact.
   - ← index.html
-- **home.ts** (255) — Home page.
+- **home.ts** (256) — Home page.
   - → core/analytics, core/i18n, ui/glide, ui/motion, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, components/NeuralMap/limits, ui/boot, ui/reveal, components/NeuralMap/NeuralMap
   - ← index.html
 
@@ -223,7 +223,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← vite-plugins/pages
 
 ## src/styles
-- **base.css** (351) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (350) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← 404.html, cv.html, index.html, project.html
 - **tokens.css** (81) — Design tokens.

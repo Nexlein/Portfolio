@@ -7,13 +7,13 @@ import { fr } from '../src/i18n/fr';
 test.describe('without JavaScript', () => {
     test.use({ javaScriptEnabled: false });
 
-    test('every project, chart and offer is in the HTML', async ({ page }) => {
+    test('every project and chart, and the contact links, are in the HTML', async ({ page }) => {
         await page.goto('/');
         await expect(page.locator('.project-list li')).toHaveCount(PROJECTS.length);
         await expect(page.locator('.feature')).toHaveCount(PROJECTS.filter((p) => p.featured).length);
         await expect(page.locator('.path-svg')).toBeVisible();
         await expect(page.locator('.chart-card')).toHaveCount(7);
-        await expect(page.locator('#hire .tile')).toHaveCount(2);
+        await expect(page.locator('#contact .copy-email')).toHaveCount(1);
         await expect(page.locator('#method .method-item')).toHaveCount(3);
         await expect(page.locator('.hero-copy h1')).toBeVisible(); // reveals never hide content without JS
     });
@@ -571,11 +571,15 @@ test.describe('charts', () => {
     });
 
     // The browser scrolls before the script trims the project list: the target must still end up on screen
-    for (const id of ['path', 'hire'])
+    for (const [id, section] of [
+        ['path', 'path'],
+        ['contact', 'contact'],
+        ['hire', 'contact'] // links from before the section became Contact
+    ])
         test(`a link to /#${id} lands on its section after the page has settled`, async ({ page }) => {
             await page.goto(`/#${id}`);
             await page.waitForLoadState('load');
-            await expect(page.locator(`#${id} h2`)).toBeInViewport();
+            await expect(page.locator(`#${section} h2`)).toBeInViewport();
         });
 });
 
@@ -583,7 +587,7 @@ test('copy email says what happened', async ({ page, context, browserName }) => 
     if (browserName === 'chromium') await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.goto('/');
     await page.locator('.copy-email').click();
-    await expect(page.locator('.toast')).toHaveText(new RegExp(`${en.home.hire.copied}|@`));
+    await expect(page.locator('.toast')).toHaveText(new RegExp(`${en.home.contact.copied}|@`));
 });
 
 test.describe('theme', () => {
@@ -618,7 +622,7 @@ test.describe('language', () => {
         expect(code).not.toContain(en.home.hero.title2b);
         expect(code).not.toContain(fr.home.hero.title2b);
         await page.locator('.copy-email').click();
-        await expect(page.locator('.toast')).toHaveText(new RegExp(`${fr.home.hire.copied}|@`));
+        await expect(page.locator('.toast')).toHaveText(new RegExp(`${fr.home.contact.copied}|@`));
         await page.locator('.path-range [data-range="1y"]').click();
         await expect(page.locator('.path-range [data-range="1y"]')).toHaveText(fr.home.path.ranges['1y']);
         await expect(page.locator('.path-delta')).toContainText(fr.home.path.over.replace('{n}', '12'));
@@ -792,8 +796,8 @@ test.describe('nav', () => {
         await page.goto('/');
         const current = page.locator('.nav-link[aria-current]');
         await expect(current).toHaveCount(0);
-        await page.locator('#hire').scrollIntoViewIfNeeded();
-        await expect(current).toHaveAttribute('data-section', 'hire');
+        await page.locator('#contact').scrollIntoViewIfNeeded();
+        await expect(current).toHaveAttribute('data-section', 'contact');
         await page.evaluate(() => window.scrollTo(0, 0));
         await expect(current).toHaveCount(0);
     });

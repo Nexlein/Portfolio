@@ -27,7 +27,7 @@ class I18nService {
         return this.lang;
     }
 
-    /** Translate a dotted key ('home.hire.copied') in the page's language. */
+    /** Translate a dotted key ('home.contact.copied') in the page's language. */
     t(key: string): string {
         this.strings ??= embedded();
         return lookupIn(this.strings, key);

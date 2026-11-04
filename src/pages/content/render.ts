@@ -29,7 +29,6 @@ export const BLOCKS: Record<string, Block> = {
     numbers: home.numbersBlock,
     method: home.method,
     'method-source': home.methodSource,
-    hire: home.hire,
     contact: home.contact,
     email: home.email,
 

@@ -12,9 +12,9 @@ Personal software engineering portfolio of Nielsen COMBE--BRACCIALE. Built with 
 | CV              | `cv.html`      | `src/pages/cv/cv.ts`           | `/cv.html` (PDF: `/cv.pdf`) |
 | Project (× all) | `project.html` | `src/pages/project/project.ts` | `/projects/<id>.html`       |
 
-Every page also exists in French under `/fr/`. `/availability.html` redirects to the home page's `#hire` section.
+Every page also exists in French under `/fr/`. `/availability.html` redirects to the home page's `#contact` section.
 
-The home page is one scroll: hero (a live simulation), selected work, every project on the neural map, the path chart, the numbers, and the two ways to hire. Project pages go deeper on one project; the CV is the printable format.
+The home page is one scroll: hero (a live simulation), selected work, every project on the neural map, the path chart, the numbers, and how to get in touch. Project pages go deeper on one project; the CV is the printable format.
 
 Unknown addresses get `404.html` (Vercel serves it with status 404 at the address that was asked for; there is one file, so the English one). It is not in the sitemap and is marked `noindex`. Under `/fr/` the head script moves the visitor to `/fr/404.html`, the French copy of the same page; `data-static` on the page keeps the language redirect from looping.
 
@@ -58,7 +58,7 @@ src/
 │   ├── Nav/          Top nav (build time) + pill, theme menu (Nav.ts)
 │   └── NeuralMap/    Project map: similarity and layout (graph.ts, pure), canvas and cards (NeuralMap.ts)
 ├── core/             Site facts, translation, structured data, analytics
-├── data/             Site content: profile.ts (experience, education, skills, offers, checkpoints) and projects.ts
+├── data/             Site content: profile.ts (experience, education, skills, now, checkpoints) and projects.ts
 ├── i18n/             Interface text (en, fr)
 ├── pages/            Per-page blocks, entry scripts and styles (home, cv, project); content/render.ts maps blocks
 ├── styles/           Design tokens and themes (tokens.css), base styles (base.css)
@@ -98,7 +98,7 @@ Every page exists in both languages, with its own URL: `/cv.html` and `/fr/cv.ht
 
 Facts live in data files, written once with English and French side by side (`{ en, fr }`, a missing language is a type error):
 
-- `src/data/profile.ts`: experiences, education, skills, the projects the CV highlights, the internship and freelance offers, and the checkpoints on the path chart.
+- `src/data/profile.ts`: experiences, education, skills, the projects the CV highlights, what is happening now (`NOW`), and the checkpoints on the path chart.
 - `src/data/projects.ts`: projects.
 
 Templates mark where content goes with `data-render="<block>"` (home sections, CV sections); `src/pages/content/render.ts` fills them at build time, so crawlers and the CV PDF see real text. `src/i18n/{en,fr}.ts` only holds interface text (navigation, headings, buttons). Text may use `<strong>`/`<br>`, never CSS classes.

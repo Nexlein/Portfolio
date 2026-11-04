@@ -67,7 +67,7 @@ test.describe('project page', () => {
 
     test('the nav links back to the home sections', async ({ page }) => {
         await page.goto(`/projects/${video.id}.html`);
-        await expect(page.locator('.nav-link[data-section="hire"]')).toHaveAttribute('href', '/#hire');
+        await expect(page.locator('.nav-link[data-section="contact"]')).toHaveAttribute('href', '/#contact');
         await expect(page.locator('.nav-name')).toHaveAttribute('href', '/');
     });
 

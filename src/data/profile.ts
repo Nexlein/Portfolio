@@ -46,14 +46,6 @@ export interface CvProjectGroup {
     projects: { id: string; title?: string; summary: Text; tags: string[] }[];
 }
 
-export interface Offer {
-    id: 'full-time' | 'freelance';
-    title: Text;
-    summary: Text;
-    /** `recruiter`: pay and contract details, folded away on the home. */
-    rows: { label: Text; value: Text; note: Text; recruiter?: true }[];
-}
-
 /** In CV order. Every entry appears on the CV and under the path chart on the home page. */
 export const EXPERIENCES: Experience[] = [
     {
@@ -325,76 +317,6 @@ export const CV_PROJECTS: CvProjectGroup[] = [
                     fr: 'Agent RL profond (Maskable PPO) qui apprend à jouer au blackjack à partir des seules règles, dans un environnement sur mesure.'
                 },
                 tags: ['Python', 'RL', 'PPO']
-            }
-        ]
-    }
-];
-
-export const OFFERS: Offer[] = [
-    {
-        id: 'full-time',
-        title: { en: 'Full-Time Internship', fr: 'Stage à temps plein' },
-        summary: {
-            en: 'Mandatory Epitech Tek3 placement (Full-time)',
-            fr: "Stage de fin d'année obligatoire Epitech Tek3 (temps plein)"
-        },
-        rows: [
-            {
-                label: { en: 'Timeline & Rhythm', fr: 'Période et rythme' },
-                value: { en: 'March 29 to Aug. 27, 2027.', fr: 'Du 29 mars au 27 août 2027.' },
-                note: { en: 'At least 4 months (5 days/week).', fr: 'Au moins 4 mois (5 jours/semaine).' }
-            },
-            {
-                label: { en: 'Location', fr: 'Lieu' },
-                value: { en: 'Montpellier area or remote.', fr: 'Montpellier et alentours, ou télétravail.' },
-                note: { en: 'Remote work welcome.', fr: 'Télétravail bienvenu.' }
-            },
-            {
-                label: { en: 'Contract Type', fr: 'Type de contrat' },
-                value: { en: 'Internship, CDD, or CDI.', fr: 'Stage, CDD ou CDI.' },
-                note: { en: 'Full-time placement.', fr: 'Temps plein.' }
-            },
-            {
-                label: { en: 'Recruiter Info', fr: 'Infos recruteur' },
-                recruiter: true,
-                value: {
-                    en: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).',
-                    fr: 'Min. légal : 4,50 €/h (taux 2026, 650-700 €/mois).'
-                },
-                note: {
-                    en: 'Seeking competitive compensation.',
-                    fr: 'Je souhaite une rémunération compétitive.'
-                }
-            }
-        ]
-    },
-    {
-        id: 'freelance',
-        title: { en: 'Freelance Missions', fr: 'Missions freelance' },
-        summary: { en: 'B2B project-based collaboration', fr: 'Collaboration B2B par projet' },
-        rows: [
-            {
-                label: { en: 'Scope & Availability', fr: 'Périmètre et disponibilité' },
-                value: { en: 'Backend APIs, AI integration.', fr: "API back-end, intégration d'IA." },
-                note: { en: 'Flexible hours, async delivery.', fr: 'Horaires flexibles, livraison asynchrone.' }
-            },
-            {
-                label: { en: 'Location', fr: 'Lieu' },
-                value: {
-                    en: 'Remote, or on site around Montpellier.',
-                    fr: 'À distance, ou sur site autour de Montpellier.'
-                },
-                note: { en: 'Based in Montpellier, France.', fr: 'Basé à Montpellier.' }
-            },
-            {
-                label: { en: 'Status', fr: 'Statut' },
-                value: { en: 'Freelancer (Auto-entrepreneur)', fr: 'Freelance (auto-entrepreneur)' },
-                note: { en: 'No payroll taxes for the client.', fr: 'Pas de charges patronales.' }
-            },
-            {
-                label: { en: 'Rates', fr: 'Tarifs' },
-                value: { en: 'Daily Rate or Fixed Price.', fr: 'TJM ou forfait.' },
-                note: { en: 'Quotation provided upon request.', fr: 'Devis fourni sur demande.' }
             }
         ]
     }

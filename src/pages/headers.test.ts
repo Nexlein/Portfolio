@@ -80,8 +80,8 @@ describe('retired pages', () => {
     const redirects = Object.fromEntries(vercel.redirects.map((r) => [r.source, r]));
 
     it.each([
-        ['/availability.html', '/#hire'],
-        ['/fr/availability.html', '/fr/#hire']
+        ['/availability.html', '/#contact'],
+        ['/fr/availability.html', '/fr/#contact']
     ])('%s moves for good to %s', (source, destination) => {
         expect(redirects[source]).toMatchObject({ destination, permanent: true });
     });
