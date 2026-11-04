@@ -1,6 +1,6 @@
 export const fr = {
     meta: {
-        imageAlt: 'Portfolio de Nielsen COMBE--BRACCIALE, ingénieur IA, data et logiciel',
+        imageAlt: 'Nielsen COMBE--BRACCIALE, développeur IA et full-stack',
         home: {
             title: 'Nielsen COMBE--BRACCIALE — Développeur IA et full-stack',
             description:
@@ -12,7 +12,7 @@ export const fr = {
                 "CV de Nielsen COMBE--BRACCIALE, développeur IA et full-stack : assistants LLM locaux, RAG, applications web, Kubernetes, tests d'abord."
         },
         notFound: {
-            title: 'Page introuvable — Nexlein',
+            title: 'Page introuvable — Nielsen COMBE--BRACCIALE',
             description: "Cette page n'existe pas. Retour au portfolio de Nielsen COMBE--BRACCIALE (Nexlein)."
         }
     },

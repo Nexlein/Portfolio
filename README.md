@@ -115,7 +115,7 @@ All pages come from one list in `vite-plugins/pages.ts` (`PAGES`): path, templat
 
 ## SEO and social previews
 
-Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
+Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). The home, CV and 404 pages share `public/og-image.png` (`og-image-fr.png` in French), 1200×630, drawn by `npm run media:brand` from the profile data; each project page uses its own `og.jpg`. `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
 
 When adding a page, give it these tags and a sitemap entry; `src/pages/seo.test.ts` fails until you do.
 

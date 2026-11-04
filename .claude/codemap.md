@@ -19,8 +19,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: home.spec.ts, not-found.spec.ts, pages.spec.ts, project.spec.ts
 
 ## scripts
-- **brand-images.ts** (70) — Social preview of the home page (public/og-image.png, 1200x630, what LinkedIn and X expect) and the icons (favicon.png 32x32, apple-touch...
-  - → data/profile
+- **brand-images.ts** (71) — Social preview of the home page, one per language (public/og-image.png and og-image-fr.png, 1200x630, what LinkedIn and X expect) and the...
+  - → data/profile, core/site, core/translate
 - **codemap.ts** (114) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
 - **cv-pdf.ts** (59) — Render the CV page to PDF in every language, from the production build (run `vite build` first).
   - exports: PDFS
@@ -135,7 +135,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← components/NeuralMap/NeuralMap, core/i18n, core/translate, vite-plugins/pages
 - **site.ts** (15) — Facts about the site and its owner, shared by the build (SEO, sitemap, structured data) and tests.
   - exports: SITE, OWNER
-  - ← components/Footer/render, core/structured-data, pages/cv/blocks, pages/home/blocks, vite-plugins/pages
+  - ← scripts/brand-images, components/Footer/render, core/structured-data, pages/cv/blocks, pages/home/blocks, vite-plugins/pages
 - **structured-data.ts** (70) — schema.org JSON-LD for search engines (rendered into each page at build time).
   - exports: profilePage, cvPerson, projectSource
   - → data/profile, data/projects, core/site, core/translate
@@ -146,7 +146,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **translate.ts** (38) — Translation helpers for the build (vite-plugins/pages.ts, which pre-renders every page in every language) and for tests.
   - exports: lookup, clientStrings, translateTree
   - → i18n/en, i18n/fr, core/lang
-  - ← components/Charts/render, components/Footer/render, components/Nav/render, core/structured-data, data/profile, data/projects, pages/content/render, pages/cv/blocks, pages/home/blocks, pages/project/render, vite-plugins/pages
+  - ← scripts/brand-images, components/Charts/render, components/Footer/render, components/Nav/render, core/structured-data, data/profile, data/projects, pages/content/render, pages/cv/blocks, pages/home/blocks, pages/project/render, vite-plugins/pages
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, translate.test.ts
 
 ## src/data
@@ -261,7 +261,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **vite-env.d.ts** (10) — / <reference types="vite/client" />
 
 ## vite-plugins
-- **pages.ts** (256) — One page of the site, in every language.
+- **pages.ts** (257) — One page of the site, in every language.
   - exports: PageSpec, PAGES, NOT_FOUND, outputFile, renderPage, sitemap, sitePages
   - → data/projects, core/site, core/structured-data, core/translate, core/lang, pages/content/render, pages/project/render
 - **shared-head.ts** (75) — Runs in <head> before first paint, on every page: 1.

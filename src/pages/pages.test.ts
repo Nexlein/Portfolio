@@ -49,7 +49,15 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
         it('points og:image at a 1200x630 file that exists', () => {
             const image = meta(doc, 'property', 'og:image')!;
             expect(image.startsWith(SITE)).toBe(true);
-            expect(publicFiles, `${image} (npm run media:og)`).toContain(new URL(image).pathname);
+            expect(publicFiles, `${image} (npm run media:og, or media:brand for og-image)`).toContain(
+                new URL(image).pathname
+            );
+        });
+
+        it('uses the social image of its language', () => {
+            const image = meta(doc, 'property', 'og:image')!;
+            if (image.includes('/og-image'))
+                expect(image.endsWith(lang === 'fr' ? '/og-image-fr.png' : '/og-image.png')).toBe(true);
         });
 
         it('points canonical at itself and lists every language as an alternate', () => {
