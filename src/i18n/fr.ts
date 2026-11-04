@@ -44,7 +44,7 @@ export const fr = {
             title2: 'IA qui cite ses sources.',
             title2b: 'Mises à jour sans coupure.',
             title2c: 'Web testé de bout en bout.',
-            lede: "J'écris d'abord les tests et je donne des règles écrites aux agents de codage ; la CI vérifie chaque changement. Étudiant en 3e année à Epitech, développeur IA en stage chez Issanka.",
+            lede: "J'écris d'abord les tests et je donne des règles écrites aux agents de codage ; la CI vérifie chaque changement. Étudiant en 3e année à Epitech.",
             work: 'Voir les projets',
             contact: 'Me contacter',
             switch: 'Changer de simulation',
@@ -52,8 +52,8 @@ export const fr = {
             scroll: 'Faire défiler',
             sims: {
                 valueIteration: {
-                    name: 'Itération de valeur',
-                    hint: 'Itération de valeur en direct. Votre curseur est la récompense. Cliquez pour poser un mur.'
+                    name: 'Itération sur les valeurs',
+                    hint: 'Itération sur les valeurs en direct. Votre curseur est la récompense. Cliquez pour poser un mur.'
                 },
                 flocking: {
                     name: 'Agents en essaim',
@@ -65,7 +65,7 @@ export const fr = {
                 },
                 neural: {
                     name: 'Réseau de neurones',
-                    hint: 'Réseau de neurones en direct. Votre curseur excite les neurones. Cliquez pour envoyer une impulsion.'
+                    hint: 'Réseau de neurones en direct. Votre curseur active les neurones. Cliquez pour envoyer une impulsion.'
                 }
             }
         },
@@ -75,11 +75,11 @@ export const fr = {
         work: {
             title1: '{n} projets.',
             title2: 'Un seul réseau.',
-            sub: 'Les projets se relient quand ils partagent des compétences.',
-            subDesk: "Survolez-en un pour voir ce qu'il active, ou interrogez le réseau.",
+            sub: 'Les projets sont reliés par leurs compétences communes.',
+            subDesk: 'Survolez un projet pour voir ses liens, ou activez un domaine.',
             ask: 'Activer un domaine',
             mapLabel:
-                "Les projets sous forme de réseau : les plus récents au centre, les liens relient les projets qui partagent des compétences (plus clair = plus proches). Survolez ou sélectionnez un projet pour l'aperçu ; validez pour ouvrir sa page.",
+                'Les projets en réseau : les plus récents au centre, reliés quand ils partagent des compétences (lien plus lumineux = plus proches). Survolez ou sélectionnez un projet pour un aperçu ; validez pour ouvrir sa page.',
             more: '{shown} projets affichés sur {n}, les autres apparaissent à tour de rôle.',
             seeAll: 'Voir tous les projets',
             viewLabel: 'Affichage des projets',
@@ -113,8 +113,8 @@ export const fr = {
         },
         path: {
             title1: 'Le parcours.',
-            title2: 'Chaque étape méritée.',
-            symbol: 'Compétences · taille de la boîte à outils',
+            title2: 'Étape par étape.',
+            symbol: 'Compétences · indice de la boîte à outils',
             over: 'sur {n} mois',
             over1: 'sur 1 mois',
             since: 'depuis {d}',
@@ -123,7 +123,7 @@ export const fr = {
             ranges: { '1m': '1M', '6m': '6M', '1y': '1A', max: 'Max' },
             aria: "Compétences distinctes au fil du temps : {n} aujourd'hui.",
             skills: '{n} compétences',
-            shipped: '{p} démarré',
+            shipped: 'Début de {p}',
             prevStep: 'Étape précédente',
             nextStep: 'Étape suivante'
         },
@@ -132,12 +132,11 @@ export const fr = {
             heatTitle: 'Où se placent les projets',
             prev: 'Graphiques précédents',
             next: 'Graphiques suivants',
-            sub: 'Chaque graphique ci-dessous est calculé à partir des projets eux-mêmes.',
-            view: 'Vue',
+            sub: 'Tous les graphiques ci-dessous sont calculés à partir des projets.',
             other: 'Autres',
             infra: 'Infra / config',
             projects: 'projets',
-            coverage: 'Couverture',
+            coverage: 'Étendue',
             domains: '{n} domaines',
             periods: 'Périodes',
             byPeriod: '{n} projets, par période',
@@ -147,7 +146,7 @@ export const fr = {
             growthTitle: 'Nouvelles compétences, par période',
             mostUsed: 'Les plus utilisées',
             distinct: '{n} dans les projets · {t} au total',
-            thisYear: 'Cette année',
+            thisYear: 'Sur un an',
             newSkills: '{n} nouvelles compétences en 12 mois'
         },
         method: {
@@ -192,17 +191,18 @@ export const fr = {
         team: 'Équipe',
         solo: 'Solo',
         people: '{n} personnes',
-        role: 'Mon rôle',
+        role: 'Ma part',
         result: 'Résultat',
-        related1: 'Projets connectés.',
-        related2: 'Là où mènent les compétences.',
+        related1: 'Projets liés.',
+        related2: 'Où mènent ces compétences.',
         shares: 'En commun :',
         sameDomain: 'Même domaine : {domain}',
         overlap: '{n} % en commun',
         gallery: "Captures d'écran",
         image: 'Image {i} sur {n}',
         prev: 'Image précédente',
-        next: 'Image suivante'
+        next: 'Image suivante',
+        video: 'Vidéo de démonstration : {p}'
     },
     cv: {
         controls: {

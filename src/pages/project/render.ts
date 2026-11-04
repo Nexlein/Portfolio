@@ -23,10 +23,10 @@ export function projectDescription(project: ProjectEntry, lang: Lang): string {
 }
 
 /** The media frame: a lazy video (started on screen by playVideosWhenVisible), an image, or a gallery. */
-function mediaHtml(media: ProjectMedia, lang: Lang): string {
+function mediaHtml(media: ProjectMedia, title: string, lang: Lang): string {
     switch (media.type) {
         case 'video':
-            return `<video loop muted playsinline preload="none" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
+            return `<video loop muted playsinline preload="none" aria-label="${attr(t(lang, 'video').replace('{p}', title))}" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
         case 'image':
             return `<img src="${media.src}" alt="${attr(media.alt[lang])}" />`;
         case 'gallery': {
@@ -125,7 +125,7 @@ export function fillProjectPage(document: Document, project: ProjectEntry, lang:
     const told = story(project, lang);
     if (told) $('project-story').innerHTML = told;
     else $('project-story').remove();
-    $('project-media').innerHTML = mediaHtml(project.media, lang);
+    $('project-media').innerHTML = mediaHtml(project.media, project.title, lang);
     $('project-related').innerHTML = related(project, lang);
     $('project-back').setAttribute('href', `${localizedPath('/', lang)}#work`);
 

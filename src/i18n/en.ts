@@ -44,7 +44,7 @@ export const en = {
             title2: 'AI that cites its sources.',
             title2b: 'Zero-downtime deploys.',
             title2c: 'End-to-end tested apps.',
-            lede: 'I write the tests first and give coding agents written rules; CI checks every change. Third-year student at Epitech, AI developer intern at Issanka.',
+            lede: 'I write the tests first and give coding agents written rules; CI checks every change. Third-year student at Epitech.',
             work: 'See the work',
             contact: 'Contact me',
             switch: 'Show another simulation',
@@ -76,10 +76,10 @@ export const en = {
             title1: '{n} projects.',
             title2: 'One network.',
             sub: 'Projects connect where they share skills.',
-            subDesk: 'Hover one to see what it lights up, or ask the network.',
+            subDesk: 'Hover one to see its links, or light up a domain.',
             ask: 'Light up a domain',
             mapLabel:
-                'Projects as a network: the most recent closest to the centre, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.',
+                'Projects as a network: the most recent closest to the center, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.',
             more: 'Showing {shown} of {n}, the rest rotate in.',
             seeAll: 'See all projects',
             viewLabel: 'Projects view',
@@ -133,11 +133,10 @@ export const en = {
             prev: 'Previous charts',
             next: 'Next charts',
             sub: 'Every chart below is calculated from the projects themselves.',
-            view: 'View',
             other: 'Other',
             infra: 'Infra / config',
             projects: 'projects',
-            coverage: 'Coverage',
+            coverage: 'Breadth',
             domains: '{n} domains',
             periods: 'Periods',
             byPeriod: '{n} projects, by period',
@@ -147,7 +146,7 @@ export const en = {
             growthTitle: 'New skills, by period',
             mostUsed: 'Most used',
             distinct: '{n} skills in projects · {t} in all',
-            thisYear: 'This year',
+            thisYear: 'Past year',
             newSkills: '{n} new skills in 12 months'
         },
         method: {
@@ -202,7 +201,8 @@ export const en = {
         gallery: 'Screenshots',
         image: 'Image {i} of {n}',
         prev: 'Previous image',
-        next: 'Next image'
+        next: 'Next image',
+        video: 'Demo video: {p}'
     },
     cv: {
         controls: {
