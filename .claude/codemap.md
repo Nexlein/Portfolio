@@ -150,7 +150,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, translate.test.ts
 
 ## src/data
-- **profile.ts** (327) — Everything the site says about its owner, written once in every language.
+- **profile.ts** (333) — Everything the site says about its owner, written once in every language.
   - exports: Experience, Education, SkillGroup, CvProjectGroup, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, core/structured-data, pages/cv/blocks, pages/home/blocks
@@ -177,11 +177,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: render.test.ts
 
 ## src/pages/cv
-- **blocks.ts** (71) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
-  - exports: experience, skills, education, certifications, projectBlocks, contact
+- **blocks.ts** (97) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+  - exports: typeset, experience, skills, education, certifications, projectBlocks, contact
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
-- **cv.css** (344) — CV: a sheet on the site's stage.
+- **cv.css** (364) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav

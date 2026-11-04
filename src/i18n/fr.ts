@@ -218,9 +218,9 @@ export const fr = {
         },
         sections: {
             experience: 'Expérience',
-            expertise: 'Expertise technique',
-            systems: 'Architecture systèmes',
-            ai: 'IA & Data Science',
+            skills: 'Compétences',
+            fullstack: 'Projets full-stack, infra et C++',
+            ai: 'Projets IA',
             education: 'Formation',
             certs: 'Certifications'
         }

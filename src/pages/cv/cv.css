@@ -150,6 +150,10 @@
     text-align: right;
 }
 
+.cv-skill {
+    white-space: nowrap;
+}
+
 .sheet-contact img {
     display: none; /* the QR code is for paper: online, you are already here */
     box-sizing: border-box;
@@ -181,8 +185,20 @@
 
 .sheet-cols {
     display: grid;
+    grid-template-rows: auto auto;
     grid-template-columns: 1fr 1fr;
-    gap: 7mm;
+    gap: 0 7mm;
+}
+
+/* Each column is a heading and its entries; sharing the rows starts both lists level when one heading wraps */
+.sheet-cols > section {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+}
+
+.sheet-cols h2 {
+    align-self: end;
 }
 
 /* ── Skill groups ── */
@@ -274,6 +290,10 @@
     .sheet-cols {
         display: flex;
         flex-direction: column;
+    }
+
+    .sheet-cols {
+        gap: 7mm;
     }
 
     .sheet-contact ul {

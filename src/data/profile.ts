@@ -41,9 +41,9 @@ export interface SkillGroup {
 }
 
 export interface CvProjectGroup {
-    id: 'systems' | 'ai';
-    /** Entries reference src/data/projects.ts by id; `title` overrides the project title when grouping several. */
-    projects: { id: string; title?: string; summary: Text; tags: string[] }[];
+    id: 'ai' | 'fullstack';
+    /** Entries reference src/data/projects.ts by id; `also` adds a second project to the same line (both linked). */
+    projects: { id: string; also?: string; summary: Text; tags: string[] }[];
 }
 
 /** In CV order. Every entry appears on the CV and under the path chart on the home page. */
@@ -128,8 +128,8 @@ export const EDUCATION: Education[] = [
             fr: "Cursus de 5 ans en ingénierie logicielle, où l'on apprend par projets."
         },
         cvSummary: {
-            en: "Master's Degree in Information Technology. Intensive focus on advanced software engineering.",
-            fr: "Master en Technologies de l'Information. Formation intensive axée sur l'ingénierie logicielle avancée."
+            en: "Master's-level title (bac+5, RNCP level 7), taught through projects.",
+            fr: 'Titre bac+5 (RNCP niveau 7), formation par projets.'
         }
     },
     {
@@ -156,8 +156,8 @@ export const EDUCATION: Education[] = [
             fr: 'Spécialités maths et informatique, puis 5 semaines de C intensif à Epitech.'
         },
         cvSummary: {
-            en: 'Baccalaureate (Specialization: Mathematics & Computer Science).',
-            fr: 'Baccalauréat (Spécialités : Mathématiques & NSI).'
+            en: 'Baccalaureate, math and computer science specialties.',
+            fr: 'Spécialités maths et informatique (NSI).'
         }
     },
     {
@@ -171,8 +171,8 @@ export const EDUCATION: Education[] = [
         },
         cvHidePeriod: true,
         cvSummary: {
-            en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (Native), English (Fluent, TEPITECH 835/990, TOEIC format).',
-            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (Natif), Anglais (Courant, TEPITECH 835/990, format TOEIC).'
+            en: 'BIA (2020), PSC 1 (2021).<br />Languages:<br />French (native), English (fluent, 835/990 on a TOEIC-format test).',
+            fr: 'BIA (2020), PSC 1 (2021).<br />Langues :<br />Français (langue maternelle), anglais courant (835/990 à un test au format TOEIC).'
         }
     }
 ];
@@ -243,17 +243,22 @@ export const SKILLS: SkillGroup[] = [
     {
         id: 'languages',
         title: { en: 'Languages', fr: 'Langages' },
-        items: ['C/C++', 'Python', 'C# / .NET', 'TypeScript']
+        items: ['Python', 'TypeScript', 'C/C++', 'C#/.NET']
     },
     {
-        id: 'ai-data',
-        title: { en: 'AI & Data', fr: 'IA & Data' },
-        items: ['PyTorch', 'RAG', 'LLMs (Ollama)', 'Agentic Frameworks', 'Prompt Engineering']
+        id: 'ai',
+        title: { en: 'AI', fr: 'IA' },
+        items: ['LLMs (Ollama)', 'RAG', 'PyTorch', 'RL (PPO, DQN)', 'MS Agent Framework']
+    },
+    {
+        id: 'web',
+        title: { en: 'Web', fr: 'Web' },
+        items: ['React', 'Express', 'Prisma', 'PostgreSQL', 'Redis']
     },
     {
         id: 'devops',
-        title: { en: 'DevOps & Arch', fr: 'DevOps & Archi' },
-        items: ['Docker', 'Linux', 'Git', 'Ansible', 'Jenkins']
+        title: { en: 'Infra & DevOps', fr: 'Infra et DevOps' },
+        items: ['Docker', 'Kubernetes', 'Azure', 'Ansible', 'Jenkins', 'Linux']
     },
     {
         id: 'practices',
@@ -265,61 +270,62 @@ export const SKILLS: SkillGroup[] = [
 /** The CV's two project columns. Ids must exist in src/data/projects.ts. */
 export const CV_PROJECTS: CvProjectGroup[] = [
     {
-        id: 'systems',
+        id: 'ai',
         projects: [
             {
-                id: 'zappy',
+                id: 'sensai',
                 summary: {
-                    en: 'Multiplayer autonomous AI network game. Handled concurrent socket connections and state.',
-                    fr: "Jeu en réseau multijoueur avec IA autonome. Gestion des connexions simultanées par sockets et de l'état du jeu."
+                    en: 'Local AI assistant on Ollama, built by a team of 4 without an LLM framework: RAG with cited sources, tools, memory; 1,406 tests in CI.',
+                    fr: 'Assistant IA local sur Ollama, construit en équipe de 4 sans framework LLM : RAG avec sources citées, outils, mémoire ; 1 406 tests en CI.'
                 },
-                tags: ['C++', 'Sockets']
+                tags: ['Python', 'LLM', 'RAG']
             },
             {
-                id: 'arcade',
-                title: 'Arcade & Raytracer',
+                id: 'starttrek',
                 summary: {
-                    en: '3D math rendering engine and modular gaming architecture.',
-                    fr: 'Moteur de rendu mathématique 3D et architecture de jeu modulaire.'
+                    en: 'DQN written from scratch in PyTorch to land a lunar module (team of 3): average reward of 191 ± 41 over 5 seeds (95% CI; 200 = solved).',
+                    fr: 'DQN écrit de zéro en PyTorch pour poser un module lunaire (équipe de 3) : récompense moyenne de 191 ± 41 sur 5 graines (IC à 95 % ; 200 = résolu).'
                 },
-                tags: ['C++']
+                tags: ['Python', 'PyTorch', 'DQN']
             },
             {
-                id: 'plazza',
+                id: 'ai-racing',
+                also: 'blackjack-ai',
                 summary: {
-                    en: 'Multi-process, multi-threaded pizzeria simulation exploring IPC and mutex coordination.',
-                    fr: 'Simulation multi-processus et multi-thread explorant la communication inter-processus (IPC) et la coordination par mutex.'
+                    en: 'Two solo RL agents (PPO): one drives around a track with raycast sensors, one learns Blackjack from the rules alone.',
+                    fr: "Deux agents RL en solo (PPO) : l'un fait le tour d'un circuit avec des capteurs à lancer de rayons, l'autre apprend le blackjack à partir des seules règles."
                 },
-                tags: ['C++', 'IPC']
+                tags: ['Python', 'RL', 'Gymnasium']
             }
         ]
     },
     {
-        id: 'ai',
+        id: 'fullstack',
         projects: [
             {
-                id: 'ai-racing',
+                id: 'bernstein',
                 summary: {
-                    en: 'RL agent (PPO) navigating a custom kinematic physics environment with raycast sensors.',
-                    fr: 'Agent RL (PPO) qui navigue dans un environnement à physique cinématique sur mesure, avec des capteurs à lancer de rayons.'
+                    en: "Deploys the school's voting app to Kubernetes on Azure (AKS) in one command (team of 2); CI checks that an update or a node drain does not interrupt the service.",
+                    fr: "Déploie en une commande l'application de vote de l'école sur Kubernetes (AKS, Azure), en équipe de 2 ; la CI vérifie qu'une mise à jour ou le drain d'un nœud ne coupe pas le service."
                 },
-                tags: ['Python', 'RL', 'Gymnasium']
+                tags: ['Kubernetes', 'Azure', 'CI/CD']
             },
             {
-                id: 'persona',
+                id: 'dashboard',
                 summary: {
-                    en: 'Self-hosted AI personalized news digest workflow.',
-                    fr: "Workflow auto-hébergé de résumé d'actualités personnalisé par IA."
+                    en: 'Widget dashboard in React and Express (team of 2): authentication, three API replicas behind Nginx, more than 400 tests.',
+                    fr: "Tableau de bord à widgets en React et Express (équipe de 2) : authentification, trois réplicas d'API derrière Nginx, plus de 400 tests."
                 },
-                tags: ['N8N', 'Mistral']
+                tags: ['TypeScript', 'React', 'Express']
             },
             {
-                id: 'blackjack-ai',
+                id: 'arcade',
+                also: 'raytracer',
                 summary: {
-                    en: 'Deep RL agent (Maskable PPO) learning to play Blackjack from the rules alone, in a custom environment.',
-                    fr: 'Agent RL profond (Maskable PPO) qui apprend à jouer au blackjack à partir des seules règles, dans un environnement sur mesure.'
+                    en: 'Game platform with hot-swapped plugins (team of 2) and a 3D ray tracer (team of 4), both in C++.',
+                    fr: 'Plateforme de jeux à plugins échangeables à chaud (équipe de 2) et moteur de rendu 3D par lancer de rayons (équipe de 4), en C++.'
                 },
-                tags: ['Python', 'RL', 'PPO']
+                tags: ['C++']
             }
         ]
     }
