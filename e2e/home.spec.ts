@@ -377,7 +377,7 @@ test.describe('charts', () => {
         const chart = page.locator('.path-chart');
         await chart.scrollIntoViewIfNeeded();
         await expect(chart.locator('.phase')).toHaveCount(4); // before Epitech, then Tek 1, 2 and 3
-        await expect(chart.locator('.phase-label', { hasText: 'Tek 2 · 2025–26' })).toBeVisible();
+        await expect(chart.locator('.phase-label', { hasText: 'Tek 2 · 2025-26' })).toBeVisible();
         await expect(chart).toHaveClass(/\bin\b/);
         const hit = chart.locator('.hit');
         const box = (await hit.boundingBox())!;

@@ -91,9 +91,9 @@ export const fr = {
             open: 'Voir le projet',
             similar: '{s} de proximité',
             periods: {
-                Tek1: 'tek 1 · 2024–25',
-                Tek2: 'tek 2 · 2025–26',
-                Tek3: 'tek 3 · 2026–27',
+                Tek1: 'tek 1 · 2024-25',
+                Tek2: 'tek 2 · 2025-26',
+                Tek3: 'tek 3 · 2026-27',
                 Personal: 'perso · 2026'
             }
         },
@@ -224,7 +224,7 @@ export const fr = {
             role: 'Développeur IA et full-stack',
             summary:
                 "Des assistants IA, des applications web et leur déploiement, construits avec les tests d'abord, des agents de codage encadrés par des règles écrites et la CI sur chaque changement.",
-            badge2: 'Stage à temps plein (mars–août 2027)',
+            badge2: 'Stage à temps plein (mars-août 2027)',
             badge3: 'Freelance'
         },
         sections: {

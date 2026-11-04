@@ -260,7 +260,7 @@ describe('where the visitor was', () => {
     });
 
     it('names a phase the way the chart prints it', () => {
-        expect(phaseLabel('en', 2, 2025)).toBe('Tek 2 · 2025–26');
+        expect(phaseLabel('en', 2, 2025)).toBe('Tek 2 · 2025-26');
         expect(phaseLabel('en', 2, 2025, true)).toBe('Tek 2');
         expect(phaseLabel('fr', 0, 0)).toBe('Avant Epitech');
     });

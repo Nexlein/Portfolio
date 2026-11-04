@@ -91,9 +91,9 @@ export const en = {
             open: 'Open project',
             similar: '{s} similar',
             periods: {
-                Tek1: 'tek 1 · 2024–25',
-                Tek2: 'tek 2 · 2025–26',
-                Tek3: 'tek 3 · 2026–27',
+                Tek1: 'tek 1 · 2024-25',
+                Tek2: 'tek 2 · 2025-26',
+                Tek3: 'tek 3 · 2026-27',
                 Personal: 'personal · 2026'
             }
         },
@@ -224,7 +224,7 @@ export const en = {
             role: 'AI & Full-Stack Developer',
             summary:
                 'AI assistants, web apps and their deployment, built with tests first, coding agents under written rules and CI on every change.',
-            badge2: 'Full-Time Intern (Mar–Aug 2027)',
+            badge2: 'Full-Time Intern (Mar-Aug 2027)',
             badge3: 'Freelance'
         },
         sections: {

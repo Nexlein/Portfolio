@@ -226,8 +226,8 @@ export const NOW = {
         en: 'First mission: issanka.com, live since 9 October',
         fr: 'Première mission : issanka.com, en ligne depuis le 9 octobre'
     },
-    detail: { en: 'Sept 2026 – Feb 2027 · Epitech year 3', fr: 'Sept 2026 – Fév 2027 · Epitech 3e année' },
-    availability: { en: 'Open to an internship · Mar – Aug 2027', fr: 'Disponible en stage · mars – août 2027' }
+    detail: { en: 'Sept 2026 - Feb 2027 · Epitech year 3', fr: 'Sept 2026 - Fév 2027 · Epitech 3e année' },
+    availability: { en: 'Open to an internship · Mar - Aug 2027', fr: 'Disponible en stage · mars - août 2027' }
 } satisfies Record<string, Text>;
 
 /** Where the owner works from: the CV header. */
@@ -359,7 +359,7 @@ export const OFFERS: Offer[] = [
                 recruiter: true,
                 value: {
                     en: 'Legal min: 4.50€/h (2026 rate, ~650-700€/mo).',
-                    fr: 'Min. légal : 4,50 €/h (taux 2026, 650–700 €/mois).'
+                    fr: 'Min. légal : 4,50 €/h (taux 2026, 650-700 €/mois).'
                 },
                 note: {
                     en: 'Seeking competitive compensation.',

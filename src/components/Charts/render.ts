@@ -46,10 +46,10 @@ export const monthName = (time: number, lang: Lang) => monthLabel(time, MONTHS[l
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
-/** Where the visitor was: "Tek 2 · 2025–26" (or "Tek 2"), and "Before Epitech" for school year 0. */
+/** Where the visitor was: "Tek 2 · 2025-26" (or "Tek 2"), and "Before Epitech" for school year 0. */
 export function phaseLabel(lang: Lang, year: number, start: number, short = false): string {
     if (year === 0) return t(lang, 'path.beforeEpitech');
-    return short ? `Tek ${year}` : `Tek ${year} · ${start}–${String(start + 1).slice(2)}`;
+    return short ? `Tek ${year}` : `Tek ${year} · ${start}-${String(start + 1).slice(2)}`;
 }
 
 /** The change since the start of a range, as the chart's headline says it: "▲ +37 (176 %) past 12 months". */
