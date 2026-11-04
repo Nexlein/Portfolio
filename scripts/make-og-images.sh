@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Social preview image per project: public/projects/<id>/og.jpg (1200x630 JPEG, what LinkedIn/X expect).
-# Built from the video poster, or the first image: fitted whole over a blurred, darkened copy of itself.
+# Built from the video poster, or the still the cards show: fitted whole over a blurred, darkened copy of itself.
 # Usage: npm run media:og [-- --force]   (requires ffmpeg)
 set -euo pipefail
 
@@ -13,7 +13,12 @@ for dir in public/projects/*/; do
         continue
     fi
     src=$(ls "$dir"*.poster.webp 2>/dev/null | head -1 || true)
-    # The full-size image, not its card thumbnails (<name>.320.webp sorts before <name>.webp)
+    # The still the cards show: the one that has card copies (a gallery's first picture)
+    if [[ -z "$src" ]]; then
+        thumb=$(ls "$dir"*.320.webp 2>/dev/null | head -1 || true)
+        [[ -n "$thumb" && -f "${thumb%.320.webp}.webp" ]] && src="${thumb%.320.webp}.webp"
+    fi
+    # Otherwise the first full-size image, not its card thumbnails (<name>.320.webp sorts before <name>.webp)
     [[ -z "$src" ]] && src=$(ls "$dir"*.webp 2>/dev/null | grep -Ev '\.(320|640)\.webp$' | sort | head -1 || true)
     if [[ -z "$src" ]]; then
         echo "skip: no image in $dir" >&2
