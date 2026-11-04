@@ -154,10 +154,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
-- **projects.ts** (484) — Single source of truth for all portfolio projects.
-  - exports: ProjectMedia, ProjectEntry, projectPath, PROJECTS
+- **projects.ts** (486) — Single source of truth for all portfolio projects.
+  - exports: DOMAINS, ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
-  - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/video, vite-plugins/pages
+  - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/icons, ui/video, vite-plugins/pages
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
@@ -191,7 +191,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: head-script.test.ts, headers.test.ts, node-safe.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (141) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+- **blocks.ts** (140) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
   - exports: availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, hire, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, core/text, components/NeuralMap/graph, components/NeuralMap/limits
   - ← pages/content/render
@@ -237,8 +237,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: ease, initGlide
   - → ui/motion
   - ← pages/home/home
-- **icons.ts** (18) — Inline SVG icons shared across components.
+- **icons.ts** (20) — Inline SVG icons shared across components.
   - exports: Icons, domainIcon
+  - → data/projects
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
 - **motion.ts** (5) — True when the visitor asked for less motion: nothing moves by itself, and pictures are drawn once.
   - exports: prefersReducedMotion

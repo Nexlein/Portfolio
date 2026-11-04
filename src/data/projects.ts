@@ -7,7 +7,9 @@ import type { Text } from '../core/translate.ts';
  * Text fields hold every language ({ en, fr }).
  */
 
-type ProjectCategory = 'architecture' | 'systems' | 'ai' | 'devops' | 'graphical';
+/** Project domains, in the order the map buttons and the charts list them. */
+export const DOMAINS = ['ai', 'systems', 'architecture', 'graphical', 'devops'] as const;
+type ProjectCategory = (typeof DOMAINS)[number];
 
 interface ProjectMediaVideo {
     type: 'video';

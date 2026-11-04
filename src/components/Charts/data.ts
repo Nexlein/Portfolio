@@ -4,7 +4,7 @@
  * functions for interactions.
  */
 import { CHECKPOINTS, EXPERIENCES, type Checkpoint } from '../../data/profile.ts';
-import type { ProjectEntry } from '../../data/projects.ts';
+import { DOMAINS, type ProjectEntry } from '../../data/projects.ts';
 import { periodOf, type Period } from '../NeuralMap/graph.ts';
 import { schoolYear, valueAt } from './series.ts';
 
@@ -214,7 +214,7 @@ export function languageBuckets(projects: ProjectEntry[]): { keys: string[]; buc
     return { keys, bucket };
 }
 
-const DOMAIN_ORDER = ['ai', 'systems', 'architecture', 'graphical', 'devops'];
+const DOMAIN_ORDER: readonly string[] = DOMAINS;
 
 /** Domains for the radar: up to 7 axes, the rest grouped as OTHER. */
 export function domainAxes(projects: ProjectEntry[]): { keys: string[]; counts: number[] } {

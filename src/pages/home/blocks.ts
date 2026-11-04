@@ -4,7 +4,7 @@
  * Relative imports only: rendered from Node.
  */
 import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, OFFERS, type Checkpoint, type Offer } from '../../data/profile.ts';
-import { PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
+import { DOMAINS, PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
@@ -44,8 +44,7 @@ export function workTitle(lang: Lang): string {
 /** One button per domain present in the data, in a stable order. */
 export function domainQuery(lang: Lang): string {
     const used = new Set(PROJECTS.map((p) => p.category as string));
-    return ['ai', 'systems', 'architecture', 'graphical', 'devops']
-        .filter((d) => used.has(d))
+    return DOMAINS.filter((d) => used.has(d))
         .map((d) => `<button type="button" data-domain="${d}">${domainName(lang, d)}</button>`)
         .join('');
 }
