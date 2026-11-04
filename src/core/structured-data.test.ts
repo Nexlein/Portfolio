@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { SKILLS } from '@/data/profile';
 import { PROJECTS } from '@/data/projects';
-import { profilePage, projectSource } from './structured-data';
+import { OWNER } from './site';
+import { cvPerson, profilePage, projectSource } from './structured-data';
 
 describe('projectSource', () => {
     const image = 'https://example.test/og.jpg';
@@ -29,5 +31,31 @@ describe('the structured data adds', () => {
         const [en, fr] = (['en', 'fr'] as const).map((lang) => profilePage(lang).isPartOf as Record<string, string>);
         expect(en).toMatchObject({ '@type': 'WebSite', name: 'Nexlein', url: 'https://nexlein.vercel.app/' });
         expect(fr['@id']).toBe(en['@id']);
+    });
+});
+
+describe('the Person block', () => {
+    const people = (['en', 'fr'] as const).flatMap((lang) => [
+        profilePage(lang).mainEntity as Record<string, unknown>,
+        cvPerson(lang)
+    ]);
+
+    it('lists spelling variants as alternate names, never the displayed name', () => {
+        for (const person of people) {
+            const names = person.alternateName as string[];
+            expect(names).toContain(OWNER.alias);
+            expect(names).not.toContain(OWNER.name);
+            expect(new Set(names).size).toBe(names.length);
+            expect(person.name).toBe(OWNER.name);
+        }
+    });
+
+    it('lists every skill once, in CV order', () => {
+        const items = SKILLS.flatMap((group) => group.items);
+        for (const person of people) {
+            const known = person.knowsAbout as string[];
+            expect(known).toEqual([...new Set(items)]);
+            expect(known.length).toBeGreaterThan(0);
+        }
     });
 });

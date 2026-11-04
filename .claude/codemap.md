@@ -136,9 +136,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **site.ts** (15) — Facts about the site and its owner, shared by the build (SEO, sitemap, structured data) and tests.
   - exports: SITE, OWNER
   - ← components/Footer/render, core/structured-data, pages/cv/blocks, pages/home/blocks, vite-plugins/pages
-- **structured-data.ts** (63) — schema.org JSON-LD for search engines (rendered into each page at build time).
+- **structured-data.ts** (70) — schema.org JSON-LD for search engines (rendered into each page at build time).
   - exports: profilePage, cvPerson, projectSource
-  - → data/projects, core/site, core/translate
+  - → data/profile, data/projects, core/site, core/translate
   - ← vite-plugins/pages
 - **text.ts** (16) — First sentence of a text, without HTML tags, ending in one full stop ("A.
   - exports: firstSentence, attr
@@ -153,7 +153,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **profile.ts** (398) — Everything the site says about its owner, written once in every language.
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
-  - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks
+  - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, core/structured-data, pages/cv/blocks, pages/home/blocks
 - **projects.ts** (486) — Single source of truth for all portfolio projects.
   - exports: DOMAINS, ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
