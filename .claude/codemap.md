@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **404.html** (56) — Template for /404.html and /fr/404.html: Vercel serves /404.html for every URL that matches nothing.
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/notfound/notfound.css, pages/notfound/notfound
-- **cv.html** (110)
+- **cv.html** (104)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
 - **index.html** (161)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
@@ -170,18 +170,18 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: dictionaries.test.ts
 
 ## src/pages/content
-- **render.ts** (53) — Render the site's data into the pages at build time (home, CV, nav and footer everywhere).
+- **render.ts** (54) — Render the site's data into the pages at build time (home, CV, nav and footer everywhere).
   - exports: BLOCKS, renderContent
   - → core/translate, components/Nav/render, components/Footer/render, pages/home/blocks, pages/cv/blocks
   - ← vite-plugins/pages
 - tests: render.test.ts
 
 ## src/pages/cv
-- **blocks.ts** (97) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
-  - exports: typeset, experience, skills, education, certifications, projectBlocks, contact
+- **blocks.ts** (103) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+  - exports: typeset, experience, skills, education, certifications, projectBlocks, contact, QR_CODE, qr
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
-- **cv.css** (364) — CV: a sheet on the site's stage.
+- **cv.css** (368) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav

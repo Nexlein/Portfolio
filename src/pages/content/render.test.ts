@@ -2,8 +2,8 @@
 import { describe, expect, it } from 'vitest';
 import { BLOCKS, renderContent } from './render';
 import { CV_PROJECTS, EDUCATION, EXPERIENCES, SKILLS } from '@/data/profile';
-import { LANGS } from '@/core/translate';
-import { typeset } from '../cv/blocks';
+import { LANGS, lookup } from '@/core/translate';
+import { QR_CODE, typeset } from '../cv/blocks';
 
 const templates = import.meta.glob<string>('../../../*.html', { query: '?raw', import: 'default', eager: true });
 const used = new Set(
@@ -63,6 +63,12 @@ describe('content blocks', () => {
                 expect(p.querySelectorAll('.cv-skill')).toHaveLength(SKILLS[i].items.length);
                 expect(p.innerHTML).not.toMatch(/ · /);
             });
+        });
+
+        it('prints the QR code to the home page in the CV language', () => {
+            const img = render('cv-qr', lang).querySelector('img')!;
+            expect(img.getAttribute('src')).toBe(QR_CODE[lang]);
+            expect(img.getAttribute('alt')).toBe(lookup(lang, 'cv.controls.qr'));
         });
 
         it('renders skills and education', () => {

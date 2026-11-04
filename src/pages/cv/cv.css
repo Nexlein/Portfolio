@@ -154,6 +154,10 @@
     white-space: nowrap;
 }
 
+.cv-qr {
+    display: contents; /* the QR code's language-specific <img> sits in the contact row like a direct child */
+}
+
 .sheet-contact img {
     display: none; /* the QR code is for paper: online, you are already here */
     box-sizing: border-box;

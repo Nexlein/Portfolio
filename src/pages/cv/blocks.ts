@@ -6,7 +6,7 @@
 import { CV_PROJECTS, EDUCATION, EXPERIENCES, LOCATION, SKILLS } from '../../data/profile.ts';
 import { PROJECTS, projectPath } from '../../data/projects.ts';
 import { OWNER, SITE } from '../../core/site.ts';
-import { localizedPath, type Lang } from '../../core/translate.ts';
+import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 
 /**
  * Line breaks that read badly on paper: "191 ± 41" always stays whole; in French a non-breaking space also goes
@@ -94,3 +94,9 @@ export const contact = (lang: Lang) =>
     ]
         .map(([href, label]) => `<li><a href="${href}">${label}</a></li>`)
         .join('');
+
+/** QR code to the home page in the CV's language (public/qrcode*.svg), printed next to the contact list. */
+export const QR_CODE: Record<Lang, string> = { en: '/qrcode.svg', fr: '/qrcode-fr.svg' };
+
+export const qr = (lang: Lang) =>
+    `<img src="${QR_CODE[lang]}" alt="${lookup(lang, 'cv.controls.qr')}" width="64" height="64" />`;

@@ -141,6 +141,8 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 - **Posters**: every video needs `<name>.poster.webp`. Run `npm run media:posters` to generate missing ones.
 - **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `media:thumbs -- --force` would replace them with plain downscales.
 
+- **QR codes**: the CV prints `public/qrcode.svg` (home) or `public/qrcode-fr.svg` (French home). To redo one: `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`, then keep the files' style (a white square under one black path).
+
 Videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion` they never autoplay: they keep their poster and show controls.
 
 Fonts are self-hosted with Fontsource (latin subset), so pages make no third-party requests. Schibsted Grotesk is the variable font: one file for every weight.

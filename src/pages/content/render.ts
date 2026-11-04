@@ -38,6 +38,7 @@ export const BLOCKS: Record<string, Block> = {
     'cv-skills': cv.skills,
     'cv-education': cv.education,
     'cv-certs': cv.certifications,
+    'cv-qr': cv.qr,
     ...cv.projectBlocks
 };
 
