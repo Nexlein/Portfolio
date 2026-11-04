@@ -4,12 +4,12 @@ export const en = {
         home: {
             title: 'Nielsen COMBE--BRACCIALE — AI & Full-Stack Developer',
             description:
-                'Nielsen COMBE--BRACCIALE (Nexlein), AI and full-stack developer, student at Epitech: local LLM assistants with RAG, tested web apps, Kubernetes deployments.'
+                'Nielsen COMBE--BRACCIALE (Nexlein), AI and full-stack developer, student at Epitech: local AI agents with RAG, tested web apps, Kubernetes deployments.'
         },
         cv: {
             title: 'Nielsen COMBE--BRACCIALE — CV · AI & Full-Stack Developer',
             description:
-                'CV of Nielsen COMBE--BRACCIALE, AI and full-stack developer: local LLM assistants, RAG, web apps, Kubernetes, tests first.'
+                'CV of Nielsen COMBE--BRACCIALE, AI and full-stack developer: local AI agents, RAG, web apps, Kubernetes, tests first.'
         },
         notFound: {
             title: 'Page not found — Nielsen COMBE--BRACCIALE',
@@ -191,7 +191,7 @@ export const en = {
         team: 'Team',
         solo: 'Solo',
         people: '{n} people',
-        role: 'My part',
+        role: 'My role',
         result: 'Result',
         related1: 'Connected projects.',
         related2: 'Where the skills lead next.',
@@ -214,7 +214,7 @@ export const en = {
         hero: {
             role: 'AI & Full-Stack Developer',
             summary:
-                'AI assistants, web apps and their deployment, built with tests first, coding agents under written rules and CI on every change.'
+                'AI agents, web apps and their deployment, built with tests first, coding agents under written rules and CI on every change.'
         },
         sections: {
             experience: 'Experience',
