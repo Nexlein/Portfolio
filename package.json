@@ -1,7 +1,7 @@
 {
     "name": "nexlein-portfolio",
     "version": "1.0.0",
-    "description": "Nielsen COMBE--BRACCIALE's professional software engineering portfolio.",
+    "description": "Portfolio of Nielsen COMBE--BRACCIALE (Nexlein), AI & full-stack developer.",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",

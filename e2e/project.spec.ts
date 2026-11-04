@@ -10,7 +10,7 @@ test.describe('project page', () => {
 
         test('renders the project, plays its video and links to GitHub', async ({ page }) => {
             await page.goto(`/projects/${video.id}.html`);
-            await expect(page).toHaveTitle(`${video.title} — Nexlein`);
+            await expect(page).toHaveTitle(`${video.title} — Nielsen COMBE--BRACCIALE`);
             await expect(page.locator('h1')).toHaveText(video.title);
             await expect(page.locator('#project-desc')).toHaveText(video.description.en);
             await expect(page.locator('#project-github')).toHaveAttribute('href', video.github);
@@ -67,7 +67,7 @@ test.describe('project page', () => {
 
     test('the nav links back to the home sections', async ({ page }) => {
         await page.goto(`/projects/${video.id}.html`);
-        await expect(page.locator('.nav-link[data-section="hire"]')).toHaveAttribute('href', '/#hire');
+        await expect(page.locator('.nav-link[data-section="contact"]')).toHaveAttribute('href', '/#contact');
         await expect(page.locator('.nav-name')).toHaveAttribute('href', '/');
     });
 

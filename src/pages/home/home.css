@@ -1,4 +1,4 @@
-/* Home sections that are not components of their own: selected work, the project list, experience, hire. */
+/* Home sections that are not components of their own: selected work, the project list, experience, contact. */
 
 /* ── Start here: three compact cards above the map filter ── */
 .features-label {
@@ -324,97 +324,7 @@
     }
 }
 
-/* ── Hire ── */
-.tiles {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-    gap: 20px;
-    margin-top: 56px;
-}
-
-.tile {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 40px;
-    border-radius: 28px;
-}
-
-.tile h3 {
-    margin: 0;
-    font-size: 28px;
-    letter-spacing: -0.025em;
-}
-
-.tile-lede {
-    margin: 8px 0 28px;
-    color: var(--muted);
-}
-
-.tile dl {
-    display: grid;
-    gap: 16px;
-    margin: 0 0 32px;
-}
-
-.tile dt {
-    color: var(--muted);
-    font-size: 13px;
-}
-
-.tile dd {
-    margin: 2px 0 0;
-    font-size: 16px;
-}
-
-.tile .link {
-    margin-top: auto;
-}
-
-/* Recruiter details: one quiet line until opened */
-.tile-more {
-    margin: -12px 0 32px;
-    font-size: 14px;
-}
-
-.tile-more summary {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--muted);
-    list-style: none;
-    cursor: pointer;
-    transition: color 160ms ease;
-}
-
-.tile-more summary::-webkit-details-marker {
-    display: none;
-}
-
-.tile-more summary::after {
-    content: '›';
-    transition: rotate 200ms var(--ease-out);
-}
-
-.tile-more[open] summary {
-    color: var(--ink);
-}
-
-.tile-more[open] summary::after {
-    rotate: 90deg;
-}
-
-.tile-more p {
-    margin: 10px 0 0;
-}
-
-.tile-more .tile-note {
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
+/* ── Contact ── */
 .talk {
     margin-top: 56px;
     text-align: center;
@@ -475,13 +385,9 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    :is(.feature, .tile):hover {
+    .feature:hover {
         transform: translateY(-4px);
         box-shadow: var(--shadow), var(--shadow-lift);
-    }
-
-    .tile-more summary:hover {
-        color: var(--ink);
     }
 
     .feature:hover .feature-media img {
@@ -523,10 +429,6 @@
 
     .exp-nav {
         inset: auto 16px 14px auto;
-    }
-
-    .tile {
-        padding: 28px;
     }
 }
 

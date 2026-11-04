@@ -178,7 +178,7 @@ function initCopyEmail(): void {
     let timer = 0;
     document.querySelectorAll<HTMLButtonElement>('.copy-email').forEach((b) =>
         b.addEventListener('click', async () => {
-            let message = i18n.t('home.hire.copied');
+            let message = i18n.t('home.contact.copied');
             try {
                 await navigator.clipboard.writeText(b.dataset.email!);
             } catch {
@@ -195,7 +195,7 @@ function initCopyEmail(): void {
 /** A soft light follows the cursor across cards. */
 function initSpotlight(): void {
     if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    document.querySelectorAll<HTMLElement>('.feature, .tile, .chart-card').forEach((card) => {
+    document.querySelectorAll<HTMLElement>('.feature, .chart-card').forEach((card) => {
         card.classList.add('spot');
         card.addEventListener('pointermove', (e) => {
             const r = card.getBoundingClientRect();
@@ -217,7 +217,8 @@ function settleHash(): void {
     } catch {
         return; // a malformed link (#%): nothing to scroll to
     }
-    const target = id ? document.getElementById(id) : null;
+    // #hire: links from before that section became Contact
+    const target = id ? document.getElementById(id === 'hire' ? 'contact' : id) : null;
     if (!target) return;
     let moved = false;
     for (const type of ['wheel', 'touchstart', 'keydown', 'pointerdown'])

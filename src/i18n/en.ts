@@ -1,18 +1,18 @@
 export const en = {
     meta: {
-        imageAlt: 'Nielsen COMBE--BRACCIALE, AI, data and software engineer portfolio',
+        imageAlt: 'Nielsen COMBE--BRACCIALE, AI & full-stack developer',
         home: {
-            title: 'Nexlein — AI, Data & Software Engineer',
+            title: 'Nielsen COMBE--BRACCIALE — AI & Full-Stack Developer',
             description:
-                'Nielsen COMBE--BRACCIALE (Nexlein), AI, data and software engineer. Reliable software at the speed of AI: TDD, agentic workflows, simulations, decision engines.'
+                'Nielsen COMBE--BRACCIALE (Nexlein), AI and full-stack developer, student at Epitech: local LLM assistants with RAG, tested web apps, Kubernetes deployments.'
         },
         cv: {
-            title: 'Nielsen COMBE--BRACCIALE — CV',
+            title: 'Nielsen COMBE--BRACCIALE — CV · AI & Full-Stack Developer',
             description:
-                'CV of Nielsen COMBE--BRACCIALE, AI, data and software engineer: TDD, agentic workflows, autonomous decision systems and real-time simulation engines.'
+                'CV of Nielsen COMBE--BRACCIALE, AI and full-stack developer: local LLM assistants, RAG, web apps, Kubernetes, tests first.'
         },
         notFound: {
-            title: 'Page not found — Nexlein',
+            title: 'Page not found — Nielsen COMBE--BRACCIALE',
             description: 'This page does not exist. Back to the portfolio of Nielsen COMBE--BRACCIALE (Nexlein).'
         }
     },
@@ -22,7 +22,7 @@ export const en = {
             skip: 'Skip to content',
             work: 'Work',
             path: 'Path',
-            hire: 'Hire',
+            contact: 'Contact',
             cv: 'CV',
             language: 'Language',
             theme: 'Choose a theme'
@@ -39,14 +39,14 @@ export const en = {
     },
     home: {
         hero: {
-            role: 'AI · Data · Software engineer · Epitech',
-            title1: 'Building reliable software',
-            title2: 'at the speed of AI.',
-            title2b: 'with tests before code.',
-            title2c: 'with agentic workflows.',
-            lede: 'I build with TDD and agentic workflows, so I ship fast and everything is verified before it goes live. Currently an AI developer at Issanka.',
+            role: 'AI & Full-Stack Developer · Epitech',
+            title1: 'Nexlein.',
+            title2: 'AI that cites its sources.',
+            title2b: 'Zero-downtime deploys.',
+            title2c: 'End-to-end tested apps.',
+            lede: 'I write the tests first and give coding agents written rules; CI checks every change. Third-year student at Epitech.',
             work: 'See the work',
-            hire: 'Hire me',
+            contact: 'Contact me',
             switch: 'Show another simulation',
             pause: 'Pause the animation',
             scroll: 'Scroll down',
@@ -76,10 +76,10 @@ export const en = {
             title1: '{n} projects.',
             title2: 'One network.',
             sub: 'Projects connect where they share skills.',
-            subDesk: 'Hover one to see what it lights up, or ask the network.',
+            subDesk: 'Hover one to see its links, or light up a domain.',
             ask: 'Light up a domain',
             mapLabel:
-                'Projects as a network: the most recent closest to the centre, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.',
+                'Projects as a network: the most recent closest to the center, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.',
             more: 'Showing {shown} of {n}, the rest rotate in.',
             seeAll: 'See all projects',
             viewLabel: 'Projects view',
@@ -89,24 +89,25 @@ export const en = {
             showLess: 'Show less',
             now: 'Now',
             open: 'Open project',
-            similar: '{s} similar',
+            similar: '{s}% overlap',
             periods: {
-                Tek1: 'tek 1 · 2024–25',
-                Tek2: 'tek 2 · 2025–26',
+                Tek1: 'year 1 · 2024-25',
+                Tek2: 'year 2 · 2025-26',
+                Tek3: 'year 3 · 2026-27',
                 Personal: 'personal · 2026'
             }
         },
         domains: {
-            ai: 'AI &amp; RL',
+            ai: 'AI',
+            fullstack: 'Full-stack',
             systems: 'Systems',
-            architecture: 'Architecture',
-            graphical: 'Graphics &amp; sims',
+            graphical: 'Graphics &amp; games',
             devops: 'DevOps'
         },
         domainsShort: {
-            ai: 'AI &amp; RL',
+            ai: 'AI',
+            fullstack: 'Full-stack',
             systems: 'Systems',
-            architecture: 'Architecture',
             graphical: 'Graphics',
             devops: 'DevOps'
         },
@@ -132,11 +133,10 @@ export const en = {
             prev: 'Previous charts',
             next: 'Next charts',
             sub: 'Every chart below is calculated from the projects themselves.',
-            view: 'View',
             other: 'Other',
-            infra: 'Infra / no-code',
+            infra: 'Infra / config',
             projects: 'projects',
-            coverage: 'Coverage',
+            coverage: 'Breadth',
             domains: '{n} domains',
             periods: 'Periods',
             byPeriod: '{n} projects, by period',
@@ -146,7 +146,7 @@ export const en = {
             growthTitle: 'New skills, by period',
             mostUsed: 'Most used',
             distinct: '{n} skills in projects · {t} in all',
-            thisYear: 'This year',
+            thisYear: 'Past year',
             newSkills: '{n} new skills in 12 months'
         },
         method: {
@@ -154,29 +154,22 @@ export const en = {
             title2: 'Fast, and checked.',
             test: {
                 title: 'Tests first',
-                body: 'I write the test before the code, then let the AI make it pass. Every change runs through unit and browser tests before it merges.'
+                body: 'I write the test before the code, whether the code comes from me or from an agent. Every commit runs the unit tests, every pull request runs them again in CI with the browser tests, and nothing reaches production until CI passes.'
             },
             agents: {
                 title: 'Agents with guardrails',
-                body: 'My AI agents work inside rules I wrote down: a conventions file, a code map rebuilt on every commit, and permissions that keep them out of what they should not touch.'
+                body: 'Coding agents work inside rules I wrote: a conventions file, a code map rebuilt on every commit, and permissions that keep them away from what they must not touch. Sometimes I write the code, sometimes I direct the agents and review what they produce.'
             },
             compound: {
                 title: 'Each project speeds up the next',
-                body: 'Each project leaves tools, tests and notes behind for the next one.'
+                body: 'Technical choices are written down with their reason (36 decision records on Bernstein), and each project leaves scripts, tests and rules that the next one builds on.'
             },
             source: 'See how this site is built'
         },
-        hire: {
-            title1: 'Two ways to work together.',
-            title2: 'Internship or freelance.',
-            'full-time': 'Internship',
-            freelance: 'Freelance',
-            cta: {
-                'full-time': 'Discuss an internship',
-                freelance: 'Ask for a quote'
-            },
-            talk: 'Either way, the fastest is an email.',
-            recruiters: 'For recruiters',
+        contact: {
+            title1: 'Get in touch.',
+            title2: 'Email is fastest.',
+            talk: 'Questions about a project? Write to me.',
             copy: 'Copy email',
             copied: 'Email copied'
         }
@@ -208,7 +201,8 @@ export const en = {
         gallery: 'Screenshots',
         image: 'Image {i} of {n}',
         prev: 'Previous image',
-        next: 'Next image'
+        next: 'Next image',
+        video: 'Demo video: {p}'
     },
     cv: {
         controls: {
@@ -218,17 +212,15 @@ export const en = {
             pdf: 'Download PDF'
         },
         hero: {
-            role: 'AI, Data & Software Engineer',
+            role: 'AI & Full-Stack Developer',
             summary:
-                'Building reliable software at the speed of AI, with TDD and agentic workflows. Focused on autonomous decision systems, real-time simulation engines, and high-performance C++.',
-            badge2: 'Full-Time Intern (Mar–Aug 2027)',
-            badge3: 'Freelance'
+                'AI assistants, web apps and their deployment, built with tests first, coding agents under written rules and CI on every change.'
         },
         sections: {
             experience: 'Experience',
-            expertise: 'Core Expertise',
-            systems: 'Systems Architecture',
-            ai: 'AI & Data Science',
+            skills: 'Skills',
+            fullstack: 'Full-stack, infra &amp; C++ projects',
+            ai: 'AI projects',
             education: 'Education',
             certs: 'Certifications'
         }

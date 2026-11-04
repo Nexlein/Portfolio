@@ -4,8 +4,8 @@
  * functions for interactions.
  */
 import { CHECKPOINTS, EXPERIENCES, type Checkpoint } from '../../data/profile.ts';
-import type { ProjectEntry } from '../../data/projects.ts';
-import { periodOf, type Period } from '../NeuralMap/graph.ts';
+import { DOMAINS, type ProjectEntry } from '../../data/projects.ts';
+import { ORBIT, periodOf, type Period } from '../NeuralMap/graph.ts';
 import { schoolYear, valueAt } from './series.ts';
 
 export { valueAt, yDomain } from './series.ts';
@@ -179,12 +179,14 @@ export const learnedSince = (projects: ProjectEntry[], now: number) =>
 
 // ── Group counts ────────────────────────────────────────────────────────────
 
-const PERIODS: Period[] = ['Tek1', 'Tek2', 'Personal'];
+/** Oldest first: the map's orbits, which list the most recent period first. */
+const PERIODS: Period[] = [];
+for (const p of Object.keys(ORBIT) as Period[]) PERIODS.unshift(p);
 
 /** Periods present in the data, in time order. */
 export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => periodOf(p) === y));
 
-const LANGUAGES = new Set(['C', 'C++', 'Python', 'TypeScript', 'JavaScript', 'Rust', 'Go', 'Java', 'C#']);
+const LANGUAGES = new Set(['C', 'C++', 'Python', 'TypeScript', 'JavaScript', 'Rust', 'Go', 'Java', 'C#', 'Bash']);
 export const INFRA = 'infra';
 export const OTHER = 'other';
 
@@ -214,7 +216,7 @@ export function languageBuckets(projects: ProjectEntry[]): { keys: string[]; buc
     return { keys, bucket };
 }
 
-const DOMAIN_ORDER = ['ai', 'systems', 'architecture', 'graphical', 'devops'];
+const DOMAIN_ORDER: readonly string[] = DOMAINS;
 
 /** Domains for the radar: up to 7 axes, the rest grouped as OTHER. */
 export function domainAxes(projects: ProjectEntry[]): { keys: string[]; counts: number[] } {

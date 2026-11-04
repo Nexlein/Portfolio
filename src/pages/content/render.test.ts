@@ -1,8 +1,9 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
 import { BLOCKS, renderContent } from './render';
-import { EDUCATION, EXPERIENCES, SKILLS } from '@/data/profile';
-import { LANGS } from '@/core/translate';
+import { CV_PROJECTS, EDUCATION, EXPERIENCES, SKILLS } from '@/data/profile';
+import { LANGS, lookup } from '@/core/translate';
+import { QR_CODE, typeset } from '../cv/blocks';
 
 const templates = import.meta.glob<string>('../../../*.html', { query: '?raw', import: 'default', eager: true });
 const used = new Set(
@@ -44,12 +45,30 @@ describe('content blocks', () => {
             expect(render('cv-education', lang).textContent).not.toContain('Google Cloud');
         });
 
-        it('links CV projects to their pages, in the same language', () => {
-            const links = [...render('cv-projects-ai', lang).querySelectorAll('h3 a')].map((a) =>
-                a.getAttribute('href')
-            );
-            expect(links.length).toBeGreaterThan(0);
-            for (const href of links) expect(href).toContain(`${lang === 'fr' ? '/fr' : ''}/projects/`);
+        it('links CV projects to their pages, in the same language, in both columns', () => {
+            for (const group of CV_PROJECTS) {
+                const links = [...render(`cv-projects-${group.id}`, lang).querySelectorAll('h3 a')].map((a) =>
+                    a.getAttribute('href')
+                );
+                // A grouped entry (AI Racing & Blackjack AI) links both projects
+                expect(links).toHaveLength(group.projects.reduce((n, e) => n + (e.also ? 2 : 1), 0));
+                for (const href of links) expect(href).toContain(`${lang === 'fr' ? '/fr' : ''}/projects/`);
+            }
+        });
+
+        it('keeps each skill whole and the dots with the skill before them', () => {
+            const groups = [...render('cv-skills', lang).querySelectorAll('.cv-group p')];
+            expect(groups).toHaveLength(SKILLS.length);
+            groups.forEach((p, i) => {
+                expect(p.querySelectorAll('.cv-skill')).toHaveLength(SKILLS[i].items.length);
+                expect(p.innerHTML).not.toMatch(/ · /);
+            });
+        });
+
+        it('prints the QR code to the home page in the CV language', () => {
+            const img = render('cv-qr', lang).querySelector('img')!;
+            expect(img.getAttribute('src')).toBe(QR_CODE[lang]);
+            expect(img.getAttribute('alt')).toBe(lookup(lang, 'cv.controls.qr'));
         });
 
         it('renders skills and education', () => {
@@ -58,5 +77,25 @@ describe('content blocks', () => {
             const count = (block: string) => render(block, lang).querySelectorAll('h3').length;
             expect(count('cv-education') + count('cv-certs')).toBe(EDUCATION.length);
         });
+    });
+});
+
+describe('line breaks on the CV', () => {
+    it('in French, puts a non-breaking space before ; : ! ? % », after «, and inside numbers', () => {
+        expect(typeset('fr', 'mémoire ; 1 406 tests (95 %) : « oui »')).toBe(
+            'mémoire\u00a0; 1\u00a0406 tests (95\u00a0%)\u00a0: «\u00a0oui\u00a0»'
+        );
+        expect(typeset('fr', '1 234 567 requêtes')).toBe('1\u00a0234\u00a0567 requêtes');
+    });
+
+    it('keeps 191 ± 41 whole in every language', () => {
+        expect(typeset('en', 'reward of 191 ± 41')).toBe('reward of 191\u00a0±\u00a041');
+        expect(typeset('fr', 'moyenne de 191 ± 41')).toBe('moyenne de 191\u00a0±\u00a041');
+    });
+
+    it('leaves English spacing, years, scores and links alone', () => {
+        expect(typeset('en', 'memory; 1 406 tests')).toBe('memory; 1 406 tests');
+        for (const text of ['2025 - 2026', '(2025, 2026)', '835/990', '<a href="https://issanka.com">issanka.com</a>'])
+            expect(typeset('fr', text)).toBe(text);
     });
 });

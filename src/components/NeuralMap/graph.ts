@@ -6,16 +6,20 @@
  */
 import type { ProjectEntry } from '../../data/projects.ts';
 
-export type Period = 'Personal' | 'Tek2' | 'Tek1';
+export type Period = 'Tek3' | 'Personal' | 'Tek2' | 'Tek1';
 
 /** Period of a project; untagged school projects are second-year ones. */
 export const periodOf = (p: ProjectEntry): Period => p.year ?? 'Tek2';
 
-/** Orbit per period, as a fraction of the usable ellipse: recent work closest to the centre. */
-export const ORBIT: Record<Period, number> = { Personal: 0.4, Tek2: 0.68, Tek1: 0.94 };
+/** Orbit per period, as a fraction of the usable ellipse: recent work closest to the centre (key order = recency). */
+export const ORBIT: Record<Period, number> = { Tek3: 0.4, Personal: 0.58, Tek2: 0.76, Tek1: 0.94 };
 
 /** Card size the layout keeps apart (px). */
 export const CARD = { w: 190, h: 52, gap: 22 };
+
+/** The "Now" block in the middle of the board (px): its width is `.nm-now` in NeuralMap.css; the French text is the
+ * tallest (156px measured, 7 lines), the height leaves a little room. */
+export const NOW_BOX = { w: 300, h: 170 };
 
 const RL = new Set(['rl', 'gymnasium', 'stable-baselines3']);
 
@@ -153,15 +157,17 @@ function settle(
             }
         return moved;
     };
-    /** Clear of the "Now" block in the middle. */
+    /** Clear of the "Now" block in the middle: the whole card, not just its centre, pushed out the shorter way. */
     const clearOfNow = (s: Star) => {
         const dx = s.x - cx,
             dy = s.y - cy,
-            d = Math.hypot(dx / 1.6, dy);
-        if (d < 120) {
-            s.x = cx + (dx / (d || 1)) * 120 * 1.6;
-            s.y = cy + (dy / (d || 1)) * 120;
-        }
+            spanX = (NOW_BOX.w + w) / 2 + gap / 2,
+            spanY = (NOW_BOX.h + h) / 2 + gap / 2,
+            ox = spanX - Math.abs(dx),
+            oy = spanY - Math.abs(dy);
+        if (ox <= 0 || oy <= 0) return;
+        if (ox / spanX < oy / spanY) s.x += ox * Math.sign(dx || 1);
+        else s.y += oy * Math.sign(dy || 1);
     };
     for (let pass = 0; pass < 240; pass++) {
         separate();
@@ -200,9 +206,7 @@ export function fitFor(W: number, H: number): { rx: number; ry: number } {
 export function pickShown(projects: ProjectEntry[], max: number): { shown: ProjectEntry[]; hidden: ProjectEntry[] } {
     const ranked = [
         ...projects.filter((p) => p.featured),
-        ...(['Personal', 'Tek2', 'Tek1'] as const).flatMap((y) =>
-            projects.filter((p) => !p.featured && periodOf(p) === y)
-        )
+        ...(Object.keys(ORBIT) as Period[]).flatMap((y) => projects.filter((p) => !p.featured && periodOf(p) === y))
     ];
     return { shown: ranked.slice(0, max), hidden: ranked.slice(max) };
 }

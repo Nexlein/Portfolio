@@ -64,6 +64,8 @@ export interface PathData {
     months: string[];
     /** "Before Epitech", "{n} skills". */
     before: string;
+    /** School years by number, from year 1 ("Year 1", "1re année"). */
+    years: string[];
     skills: string;
     /** The series; `what` names the step's milestone ('' for the start and end points). */
     points: (Step & { what: string })[];

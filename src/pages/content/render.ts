@@ -29,7 +29,6 @@ export const BLOCKS: Record<string, Block> = {
     numbers: home.numbersBlock,
     method: home.method,
     'method-source': home.methodSource,
-    hire: home.hire,
     contact: home.contact,
     email: home.email,
 
@@ -39,6 +38,7 @@ export const BLOCKS: Record<string, Block> = {
     'cv-skills': cv.skills,
     'cv-education': cv.education,
     'cv-certs': cv.certifications,
+    'cv-qr': cv.qr,
     ...cv.projectBlocks
 };
 

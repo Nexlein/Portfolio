@@ -5,6 +5,7 @@ import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
 import { PROJECTS } from '@/data/projects';
 import { SITE } from '@/core/site';
 import { LANGS, localizedPath, lookup, type Lang } from '@/core/translate';
+import { QR_CODE } from './cv/blocks';
 
 const sources = import.meta.glob<string>('../../*.html', { query: '?raw', import: 'default', eager: true });
 const publicFiles = new Set(
@@ -49,7 +50,15 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
         it('points og:image at a 1200x630 file that exists', () => {
             const image = meta(doc, 'property', 'og:image')!;
             expect(image.startsWith(SITE)).toBe(true);
-            expect(publicFiles, `${image} (npm run media:og)`).toContain(new URL(image).pathname);
+            expect(publicFiles, `${image} (npm run media:og, or media:brand for og-image)`).toContain(
+                new URL(image).pathname
+            );
+        });
+
+        it('uses the social image of its language', () => {
+            const image = meta(doc, 'property', 'og:image')!;
+            if (image.includes('/og-image'))
+                expect(image.endsWith(lang === 'fr' ? '/og-image-fr.png' : '/og-image.png')).toBe(true);
         });
 
         it('points canonical at itself and lists every language as an alternate', () => {
@@ -163,4 +172,14 @@ describe('404 page', () => {
         expect(doc.title).toBe(lookup(lang, 'meta.notFound.title'));
         expect(sitemap()).not.toContain(localizedPath(NOT_FOUND.path, lang));
     });
+});
+
+describe('the CV page', () => {
+    it.each(LANGS)(
+        'in %s, names the role in its title (search results, the PDF title) and prints a QR code that exists',
+        (lang) => {
+            expect(lookup(lang, 'meta.cv.title')).toContain(lookup(lang, 'cv.hero.role'));
+            expect(publicFiles).toContain(QR_CODE[lang]);
+        }
+    );
 });

@@ -62,7 +62,7 @@ export function initPathChart(): void {
             dot.setAttribute('cy', py.toFixed(1));
             const last = points.reduce((l, p) => (p.t <= time && p.what ? p : l), points[0]);
             const year = schoolYear(time, data.epitech);
-            tip.innerHTML = `<span class="mono">${monthLabel(time, data.months)} · ${year ? `Tek ${year}` : data.before}</span><strong>${data.skills.replace('{n}', String(valueAt(points, time)))}</strong><span>${last.what}</span>`;
+            tip.innerHTML = `<span class="mono">${monthLabel(time, data.months)} · ${year ? data.years[Math.min(year, data.years.length) - 1] : data.before}</span><strong>${data.skills.replace('{n}', String(valueAt(points, time)))}</strong><span>${last.what}</span>`;
             tip.hidden = false;
             tip.style.left = `${(sx / PATH.W) * 100}%`;
             tip.style.top = `${(py / PATH.H) * 100}%`;

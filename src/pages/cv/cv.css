@@ -132,22 +132,6 @@
     color: var(--paper-muted);
 }
 
-.sheet-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 10px 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.sheet-badges li {
-    padding: 2px 9px;
-    border: 1px solid var(--paper-line);
-    border-radius: 999px;
-    font-size: 10.5px;
-}
-
 .sheet-contact {
     display: flex;
     flex-shrink: 0;
@@ -164,6 +148,14 @@
     font-family: var(--font-mono);
     font-size: 10px;
     text-align: right;
+}
+
+.cv-skill {
+    white-space: nowrap;
+}
+
+.cv-qr {
+    display: contents; /* the QR code's language-specific <img> sits in the contact row like a direct child */
 }
 
 .sheet-contact img {
@@ -197,8 +189,20 @@
 
 .sheet-cols {
     display: grid;
+    grid-template-rows: auto auto;
     grid-template-columns: 1fr 1fr;
-    gap: 7mm;
+    gap: 0 7mm;
+}
+
+/* Each column is a heading and its entries; sharing the rows starts both lists level when one heading wraps */
+.sheet-cols > section {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+}
+
+.sheet-cols h2 {
+    align-self: end;
 }
 
 /* ── Skill groups ── */
@@ -292,6 +296,10 @@
         flex-direction: column;
     }
 
+    .sheet-cols {
+        gap: 7mm;
+    }
+
     .sheet-contact ul {
         text-align: left;
     }
@@ -306,10 +314,6 @@
     .cv-aside,
     .sheet-contact ul {
         font-size: 11px;
-    }
-
-    .sheet-badges li {
-        font-size: 12px;
     }
 }
 

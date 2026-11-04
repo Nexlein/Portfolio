@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CHECKPOINTS, CV_PROJECTS, EDUCATION, EXPERIENCES, NOW, OFFERS, SKILLS, TIMELINE, type Text } from './profile';
+import { CHECKPOINTS, CV_PROJECTS, EDUCATION, EXPERIENCES, NOW, SKILLS, TIMELINE, type Text } from './profile';
 import { PROJECTS } from './projects';
 import { LANGS } from '@/core/translate';
 
@@ -10,7 +10,7 @@ function texts(value: unknown, path = ''): [string, Text][] {
     return Object.entries(value).flatMap(([k, v]) => texts(v, path ? `${path}.${k}` : k));
 }
 
-const all = texts({ EXPERIENCES, EDUCATION, SKILLS, CV_PROJECTS, OFFERS, CHECKPOINTS, NOW });
+const all = texts({ EXPERIENCES, EDUCATION, SKILLS, CV_PROJECTS, CHECKPOINTS, NOW });
 
 describe('profile data', () => {
     it('finds text to check', () => {

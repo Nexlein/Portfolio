@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { Window } from 'happy-dom';
 import type { Plugin } from 'vite';
 import { PROJECTS, projectPath } from '../src/data/projects.ts';
-import { SITE } from '../src/core/site.ts';
+import { OWNER, SITE } from '../src/core/site.ts';
 import { cvPerson, profilePage, projectSource } from '../src/core/structured-data.ts';
 import {
     clientStrings,
@@ -27,7 +27,7 @@ export interface PageSpec {
     template: string;
     title: (lang: Lang) => string;
     description: (lang: Lang) => string;
-    image: string;
+    image: (lang: Lang) => string;
     imageAlt: (lang: Lang) => string;
     jsonLd?: (lang: Lang) => object;
     /** Served as the 404: no canonical or language alternates, not in the sitemap. */
@@ -39,7 +39,8 @@ export interface PageSpec {
 }
 
 const OG_LOCALE: Record<Lang, string> = { en: 'en_US', fr: 'fr_FR' };
-const DEFAULT_IMAGE = `${SITE}/og-image.png`;
+/** The site's social image, drawn per language by scripts/brand-images.ts. */
+const DEFAULT_IMAGE = (lang: Lang) => `${SITE}/og-image${lang === 'fr' ? '-fr' : ''}.png`;
 
 const fixedPage = (
     path: string,
@@ -66,9 +67,9 @@ export const PAGES: PageSpec[] = [
     ...PROJECTS.map((project): PageSpec => ({
         path: projectPath(project.id),
         template: 'project.html',
-        title: () => `${project.title} — Nexlein`,
+        title: () => `${project.title} — ${OWNER.name}`,
         description: (lang) => projectDescription(project, lang),
-        image: `${SITE}/projects/${project.id}/og.jpg`,
+        image: () => `${SITE}/projects/${project.id}/og.jpg`,
         imageAlt: () => project.title,
         jsonLd: (lang) =>
             projectSource(project, lang, projectDescription(project, lang), `${SITE}/projects/${project.id}/og.jpg`),
@@ -141,7 +142,7 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
     setMeta('property', 'og:title', title);
     setMeta('property', 'og:description', description);
     setMeta('property', 'og:url', url(lang));
-    setMeta('property', 'og:image', page.image);
+    setMeta('property', 'og:image', page.image(lang));
     setMeta('property', 'og:image:alt', page.imageAlt(lang));
     setMeta('property', 'og:locale', OG_LOCALE[lang]);
     head.querySelectorAll('meta[property="og:locale:alternate"]').forEach((el) => el.remove());

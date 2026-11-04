@@ -67,23 +67,12 @@
         transform 160ms var(--ease-out);
 }
 
-/* The page's one beating dot: availability is live information */
+/* What I do now, in the accent colour like the map's "Now"; still, so it does not read as an "available" signal */
 .avail-dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--pos);
-    animation: avail 2.6s ease-out infinite;
-}
-
-@keyframes avail {
-    from {
-        box-shadow: 0 0 0 0 color-mix(in sRGB, var(--pos) 60%, transparent);
-    }
-
-    to {
-        box-shadow: 0 0 0 9px transparent;
-    }
+    background: var(--signal);
 }
 
 .hero-hint {
@@ -183,12 +172,6 @@
 @media (width <= 760px) {
     .hero-hint {
         display: none;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .avail-dot {
-        animation: none;
     }
 }
 

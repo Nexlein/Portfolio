@@ -10,6 +10,7 @@ import {
     languageOf,
     learnedSince,
     newSkillsPerPeriod,
+    periodsIn,
     phasesIn,
     RANGES,
     rangeStart,
@@ -130,9 +131,26 @@ describe('group counts', () => {
         for (const p of PROJECTS) expect(keys).toContain(bucket(p));
     });
 
+    it('lists the periods oldest first, and every project falls in one', () => {
+        expect(periodsIn(PROJECTS)).toEqual(['Tek1', 'Tek2', 'Personal', 'Tek3']);
+        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(periodOf(p));
+    });
+
     it('counts every project in one domain axis', () => {
         const { counts } = domainAxes(PROJECTS);
         expect(counts.reduce((a, b) => a + b, 0)).toBe(PROJECTS.length);
+    });
+});
+
+describe('labels in French', () => {
+    it('breaks a long column label onto two lines, and keeps a short one on one', () => {
+        expect(numbers('fr', PROJECTS, TODAY)).toMatch(/<tspan[^>]*>1re<\/tspan><tspan[^>]*>année<\/tspan>/);
+        expect(numbers('en', PROJECTS, TODAY)).not.toContain('<tspan');
+    });
+
+    it('gives the path tooltip the school years in the page language', () => {
+        expect(pathChart('fr', PROJECTS, TODAY)).toContain('"years":["1re année","2e année","3e année"');
+        expect(pathChart('en', PROJECTS, TODAY)).toContain('"years":["year 1","year 2","year 3"');
     });
 });
 
@@ -239,7 +257,7 @@ describe('where the visitor was', () => {
         expect(schoolYearAt(yearOf('2025-08'))).toBe(1);
         expect(schoolYearAt(yearOf('2025-09'))).toBe(2);
         expect(schoolYearAt(yearOf('2026-05'))).toBe(2);
-        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: Tek 3
+        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: year 3
     });
 
     it('covers the whole window with consecutive phases, clipped to it', () => {
@@ -254,8 +272,10 @@ describe('where the visitor was', () => {
     });
 
     it('names a phase the way the chart prints it', () => {
-        expect(phaseLabel('en', 2, 2025)).toBe('Tek 2 · 2025–26');
-        expect(phaseLabel('en', 2, 2025, true)).toBe('Tek 2');
+        expect(phaseLabel('en', 2, 2025)).toBe('year 2 · 2025-26');
+        expect(phaseLabel('en', 2, 2025, true)).toBe('year 2');
+        expect(phaseLabel('fr', 1, 2024, true)).toBe('1re année');
+        expect(phaseLabel('fr', 3, 2026)).toBe('3e année · 2026-27');
         expect(phaseLabel('fr', 0, 0)).toBe('Avant Epitech');
     });
 });
@@ -319,7 +339,7 @@ describe('checkpoint names on the plot', () => {
     it('stay inside the picture when a checkpoint sits at the start of a range', () => {
         const points = skillSeries(PROJECTS, TODAY);
         const month = pathSvg('en', points, TODAY - 1 / 12, TODAY); // the Issanka checkpoint is dated September 2026
-        expect(month).toMatch(/<text class="start"[^>]*>AI developer, Issanka<\/text>/);
+        expect(month).toMatch(/<text class="start"[^>]*>AI developer intern, Issanka<\/text>/);
         expect(pathSvg('en', points, points[0].t, TODAY)).not.toContain('class="start"'); // nothing sticks out on Max
     });
 });

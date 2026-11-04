@@ -27,11 +27,11 @@ describe('i18n service', () => {
 
     it('translates keys from the strings the build embedded in the page', async () => {
         const { i18n } = await loadOnPage('fr', JSON.stringify(clientStrings('fr')));
-        expect(i18n.t('home.hire.copied')).toBe(fr.home.hire.copied);
+        expect(i18n.t('home.contact.copied')).toBe(fr.home.contact.copied);
     });
 
     it('shows the key when the page carries no strings, or broken ones', async () => {
-        expect((await loadOnPage('fr')).i18n.t('home.hire.copied')).toBe('home.hire.copied');
-        expect((await loadOnPage('fr', '{oops')).i18n.t('home.hire.copied')).toBe('home.hire.copied');
+        expect((await loadOnPage('fr')).i18n.t('home.contact.copied')).toBe('home.contact.copied');
+        expect((await loadOnPage('fr', '{oops')).i18n.t('home.contact.copied')).toBe('home.contact.copied');
     });
 });

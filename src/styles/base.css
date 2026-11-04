@@ -286,7 +286,7 @@ button {
         --hit: -9px -4px;
     }
 
-    /* Links that can end at the screen's edge (the hire row at 320px) grow upwards and downwards only: a hit area
+    /* Links that can end at the screen's edge (the contact row at 320px) grow upwards and downwards only: a hit area
        sticking out sideways makes the page scroll sideways */
     .link {
         --hit: -12px 0;
@@ -325,8 +325,7 @@ button {
 /* Cards that rise into view and lift on hover share one transition */
 .chart-card,
 .related-card,
-.feature,
-.tile {
+.feature {
     transition:
         opacity 700ms var(--ease-out),
         translate 700ms var(--ease-out),

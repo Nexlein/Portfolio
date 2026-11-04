@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Nexlein/Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Nexlein/Portfolio/actions/workflows/ci.yml)
 
-Personal software engineering portfolio of Nielsen COMBE--BRACCIALE. Built with vanilla TypeScript and Vite, deployed on Vercel. Content is available in English and French.
+Personal portfolio of Nielsen COMBE--BRACCIALE (Nexlein), AI & full-stack developer. Built with vanilla TypeScript and Vite, deployed on Vercel. Content is available in English and French.
 
 ## Pages
 
@@ -12,9 +12,9 @@ Personal software engineering portfolio of Nielsen COMBE--BRACCIALE. Built with 
 | CV              | `cv.html`      | `src/pages/cv/cv.ts`           | `/cv.html` (PDF: `/cv.pdf`) |
 | Project (× all) | `project.html` | `src/pages/project/project.ts` | `/projects/<id>.html`       |
 
-Every page also exists in French under `/fr/`. `/availability.html` redirects to the home page's `#hire` section.
+Every page also exists in French under `/fr/`. `/availability.html` redirects to the home page's `#contact` section.
 
-The home page is one scroll: hero (a live simulation), selected work, every project on the neural map, the path chart, the numbers, and the two ways to hire. Project pages go deeper on one project; the CV is the printable format.
+The home page is one scroll: hero (a live simulation), selected work, every project on the neural map, the path chart, the numbers, and how to get in touch. Project pages go deeper on one project; the CV is the printable format.
 
 Unknown addresses get `404.html` (Vercel serves it with status 404 at the address that was asked for; there is one file, so the English one). It is not in the sitemap and is marked `noindex`. Under `/fr/` the head script moves the visitor to `/fr/404.html`, the French copy of the same page; `data-static` on the page keeps the language redirect from looping.
 
@@ -58,7 +58,7 @@ src/
 │   ├── Nav/          Top nav (build time) + pill, theme menu (Nav.ts)
 │   └── NeuralMap/    Project map: similarity and layout (graph.ts, pure), canvas and cards (NeuralMap.ts)
 ├── core/             Site facts, translation, structured data, analytics
-├── data/             Site content: profile.ts (experience, education, skills, offers, checkpoints) and projects.ts
+├── data/             Site content: profile.ts (experience, education, skills, now, checkpoints) and projects.ts
 ├── i18n/             Interface text (en, fr)
 ├── pages/            Per-page blocks, entry scripts and styles (home, cv, project); content/render.ts maps blocks
 ├── styles/           Design tokens and themes (tokens.css), base styles (base.css)
@@ -77,7 +77,7 @@ Conventions:
 ## Adding a project
 
 1. Put the media in `public/projects/<id>/` (see Media).
-2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), and `featured: true` for the three on the home page.
+2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), its period (`year`: `Tek1`, `Tek2`, `Tek3` or `Personal`; without it a project counts as `Tek2`), and `featured: true` for the three on the home page.
 3. Run `npm run media:og` for its social image, and `npm run media:thumbs` if its still is an image.
 
 The map, the list, the charts, the counts, its page, the sitemap and the structured data follow.
@@ -98,7 +98,7 @@ Every page exists in both languages, with its own URL: `/cv.html` and `/fr/cv.ht
 
 Facts live in data files, written once with English and French side by side (`{ en, fr }`, a missing language is a type error):
 
-- `src/data/profile.ts`: experiences, education, skills, the projects the CV highlights, the internship and freelance offers, and the checkpoints on the path chart.
+- `src/data/profile.ts`: experiences, education, skills, the projects the CV highlights, what is happening now (`NOW`), and the checkpoints on the path chart.
 - `src/data/projects.ts`: projects.
 
 Templates mark where content goes with `data-render="<block>"` (home sections, CV sections); `src/pages/content/render.ts` fills them at build time, so crawlers and the CV PDF see real text. `src/i18n/{en,fr}.ts` only holds interface text (navigation, headings, buttons). Text may use `<strong>`/`<br>`, never CSS classes.
@@ -115,7 +115,7 @@ All pages come from one list in `vite-plugins/pages.ts` (`PAGES`): path, templat
 
 ## SEO and social previews
 
-Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). All pages share `public/og-image.png` (1200×630, a screenshot of the home hero). `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
+Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). The home, CV and 404 pages share `public/og-image.png` (`og-image-fr.png` in French), 1200×630, drawn by `npm run media:brand` from the profile data; each project page uses its own `og.jpg`. `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
 
 When adding a page, give it these tags and a sitemap entry; `src/pages/seo.test.ts` fails until you do.
 
@@ -139,7 +139,9 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 - **Images**: WebP, at most 1200px on the long side (`ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_ratio=decrease" -quality 80 out.webp`).
 - **Videos**: H.264 MP4 without audio, at most 960px wide, `faststart`. Run `npm run media:video -- public/projects/<id>/<name>.mp4` to re-encode in place.
 - **Posters**: every video needs `<name>.poster.webp`. Run `npm run media:posters` to generate missing ones.
-- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist).
+- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `media:thumbs -- --force` would replace them with plain downscales.
+
+- **QR codes**: the CV prints `public/qrcode.svg` (home) or `public/qrcode-fr.svg` (French home). To redo one: `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`, then keep the files' style (a white square under one black path).
 
 Videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion` they never autoplay: they keep their poster and show controls.
 
