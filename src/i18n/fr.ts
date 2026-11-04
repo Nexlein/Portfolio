@@ -214,9 +214,7 @@ export const fr = {
         hero: {
             role: 'Développeur IA et full-stack',
             summary:
-                "Des assistants IA, des applications web et leur déploiement, construits avec les tests d'abord, des agents de codage encadrés par des règles écrites et la CI sur chaque changement.",
-            badge2: 'Stage à temps plein (mars-août 2027)',
-            badge3: 'Freelance'
+                "Des assistants IA, des applications web et leur déploiement, construits avec les tests d'abord, des agents de codage encadrés par des règles écrites et la CI sur chaque changement."
         },
         sections: {
             experience: 'Expérience',

@@ -214,9 +214,7 @@ export const en = {
         hero: {
             role: 'AI & Full-Stack Developer',
             summary:
-                'AI assistants, web apps and their deployment, built with tests first, coding agents under written rules and CI on every change.',
-            badge2: 'Full-Time Intern (Mar-Aug 2027)',
-            badge3: 'Freelance'
+                'AI assistants, web apps and their deployment, built with tests first, coding agents under written rules and CI on every change.'
         },
         sections: {
             experience: 'Experience',

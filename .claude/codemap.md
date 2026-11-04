@@ -6,7 +6,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **404.html** (56) — Template for /404.html and /fr/404.html: Vercel serves /404.html for every URL that matches nothing.
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/notfound/notfound.css, pages/notfound/notfound
-- **cv.html** (114)
+- **cv.html** (110)
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
 - **index.html** (161)
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
@@ -161,10 +161,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (231)
+- **en.ts** (229)
   - exports: en
   - ← core/translate
-- **fr.ts** (231)
+- **fr.ts** (229)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -181,7 +181,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: experience, skills, education, certifications, projectBlocks, contact
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
-- **cv.css** (364) — CV: a sheet on the site's stage.
+- **cv.css** (344) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav

@@ -132,22 +132,6 @@
     color: var(--paper-muted);
 }
 
-.sheet-badges {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 10px 0 0;
-    padding: 0;
-    list-style: none;
-}
-
-.sheet-badges li {
-    padding: 2px 9px;
-    border: 1px solid var(--paper-line);
-    border-radius: 999px;
-    font-size: 10.5px;
-}
-
 .sheet-contact {
     display: flex;
     flex-shrink: 0;
@@ -306,10 +290,6 @@
     .cv-aside,
     .sheet-contact ul {
         font-size: 11px;
-    }
-
-    .sheet-badges li {
-        font-size: 12px;
     }
 }
 
