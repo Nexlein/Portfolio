@@ -56,28 +56,12 @@
         0 1px 0 rgb(255 255 255 / calc(var(--depth) * 12%)) inset, 0 10px 30px rgb(0 0 0 / calc(var(--depth) * 100%));
     --shadow-lift: 0 24px 50px rgb(0 0 0 / calc(var(--depth) * 63%));
 
-    /* Domains (charts and map only): three come from the palette, two are hue shifts of it */
-    --d-ai: var(--signal);
-    --d-systems: var(--third);
-    --d-architecture: var(--cold);
-    --d-graphical: oklch(from var(--signal) l max(c, 0.14) calc(h - 55));
-    --d-devops: oklch(from var(--cold) l max(c, 0.14) calc(h + 55));
-
     /* Chart series: the first (most used) is the accent */
     --c0: var(--signal);
     --c1: var(--cold);
     --c2: color-mix(in oklab, var(--cold) 45%, var(--bg));
     --c3: color-mix(in oklab, var(--ink) 35%, var(--bg));
     --c4: var(--third);
-}
-
-/* Browsers without relative colours (Safari before 16.4, Firefox before 128): the two hue shifts fall back to their source */
-@supports not (color: oklch(from red l c h)) {
-    :root,
-    [data-theme] {
-        --d-graphical: var(--signal);
-        --d-devops: var(--cold);
-    }
 }
 
 :root {
