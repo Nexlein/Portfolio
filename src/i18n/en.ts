@@ -2,14 +2,14 @@ export const en = {
     meta: {
         imageAlt: 'Nielsen COMBE--BRACCIALE, AI, data and software engineer portfolio',
         home: {
-            title: 'Nexlein — AI, Data & Software Engineer',
+            title: 'Nielsen COMBE--BRACCIALE — AI & Full-Stack Developer',
             description:
-                'Nielsen COMBE--BRACCIALE (Nexlein), AI, data and software engineer. Reliable software at the speed of AI: TDD, agentic workflows, simulations, decision engines.'
+                'Nielsen COMBE--BRACCIALE (Nexlein), AI and full-stack developer, student at Epitech: local LLM assistants with RAG, tested web apps, Kubernetes deployments.'
         },
         cv: {
             title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
-                'CV of Nielsen COMBE--BRACCIALE, AI, data and software engineer: TDD, agentic workflows, autonomous decision systems and real-time simulation engines.'
+                'CV of Nielsen COMBE--BRACCIALE, AI and full-stack developer: local LLM assistants, RAG, web apps, Kubernetes, tests first.'
         },
         notFound: {
             title: 'Page not found — Nexlein',
@@ -39,12 +39,12 @@ export const en = {
     },
     home: {
         hero: {
-            role: 'AI · Data · Software engineer · Epitech',
-            title1: 'Building reliable software',
-            title2: 'at the speed of AI.',
-            title2b: 'with tests before code.',
-            title2c: 'with agentic workflows.',
-            lede: 'I build with TDD and agentic workflows, so I ship fast and everything is verified before it goes live. Currently an AI developer at Issanka.',
+            role: 'AI & Full-Stack Developer · Epitech',
+            title1: 'Nexlein.',
+            title2: 'AI that cites its sources.',
+            title2b: 'Zero-downtime deploys.',
+            title2c: 'End-to-end tested apps.',
+            lede: 'I write the tests first and give coding agents written rules; CI checks every change. Third-year student at Epitech, AI developer intern at Issanka.',
             work: 'See the work',
             hire: 'Hire me',
             switch: 'Show another simulation',
@@ -157,15 +157,15 @@ export const en = {
             title2: 'Fast, and checked.',
             test: {
                 title: 'Tests first',
-                body: 'I write the test before the code, then let the AI make it pass. Every change runs through unit and browser tests before it merges.'
+                body: 'I write the test before the code, whether the code comes from me or from an agent. Every commit runs the unit tests, every pull request runs them again in CI with the browser tests, and nothing reaches production until CI passes.'
             },
             agents: {
                 title: 'Agents with guardrails',
-                body: 'My AI agents work inside rules I wrote down: a conventions file, a code map rebuilt on every commit, and permissions that keep them out of what they should not touch.'
+                body: 'Coding agents work inside rules I wrote: a conventions file, a code map rebuilt on every commit, and permissions that keep them away from what they must not touch. Sometimes I write the code, sometimes I direct the agents and review what they produce.'
             },
             compound: {
                 title: 'Each project speeds up the next',
-                body: 'Each project leaves tools, tests and notes behind for the next one.'
+                body: 'Technical choices are written down with their reason (36 decision records on Bernstein), and each project leaves scripts, tests and rules that the next one builds on.'
             },
             source: 'See how this site is built'
         },
@@ -221,9 +221,9 @@ export const en = {
             pdf: 'Download PDF'
         },
         hero: {
-            role: 'AI, Data & Software Engineer',
+            role: 'AI & Full-Stack Developer',
             summary:
-                'Building reliable software at the speed of AI, with TDD and agentic workflows. Focused on autonomous decision systems, real-time simulation engines, and high-performance C++.',
+                'AI assistants, web apps and their deployment, built with tests first, coding agents under written rules and CI on every change.',
             badge2: 'Full-Time Intern (Mar–Aug 2027)',
             badge3: 'Freelance'
         },

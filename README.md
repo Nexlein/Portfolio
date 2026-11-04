@@ -139,7 +139,7 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 - **Images**: WebP, at most 1200px on the long side (`ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_ratio=decrease" -quality 80 out.webp`).
 - **Videos**: H.264 MP4 without audio, at most 960px wide, `faststart`. Run `npm run media:video -- public/projects/<id>/<name>.mp4` to re-encode in place.
 - **Posters**: every video needs `<name>.poster.webp`. Run `npm run media:posters` to generate missing ones.
-- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist).
+- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `media:thumbs -- --force` would replace them with plain downscales.
 
 Videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion` they never autoplay: they keep their poster and show controls.
 

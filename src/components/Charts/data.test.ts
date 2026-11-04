@@ -10,6 +10,7 @@ import {
     languageOf,
     learnedSince,
     newSkillsPerPeriod,
+    periodsIn,
     phasesIn,
     RANGES,
     rangeStart,
@@ -128,6 +129,11 @@ describe('group counts', () => {
     it('buckets every project exactly once', () => {
         const { keys, bucket } = languageBuckets(PROJECTS);
         for (const p of PROJECTS) expect(keys).toContain(bucket(p));
+    });
+
+    it('lists the periods oldest first, and every project falls in one', () => {
+        expect(periodsIn(PROJECTS)).toEqual(['Tek1', 'Tek2', 'Personal', 'Tek3']);
+        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(periodOf(p));
     });
 
     it('counts every project in one domain axis', () => {
@@ -319,7 +325,7 @@ describe('checkpoint names on the plot', () => {
     it('stay inside the picture when a checkpoint sits at the start of a range', () => {
         const points = skillSeries(PROJECTS, TODAY);
         const month = pathSvg('en', points, TODAY - 1 / 12, TODAY); // the Issanka checkpoint is dated September 2026
-        expect(month).toMatch(/<text class="start"[^>]*>AI developer, Issanka<\/text>/);
+        expect(month).toMatch(/<text class="start"[^>]*>AI developer intern, Issanka<\/text>/);
         expect(pathSvg('en', points, points[0].t, TODAY)).not.toContain('class="start"'); // nothing sticks out on Max
     });
 });

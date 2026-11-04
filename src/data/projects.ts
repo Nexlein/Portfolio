@@ -55,6 +55,176 @@ export function projectPath(id: string): string {
 
 export const PROJECTS: ProjectEntry[] = [
     {
+        id: 'sensai',
+        title: 'Sensai',
+        description: {
+            en: 'A local AI assistant on Ollama, written without any LLM framework. It answers from your documents and cites them, asks before writing a file, remembers facts from one session to the next and masks personal data.',
+            fr: "Un assistant IA local sur Ollama, écrit sans framework LLM. Il répond à partir de vos documents en citant ses sources, demande avant d'écrire un fichier, se souvient d'une session à l'autre et masque les données personnelles."
+        },
+        tags: ['Python', 'LLM', 'RAG', 'Ollama', 'FastAPI', 'Textual'],
+        category: 'ai',
+        year: 'Tek3',
+        date: '2026-09',
+        featured: true,
+        team: {
+            size: 4,
+            role: {
+                en: 'The structured memory (remember, recall, forget), the first version of the RAG chunker, store and retriever, the first tool-calling loop, the file reading and listing tools, the five CI workflows, and the functional and live test suites.',
+                fr: "La mémoire structurée (retenir, retrouver, oublier), la première version du découpage, du stockage et de la recherche du RAG, la première boucle d'appel d'outils, les outils de lecture et de listage de fichiers, les cinq workflows de CI, et les tests fonctionnels et en conditions réelles."
+            }
+        },
+        result: {
+            en: "1,406 automated tests run in CI, plus 63 that need a live model, with a 96% coverage floor (lines and branches). In the team's keyword-graded benchmark, document search lifts correct answers from 23% to 82% on 22 questions.",
+            fr: "1 406 tests automatisés lancés en CI, plus 63 qui demandent un vrai modèle, avec une couverture minimale de 96 % (lignes et branches). Dans le benchmark de l'équipe, noté par mots-clés, la recherche dans les documents fait passer les bonnes réponses de 23 % à 82 % sur 22 questions."
+        },
+        github: 'https://github.com/Nexlein/Sensai',
+        media: {
+            type: 'image',
+            src: '/projects/sensai/sensai.webp',
+            alt: {
+                en: "Sensai's README feature table, the team's RAG benchmark (correct answers from 23% to 82% on 22 questions, keyword-graded) and the pytest line: 1,469 tests collected.",
+                fr: "Le tableau des fonctionnalités du README de Sensai, le benchmark RAG de l'équipe (de 23 % à 82 % de bonnes réponses sur 22 questions, noté par mots-clés) et la ligne de pytest : 1 469 tests collectés."
+            }
+        }
+    },
+    {
+        id: 'bernstein',
+        title: 'Bernstein',
+        description: {
+            en: 'Deploys a voting app supplied by the school (three services, plus Redis and PostgreSQL) to Kubernetes on Azure (AKS) with one command. On every pull request, CI checks that an update or a node drain does not interrupt the service.',
+            fr: "Déploie en une commande une application de vote fournie par l'école (trois services, plus Redis et PostgreSQL) sur Kubernetes (AKS, Azure). À chaque pull request, la CI vérifie qu'une mise à jour ou le drain d'un nœud n'interrompt pas le service."
+        },
+        tags: ['Kubernetes', 'Azure', 'Docker', 'CI/CD', 'PostgreSQL', 'Redis'],
+        category: 'devops',
+        year: 'Tek3',
+        date: '2026-10',
+        featured: true,
+        team: {
+            size: 2,
+            role: {
+                en: 'Almost everything around the app: the Kubernetes manifests except Redis, Worker and Poll, network policies and autoscaling, the deploy script, the zero-downtime test, the CI pipeline, and most of the 36 decision records.',
+                fr: "Presque tout autour de l'application : les manifestes Kubernetes sauf Redis, Worker et Poll, les règles réseau et l'autoscaling, le script de déploiement, le test de continuité de service, la CI, et la plupart des 36 décisions d'architecture documentées."
+            }
+        },
+        result: {
+            en: '0 errors out of 13,000 probe requests while Poll scaled from 2 to 6 pods, a node was drained and Poll scaled back down.',
+            fr: "Aucune erreur sur 13 000 requêtes de contrôle pendant la montée de Poll de 2 à 6 pods, le drain d'un nœud et le retour à 2 pods."
+        },
+        github: 'https://github.com/Nexlein/Bernstein',
+        media: {
+            type: 'image',
+            src: '/projects/bernstein/bernstein.webp',
+            alt: {
+                en: "Bernstein's architecture (Poll, Result, Redis, a Java worker, PostgreSQL) next to its zero-downtime results: 0 errors in 1,519 requests during a rollout and 0 in 1,002 during a node drain (kind in CI, first run), and 0 errors in 13,000 probe requests on AKS while Poll scaled from 2 to 6 pods and back.",
+                fr: "L'architecture de Bernstein (Poll, Result, Redis, un worker Java, PostgreSQL) à côté de ses tests de continuité : 0 erreur sur 1 519 requêtes pendant une mise à jour et 0 sur 1 002 pendant le drain d'un nœud (kind en CI, premier passage), puis 0 erreur sur 13 000 requêtes de contrôle sur AKS pendant que Poll passait de 2 à 6 pods et revenait."
+            }
+        }
+    },
+    {
+        id: 'dashboard',
+        title: 'Dashboard',
+        description: {
+            en: 'A web dashboard you assemble yourself: link your accounts, place widgets (GitHub, weather, crypto, stocks, YouTube) on a drag-and-drop grid, and they refresh on their own.',
+            fr: 'Un tableau de bord web à composer soi-même : on relie ses comptes, on place des widgets (GitHub, météo, crypto, bourse, YouTube) sur une grille en glisser-déposer, et ils se mettent à jour tout seuls.'
+        },
+        tags: ['TypeScript', 'React', 'Express', 'PostgreSQL', 'Redis', 'Playwright'],
+        category: 'fullstack',
+        year: 'Tek3',
+        date: '2026-09',
+        featured: true,
+        team: {
+            size: 2,
+            role: {
+                en: 'The backend core (database, authentication, three API replicas behind Nginx, Redis cache and rate limits), GDPR export and deletion, and, on the frontend, the grid, the widget editor and the accessibility settings.',
+                fr: "Le cœur du backend (base de données, authentification, trois réplicas de l'API derrière Nginx, cache et limites de débit dans Redis), l'export et la suppression RGPD, et, côté interface, la grille, l'éditeur de widgets et les réglages d'accessibilité."
+            }
+        },
+        result: {
+            en: 'More than 400 automated tests with coverage floors enforced in CI, and a Lighthouse score of 98 for performance and 100 for accessibility, best practices and SEO.',
+            fr: 'Plus de 400 tests automatisés avec des seuils de couverture exigés par la CI, et un score Lighthouse de 98 en performance et de 100 en accessibilité, bonnes pratiques et SEO.'
+        },
+        github: 'https://github.com/Nexlein/Dashboard',
+        media: {
+            type: 'gallery',
+            images: [
+                {
+                    src: '/projects/dashboard/dashboard.webp',
+                    alt: {
+                        en: 'Dashboard in the light theme, on demo data: weather in Paris, a five-day forecast for Lyon, GitHub statistics for facebook/react, a BTC and ETH price chart and an AAPL, NVDA and MSFT stock chart.',
+                        fr: "Le tableau de bord en thème clair, sur des données de démonstration : météo à Paris, prévisions sur cinq jours à Lyon, statistiques GitHub de facebook/react, cours du BTC et de l'ETH, cours boursiers d'AAPL, NVDA et MSFT."
+                    }
+                },
+                {
+                    src: '/projects/dashboard/dashboard-dark-fr.webp',
+                    alt: {
+                        en: 'The same dashboard in the dark theme, with the interface in French (demo data).',
+                        fr: 'Le même tableau de bord en thème sombre, interface en français (données de démonstration).'
+                    }
+                },
+                {
+                    src: '/projects/dashboard/add-widget.webp',
+                    alt: {
+                        en: 'The add-widget dialog: Weather service, 5-Day Forecast widget, city Marseille, refreshed every 60 seconds (the minimum).',
+                        fr: "La fenêtre d'ajout d'un widget : service Weather, widget 5-Day Forecast, ville de Marseille, mise à jour toutes les 60 secondes (le minimum)."
+                    }
+                },
+                {
+                    src: '/projects/dashboard/services.webp',
+                    alt: {
+                        en: 'The Services page on demo data: OpenWeather, CoinGecko and GitHub connected, Twelve Data waiting for an API key. Keys are checked and never shown again.',
+                        fr: "La page Services, sur des données de démonstration : OpenWeather, CoinGecko et GitHub connectés, Twelve Data en attente d'une clé d'API. Les clés sont vérifiées et jamais réaffichées."
+                    }
+                },
+                {
+                    src: '/projects/dashboard/accessibility.webp',
+                    alt: {
+                        en: 'The accessibility settings: text size from 100% to 200%, animations, high contrast, underlined links, wider spacing and an easy-to-read font.',
+                        fr: "Les réglages d'accessibilité : taille du texte de 100 % à 200 %, animations, contraste élevé, liens soulignés, espacement élargi et police facile à lire."
+                    }
+                },
+                {
+                    src: '/projects/dashboard/admin.webp',
+                    alt: {
+                        en: 'The administration page on demo accounts: 6 users, 2 administrators, 1 banned, a search by email and a table of roles, bans and sign-up dates.',
+                        fr: "La page d'administration, sur des comptes de démonstration : 6 utilisateurs, 2 administrateurs, 1 banni, une recherche par e-mail et un tableau des rôles, bannissements et dates d'inscription."
+                    }
+                }
+            ]
+        }
+    },
+    {
+        id: 'survivor',
+        title: 'Survivor',
+        description: {
+            en: 'ProfilsActifs, a video job platform built in a two-week sprint: candidates post a short moderated video, recruiters browse a catalogue and get in touch. GDPR compliance was part of the brief.',
+            fr: "ProfilsActifs, une plateforme d'emploi par vidéo construite en un sprint de deux semaines : les candidats publient une courte vidéo modérée, les recruteurs parcourent un catalogue et les contactent. Le RGPD faisait partie du cahier des charges."
+        },
+        tags: ['TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Next.js', 'Whisper'],
+        category: 'fullstack',
+        year: 'Tek3',
+        date: '2026-08',
+        team: {
+            size: 3,
+            role: {
+                en: 'The backend data model and demo data, the GDPR export and deletion routes, the age check before a profile is shown, the right to object, the video pipeline with automatic Whisper subtitles, and the deterministic catalogue sort.',
+                fr: "Le modèle de données et les données de démo du backend, les routes d'export et de suppression RGPD, la vérification de l'âge avant d'afficher un profil, le droit d'opposition, le pipeline vidéo avec sous-titres automatiques par Whisper, et le tri déterministe du catalogue."
+            }
+        },
+        result: {
+            en: '35 API endpoints documented in Swagger, with GDPR export and deletion, video moderation before publication and automatic Whisper subtitles.',
+            fr: "35 routes d'API documentées dans Swagger, avec l'export et la suppression RGPD, la modération des vidéos avant publication et les sous-titres automatiques par Whisper."
+        },
+        github: 'https://github.com/Nexlein/Survivor-ProfilsActifs',
+        media: {
+            type: 'image',
+            src: '/projects/survivor/survivor.webp',
+            alt: {
+                en: 'The data model of ProfilsActifs next to a load test of its catalogue: 550.8 to 638.1 requests per second after a composite index, 0 errors at 100 connections in one 10-second run, with the database-free health route as a reference (3,479.0 to 3,834.4).',
+                fr: "Le modèle de données de ProfilsActifs à côté d'un test de charge du catalogue : de 550,8 à 638,1 requêtes par seconde après un index composite, sans erreur à 100 connexions sur un passage de 10 secondes, avec la route de santé, sans base de données, comme référence (de 3 479,0 à 3 834,4)."
+            }
+        }
+    },
+    {
         id: 'arcade',
         title: 'Arcade',
         description: {
@@ -88,7 +258,6 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['C++', 'Graphics', 'Maths'],
         category: 'graphical',
         date: '2026-04',
-        featured: true,
         team: {
             size: 4,
             role: {
@@ -175,7 +344,6 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Python', 'PyTorch', 'RL', 'DQN'],
         category: 'ai',
         date: '2026-04',
-        featured: true,
         team: {
             size: 3,
             role: {
@@ -254,7 +422,6 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['Security', 'LLM', 'Prompt Engineering', 'Ollama', 'Bash'],
         category: 'ai',
         date: '2026-03',
-        featured: true,
         team: {
             size: 2,
             role: {

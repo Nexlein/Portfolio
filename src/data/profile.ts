@@ -58,8 +58,8 @@ export interface Offer {
 export const EXPERIENCES: Experience[] = [
     {
         id: 'issanka',
-        kind: 'job',
-        title: { en: 'AI Developer (Part-Time)', fr: 'Développeur IA (temps partiel)' },
+        kind: 'internship',
+        title: { en: 'AI Developer Intern (Part-Time)', fr: 'Développeur IA (stage à temps partiel)' },
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'Sept 2026 - Fév 2027' },
         summary: {
@@ -209,7 +209,11 @@ export const CHECKPOINTS: Checkpoint[] = [
         label: { en: 'Google Cloud certificate', fr: 'Certificat Google Cloud' },
         skills: ['Google Cloud']
     },
-    { id: 'issanka', date: '2026-09', label: { en: 'AI developer, Issanka', fr: 'Développeur IA, Issanka' } }
+    {
+        id: 'issanka',
+        date: '2026-09',
+        label: { en: 'AI developer intern, Issanka', fr: 'Développeur IA en stage, Issanka' }
+    }
 ];
 
 /**
@@ -217,7 +221,7 @@ export const CHECKPOINTS: Checkpoint[] = [
  * The map keeps its cards clear of this block by size (NOW_BOX in NeuralMap/graph.ts): re-measure if the text grows.
  */
 export const NOW = {
-    role: { en: 'AI developer at Issanka', fr: 'Développeur IA chez Issanka' },
+    role: { en: 'AI developer intern at Issanka', fr: 'Développeur IA en stage chez Issanka' },
     focus: {
         en: 'First mission: issanka.com, live since 9 October',
         fr: 'Première mission : issanka.com, en ligne depuis le 9 octobre'

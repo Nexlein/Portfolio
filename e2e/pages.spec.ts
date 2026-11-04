@@ -1,7 +1,9 @@
 import { test, expect } from './fixtures';
+import { en } from '../src/i18n/en';
+import { fr } from '../src/i18n/fr';
 
 const pages = ['', '/fr'].flatMap((prefix) => [
-    { path: `${prefix}/`, heading: prefix ? 'fiable' : 'reliable' },
+    { path: `${prefix}/`, heading: (prefix ? fr : en).home.hero.title2 },
     { path: `${prefix}/cv.html`, heading: 'Nielsen' },
     { path: `${prefix}/projects/zappy.html`, heading: 'Zappy' },
     { path: `${prefix}/404.html`, heading: prefix ? 'Rien' : 'Nothing' }

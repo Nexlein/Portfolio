@@ -2,14 +2,14 @@ export const fr = {
     meta: {
         imageAlt: 'Portfolio de Nielsen COMBE--BRACCIALE, ingénieur IA, data et logiciel',
         home: {
-            title: 'Nexlein — Ingénieur IA, Data & Logiciel',
+            title: 'Nielsen COMBE--BRACCIALE — Développeur IA et full-stack',
             description:
-                "Nielsen COMBE--BRACCIALE (Nexlein), ingénieur IA, data et logiciel. Des logiciels fiables à la vitesse de l'IA : TDD, workflows agentiques, simulations, moteurs de décision."
+                'Nielsen COMBE--BRACCIALE (Nexlein), développeur IA et full-stack, étudiant à Epitech : assistants LLM locaux, RAG, applis web testées, Kubernetes.'
         },
         cv: {
             title: 'Nielsen COMBE--BRACCIALE — CV',
             description:
-                'CV de Nielsen COMBE--BRACCIALE, ingénieur IA, data et logiciel : TDD, workflows agentiques, systèmes de décision autonomes et moteurs de simulation temps réel.'
+                "CV de Nielsen COMBE--BRACCIALE, développeur IA et full-stack : assistants LLM locaux, RAG, applications web, Kubernetes, tests d'abord."
         },
         notFound: {
             title: 'Page introuvable — Nexlein',
@@ -39,12 +39,12 @@ export const fr = {
     },
     home: {
         hero: {
-            role: 'Ingénieur IA · Data · Logiciel · Epitech',
-            title1: 'Créer des logiciels fiables',
-            title2: "à la vitesse de l'IA.",
-            title2b: 'en TDD.',
-            title2c: 'avec des agents IA.',
-            lede: 'Je travaille en TDD avec des workflows agentiques : je livre vite, et tout est vérifié avant la mise en ligne. Actuellement développeur IA chez Issanka.',
+            role: 'Développeur IA et full-stack · Epitech',
+            title1: 'Nexlein.',
+            title2: 'IA qui cite ses sources.',
+            title2b: 'Mises à jour sans coupure.',
+            title2c: 'Web testé de bout en bout.',
+            lede: "J'écris d'abord les tests et je donne des règles écrites aux agents de codage ; la CI vérifie chaque changement. Étudiant en 3e année à Epitech, développeur IA en stage chez Issanka.",
             work: 'Voir les projets',
             hire: 'Me recruter',
             switch: 'Changer de simulation',
@@ -157,15 +157,15 @@ export const fr = {
             title2: 'Vite, et vérifié.',
             test: {
                 title: "Les tests d'abord",
-                body: "J'écris le test avant le code, puis l'IA le fait passer. Chaque changement passe les tests unitaires et navigateur avant d'être fusionné."
+                body: "J'écris le test avant le code, que le code vienne de moi ou d'un agent. Chaque commit lance les tests unitaires, chaque pull request les relance en CI avec les tests de bout en bout, et rien n'arrive en production sans que la CI passe."
             },
             agents: {
                 title: 'Des agents sous contrôle',
-                body: "Mes agents IA travaillent dans un cadre écrit : un fichier de conventions, une carte du code régénérée à chaque commit, et des permissions qui les tiennent à l'écart de ce qu'ils ne doivent pas toucher."
+                body: "Les agents de codage travaillent selon des règles que j'ai écrites : un fichier de conventions, une carte du code régénérée à chaque commit, et des permissions qui les tiennent à l'écart de ce qu'ils ne doivent pas toucher. Parfois j'écris le code, parfois je dirige les agents et je relis ce qu'ils produisent."
             },
             compound: {
                 title: 'Chaque projet accélère le suivant',
-                body: 'Chaque projet laisse derrière lui des outils, des tests et des notes pour le suivant.'
+                body: "Les choix techniques sont consignés avec leur justification (36 décisions documentées sur Bernstein), et chaque projet laisse des scripts, des tests et des règles sur lesquels le suivant s'appuie."
             },
             source: 'Voir comment ce site est construit'
         },
@@ -221,9 +221,9 @@ export const fr = {
             pdf: 'Télécharger le PDF'
         },
         hero: {
-            role: 'Ingénieur IA, Data & Logiciel',
+            role: 'Développeur IA et full-stack',
             summary:
-                "Conception de logiciels fiables à la vitesse de l'IA, en TDD et avec des workflows agentiques. Spécialités : systèmes de décision autonomes, moteurs de simulation en temps réel et C++ haute performance.",
+                "Des assistants IA, des applications web et leur déploiement, construits avec les tests d'abord, des agents de codage encadrés par des règles écrites et la CI sur chaque changement.",
             badge2: 'Stage à temps plein (mars–août 2027)',
             badge3: 'Freelance'
         },

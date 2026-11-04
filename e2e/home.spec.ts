@@ -187,10 +187,10 @@ test.describe('project list', () => {
         await expect(rows(page)).toHaveCount(6);
         const more = page.locator('.more-btn');
         await expect(more).toHaveText(/Show 6 more/);
-        await more.click();
-        await expect(rows(page)).toHaveCount(12);
-        await more.click();
-        await expect(rows(page)).toHaveCount(PROJECTS.length);
+        for (let shown = 12; shown < PROJECTS.length + 6; shown += 6) {
+            await more.click();
+            await expect(rows(page)).toHaveCount(Math.min(shown, PROJECTS.length));
+        }
         await expect(more).toHaveText('Show less');
         await more.click();
         await expect(rows(page)).toHaveCount(6);
