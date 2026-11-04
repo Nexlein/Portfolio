@@ -46,10 +46,11 @@ export const monthName = (time: number, lang: Lang) => monthLabel(time, MONTHS[l
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
-/** Where the visitor was: "Tek 2 · 2025-26" (or "Tek 2"), and "Before Epitech" for school year 0. */
+/** Where the visitor was: "year 2 · 2025-26" / "2e année · 2025-26" (or just the year), and "Before Epitech" for 0. */
 export function phaseLabel(lang: Lang, year: number, start: number, short = false): string {
     if (year === 0) return t(lang, 'path.beforeEpitech');
-    return short ? `Tek ${year}` : `Tek ${year} · ${start}-${String(start + 1).slice(2)}`;
+    const name = lang === 'fr' ? `${year === 1 ? '1re' : `${year}e`} année` : `year ${year}`;
+    return short ? name : `${name} · ${start}-${String(start + 1).slice(2)}`;
 }
 
 /** The change since the start of a range, as the chart's headline says it: "▲ +37 (176 %) past 12 months". */
@@ -169,6 +170,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
         epitech: EPITECH_START,
         months: MONTHS[lang],
         before: t(lang, 'path.beforeEpitech'),
+        years: [1, 2, 3, 4, 5, 6].map((y) => phaseLabel(lang, y, 0, true)),
         skills: t(lang, 'path.skills'),
         points: points.map((p) => ({ t: p.t, v: p.v, what: whatOf(lang, p) })),
         ranges: Object.fromEntries(
@@ -248,6 +250,13 @@ function donut(lang: Lang, projects: ProjectEntry[]): string {
 <ul class="key">${pers.map((y, k) => `<li><span class="c${k}"></span>${period(lang, y)} · ${counts[k]}</li>`).join('')}</ul>`;
 }
 
+/** A column's label under the bars; a long one ("1re année") breaks onto two lines so neighbours never touch. */
+function columnLabel(text: string, x: number, H: number): string {
+    const cut = text.lastIndexOf(' ');
+    if (text.length <= 7 || cut < 0) return `<text x="${f1(x)}" y="${H - 8}">${text}</text>`;
+    return `<text x="${f1(x)}" y="${H - 15}"><tspan x="${f1(x)}">${text.slice(0, cut)}</tspan><tspan x="${f1(x)}" dy="11">${text.slice(cut + 1)}</tspan></text>`;
+}
+
 function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
     const { keys, bucket } = languageBuckets(projects);
@@ -271,7 +280,7 @@ function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
                     acc += h;
                     return `<rect class="c${k}" x="${f1(bx)}" y="${f1(y0)}" width="${f1(bw)}" height="${f1(h - 2)}" rx="3"><title>${period(lang, pers[i])}: ${n} · ${name(keys[k])}</title></rect>`;
                 })
-                .join('')}<text x="${f1(bx + bw / 2)}" y="${H - 8}">${period(lang, pers[i])}</text></g>`;
+                .join('')}${columnLabel(period(lang, pers[i]), bx + bw / 2, H)}</g>`;
         })
         .join('');
     return `<svg class="columns" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.languagesTitle')}">${bars}</svg>
@@ -290,7 +299,7 @@ ${pers
     .map((y, k) => {
         const h = (counts[k] / max) * (H - 70),
             bx = 30 + k * col + col / 2 - 22;
-        return `<g class="bar"><rect class="c0" x="${f1(bx)}" y="${f1(H - 28 - h)}" width="44" height="${f1(h)}" rx="4" /><text class="value" x="${f1(bx + 22)}" y="${f1(H - 36 - h)}">${counts[k]}</text><text x="${f1(bx + 22)}" y="${H - 8}">${period(lang, y)}</text></g>`;
+        return `<g class="bar"><rect class="c0" x="${f1(bx)}" y="${f1(H - 28 - h)}" width="44" height="${f1(h)}" rx="4" /><text class="value" x="${f1(bx + 22)}" y="${f1(H - 36 - h)}">${counts[k]}</text>${columnLabel(period(lang, y), bx + 22, H)}</g>`;
     })
     .join('')}</svg>`;
 }
@@ -346,9 +355,7 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
             return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${label(lang, d, 'domainsShort')}</text>${row}</g>`;
         })
         .join('');
-    const cols = pers
-        .map((y, c) => `<text x="${f1(left + c * cw + cw / 2)}" y="${H - 8}">${period(lang, y)}</text>`)
-        .join('');
+    const cols = pers.map((y, c) => columnLabel(period(lang, y), left + c * cw + cw / 2, H)).join('');
     return `<svg class="heat" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.heatTitle')}">${cells}${cols}</svg>`;
 }
 

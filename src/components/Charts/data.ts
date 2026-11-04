@@ -186,7 +186,7 @@ for (const p of Object.keys(ORBIT) as Period[]) PERIODS.unshift(p);
 /** Periods present in the data, in time order. */
 export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => periodOf(p) === y));
 
-const LANGUAGES = new Set(['C', 'C++', 'Python', 'TypeScript', 'JavaScript', 'Rust', 'Go', 'Java', 'C#']);
+const LANGUAGES = new Set(['C', 'C++', 'Python', 'TypeScript', 'JavaScript', 'Rust', 'Go', 'Java', 'C#', 'Bash']);
 export const INFRA = 'infra';
 export const OTHER = 'other';
 

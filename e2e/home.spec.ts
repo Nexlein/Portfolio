@@ -376,13 +376,13 @@ test.describe('charts', () => {
         await page.goto('/');
         const chart = page.locator('.path-chart');
         await chart.scrollIntoViewIfNeeded();
-        await expect(chart.locator('.phase')).toHaveCount(4); // before Epitech, then Tek 1, 2 and 3
-        await expect(chart.locator('.phase-label', { hasText: 'Tek 2 · 2025-26' })).toBeVisible();
+        await expect(chart.locator('.phase')).toHaveCount(4); // before Epitech, then years 1, 2 and 3
+        await expect(chart.locator('.phase-label', { hasText: 'year 2 · 2025-26' })).toBeVisible();
         await expect(chart).toHaveClass(/\bin\b/);
         const hit = chart.locator('.hit');
         const box = (await hit.boundingBox())!;
         await hit.hover({ position: { x: box.width * 0.6, y: box.height / 2 }, force: true });
-        await expect(chart.locator('.path-tip .mono')).toHaveText(/\d{4} · (Tek \d|Before Epitech)/);
+        await expect(chart.locator('.path-tip .mono')).toHaveText(/\d{4} · (year \d|Before Epitech)/);
     });
 
     test('the numbers are a deck: one chart in front, the arrows and the index bring another one forward', async ({

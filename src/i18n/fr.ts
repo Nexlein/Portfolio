@@ -91,9 +91,9 @@ export const fr = {
             open: 'Voir le projet',
             similar: '{s} de proximité',
             periods: {
-                Tek1: 'tek 1 · 2024-25',
-                Tek2: 'tek 2 · 2025-26',
-                Tek3: 'tek 3 · 2026-27',
+                Tek1: '1re année · 2024-25',
+                Tek2: '2e année · 2025-26',
+                Tek3: '3e année · 2026-27',
                 Personal: 'perso · 2026'
             }
         },
@@ -137,7 +137,7 @@ export const fr = {
             sub: 'Chaque graphique ci-dessous est calculé à partir des projets eux-mêmes.',
             view: 'Vue',
             other: 'Autres',
-            infra: 'Infra / no-code',
+            infra: 'Infra / config',
             projects: 'projets',
             coverage: 'Couverture',
             domains: '{n} domaines',

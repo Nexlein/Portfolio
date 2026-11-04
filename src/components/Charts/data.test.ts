@@ -142,6 +142,18 @@ describe('group counts', () => {
     });
 });
 
+describe('labels in French', () => {
+    it('breaks a long column label onto two lines, and keeps a short one on one', () => {
+        expect(numbers('fr', PROJECTS, TODAY)).toMatch(/<tspan[^>]*>1re<\/tspan><tspan[^>]*>année<\/tspan>/);
+        expect(numbers('en', PROJECTS, TODAY)).not.toContain('<tspan');
+    });
+
+    it('gives the path tooltip the school years in the page language', () => {
+        expect(pathChart('fr', PROJECTS, TODAY)).toContain('"years":["1re année","2e année","3e année"');
+        expect(pathChart('en', PROJECTS, TODAY)).toContain('"years":["year 1","year 2","year 3"');
+    });
+});
+
 describe('the charts at any date', () => {
     it.each([2023, 2024.5, 2026.9, 2027, 2030, 2099])(
         'draws without NaN, Infinity or gaps in the text at %s',
@@ -245,7 +257,7 @@ describe('where the visitor was', () => {
         expect(schoolYearAt(yearOf('2025-08'))).toBe(1);
         expect(schoolYearAt(yearOf('2025-09'))).toBe(2);
         expect(schoolYearAt(yearOf('2026-05'))).toBe(2);
-        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: Tek 3
+        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: year 3
     });
 
     it('covers the whole window with consecutive phases, clipped to it', () => {
@@ -260,8 +272,10 @@ describe('where the visitor was', () => {
     });
 
     it('names a phase the way the chart prints it', () => {
-        expect(phaseLabel('en', 2, 2025)).toBe('Tek 2 · 2025-26');
-        expect(phaseLabel('en', 2, 2025, true)).toBe('Tek 2');
+        expect(phaseLabel('en', 2, 2025)).toBe('year 2 · 2025-26');
+        expect(phaseLabel('en', 2, 2025, true)).toBe('year 2');
+        expect(phaseLabel('fr', 1, 2024, true)).toBe('1re année');
+        expect(phaseLabel('fr', 3, 2026)).toBe('3e année · 2026-27');
         expect(phaseLabel('fr', 0, 0)).toBe('Avant Epitech');
     });
 });

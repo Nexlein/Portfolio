@@ -38,11 +38,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, components/NeuralMap/graph, components/Charts/series
   - ← components/Charts/render, pages/home/blocks, pages/project/render
-- **render.ts** (394) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+- **render.ts** (401) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
   - exports: monthName, phaseLabel, changeText, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data, components/Charts/series
   - ← pages/home/blocks, pages/project/render
-- **series.ts** (73) — The path chart's geometry and the few rules the browser needs for its crosshair: pure functions of a series of steps, with no data imported.
+- **series.ts** (75) — The path chart's geometry and the few rules the browser needs for its crosshair: pure functions of a series of steps, with no data imported.
   - exports: Step, valueAt, yDomain, schoolYear, monthLabel, PATH, pathSamples, PathData
   - ← components/Charts/Charts, components/Charts/data, components/Charts/render
 - tests: data.test.ts

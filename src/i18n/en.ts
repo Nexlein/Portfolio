@@ -91,9 +91,9 @@ export const en = {
             open: 'Open project',
             similar: '{s} similar',
             periods: {
-                Tek1: 'tek 1 · 2024-25',
-                Tek2: 'tek 2 · 2025-26',
-                Tek3: 'tek 3 · 2026-27',
+                Tek1: 'year 1 · 2024-25',
+                Tek2: 'year 2 · 2025-26',
+                Tek3: 'year 3 · 2026-27',
                 Personal: 'personal · 2026'
             }
         },
@@ -137,7 +137,7 @@ export const en = {
             sub: 'Every chart below is calculated from the projects themselves.',
             view: 'View',
             other: 'Other',
-            infra: 'Infra / no-code',
+            infra: 'Infra / config',
             projects: 'projects',
             coverage: 'Coverage',
             domains: '{n} domains',
