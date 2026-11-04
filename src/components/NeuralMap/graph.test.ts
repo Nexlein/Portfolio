@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
-import { CARD, fitFor, layout, mds, neighbours, periodOf, pickShown, similarity, skillSet } from './graph';
+import { CARD, fitFor, layout, mds, neighbours, NOW_BOX, periodOf, pickShown, similarity, skillSet } from './graph';
 
 /** `n` projects made from the real ones (same skills, other ids), as when the portfolio grows. */
 function grown(n: number): ProjectEntry[] {
@@ -17,6 +17,13 @@ function overlaps(stars: { x: number; y: number }[]): number {
         for (let j = i + 1; j < stars.length; j++)
             if (Math.abs(stars[i].x - stars[j].x) < CARD.w && Math.abs(stars[i].y - stars[j].y) < CARD.h) n++;
     return n;
+}
+
+/** Cards that cover part of the "Now" block in the middle of a W×H board. */
+function onNow(W: number, H: number, stars: { x: number; y: number }[]): number {
+    return stars.filter(
+        (s) => Math.abs(s.x - W / 2) < (NOW_BOX.w + CARD.w) / 2 && Math.abs(s.y - H / 2) < (NOW_BOX.h + CARD.h) / 2
+    ).length;
 }
 
 describe('similarity', () => {
@@ -50,6 +57,7 @@ describe.each([
     it("places today's projects without overlap, inside the ellipse", () => {
         const stars = layout(W, H, fit, PROJECTS);
         expect(overlaps(stars)).toBe(0);
+        expect(onNow(W, H, stars)).toBe(0);
         expect(stars.every(inside)).toBe(true);
     });
 
@@ -63,11 +71,13 @@ describe.each([
 
 describe('layout at every window width the map is shown at (900px and up; the board is at least 760px tall)', () => {
     // A board where the ellipse is too tight used to leave a few cards overlapping (up to 25px at 1303x800)
-    it("never overlaps today's projects", () => {
+    it("never overlaps today's projects, nor the Now block", () => {
         const bad: string[] = [];
         for (let W = 901; W <= 1700; W += 5)
-            for (const H of [760, 800, 900, 1000])
-                if (overlaps(layout(W, H, fitFor(W, H), PROJECTS))) bad.push(`${W}x${H}`);
+            for (const H of [760, 800, 900, 1000]) {
+                const stars = layout(W, H, fitFor(W, H), PROJECTS);
+                if (overlaps(stars) || onNow(W, H, stars)) bad.push(`${W}x${H}`);
+            }
         expect(bad).toEqual([]);
     }, 30_000); // 640 layouts, about 1.5 s; coverage instrumentation makes it several times slower
 

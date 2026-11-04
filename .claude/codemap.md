@@ -113,8 +113,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/lang, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
   - ← pages/home/home
-- **graph.ts** (207) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
-  - exports: Period, periodOf, ORBIT, CARD, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
+- **graph.ts** (213) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
+  - exports: Period, periodOf, ORBIT, CARD, NOW_BOX, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
   - → data/projects
   - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
 - **limits.ts** (3) — Most projects the map shows at once (the rest rotate in).
@@ -150,7 +150,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, translate.test.ts
 
 ## src/data
-- **profile.ts** (395) — Everything the site says about its owner, written once in every language.
+- **profile.ts** (398) — Everything the site says about its owner, written once in every language.
   - exports: Experience, Education, SkillGroup, CvProjectGroup, Offer, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS, OFFERS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/cv/blocks, pages/home/blocks

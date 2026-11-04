@@ -17,6 +17,10 @@ export const ORBIT: Record<Period, number> = { Tek3: 0.4, Personal: 0.58, Tek2: 
 /** Card size the layout keeps apart (px). */
 export const CARD = { w: 190, h: 52, gap: 22 };
 
+/** The "Now" block in the middle of the board (px): its width is `.nm-now` in NeuralMap.css; the French text is the
+ * tallest (138px measured, 6 lines), the height leaves room for one more. */
+export const NOW_BOX = { w: 300, h: 150 };
+
 const RL = new Set(['rl', 'gymnasium', 'stable-baselines3']);
 
 export function skillSet(p: ProjectEntry): Set<string> {
@@ -153,15 +157,17 @@ function settle(
             }
         return moved;
     };
-    /** Clear of the "Now" block in the middle. */
+    /** Clear of the "Now" block in the middle: the whole card, not just its centre, pushed out the shorter way. */
     const clearOfNow = (s: Star) => {
         const dx = s.x - cx,
             dy = s.y - cy,
-            d = Math.hypot(dx / 1.6, dy);
-        if (d < 120) {
-            s.x = cx + (dx / (d || 1)) * 120 * 1.6;
-            s.y = cy + (dy / (d || 1)) * 120;
-        }
+            spanX = (NOW_BOX.w + w) / 2 + gap / 2,
+            spanY = (NOW_BOX.h + h) / 2 + gap / 2,
+            ox = spanX - Math.abs(dx),
+            oy = spanY - Math.abs(dy);
+        if (ox <= 0 || oy <= 0) return;
+        if (ox / spanX < oy / spanY) s.x += ox * Math.sign(dx || 1);
+        else s.y += oy * Math.sign(dy || 1);
     };
     for (let pass = 0; pass < 240; pass++) {
         separate();

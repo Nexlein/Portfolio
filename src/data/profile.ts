@@ -212,7 +212,10 @@ export const CHECKPOINTS: Checkpoint[] = [
     { id: 'issanka', date: '2026-09', label: { en: 'AI developer, Issanka', fr: 'Développeur IA, Issanka' } }
 ];
 
-/** What is happening now: the centre of the project map and the hero's availability pill. */
+/**
+ * What is happening now: the centre of the project map and the hero's availability pill.
+ * The map keeps its cards clear of this block by size (NOW_BOX in NeuralMap/graph.ts): re-measure if the text grows.
+ */
 export const NOW = {
     role: { en: 'AI developer at Issanka', fr: 'Développeur IA chez Issanka' },
     focus: {
