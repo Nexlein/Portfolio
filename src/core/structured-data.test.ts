@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { SKILLS } from '@/data/profile';
 import { PROJECTS } from '@/data/projects';
 import { OWNER } from './site';
-import { cvPerson, profilePage, projectSource } from './structured-data';
+import { cvPerson, profilePage, projectSource, SKILL_ENTITIES } from './structured-data';
 
 describe('projectSource', () => {
     const image = 'https://example.test/og.jpg';
@@ -50,12 +50,18 @@ describe('the Person block', () => {
         }
     });
 
-    it('lists every skill once, in CV order', () => {
-        const items = SKILLS.flatMap((group) => group.items);
+    it('lists every skill once, in CV order, under the names search engines know', () => {
+        const items = SKILLS.flatMap((group) => group.items.flatMap((item) => SKILL_ENTITIES[item] ?? [item]));
         for (const person of people) {
             const known = person.knowsAbout as string[];
             expect(known).toEqual([...new Set(items)]);
-            expect(known.length).toBeGreaterThan(0);
+            expect(known).toEqual(expect.arrayContaining(['C++', 'Reinforcement learning', 'Kubernetes']));
+            expect(known.filter((name) => name.includes('('))).toEqual([]); // no CV shorthand like "RL (PPO, DQN)"
         }
+    });
+
+    it('maps only labels the CV actually shows', () => {
+        const labels = SKILLS.flatMap((group) => group.items);
+        for (const label of Object.keys(SKILL_ENTITIES)) expect(labels).toContain(label);
     });
 });

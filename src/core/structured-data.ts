@@ -12,7 +12,18 @@ type JsonLd = Record<string, unknown>;
 // Spellings people type in search engines. The displayed name stays OWNER.name.
 const NAME_VARIANTS = [OWNER.alias, 'Nielsen Combe-Bracciale', 'Nielsen Combe Bracciale'];
 
-const SKILL_NAMES = [...new Set(SKILLS.flatMap((group) => group.items))];
+/** CV labels that bundle or abbreviate, as the names search engines know them; other labels are already names. */
+export const SKILL_ENTITIES: Record<string, string[]> = {
+    'C/C++': ['C', 'C++'],
+    'C#/.NET': ['C#', '.NET'],
+    'LLMs (Ollama)': ['Large language models', 'Ollama'],
+    'RL (PPO, DQN)': ['Reinforcement learning'],
+    'MS Agent Framework': ['Microsoft Agent Framework']
+};
+
+const SKILL_NAMES = [
+    ...new Set(SKILLS.flatMap((group) => group.items.flatMap((item) => SKILL_ENTITIES[item] ?? [item])))
+];
 
 function person(lang: Lang): JsonLd {
     return {

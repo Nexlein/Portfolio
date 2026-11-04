@@ -7,7 +7,7 @@ export const fr = {
                 'Nielsen COMBE--BRACCIALE (Nexlein), développeur IA et full-stack, étudiant à Epitech : assistants LLM locaux, RAG, applis web testées, Kubernetes.'
         },
         cv: {
-            title: 'Nielsen COMBE--BRACCIALE — CV',
+            title: 'Nielsen COMBE--BRACCIALE — CV · Développeur IA et full-stack',
             description:
                 "CV de Nielsen COMBE--BRACCIALE, développeur IA et full-stack : assistants LLM locaux, RAG, applications web, Kubernetes, tests d'abord."
         },

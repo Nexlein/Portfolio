@@ -5,6 +5,7 @@ import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
 import { PROJECTS } from '@/data/projects';
 import { SITE } from '@/core/site';
 import { LANGS, localizedPath, lookup, type Lang } from '@/core/translate';
+import { QR_CODE } from './cv/blocks';
 
 const sources = import.meta.glob<string>('../../*.html', { query: '?raw', import: 'default', eager: true });
 const publicFiles = new Set(
@@ -171,4 +172,14 @@ describe('404 page', () => {
         expect(doc.title).toBe(lookup(lang, 'meta.notFound.title'));
         expect(sitemap()).not.toContain(localizedPath(NOT_FOUND.path, lang));
     });
+});
+
+describe('the CV page', () => {
+    it.each(LANGS)(
+        'in %s, names the role in its title (search results, the PDF title) and prints a QR code that exists',
+        (lang) => {
+            expect(lookup(lang, 'meta.cv.title')).toContain(lookup(lang, 'cv.hero.role'));
+            expect(publicFiles).toContain(QR_CODE[lang]);
+        }
+    );
 });

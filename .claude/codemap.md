@@ -136,8 +136,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **site.ts** (15) — Facts about the site and its owner, shared by the build (SEO, sitemap, structured data) and tests.
   - exports: SITE, OWNER
   - ← scripts/brand-images, components/Footer/render, core/structured-data, pages/cv/blocks, pages/home/blocks, vite-plugins/pages
-- **structured-data.ts** (70) — schema.org JSON-LD for search engines (rendered into each page at build time).
-  - exports: profilePage, cvPerson, projectSource
+- **structured-data.ts** (81) — schema.org JSON-LD for search engines (rendered into each page at build time).
+  - exports: SKILL_ENTITIES, profilePage, cvPerson, projectSource
   - → data/profile, data/projects, core/site, core/translate
   - ← vite-plugins/pages
 - **text.ts** (16) — First sentence of a text, without HTML tags, ending in one full stop ("A.
