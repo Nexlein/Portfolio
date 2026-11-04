@@ -58,8 +58,8 @@ export const PROJECTS: ProjectEntry[] = [
         id: 'sensai',
         title: 'Sensai',
         description: {
-            en: 'A local AI assistant on Ollama, written without any LLM framework. It answers from your documents and cites them, asks before writing a file, remembers facts from one session to the next and masks personal data.',
-            fr: "Un assistant IA local sur Ollama, écrit sans framework LLM. Il répond à partir de vos documents en citant ses sources, demande avant d'écrire un fichier, se souvient d'une session à l'autre et masque les données personnelles."
+            en: 'A local AI agent on Ollama, written without any LLM framework. It answers from your documents and cites them, asks before writing a file, remembers facts from one session to the next and masks personal data.',
+            fr: "Un agent IA local sur Ollama, écrit sans framework LLM. Il répond à partir de vos documents en citant ses sources, demande avant d'écrire un fichier, se souvient d'une session à l'autre et masque les données personnelles."
         },
         tags: ['Python', 'LLM', 'RAG', 'Ollama', 'FastAPI', 'Textual'],
         category: 'ai',

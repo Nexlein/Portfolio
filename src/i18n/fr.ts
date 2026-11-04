@@ -4,12 +4,12 @@ export const fr = {
         home: {
             title: 'Nielsen COMBE--BRACCIALE — Développeur IA et full-stack',
             description:
-                'Nielsen COMBE--BRACCIALE (Nexlein), développeur IA et full-stack, étudiant à Epitech : assistants LLM locaux, RAG, applis web testées, Kubernetes.'
+                'Nielsen COMBE--BRACCIALE (Nexlein), développeur IA et full-stack, étudiant à Epitech : agents IA locaux, RAG, applis web testées, Kubernetes.'
         },
         cv: {
             title: 'Nielsen COMBE--BRACCIALE — CV · Développeur IA et full-stack',
             description:
-                "CV de Nielsen COMBE--BRACCIALE, développeur IA et full-stack : assistants LLM locaux, RAG, applications web, Kubernetes, tests d'abord."
+                "CV de Nielsen COMBE--BRACCIALE, développeur IA et full-stack : agents IA locaux, RAG, applications web, Kubernetes, tests d'abord."
         },
         notFound: {
             title: 'Page introuvable — Nielsen COMBE--BRACCIALE',
@@ -214,7 +214,7 @@ export const fr = {
         hero: {
             role: 'Développeur IA et full-stack',
             summary:
-                "Des assistants IA, des applications web et leur déploiement, construits avec les tests d'abord, des agents de codage encadrés par des règles écrites et la CI sur chaque changement."
+                "Des agents IA, des applications web et leur déploiement, construits avec les tests d'abord, des agents de codage encadrés par des règles écrites et la CI sur chaque changement."
         },
         sections: {
             experience: 'Expérience',

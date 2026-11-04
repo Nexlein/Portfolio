@@ -275,8 +275,8 @@ export const CV_PROJECTS: CvProjectGroup[] = [
             {
                 id: 'sensai',
                 summary: {
-                    en: 'Local AI assistant on Ollama, built by a team of 4 without an LLM framework: RAG with cited sources, tools, memory; 1,406 tests in CI.',
-                    fr: 'Assistant IA local sur Ollama, construit en équipe de 4 sans framework LLM : RAG avec sources citées, outils, mémoire ; 1 406 tests en CI.'
+                    en: 'Local AI agent on Ollama, built by a team of 4 without an LLM framework: RAG with cited sources, tools, memory; 1,406 tests in CI.',
+                    fr: 'Agent IA local sur Ollama, construit en équipe de 4 sans framework LLM : RAG avec sources citées, outils, mémoire ; 1 406 tests en CI.'
                 },
                 tags: ['Python', 'LLM', 'RAG']
             },
