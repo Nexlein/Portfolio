@@ -98,19 +98,17 @@ export const fr = {
             }
         },
         domains: {
-            ai: 'IA &amp; RL',
+            ai: 'IA',
             fullstack: 'Full-stack',
             systems: 'Systèmes',
-            architecture: 'Architecture',
-            graphical: 'Graphisme &amp; simulations',
+            graphical: 'Rendu et jeux',
             devops: 'DevOps'
         },
         domainsShort: {
-            ai: 'IA &amp; RL',
+            ai: 'IA',
             fullstack: 'Full-stack',
             systems: 'Systèmes',
-            architecture: 'Architecture',
-            graphical: 'Graphisme',
+            graphical: 'Rendu et jeux',
             devops: 'DevOps'
         },
         path: {

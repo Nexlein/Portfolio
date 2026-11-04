@@ -8,7 +8,7 @@ import type { Text } from '../core/translate.ts';
  */
 
 /** Project domains, in the order the map buttons and the charts list them. */
-export const DOMAINS = ['ai', 'fullstack', 'systems', 'architecture', 'graphical', 'devops'] as const;
+export const DOMAINS = ['ai', 'fullstack', 'systems', 'graphical', 'devops'] as const;
 type ProjectCategory = (typeof DOMAINS)[number];
 
 interface ProjectMediaVideo {
@@ -295,7 +295,7 @@ export const PROJECTS: ProjectEntry[] = [
             fr: "Simulation d'une pizzeria multi-processus et multi-thread, pour explorer les architectures concurrentes, la communication inter-processus (IPC) et la synchronisation par mutex sous charge."
         },
         tags: ['C++', 'Concurrency', 'IPC'],
-        category: 'architecture',
+        category: 'systems',
         date: '2026-05',
         team: {
             size: 3,
@@ -366,7 +366,7 @@ export const PROJECTS: ProjectEntry[] = [
             fr: "Jeu en réseau multijoueur où des équipes d'IA autonomes s'affrontent. Un serveur et un client graphique en C/C++, et des clients IA autonomes en Python pilotés par des machines à états (FSM) et une IA à utilité."
         },
         tags: ['C/C++', 'Python', 'Network', 'FSM', 'Utility AI', 'Game Dev'],
-        category: 'architecture',
+        category: 'systems',
         date: '2026-05',
         team: {
             size: 5,
@@ -500,8 +500,8 @@ export const PROJECTS: ProjectEntry[] = [
             en: 'A logic gate simulator built in C++. Models digital electronic components (such as logic gates, clocks, and memory units) using pure Object-Oriented Programming principles.',
             fr: 'Un simulateur de circuits logiques codé en C++. Il modélise des composants électroniques numériques (portes logiques, horloges, mémoires) avec les principes de la programmation orientée objet (POO).'
         },
-        tags: ['C++', 'OOP', 'Simulation', 'Algorithms'],
-        category: 'architecture',
+        tags: ['C++', 'OOP', 'Simulation'],
+        category: 'systems',
         date: '2026-02',
         team: {
             size: 2,
@@ -604,7 +604,7 @@ export const PROJECTS: ProjectEntry[] = [
             fr: 'Ce site. TypeScript sans framework et Vite, chaque page pré-rendue en anglais et en français au build, une CSP stricte, et plus de 860 tests unitaires plus des tests navigateur Playwright sur ordinateur et mobile en CI. La carte des projets, les graphiques et le CV sont tous calculés à partir des deux mêmes fichiers de données.'
         },
         tags: ['TypeScript', 'Vite', 'Vitest', 'Playwright', 'CI/CD'],
-        category: 'architecture',
+        category: 'fullstack',
         year: 'Personal',
         date: '2026-07',
         team: {

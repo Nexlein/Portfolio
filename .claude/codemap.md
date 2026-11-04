@@ -161,10 +161,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (233)
+- **en.ts** (231)
   - exports: en
   - ← core/translate
-- **fr.ts** (233)
+- **fr.ts** (231)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -237,7 +237,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: ease, initGlide
   - → ui/motion
   - ← pages/home/home
-- **icons.ts** (21) — Inline SVG icons shared across components.
+- **icons.ts** (20) — Inline SVG icons shared across components.
   - exports: Icons, domainIcon
   - → data/projects
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
