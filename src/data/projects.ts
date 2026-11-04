@@ -8,7 +8,7 @@ import type { Text } from '../core/translate.ts';
  */
 
 /** Project domains, in the order the map buttons and the charts list them. */
-export const DOMAINS = ['ai', 'systems', 'architecture', 'graphical', 'devops'] as const;
+export const DOMAINS = ['ai', 'fullstack', 'systems', 'architecture', 'graphical', 'devops'] as const;
 type ProjectCategory = (typeof DOMAINS)[number];
 
 interface ProjectMediaVideo {
@@ -35,7 +35,7 @@ export interface ProjectEntry {
     description: Text;
     tags: string[];
     category: ProjectCategory;
-    year?: 'Tek1' | 'Tek2' | 'Personal';
+    year?: 'Tek1' | 'Tek2' | 'Tek3' | 'Personal';
     /** Month the project started, 'YYYY-MM'. Drives the path chart and "learned this year". */
     date: string;
     /** Shown in "Selected work" and always on the map. */

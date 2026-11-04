@@ -93,11 +93,13 @@ export const en = {
             periods: {
                 Tek1: 'tek 1 · 2024–25',
                 Tek2: 'tek 2 · 2025–26',
+                Tek3: 'tek 3 · 2026–27',
                 Personal: 'personal · 2026'
             }
         },
         domains: {
             ai: 'AI &amp; RL',
+            fullstack: 'Full-stack',
             systems: 'Systems',
             architecture: 'Architecture',
             graphical: 'Graphics &amp; sims',
@@ -105,6 +107,7 @@ export const en = {
         },
         domainsShort: {
             ai: 'AI &amp; RL',
+            fullstack: 'Full-stack',
             systems: 'Systems',
             architecture: 'Architecture',
             graphical: 'Graphics',

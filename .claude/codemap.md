@@ -34,7 +34,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: initPathChart, initPathStory, initNumbers
   - → ui/motion, ui/reveal, ui/svg-scale, components/Charts/series
   - ← pages/home/home
-- **data.ts** (254) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
+- **data.ts** (256) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
   - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, components/NeuralMap/graph, components/Charts/series
   - ← components/Charts/render, pages/home/blocks, pages/project/render
@@ -113,7 +113,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/lang, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
   - ← pages/home/home
-- **graph.ts** (209) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
+- **graph.ts** (207) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
   - exports: Period, periodOf, ORBIT, CARD, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
   - → data/projects
   - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
@@ -161,10 +161,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts
 
 ## src/i18n
-- **en.ts** (237)
+- **en.ts** (240)
   - exports: en
   - ← core/translate
-- **fr.ts** (237)
+- **fr.ts** (240)
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -237,7 +237,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: ease, initGlide
   - → ui/motion
   - ← pages/home/home
-- **icons.ts** (20) — Inline SVG icons shared across components.
+- **icons.ts** (21) — Inline SVG icons shared across components.
   - exports: Icons, domainIcon
   - → data/projects
   - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render

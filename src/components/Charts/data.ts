@@ -5,7 +5,7 @@
  */
 import { CHECKPOINTS, EXPERIENCES, type Checkpoint } from '../../data/profile.ts';
 import { DOMAINS, type ProjectEntry } from '../../data/projects.ts';
-import { periodOf, type Period } from '../NeuralMap/graph.ts';
+import { ORBIT, periodOf, type Period } from '../NeuralMap/graph.ts';
 import { schoolYear, valueAt } from './series.ts';
 
 export { valueAt, yDomain } from './series.ts';
@@ -179,7 +179,9 @@ export const learnedSince = (projects: ProjectEntry[], now: number) =>
 
 // ── Group counts ────────────────────────────────────────────────────────────
 
-const PERIODS: Period[] = ['Tek1', 'Tek2', 'Personal'];
+/** Oldest first: the map's orbits, which list the most recent period first. */
+const PERIODS: Period[] = [];
+for (const p of Object.keys(ORBIT) as Period[]) PERIODS.unshift(p);
 
 /** Periods present in the data, in time order. */
 export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => periodOf(p) === y));

@@ -77,7 +77,7 @@ Conventions:
 ## Adding a project
 
 1. Put the media in `public/projects/<id>/` (see Media).
-2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), and `featured: true` for the three on the home page.
+2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), its period (`year`: `Tek1`, `Tek2`, `Tek3` or `Personal`; without it a project counts as `Tek2`), and `featured: true` for the three on the home page.
 3. Run `npm run media:og` for its social image, and `npm run media:thumbs` if its still is an image.
 
 The map, the list, the charts, the counts, its page, the sitemap and the structured data follow.

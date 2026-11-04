@@ -4,10 +4,10 @@ import { CARD, fitFor, layout, mds, neighbours, periodOf, pickShown, similarity,
 
 /** `n` projects made from the real ones (same skills, other ids), as when the portfolio grows. */
 function grown(n: number): ProjectEntry[] {
-    const years = ['Tek1', 'Tek2', 'Personal'] as const;
+    const years = ['Tek1', 'Tek2', 'Tek3', 'Personal'] as const;
     return Array.from({ length: n }, (_, k) => {
         const p = PROJECTS[k % PROJECTS.length];
-        return k < PROJECTS.length ? p : { ...p, id: `${p.id}-${k}`, featured: undefined, year: years[k % 3] };
+        return k < PROJECTS.length ? p : { ...p, id: `${p.id}-${k}`, featured: undefined, year: years[k % 4] };
     });
 }
 
@@ -117,7 +117,7 @@ describe('pickShown', () => {
         expect(shown).toHaveLength(24);
         expect(hidden).toHaveLength(16);
         expect(shown.slice(0, 3).every((p) => p.featured)).toBe(true);
-        const order = ['Personal', 'Tek2', 'Tek1'];
+        const order = ['Tek3', 'Personal', 'Tek2', 'Tek1'];
         const rest = shown.slice(3).map((p) => order.indexOf(periodOf(p)));
         expect(rest).toEqual([...rest].sort((a, b) => a - b)); // eslint-disable-line -- test-only copy
     });
