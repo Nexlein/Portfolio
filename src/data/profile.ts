@@ -97,13 +97,13 @@ export const EXPERIENCES: Experience[] = [
         title: { en: 'Hackathons & Cybersecurity', fr: 'Hackathons et cybersécurité' },
         period: { en: '2025 - 2026', fr: '2025 - 2026' },
         summary: {
-            en: 'Two generative AI hackathons, with a special mention in 2025 for a quiz chatbot, and two Cycom cybersecurity events.',
-            fr: "Deux hackathons d'IA générative, avec une mention spéciale en 2025 pour un chatbot de quiz, et deux événements de cybersécurité Cycom."
+            en: 'Two generative AI hackathons, with an encouragement prize in 2025 for a quiz chatbot, and two Cycom cybersecurity events.',
+            fr: "Deux hackathons d'IA générative, avec un prix d'encouragement en 2025 pour un chatbot de quiz, et deux événements de cybersécurité Cycom."
         },
         highlights: [
             {
-                en: '2 generative AI hackathons: a code-review PR hook and a revision-quiz chatbot (special mention, 2025).',
-                fr: "2 hackathons d'IA générative : un hook de PR qui relit le code et un chatbot de révision par quiz (mention spéciale, 2025)."
+                en: '2 generative AI hackathons: a code-review PR hook and a revision-quiz chatbot (encouragement prize, 2025).',
+                fr: "2 hackathons d'IA générative : un hook de PR qui relit le code et un chatbot de révision par quiz (prix d'encouragement, 2025)."
             },
             {
                 en: '2 Cycom editions (2025, 2026): a hackathon building a security-scan tool, then a CTF.',

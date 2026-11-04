@@ -619,8 +619,8 @@ export const PROJECTS: ProjectEntry[] = [
             }
         },
         result: {
-            en: 'More than 850 unit tests, plus Playwright tests on desktop and mobile, run in CI on every change.',
-            fr: 'Plus de 850 tests unitaires, et des tests Playwright sur ordinateur et mobile, lancés en CI à chaque changement.'
+            en: 'More than 900 unit tests, plus Playwright tests on desktop and mobile, run in CI on every change.',
+            fr: 'Plus de 900 tests unitaires, et des tests Playwright sur ordinateur et mobile, lancés en CI à chaque changement.'
         },
         github: 'https://github.com/Nexlein/Portfolio',
         media: {
