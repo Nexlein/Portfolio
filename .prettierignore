@@ -1,2 +1,5 @@
 # Generated (npm run codemap)
 .claude/codemap.md
+
+# Google Search Console checks this file byte for byte
+public/google*.html
