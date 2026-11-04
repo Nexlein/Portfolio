@@ -191,7 +191,7 @@ export const en = {
         team: 'Team',
         solo: 'Solo',
         people: '{n} people',
-        role: 'My part',
+        role: 'My role',
         result: 'Result',
         related1: 'Connected projects.',
         related2: 'Where the skills lead next.',
