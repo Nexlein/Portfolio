@@ -94,8 +94,7 @@ jobs:
         name: Browser tests
         needs: check
         runs-on: ubuntu-latest
-        # The tests take about 8 minutes; the browsers' 139 MB of apt packages take 8 s to 15 minutes, by mirror load
-        timeout-minutes: 30
+        timeout-minutes: 15
         steps:
             - uses: actions/checkout@v7
 
@@ -113,6 +112,13 @@ jobs:
               with:
                   name: dist
                   path: dist
+
+            # The runners' default apt mirror can drop to a trickle: 139 MB took 8 s one day, over 30 minutes the next.
+            # The grep fails the job if a new image moves that address and the sed stops working.
+            - name: Use the main Ubuntu mirror
+              run: |
+                  sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|' /etc/apt/apt-mirrors.txt
+                  ! grep -rsq 'azure\.archive\.ubuntu\.com' /etc/apt
 
             - name: Install browsers
               run: npx playwright install --with-deps chromium firefox webkit
