@@ -118,14 +118,14 @@ export const EDUCATION: Education[] = [
     {
         id: 'epitech',
         title: {
-            en: "Information Technology Expert (Master's level)",
-            fr: "Expert en technologies de l'information (bac+5)"
+            en: "Software Engineering Expert (Master's level)",
+            fr: 'Expert en ingénierie logicielle (bac+5)'
         },
         cvTitle: { en: 'Epitech', fr: 'Epitech' },
         period: { en: 'Expected 2029', fr: 'Prévu pour 2029' },
         summary: {
-            en: 'Five-year software engineering program, taught through projects.',
-            fr: "Cursus de 5 ans en ingénierie logicielle, où l'on apprend par projets."
+            en: 'Five-year program, taught through projects.',
+            fr: "Cursus de 5 ans, où l'on apprend par projets."
         },
         cvSummary: {
             en: "Master's-level title (bac+5, RNCP level 7), taught through projects.",
