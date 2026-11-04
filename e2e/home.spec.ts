@@ -205,6 +205,8 @@ test.describe('project list', () => {
         await page.locator('.work-view [data-view="list"]').click();
         await expect(page.locator('.nm')).toBeHidden();
         await expect(rows(page)).toHaveCount(6);
+        // Linux WebKit can keep moving by 1px after restoring the scroll, which Playwright reads as "not stable"
+        await page.evaluate(() => (history.scrollRestoration = 'manual'));
         await page.reload();
         await page.locator('#work').scrollIntoViewIfNeeded();
         await expect(page.locator('.work-view [data-view="list"]')).toHaveAttribute('aria-pressed', 'true');
