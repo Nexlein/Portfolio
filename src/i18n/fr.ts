@@ -89,7 +89,7 @@ export const fr = {
             showLess: 'Voir moins',
             now: 'En ce moment',
             open: 'Voir le projet',
-            similar: '{s} de proximité',
+            similar: '{s} % en commun',
             periods: {
                 Tek1: '1re année · 2024-25',
                 Tek2: '2e année · 2025-26',

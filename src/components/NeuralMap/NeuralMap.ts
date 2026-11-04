@@ -17,7 +17,19 @@ import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { stillAttrs } from '@/ui/video';
-import { fitFor, layout, neighbours, ORBIT, periodOf, pickShown, similarity, type Period, type Star } from './graph';
+import {
+    CARD,
+    fitFor,
+    layout,
+    neighbours,
+    NOW_BOX,
+    ORBIT,
+    periodOf,
+    pickShown,
+    similarity,
+    type Period,
+    type Star
+} from './graph';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const OPEN_W = 330;
@@ -249,28 +261,37 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             timer: 0
         }));
 
-        // Period layers: a dotted ellipse each, labelled in its widest gap
+        // Period layers: a dotted ellipse each, labelled in its widest gap that no card (of any layer) covers
         (Object.keys(ORBIT) as Period[]).forEach((period, ring) => {
             const r = ORBIT[period];
             const own = cards.filter((c) => periodOf(c.star.p) === period);
             const ang = own.map((c) => Math.atan2((c.y - cy) / fit.ry, (c.x - cx) / fit.rx));
-            let best = { gap: -1, mid: -Math.PI / 2 };
+            const text = svg('text', 'nm-layer-label', labelsG);
+            text.textContent = i18n.t(`home.work.periods.${period}`);
+            const tw = text.getBBox().width + 16,
+                th = 20;
+            const clear = (x: number, y: number) =>
+                cards.every((c) => Math.abs(c.x - x) >= (CARD.w + tw) / 2 || Math.abs(c.y - y) >= (CARD.h + th) / 2) &&
+                (Math.abs(x - cx) >= (NOW_BOX.w + tw) / 2 || Math.abs(y - cy) >= (NOW_BOX.h + th) / 2);
+            let best = { gap: -1, mid: -Math.PI / 2 },
+                fallback = best;
             for (let k = 0; k < 48; k++) {
                 const a = -Math.PI + (k / 48) * Math.PI * 2;
                 const gap = Math.min(
                     ...ang.map((b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)))),
                     Math.PI
                 );
-                if (gap > best.gap) best = { gap, mid: a };
+                if (gap > fallback.gap) fallback = { gap, mid: a };
+                if (gap > best.gap && clear(cx + Math.cos(a) * fit.rx * r, cy + Math.sin(a) * fit.ry * r))
+                    best = { gap, mid: a };
             }
+            if (best.gap < 0) best = fallback;
             const e = svg('ellipse', 'nm-layer', layersG);
             e.setAttribute('cx', f1(cx));
             e.setAttribute('cy', f1(cy));
             e.setAttribute('rx', f1(fit.rx * r));
             e.setAttribute('ry', f1(fit.ry * r));
             e.style.setProperty('--d', `${100 + ring * 300}ms`);
-            const text = svg('text', 'nm-layer-label', labelsG);
-            text.textContent = i18n.t(`home.work.periods.${period}`);
             text.setAttribute('x', f1(cx + Math.cos(best.mid) * fit.rx * r));
             text.setAttribute('y', f1(cy + Math.sin(best.mid) * fit.ry * r + 3.5));
             const box = text.getBBox(),
@@ -648,7 +669,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             for (const n of [sy.path, sy.pa, sy.pb]) n.classList.toggle('hot', on);
             const other = (sy.a === c ? sy.b : sy.a).el;
             other.classList.toggle('near', on);
-            if (on) other.dataset.score = i18n.t('home.work.similar').replace('{s}', sy.s.toFixed(2));
+            if (on) other.dataset.score = i18n.t('home.work.similar').replace('{s}', String(Math.round(sy.s * 100)));
             else delete other.dataset.score;
         }
     };

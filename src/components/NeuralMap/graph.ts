@@ -18,8 +18,8 @@ export const ORBIT: Record<Period, number> = { Tek3: 0.4, Personal: 0.58, Tek2: 
 export const CARD = { w: 190, h: 52, gap: 22 };
 
 /** The "Now" block in the middle of the board (px): its width is `.nm-now` in NeuralMap.css; the French text is the
- * tallest (138px measured, 6 lines), the height leaves room for one more. */
-export const NOW_BOX = { w: 300, h: 150 };
+ * tallest (156px measured, 7 lines), the height leaves a little room. */
+export const NOW_BOX = { w: 300, h: 170 };
 
 const RL = new Set(['rl', 'gymnasium', 'stable-baselines3']);
 

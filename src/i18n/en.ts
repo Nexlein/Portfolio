@@ -89,7 +89,7 @@ export const en = {
             showLess: 'Show less',
             now: 'Now',
             open: 'Open project',
-            similar: '{s} similar',
+            similar: '{s}% overlap',
             periods: {
                 Tek1: 'year 1 · 2024-25',
                 Tek2: 'year 2 · 2025-26',
