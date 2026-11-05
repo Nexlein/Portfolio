@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
     group: ci-${{ github.ref }}
-    cancel-in-progress: true
+    cancel-in-progress: ${{ github.ref != 'refs/heads/main' }} # a run on main may be publishing the CV
 
 jobs:
     check:

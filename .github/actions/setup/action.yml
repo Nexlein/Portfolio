@@ -1,10 +1,12 @@
 name: Set up
-description: Node and the tools from mise.toml, same as local, and the dependencies
+description: Node from mise.toml, same as local, and the dependencies
 
 runs:
     using: composite
     steps:
         - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+          with:
+              install_args: node # the rest of mise.toml is for local hooks
 
         - uses: actions/cache@v6
           with:
