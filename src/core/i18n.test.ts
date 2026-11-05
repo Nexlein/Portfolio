@@ -30,6 +30,11 @@ describe('i18n service', () => {
         expect(i18n.t('home.contact.copied')).toBe(fr.home.contact.copied);
     });
 
+    it('fills the slots of a text', async () => {
+        const strings = JSON.stringify({ home: { work: { showMore: 'Show {n} more' } } });
+        expect((await loadOnPage('en', strings)).i18n.t('home.work.showMore', { n: 6 })).toBe('Show 6 more');
+    });
+
     it('shows the key when the page carries no strings, or broken ones', async () => {
         expect((await loadOnPage('fr')).i18n.t('home.contact.copied')).toBe('home.contact.copied');
         expect((await loadOnPage('fr', '{oops')).i18n.t('home.contact.copied')).toBe('home.contact.copied');

@@ -669,7 +669,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             for (const n of [sy.path, sy.pa, sy.pb]) n.classList.toggle('hot', on);
             const other = (sy.a === c ? sy.b : sy.a).el;
             other.classList.toggle('near', on);
-            if (on) other.dataset.score = i18n.t('home.work.similar').replace('{s}', String(Math.round(sy.s * 100)));
+            if (on) other.dataset.score = i18n.t('home.work.similar', { s: Math.round(sy.s * 100) });
             else delete other.dataset.score;
         }
     };

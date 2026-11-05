@@ -35,6 +35,12 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
             }
         });
 
+        it('leaves no {slot} unfilled in what visitors read', () => {
+            const body = doc.body.cloneNode(true) as HTMLElement;
+            body.querySelectorAll('script, template').forEach((el) => el.remove());
+            expect(body.textContent).not.toMatch(/\{\w+\}/);
+        });
+
         it('has a localized title, a real description and matching social tags', () => {
             expect(doc.title).toBe(page.title(lang));
             const description = meta(doc, 'name', 'description')!;

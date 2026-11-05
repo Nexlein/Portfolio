@@ -66,9 +66,7 @@ function initWork(): void {
         const left = rowsIn.length - shown;
         more.hidden = rowsIn.length <= LIST_PAGE;
         moreBtn.textContent =
-            left > 0
-                ? i18n.t('home.work.showMore').replace('{n}', String(Math.min(LIST_PAGE, left)))
-                : i18n.t('home.work.showLess');
+            left > 0 ? i18n.t('home.work.showMore', { n: Math.min(LIST_PAGE, left) }) : i18n.t('home.work.showLess');
     };
     moreBtn.addEventListener('click', () => {
         const left = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain).length - shown;

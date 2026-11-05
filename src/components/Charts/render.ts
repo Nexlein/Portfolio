@@ -6,6 +6,7 @@
  */
 import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
+import type { Slots } from '../../core/lang.ts';
 import { lookup, type Lang } from '../../core/translate.ts';
 import { periodOf } from '../NeuralMap/graph.ts';
 import {
@@ -37,7 +38,7 @@ import {
 import { monthLabel, PATH, pathSamples, type PathData } from './series.ts';
 
 const f1 = (n: number) => n.toFixed(1);
-const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
+const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`, slots);
 const MONTHS: Record<Lang, string[]> = {
     en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     fr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
@@ -64,10 +65,10 @@ export function changeText(
     const { delta, pct } = changeSince(points, t0);
     const over =
         range.months === null
-            ? t(lang, 'path.since').replace('{d}', monthName(points[0].t + 2 / 12, lang)) // the first step is two months in
+            ? t(lang, 'path.since', { d: monthName(points[0].t + 2 / 12, lang) }) // the first step is two months in
             : range.months === 1
               ? t(lang, 'path.over1')
-              : t(lang, 'path.over').replace('{n}', String(range.months));
+              : t(lang, 'path.over', { n: range.months });
     const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${pct} %)`}`;
     return { text, over, up: delta > 0 };
 }
@@ -134,7 +135,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
             return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text class="${anchor.trim()}" x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
         })
         .join('');
-    return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">
+    return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria', { n: total })}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
 <g class="grid">${ticks.map((v, i) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text${ticks.length > 3 && i % 2 ? ' class="value-minor"' : ''} x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}${narrow.has(tk) ? '' : ' wide'}${x(tk.t) < L + 40 ? ' first' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
@@ -149,7 +150,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
 /** What a step is, in words: a checkpoint's name, "<project> started", or nothing (the start and end points). */
 function whatOf(lang: Lang, p: Point): string {
     if (p.m?.checkpoint) return p.m.checkpoint.label[lang];
-    return p.m?.project ? t(lang, 'path.shipped').replace('{p}', p.m.project.title) : '';
+    return p.m?.project ? t(lang, 'path.shipped', { p: p.m.project.title }) : '';
 }
 
 /**
@@ -196,12 +197,10 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
 
 // ── Numbers: small charts ───────────────────────────────────────
 
-const label = (lang: Lang, key: string, set = 'domains') => {
-    if (key === OTHER) return t(lang, 'numbers.other');
-    if (key === INFRA) return t(lang, 'numbers.infra');
-    const domain = lookup(lang, `home.${set}.${key}`);
-    return domain.startsWith('home.') ? key : domain;
-};
+/** A chart's groups that are neither a domain nor a language. */
+const groupName = (lang: Lang, key: string) =>
+    key === OTHER ? t(lang, 'numbers.other') : key === INFRA ? t(lang, 'numbers.infra') : null;
+const domainLabel = (lang: Lang, key: string, set = 'domains') => groupName(lang, key) ?? t(lang, `${set}.${key}`);
 const period = (lang: Lang, y: string) => t(lang, `work.periods.${y}`).split(' · ')[0];
 
 function radar(lang: Lang, projects: ProjectEntry[]): string {
@@ -218,7 +217,7 @@ function radar(lang: Lang, projects: ProjectEntry[]): string {
             .map((_, i) => at(i, r(i)))
             .map(([px, py]) => `${f1(px)},${f1(py)}`)
             .join(' ');
-    return `<svg class="radar" viewBox="-100 10 460 240" role="img" aria-label="${keys.map((k, i) => `${label(lang, k)} ${counts[i]}`).join(', ')}">
+    return `<svg class="radar" viewBox="-100 10 460 240" role="img" aria-label="${keys.map((k, i) => `${domainLabel(lang, k)} ${counts[i]}`).join(', ')}">
 ${[0.25, 0.5, 0.75, 1].map((k) => `<polygon class="ring" points="${poly(() => Rr * k)}" />`).join('')}
 ${keys.map((_, i) => `<line class="spoke" x1="${C}" y1="${C}" x2="${f1(at(i, Rr)[0])}" y2="${f1(at(i, Rr)[1])}" />`).join('')}
 <polygon class="shape" points="${poly((i) => (Rr * counts[i]) / max)}" />
@@ -227,7 +226,7 @@ ${keys
         const [px, py] = at(i, (Rr * counts[i]) / max);
         const [lx, ly] = at(i, Rr + 18);
         const anchor = lx < C - 10 ? 'end' : lx > C + 10 ? 'start' : 'middle';
-        return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3" /><text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${anchor}">${label(lang, k, 'domainsShort')} · ${counts[i]}</text>`;
+        return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3" /><text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${anchor}">${domainLabel(lang, k, 'domainsShort')} · ${counts[i]}</text>`;
     })
     .join('')}</svg>`;
 }
@@ -267,7 +266,7 @@ function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
         col = (W - 60) / pers.length,
         bw = Math.min(54, col - 20),
         base = H - 28;
-    const name = (k: string) => label(lang, k);
+    const name = (k: string) => groupName(lang, k) ?? k;
     const bars = data
         .map((row, i) => {
             let acc = 0;
@@ -351,10 +350,10 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
                 .map((y, c) => {
                     const n = grid[r][c];
                     const x0 = left + c * cw;
-                    return `<rect class="cell${n ? '' : ' empty'}" x="${f1(x0 + 2)}" y="${f1(y0 + 2)}" width="${f1(cw - 4)}" height="${f1(ch - 4)}" rx="4"${n ? ` fill-opacity="${(0.18 + 0.82 * (n / max)).toFixed(2)}"` : ''}><title>${label(lang, d, 'domainsShort')} · ${period(lang, y)}: ${n}</title></rect>${n ? `<text class="n" x="${f1(x0 + cw / 2)}" y="${f1(y0 + ch / 2 + 3.5)}">${n}</text>` : ''}`;
+                    return `<rect class="cell${n ? '' : ' empty'}" x="${f1(x0 + 2)}" y="${f1(y0 + 2)}" width="${f1(cw - 4)}" height="${f1(ch - 4)}" rx="4"${n ? ` fill-opacity="${(0.18 + 0.82 * (n / max)).toFixed(2)}"` : ''}><title>${domainLabel(lang, d, 'domainsShort')} · ${period(lang, y)}: ${n}</title></rect>${n ? `<text class="n" x="${f1(x0 + cw / 2)}" y="${f1(y0 + ch / 2 + 3.5)}">${n}</text>` : ''}`;
                 })
                 .join('');
-            return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${label(lang, d, 'domainsShort')}</text>${row}</g>`;
+            return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${domainLabel(lang, d, 'domainsShort')}</text>${row}</g>`;
         })
         .join('');
     const cols = pers.map((y, c) => columnLabel(period(lang, y), left + c * cw + cw / 2, H)).join('');
@@ -376,14 +375,14 @@ export function numbers(lang: Lang, projects: ProjectEntry[], now: number): stri
         recent = learnedSince(projects, now).length,
         series = skillSeries(projects, now),
         total = series[series.length - 1].v;
-    const n = (key: string, value: number) => t(lang, `numbers.${key}`).replace('{n}', count(value));
+    const n = (key: string, value: number) => t(lang, `numbers.${key}`, { n: count(value) });
     const cards = [
         chartCard(t(lang, 'numbers.coverage'), n('domains', domains), radar(lang, projects)),
         chartCard(t(lang, 'numbers.languages'), t(lang, 'numbers.languagesTitle'), stackedLanguages(lang, projects)),
         chartCard(
             t(lang, 'numbers.mostUsed'),
             // Projects alone, then with what jobs and certifications add: the path chart's headline number
-            n('distinct', distinctSkills(projects)).replace('{t}', count(total)),
+            t(lang, 'numbers.distinct', { n: count(distinctSkills(projects)), t: count(total) }),
             topSkillBars(projects)
         ),
         chartCard(t(lang, 'numbers.heat'), t(lang, 'numbers.heatTitle'), heatmap(lang, projects)),

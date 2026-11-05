@@ -5,15 +5,17 @@
  */
 import { en } from '../i18n/en.ts';
 import { fr } from '../i18n/fr.ts';
-import { lookupIn, type Lang } from './lang.ts';
+import { fill, lookupIn, type Lang, type Slots } from './lang.ts';
 
 export { DEFAULT_LANG, LANGS, langOfPath, localizedPath, type Lang, type Text } from './lang.ts';
 
 const dictionaries: Record<Lang, typeof en> = { en, fr };
 
-/** Look up a dotted key ('projectPage.back'); falls back to the key itself so gaps are visible. */
-export function lookup(lang: Lang, key: string): string {
-    return lookupIn(dictionaries[lang], key);
+/** Look up a dotted key ('projectPage.back') and fill its {slots}. A missing key stops the build: no visitor reads one. */
+export function lookup(lang: Lang, key: string, slots: Slots = {}): string {
+    const text = lookupIn(dictionaries[lang], key);
+    if (text === key) throw new Error(`No ${lang} text for "${key}"`);
+    return fill(text, slots);
 }
 
 /**

@@ -6,6 +6,7 @@
 import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, type Checkpoint } from '../../data/profile.ts';
 import { DOMAINS, PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
+import type { Slots } from '../../core/lang.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
 import { stillAttrs } from '../../ui/video.ts';
@@ -15,7 +16,7 @@ import { firstSentence } from '../../core/text.ts';
 import { pickShown } from '../../components/NeuralMap/graph.ts';
 import { MAP_MAX } from '../../components/NeuralMap/limits.ts';
 
-const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
+const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`, slots);
 
 /** First sentence of the description. */
 const oneLiner = (p: ProjectEntry, lang: Lang) => firstSentence(p.description[lang]);
@@ -38,7 +39,7 @@ export function featured(lang: Lang): string {
 
 /** "17 projects. / One network." as two masked lines. */
 export function workTitle(lang: Lang): string {
-    return `<span class="line"><span>${t(lang, 'work.title1').replace('{n}', String(PROJECTS.length))}</span></span><span class="line"><span class="recede">${t(lang, 'work.title2')}</span></span>`;
+    return `<span class="line"><span>${t(lang, 'work.title1', { n: PROJECTS.length })}</span></span><span class="line"><span class="recede">${t(lang, 'work.title2')}</span></span>`;
 }
 
 /** One button per domain present in the data, in a stable order. */
@@ -63,7 +64,7 @@ export function projectList(lang: Lang): string {
 export function mapMore(lang: Lang): string {
     const { shown } = pickShown(PROJECTS, MAP_MAX);
     if (shown.length === PROJECTS.length) return '';
-    return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all">${t(lang, 'work.seeAll')}</button>`;
+    return `${t(lang, 'work.more', { shown: shown.length, n: PROJECTS.length })} <button type="button" class="see-all">${t(lang, 'work.seeAll')}</button>`;
 }
 
 /**
