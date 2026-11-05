@@ -24,7 +24,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **codemap.ts** (114) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
 - **cv-pdf.ts** (59) — Render the CV page to PDF in every language, from the production build (run `vite build` first).
   - exports: PDFS
-- **make-thumbs.ts** (37) — Card-sized copies of every project still that is an image: public/projects/<id>/<name>.webp -> <name>.320.webp and <name>.640.webp.
+- **media.ts** (44) — Everything generated from a project's media, each step needing the one before: a poster per video, card-sized copies of a still that is a...
   - → data/projects, ui/video
 
 ## src/components/Charts
@@ -165,7 +165,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **projects.ts** (672) — Single source of truth for all portfolio projects.
   - exports: DOMAINS, PERIODS, Period, ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
-  - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/icons, ui/video, vite-plugins/pages
+  - ← scripts/media, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/icons, ui/video, vite-plugins/pages
 - **skills.ts** (30) — Skills from free-form tags: the one rule behind the map's similarity, the charts' counts and a project page's "Shares...".
   - exports: skillsOfTag, skillsOf, skillNames
   - ← components/Charts/data, components/NeuralMap/graph, pages/project/render
@@ -266,7 +266,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **video.ts** (87) — MIME type for a project video, from its extension.
   - exports: videoType, videoPoster, THUMB_WIDTHS, thumbOf, stillImage, still, stillAttrs, playVideosWhenVisible
   - → data/projects, ui/motion
-  - ← scripts/make-thumbs, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
+  - ← scripts/media, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
 - tests: boot.test.ts, glide.test.ts, video.dom.test.ts, video.test.ts
 
 ## src

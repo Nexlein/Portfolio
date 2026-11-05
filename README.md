@@ -29,23 +29,21 @@ npm run dev
 
 ## Scripts
 
-| Script                  | Description                                                      |
-| ----------------------- | ---------------------------------------------------------------- |
-| `npm run dev`           | Start the Vite dev server                                        |
-| `npm run build`         | Typecheck and build to `dist/`                                   |
-| `npm run preview`       | Serve the production build locally                               |
-| `npm run typecheck`     | Run `tsc --noEmit`                                               |
-| `npm test`              | Run Vitest                                                       |
-| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                             |
-| `npm run lint:fix`      | Lint and autofix                                                 |
-| `npm run media:posters` | Generate missing video posters (ffmpeg)                          |
-| `npm run media:thumbs`  | Generate missing card-sized copies of project images (ffmpeg)    |
-| `npm run media:og`      | Generate missing per-project social images (ffmpeg)              |
-| `npm run media:brand`   | Redraw the home social image and the icons (Chromium, no ffmpeg) |
-| `npm run media:video`   | Re-encode a video for the web (ffmpeg)                           |
-| `npm run audit`         | Dependency audit (`config/audit-ci.jsonc`)                       |
-| `npm run format`        | Format all files with Prettier                                   |
-| `npm run format:check`  | Check formatting without writing                                 |
+| Script                 | Description                                                      |
+| ---------------------- | ---------------------------------------------------------------- |
+| `npm run dev`          | Start the Vite dev server                                        |
+| `npm run build`        | Typecheck and build to `dist/`                                   |
+| `npm run preview`      | Serve the production build locally                               |
+| `npm run typecheck`    | Run `tsc --noEmit`                                               |
+| `npm test`             | Run Vitest                                                       |
+| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint)                             |
+| `npm run lint:fix`     | Lint and autofix                                                 |
+| `npm run media`        | Generate missing posters, card copies and social images (ffmpeg) |
+| `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg) |
+| `npm run media:video`  | Re-encode a video for the web (ffmpeg)                           |
+| `npm run audit`        | Dependency audit (`config/audit-ci.jsonc`)                       |
+| `npm run format`       | Format all files with Prettier                                   |
+| `npm run format:check` | Check formatting without writing                                 |
 
 ## Project structure
 
@@ -78,7 +76,7 @@ Conventions:
 
 1. Put the media in `public/projects/<id>/` (see Media).
 2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), its period (`year`: `Tek1`, `Tek2`, `Tek3` or `Personal`), and `featured: true` for the three on the home page.
-3. Run `npm run media:og` for its social image, and `npm run media:thumbs` if its still is an image.
+3. Run `npm run media` for its poster, card copies and social image.
 
 The map, the list, the charts, the counts, its page, the sitemap and the structured data follow.
 
@@ -109,7 +107,7 @@ The path chart opens on Max; its buttons (1M, 6M, 1Y, Max, in `RANGES` in `src/c
 
 ## Project pages
 
-Every project in `src/data/projects.ts` gets its own page, `/projects/<id>.html` and `/fr/projects/<id>.html`, rendered at build time from `project.html` (`src/pages/project/render.ts`): media, specs, and the three projects the map links it to. Adding a project adds its page, sitemap entry and structured data automatically; it only needs a social image: run `npm run media:og` (creates `public/projects/<id>/og.jpg`, 1200×630).
+Every project in `src/data/projects.ts` gets its own page, `/projects/<id>.html` and `/fr/projects/<id>.html`, rendered at build time from `project.html` (`src/pages/project/render.ts`): media, specs, and the three projects the map links it to. Adding a project adds its page, sitemap entry and structured data automatically; it only needs a social image: `npm run media` creates `public/projects/<id>/og.jpg`, 1200×630.
 
 All pages come from one list in `vite-plugins/pages.ts` (`PAGES`): path, template, title, description, social image and JSON-LD per page, rendered in every language. `sitemap.xml` is generated from the same list.
 
@@ -138,8 +136,8 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 
 - **Images**: WebP, at most 1200px on the long side (`ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_ratio=decrease" -quality 80 out.webp`).
 - **Videos**: H.264 MP4 without audio, at most 960px wide, `faststart`. Run `npm run media:video -- public/projects/<id>/<name>.mp4` to re-encode in place.
-- **Posters**: every video needs `<name>.poster.webp`. Run `npm run media:posters` to generate missing ones.
-- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `media:thumbs -- --force` would replace them with plain downscales.
+- **Posters**: every video needs `<name>.poster.webp`. `npm run media` generates missing ones.
+- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. `npm run media` generates missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `npm run media -- --force=thumbs` would replace them with plain downscales.
 
 - **QR codes**: the CV prints `public/qrcode.svg` (home) or `public/qrcode-fr.svg` (French home). To redo one: `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`, then keep the files' style (a white square under one black path).
 

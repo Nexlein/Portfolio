@@ -43,11 +43,11 @@ describe('PROJECTS data', () => {
             }
         });
 
-        it.each(posterPaths(project))('poster %s exists (npm run media:posters)', (src) => {
+        it.each(posterPaths(project))('poster %s exists (npm run media)', (src) => {
             expect(publicFiles).toContain(src);
         });
 
-        it('has the card-sized copies its cards show (npm run media:thumbs)', () => {
+        it('has the card-sized copies its cards show (npm run media)', () => {
             const image = stillImage(project);
             const copies = image ? THUMB_WIDTHS.map((w) => thumbOf(image, w)) : [still(project)];
             for (const src of copies) expect(publicFiles).toContain(src);
