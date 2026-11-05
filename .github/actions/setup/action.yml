@@ -1,0 +1,15 @@
+name: Set up
+description: Node and the tools from mise.toml, same as local, and the dependencies
+
+runs:
+    using: composite
+    steps:
+        - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+
+        - uses: actions/cache@v6
+          with:
+              path: ~/.npm
+              key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+        - run: npm ci
+          shell: bash

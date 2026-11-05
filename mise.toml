@@ -1,3 +1,5 @@
 [tools]
 # Same Node locally and in CI (jdx/mise-action)
 node = "24"
+# The pre-commit hook's secret scan (.husky/no-secrets.sh)
+gitleaks = "8"

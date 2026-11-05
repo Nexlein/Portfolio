@@ -20,15 +20,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - name: Audit
               run: npm run audit
@@ -67,15 +59,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - uses: actions/download-artifact@v8
               with:
@@ -98,15 +82,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - uses: actions/download-artifact@v8
               with:
@@ -142,15 +118,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - uses: actions/download-artifact@v8
               with:

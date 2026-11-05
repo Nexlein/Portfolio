@@ -36,6 +36,10 @@ npm run dev
 | `npm run preview`      | Serve the production build locally                               |
 | `npm run typecheck`    | Run `tsc --noEmit`                                               |
 | `npm test`             | Run Vitest                                                       |
+| `npm run test:e2e`     | Build, then run Playwright (see Browser tests)                   |
+| `npm run cv:pdf`       | Render the CV to PDF, after a build                              |
+| `npm run codemap`      | Refresh `.claude/codemap.md` (the pre-commit hook does too)      |
+| `npm run knip`         | Find dead code                                                   |
 | `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint)                             |
 | `npm run lint:fix`     | Lint and autofix                                                 |
 | `npm run media`        | Generate missing posters, card copies and social images (ffmpeg) |
@@ -82,7 +86,7 @@ The map, the list, the charts, the counts, its page, the sitemap and the structu
 
 ### Browser tests
 
-Playwright (`e2e/`) runs desktop and mobile Chromium against the production build, served by `vite preview` with the production headers. Scenarios: every page loads with its fonts and no console errors, CSP violations or third-party requests; content without JavaScript; the project map (hover, click, domains) and the phone list; hero switch; path chart and numbers cards; copy email; themes; the EN/FR switch and first visit from a French browser; reduced motion; project pages (video, gallery, connected projects, back link); the CV PDF link. Any console error fails the test.
+Playwright (`e2e/`) runs desktop and mobile Chromium, plus Firefox and WebKit in CI, against the production build, served by `vite preview` with the production headers. Scenarios: every page loads with its fonts and no console errors, CSP violations or third-party requests; content without JavaScript; the project map (hover, click, domains) and the phone list; hero switch; path chart and numbers cards; copy email; themes; the EN/FR switch and first visit from a French browser; reduced motion; project pages (video, gallery, connected projects, back link); the CV PDF link. Any console error fails the test.
 
 ## Languages (EN / FR)
 
@@ -165,11 +169,11 @@ Because of the CSP:
 
 ## Quality checks
 
-- **Pre-commit** (Husky + lint-staged): Oxlint/Stylelint autofix and Prettier on staged files, then typecheck and tests.
-- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build; then browser tests and Lighthouse on the built site.
+- **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, then typecheck, tests and the code map.
+- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: `npm audit` fails on high/critical advisories.
-- **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
+- **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
 - **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.

@@ -8,8 +8,7 @@ import { dirname, join, normalize, relative } from 'node:path';
 const OUT = '.claude/codemap.md';
 const files = execFileSync('git', ['ls-files', '-co', '--exclude-standard'], { encoding: 'utf8' })
     .split('\n')
-    .filter((f) => /^(src|vite-plugins|scripts|e2e)\/.*\.(ts|mjs|css)$|^[^/]+\.html$/.test(f))
-    .filter((f) => !f.startsWith('src/prototype'))
+    .filter((f) => /^(src|vite-plugins|scripts|e2e)\/.*\.(ts|css)$|^[^/]+\.html$/.test(f))
     .toSorted();
 const known = new Set(files);
 
