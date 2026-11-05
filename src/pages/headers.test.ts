@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import vercel from '../../vercel.json';
 import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
+import { PROJECTS } from '../data/projects';
 
 const siteHeaders = Object.fromEntries(
     vercel.headers.find((rule) => rule.source === '/(.*)')!.headers.map((h) => [h.key, h.value])
@@ -54,8 +55,16 @@ describe('HTML pages', () => {
     it.each(Object.keys(pages))('%s has no inline style attributes or inline scripts (CSP blocks them)', (file) => {
         const html = pages[file];
         expect(html).not.toMatch(/\sstyle="/);
-        expect(html).not.toMatch(/<script>(?!<\/script>)/);
+        expect(html).not.toMatch(/<script(?![^>]*\ssrc=)[^>]*>/);
         expect(html).not.toMatch(/\son[a-z]+="/); // inline event handlers
+    });
+});
+
+describe('retired project pages', () => {
+    it('redirect no project that still exists', () => {
+        const retired = vercel.redirects.flatMap((r) => /:id\(([^)]+)\)/.exec(r.source)?.[1].split('|') ?? []);
+        expect(retired.length).toBeGreaterThan(0);
+        for (const { id } of PROJECTS) expect(retired).not.toContain(id);
     });
 });
 

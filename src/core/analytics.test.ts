@@ -18,7 +18,7 @@ describe('initAnalytics', () => {
     });
 
     it('is off outside Vercel builds (tests, local and CI builds)', () => {
-        initAnalytics();
+        initAnalytics(false);
         expect(scripts()).toHaveLength(0);
     });
 

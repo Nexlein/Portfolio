@@ -36,15 +36,16 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
         });
 
         it('leaves no {slot} unfilled in what visitors read', () => {
-            const body = doc.body.cloneNode(true) as HTMLElement;
-            body.querySelectorAll('script, template').forEach((el) => el.remove());
-            expect(body.textContent).not.toMatch(/\{\w+\}/);
+            const html = doc.documentElement.cloneNode(true) as HTMLElement;
+            html.querySelectorAll('script, template').forEach((el) => el.remove());
+            expect(html.outerHTML).not.toMatch(/\{\w+\}/);
         });
 
         it('has a localized title, a real description and matching social tags', () => {
             expect(doc.title).toBe(page.title(lang));
             const description = meta(doc, 'name', 'description')!;
             expect(description.length).toBeGreaterThan(50);
+            expect(description.length).toBeLessThanOrEqual(160); // what a search result shows
             expect(description).toBe(page.description(lang));
             expect(meta(doc, 'property', 'og:title')).toBe(doc.title);
             expect(meta(doc, 'property', 'og:description')).toBe(description);

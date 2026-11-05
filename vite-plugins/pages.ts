@@ -4,7 +4,7 @@ import { Window } from 'happy-dom';
 import type { Plugin } from 'vite';
 import { PROJECTS, projectImage, projectPath } from '../src/data/projects.ts';
 import { OWNER, SITE } from '../src/core/site.ts';
-import { jsonBlock } from '../src/core/text.ts';
+import { clampWords, jsonBlock } from '../src/core/text.ts';
 import { cvPerson, profilePage, projectSource } from '../src/core/structured-data.ts';
 import {
     clientStrings,
@@ -31,7 +31,7 @@ export interface PageSpec {
     image: (lang: Lang) => string;
     imageAlt: (lang: Lang) => string;
     /** Open Graph type: 'website' unless a page says otherwise. */
-    ogType?: string;
+    ogType?: 'website' | 'article';
     jsonLd?: (lang: Lang) => object;
     /** Served as the 404: no canonical or language alternates, not in the sitemap. */
     unlisted?: boolean;
@@ -73,7 +73,7 @@ export const PAGES: PageSpec[] = [
             path: projectPath(project.id),
             template: 'project.html',
             title: () => `${project.title} — ${OWNER.name}`,
-            description: (lang) => projectDescription(project, lang),
+            description: (lang) => clampWords(projectDescription(project, lang)),
             image: () => image,
             imageAlt: () => project.title,
             ogType: 'article',
@@ -122,6 +122,13 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
         head.appendChild(el);
         return el;
     };
+    // What crawlers read comes before the stylesheets and scripts; the big data blocks go last
+    const firstAsset = head.querySelector('link, script, style');
+    const seoTag = (tag: string, attrs: Record<string, string>) => {
+        const el = appendHead(tag, attrs);
+        head.insertBefore(el, firstAsset);
+        return el;
+    };
 
     document.documentElement.setAttribute('lang', lang);
     page.fill?.(document, lang);
@@ -129,8 +136,8 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
 
     const title = page.title(lang);
     const description = page.description(lang);
-    appendHead('title', {}).textContent = title;
-    appendHead('meta', { name: 'description', content: description });
+    seoTag('title', {}).textContent = title;
+    seoTag('meta', { name: 'description', content: description });
     const openGraph = {
         type: page.ogType ?? 'website',
         site_name: OWNER.alias,
@@ -143,16 +150,16 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
         'image:alt': page.imageAlt(lang),
         locale: OG_LOCALE[lang]
     };
-    for (const [name, content] of Object.entries(openGraph)) appendHead('meta', { property: `og:${name}`, content });
+    for (const [name, content] of Object.entries(openGraph)) seoTag('meta', { property: `og:${name}`, content });
     for (const other of LANGS.filter((l) => l !== lang)) {
-        appendHead('meta', { property: 'og:locale:alternate', content: OG_LOCALE[other] });
+        seoTag('meta', { property: 'og:locale:alternate', content: OG_LOCALE[other] });
     }
-    appendHead('meta', { name: 'twitter:card', content: 'summary_large_image' });
+    seoTag('meta', { name: 'twitter:card', content: 'summary_large_image' });
 
     if (!page.unlisted) {
-        appendHead('link', { rel: 'canonical', href: url(lang) });
-        for (const l of LANGS) appendHead('link', { rel: 'alternate', hreflang: l, href: url(l) });
-        appendHead('link', { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LANG) });
+        seoTag('link', { rel: 'canonical', href: url(lang) });
+        for (const l of LANGS) seoTag('link', { rel: 'alternate', hreflang: l, href: url(l) });
+        seoTag('link', { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LANG) });
     }
 
     if (page.jsonLd) {

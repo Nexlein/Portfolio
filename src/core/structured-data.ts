@@ -75,6 +75,6 @@ export function projectSource(project: ProjectEntry, lang: Lang, description: st
         dateCreated: project.date, // 'YYYY-MM', a valid partial ISO date
         keywords: project.tags.join(', '),
         ...(project.github ? { codeRepository: project.github } : {}),
-        author: { '@type': 'Person', '@id': `${SITE}/#person`, name: OWNER.name, url: SITE + '/' }
+        author: { '@type': 'Person', '@id': `${SITE}/#person`, name: OWNER.name, url: SITE + localizedPath('/', lang) }
     };
 }
