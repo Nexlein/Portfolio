@@ -88,6 +88,8 @@ test.describe('404 page', () => {
 for (const width of [320, 280])
     test.describe(`at ${width}px wide on a touch screen`, () => {
         test.use({ viewport: { width, height: 640 }, hasTouch: true, isMobile: true });
+        // This block sets its own screen: the phone project would run the desktop one's tests again
+        test.beforeEach(() => test.skip(test.info().project.name === 'mobile', 'same run as desktop'));
 
         for (const { path } of pages)
             test(`${path} does not scroll sideways`, async ({ page }) => {
