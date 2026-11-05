@@ -1,6 +1,6 @@
 # Portfolio
 
-Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.vercel.app. Vanilla TypeScript + Vite 8, no framework, Vercel. EN + FR. Node 24 (`mise.toml`).
+Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.vercel.app. Vanilla TypeScript + Vite 8, no framework, Vercel. EN + FR. Node 26 (`mise.toml`).
 
 ## Start here (save tokens)
 
