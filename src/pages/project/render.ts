@@ -3,6 +3,7 @@
  * Relative imports only: vite-plugins/pages.ts runs this from Node, without the '@/' alias.
  */
 import { PROJECTS, projectPath, type ProjectEntry, type ProjectMedia } from '../../data/projects.ts';
+import { skillsOfTag } from '../../data/skills.ts';
 import { attr } from '../../core/text.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
@@ -86,14 +87,9 @@ function story(project: ProjectEntry, lang: Lang): string {
 }
 
 /** The skills two projects share, in the neighbour's own spelling. */
-function sharedTags(project: ProjectEntry, other: ProjectEntry): string[] {
+export function sharedTags(project: ProjectEntry, other: ProjectEntry): string[] {
     const mine = skillSet(project);
-    return other.tags.filter((tag) =>
-        tag
-            .toLowerCase()
-            .split('/')
-            .some((part) => mine.has(part.trim()))
-    );
+    return other.tags.filter((tag) => skillsOfTag(tag).some((skill) => mine.has(skill)));
 }
 
 /** The three projects the map links this one to, with how much they overlap and why. */

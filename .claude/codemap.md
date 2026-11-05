@@ -34,11 +34,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: initPathChart, initPathStory, initNumbers
   - → ui/motion, ui/reveal, ui/svg-scale, components/Charts/series
   - ← pages/home/home
-- **data.ts** (256) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
-  - exports: yearOf, thisMonth, skills, prettySkill, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
-  - → data/profile, data/projects, components/NeuralMap/graph, components/Charts/series
+- **data.ts** (252) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
+  - exports: yearOf, thisMonth, spelling, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
+  - → data/profile, data/projects, data/skills, components/NeuralMap/graph, components/Charts/series
   - ← components/Charts/render, pages/home/blocks, pages/project/render
-- **render.ts** (401) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+- **render.ts** (403) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
   - exports: monthName, phaseLabel, changeText, pathSvg, pathChart, numbers
   - → data/profile, data/projects, core/translate, components/NeuralMap/graph, components/Charts/data, components/Charts/series
   - ← pages/home/blocks, pages/project/render
@@ -107,15 +107,15 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: themes.test.ts
 
 ## src/components/NeuralMap
-- **NeuralMap.css** (491) — The project map (see NeuralMap.ts).
+- **NeuralMap.css** (493) — The project map (see NeuralMap.ts).
   - ← index.html
 - **NeuralMap.ts** (803) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/lang, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
   - ← pages/home/home
-- **graph.ts** (213) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
+- **graph.ts** (203) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
   - exports: Period, periodOf, ORBIT, CARD, NOW_BOX, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
-  - → data/projects
+  - → data/projects, data/skills
   - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
 - **limits.ts** (3) — Most projects the map shows at once (the rest rotate in).
   - exports: MAP_MAX
@@ -158,7 +158,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: DOMAINS, ProjectMedia, ProjectEntry, projectPath, PROJECTS
   - → core/translate
   - ← scripts/make-thumbs, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, components/NeuralMap/graph, core/structured-data, pages/cv/blocks, pages/home/blocks, pages/project/render, ui/icons, ui/video, vite-plugins/pages
-- tests: profile.test.ts, projects.test.ts
+- **skills.ts** (30) — Skills from free-form tags: the one rule behind the map's similarity, the charts' counts and a project page's "Shares...".
+  - exports: skillsOfTag, skillsOf, skillNames
+  - ← components/Charts/data, components/NeuralMap/graph, pages/project/render
+- tests: profile.test.ts, projects.test.ts, skills.test.ts
 
 ## src/i18n
 - **en.ts** (229)
@@ -195,7 +198,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, core/text, components/NeuralMap/graph, components/NeuralMap/limits
   - ← pages/content/render
-- **home.css** (559) — Home sections that are not components of their own: selected work, the project list, experience, contact.
+- **home.css** (563) — Home sections that are not components of their own: selected work, the project list, experience, contact.
   - ← index.html
 - **home.ts** (256) — Home page.
   - → core/analytics, core/i18n, ui/glide, ui/motion, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, components/NeuralMap/limits, ui/boot, ui/reveal, components/NeuralMap/NeuralMap
@@ -212,18 +215,19 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **gallery.ts** (34) — Gallery on a project page: arrows, dots, arrow keys and a "2 / 4" counter.
   - exports: initGallery
   - ← pages/project/project
-- **project.css** (361) — Project page: a header, the media, a spec strip, then the projects the map links it to.
+- **project.css** (360) — Project page: a header, the media, a spec strip, then the projects the map links it to.
   - ← project.html
 - **project.ts** (29) — Project page entry point.
   - → core/analytics, components/Nav/Nav, ui/boot, ui/reveal, ui/motion, ui/video, pages/project/gallery
   - ← project.html
-- **render.ts** (136) — Fill the project page template (project.html) for one project, at build time.
-  - exports: projectDescription, fillProjectPage
-  - → data/projects, core/text, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
+- **render.ts** (132) — Fill the project page template (project.html) for one project, at build time.
+  - exports: projectDescription, sharedTags, fillProjectPage
+  - → data/projects, data/skills, core/text, core/translate, ui/icons, ui/video, components/Charts/render, components/Charts/data, components/NeuralMap/graph
   - ← vite-plugins/pages
+- tests: render.test.ts
 
 ## src/styles
-- **base.css** (350) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (360) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← 404.html, cv.html, index.html, project.html
 - **tokens.css** (81) — Design tokens.

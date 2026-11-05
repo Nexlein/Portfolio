@@ -18,12 +18,12 @@ import {
     OTHER,
     periodsIn,
     phasesIn,
-    prettySkill,
     RANGES,
     changeSince,
     EPITECH_START,
     rangeStart,
     skillSeries,
+    spelling,
     timeTicks,
     topSkills,
     valueAt,
@@ -309,23 +309,25 @@ const short = (s: string) => (s.length > 16 ? `${s.slice(0, 15)}…` : s);
 
 function topSkillBars(projects: ProjectEntry[]): string {
     const best = topSkills(projects),
-        max = best[0]?.[1] ?? 1;
+        max = best[0]?.[1] ?? 1,
+        name = spelling(projects);
     const W = 300,
         row = 26;
-    return `<svg class="bars" viewBox="0 0 ${W} ${best.length * row}" role="img" aria-label="${best.map(([s, n]) => `${prettySkill(s)} ${n}`).join(', ')}">
+    return `<svg class="bars" viewBox="0 0 ${W} ${best.length * row}" role="img" aria-label="${best.map(([s, n]) => `${name(s)} ${n}`).join(', ')}">
 ${best
     .map(
         ([s, n], i) =>
-            `<g class="bar-row"><text class="name" x="0" y="${i * row + 15}">${short(prettySkill(s))}<title>${prettySkill(s)}</title></text><rect class="track" x="128" y="${i * row + 8}" width="140" height="6" rx="3" /><rect class="fill" x="128" y="${i * row + 8}" width="${f1((140 * n) / max)}" height="6" rx="3" /><text class="value" x="${W}" y="${i * row + 15}" text-anchor="end">${n}</text></g>`
+            `<g class="bar-row"><text class="name" x="0" y="${i * row + 15}">${short(name(s))}<title>${name(s)}</title></text><rect class="track" x="128" y="${i * row + 8}" width="140" height="6" rx="3" /><rect class="fill" x="128" y="${i * row + 8}" width="${f1((140 * n) / max)}" height="6" rx="3" /><text class="value" x="${W}" y="${i * row + 15}" text-anchor="end">${n}</text></g>`
     )
     .join('')}</svg>`;
 }
 
 function chips(projects: ProjectEntry[], now: number): string {
-    const recent = learnedSince(projects, now);
+    const recent = learnedSince(projects, now),
+        name = spelling(projects);
     return `<ul class="chips">${recent
         .slice(0, 18)
-        .map((s) => `<li>${prettySkill(s)}</li>`)
+        .map((s) => `<li>${name(s)}</li>`)
         .join('')}${recent.length > 18 ? `<li class="more">+${recent.length - 18}</li>` : ''}</ul>`;
 }
 

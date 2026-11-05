@@ -5,6 +5,7 @@
  */
 import { CHECKPOINTS, EXPERIENCES, type Checkpoint } from '../../data/profile.ts';
 import { DOMAINS, type ProjectEntry } from '../../data/projects.ts';
+import { skillNames, skillsOf } from '../../data/skills.ts';
 import { ORBIT, periodOf, type Period } from '../NeuralMap/graph.ts';
 import { schoolYear, valueAt } from './series.ts';
 
@@ -16,20 +17,15 @@ export const yearOf = (month: string) => Number(month.slice(0, 4)) + (Number(mon
 /** Today, as a fractional year at the start of the current month. */
 export const thisMonth = (now = new Date()) => now.getFullYear() + now.getMonth() / 12;
 
-/** Normalised skill names: lowercase, 'C/C++' split, RL aliases merged. */
-export function skills(tags: string[]): string[] {
-    return tags.flatMap((raw) =>
-        raw
-            .toLowerCase()
-            .split('/')
-            .map((s) => s.trim())
-            .map((s) => (s === 'rl' ? 'reinforcement learning' : s))
-            .filter(Boolean)
-    );
+/** How the data spells a normalised skill ('typescript' -> 'TypeScript'): projects, jobs and checkpoints alike. */
+export function spelling(projects: ProjectEntry[]): (skill: string) => string {
+    const names = skillNames([
+        ...projects.flatMap((p) => p.tags),
+        ...EXPERIENCES.flatMap((e) => e.tags ?? []),
+        ...CHECKPOINTS.flatMap((c) => c.skills ?? [])
+    ]);
+    return (skill) => names.get(skill) ?? skill;
 }
-
-/** Display form of a normalised skill. */
-export const prettySkill = (s: string) => (s.length <= 3 ? s.toUpperCase() : s[0].toUpperCase() + s.slice(1));
 
 interface Milestone {
     t: number;
@@ -49,9 +45,9 @@ function milestones(projects: ProjectEntry[]): Milestone[] {
             t: yearOf(c.date),
             id: c.id,
             checkpoint: c,
-            adds: skills([...(c.skills ?? []), ...tagsOf(c.id)])
+            adds: skillsOf([...(c.skills ?? []), ...tagsOf(c.id)])
         })),
-        ...projects.map((p) => ({ t: yearOf(p.date), id: p.id, project: p, adds: skills(p.tags) }))
+        ...projects.map((p) => ({ t: yearOf(p.date), id: p.id, project: p, adds: skillsOf(p.tags) }))
     ];
     // Stable insertion by date (the codebase lint bans Array#sort; ES2020 has no toSorted)
     const out: Milestone[] = [];
@@ -232,7 +228,7 @@ export function domainAxes(projects: ProjectEntry[]): { keys: string[]; counts: 
 /** The most used skills across projects, most frequent first. */
 export function topSkills(projects: ProjectEntry[], n = 7): [string, number][] {
     const freq = new Map<string, number>();
-    for (const p of projects) for (const s of new Set(skills(p.tags))) freq.set(s, (freq.get(s) ?? 0) + 1);
+    for (const p of projects) for (const s of new Set(skillsOf(p.tags))) freq.set(s, (freq.get(s) ?? 0) + 1);
     const out: [string, number][] = [];
     for (const e of freq) {
         let i = out.length;
@@ -248,8 +244,8 @@ export function newSkillsPerPeriod(projects: ProjectEntry[]): number[] {
     const first = new Map<string, Period>();
     for (const y of pers)
         for (const p of projects.filter((q) => periodOf(q) === y))
-            for (const s of skills(p.tags)) if (!first.has(s)) first.set(s, y);
+            for (const s of skillsOf(p.tags)) if (!first.has(s)) first.set(s, y);
     return pers.map((y) => [...first.values()].filter((v) => v === y).length);
 }
 
-export const distinctSkills = (projects: ProjectEntry[]) => new Set(projects.flatMap((p) => skills(p.tags))).size;
+export const distinctSkills = (projects: ProjectEntry[]) => new Set(projects.flatMap((p) => skillsOf(p.tags))).size;

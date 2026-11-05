@@ -1,10 +1,11 @@
 /**
  * The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which
  * ones are shown when there are more than the map can hold.
- * - Similarity: Jaccard overlap of skills (tags split on '/', RL aliases merged, same domain counts as shared).
+ * - Similarity: Jaccard overlap of skills (src/data/skills.ts), same domain counts as shared.
  * - Direction from the centre = similarity (classical MDS), distance = period (recent work closest).
  */
 import type { ProjectEntry } from '../../data/projects.ts';
+import { skillsOf } from '../../data/skills.ts';
 
 export type Period = 'Tek3' | 'Personal' | 'Tek2' | 'Tek1';
 
@@ -21,18 +22,7 @@ export const CARD = { w: 190, h: 52, gap: 22 };
  * tallest (156px measured, 7 lines), the height leaves a little room. */
 export const NOW_BOX = { w: 300, h: 170 };
 
-const RL = new Set(['rl', 'gymnasium', 'stable-baselines3']);
-
-export function skillSet(p: ProjectEntry): Set<string> {
-    const out = new Set<string>();
-    for (const raw of p.tags)
-        for (const part of raw.toLowerCase().split('/')) {
-            const t = part.trim();
-            if (t) out.add(RL.has(t) ? 'reinforcement learning' : t);
-        }
-    out.add(`domain:${p.category}`);
-    return out;
-}
+export const skillSet = (p: ProjectEntry) => new Set([...skillsOf(p.tags), `domain:${p.category}`]);
 
 /** Jaccard similarity of two projects' skills, 0..1. */
 export function similarity(a: ProjectEntry, b: ProjectEntry): number {

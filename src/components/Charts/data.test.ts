@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { CHECKPOINTS, EXPERIENCES } from '@/data/profile';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
+import { skillsOf } from '@/data/skills';
 import { periodOf } from '../NeuralMap/graph';
 import { changeText, numbers, pathChart, pathSvg, phaseLabel } from './render';
 import {
@@ -17,7 +18,7 @@ import {
     changeSince,
     schoolYearAt,
     skillSeries,
-    skills,
+    spelling,
     thisMonth,
     timeTicks,
     topSkills,
@@ -50,27 +51,29 @@ describe('dates', () => {
     });
 });
 
-describe('skills', () => {
-    it('lowercases, splits C/C++, trims, merges RL and drops empties', () => {
-        expect(skills(['C/C++', ' Python ', 'RL', 'Net / work', 'C/'])).toEqual([
-            'c',
-            'c++',
-            'python',
-            'reinforcement learning',
-            'net',
-            'work',
-            'c'
-        ]);
+describe('spelling', () => {
+    it('writes a skill as the data does', () => {
+        const name = spelling([{ ...PROJECTS[0], tags: ['FastAPI', 'PostgreSQL'] }]);
+        expect(name('fastapi')).toBe('FastAPI');
+        expect(name('postgresql')).toBe('PostgreSQL');
+    });
+
+    it('also knows the skills of jobs and checkpoints', () => {
+        expect(spelling([])('google cloud')).toBe('Google Cloud');
+    });
+
+    it('leaves an unknown skill as it is', () => {
+        expect(spelling([])('no such skill')).toBe('no such skill');
     });
 });
 
 /** What the path chart says ("58 skills", "+37 in 12 months"), recomputed the plain way for the tests to compare with. */
 const known = (t: number) => {
     const all: [number, string[]][] = [
-        ...PROJECTS.map((p): [number, string[]] => [yearOf(p.date), skills(p.tags)]),
+        ...PROJECTS.map((p): [number, string[]] => [yearOf(p.date), skillsOf(p.tags)]),
         ...CHECKPOINTS.map((c): [number, string[]] => [
             yearOf(c.date),
-            skills([...(c.skills ?? []), ...(EXPERIENCES.find((e) => e.id === c.id)?.tags ?? [])])
+            skillsOf([...(c.skills ?? []), ...(EXPERIENCES.find((e) => e.id === c.id)?.tags ?? [])])
         ])
     ];
     return new Set(all.filter(([d]) => d <= t).flatMap(([, s]) => s)).size;
