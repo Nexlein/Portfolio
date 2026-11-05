@@ -40,8 +40,16 @@ test('copy email says what happened', async ({ page, context, browserName }) => 
     if (browserName === 'chromium') await context.grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.goto('/');
     await page.locator('.copy-email').click();
-    // Only Chromium can be granted the clipboard: elsewhere the toast shows the address instead
-    await expect(page.locator('.toast')).toHaveText(browserName === 'chromium' ? en.home.contact.copied : /@/);
+    await expect(page.locator('.toast')).toHaveText(en.home.contact.copied);
+});
+
+test('a blocked clipboard shows the address instead', async ({ page }) => {
+    await page.addInitScript(() => {
+        navigator.clipboard.writeText = () => Promise.reject(new Error('blocked'));
+    });
+    await page.goto('/');
+    await page.locator('.copy-email').click();
+    await expect(page.locator('.toast')).toHaveText(/@/);
 });
 
 test('reduced motion: no scroll reveal hides content and nothing moves on its own', async ({ page }) => {
