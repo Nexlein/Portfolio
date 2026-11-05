@@ -47,8 +47,10 @@ for (const path of ['/', '/fr/', '/projects/zappy.html'])
 
 test('no request leaves our own origin', async ({ page, baseURL }) => {
     const external: string[] = [];
+    // blob: never reaches the network: WebKit builds the icons of native video controls that way
+    const own = [baseURL!, `blob:${baseURL!}`, 'data:'];
     page.on('request', (req) => {
-        if (!req.url().startsWith(baseURL!) && !req.url().startsWith('data:')) external.push(req.url());
+        if (!own.some((start) => req.url().startsWith(start))) external.push(req.url());
     });
     for (const { path } of pages) await page.goto(path, { waitUntil: 'load' });
     expect(external).toEqual([]);
