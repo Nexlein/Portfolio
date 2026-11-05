@@ -36,6 +36,13 @@ describe('PROJECTS data', () => {
             expect(`Tek${schoolYear(yearOf(p.date), EPITECH_START)}`, p.id).toBe(p.year);
     });
 
+    it('spells a skill one way across the projects', () => {
+        const spellings = new Map<string, Set<string>>();
+        for (const tag of PROJECTS.flatMap((p) => p.tags))
+            spellings.set(tag.toLowerCase(), (spellings.get(tag.toLowerCase()) ?? new Set()).add(tag));
+        for (const [skill, names] of spellings) expect(names.size, skill).toBe(1);
+    });
+
     it('finds public files to check against', () => {
         expect(publicFiles.size).toBeGreaterThan(0);
     });

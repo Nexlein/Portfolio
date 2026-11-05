@@ -54,10 +54,71 @@ test.describe('project map', () => {
             card.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
         });
         await expect(page.locator('.nm-card.near[data-score]').first()).toBeAttached();
+        await expect(page.locator('.nm-card.open')).toHaveCount(1);
         await page.setViewportSize({ width: 1290, height: 800 });
         await expect(page.locator('.nm-card[data-score]')).toHaveCount(0); // the redraw forgets every state
-        await page.keyboard.press('Escape');
         await expect(page.locator('.nm-card.open')).toHaveCount(0);
+    });
+
+    test('resizing with the cursor near the cards keeps the map moving', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 1000 });
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await mapDrawn(page);
+        await page.evaluate(() => document.querySelector('.nm')!.scrollIntoView({ block: 'center' }));
+        // Empty space close to a card: the cursor draws attention lines without opening anything
+        const spot = await page.evaluate(() => {
+            const map = document.querySelector('.nm')!.getBoundingClientRect();
+            const cards = [...document.querySelectorAll('.nm-card')].map((c) => c.getBoundingClientRect());
+            for (let y = map.top + 40; y < Math.min(map.bottom, innerHeight) - 40; y += 20)
+                for (let x = map.left + 40; x < map.right - 40; x += 20) {
+                    const under = document.elementFromPoint(x, y);
+                    const near = cards.some((c) => Math.hypot(c.x + c.width / 2 - x, c.y + c.height / 2 - y) < 200);
+                    if (near && under?.closest('.nm') && !under.closest('.nm-card, .nm-now')) return { x, y };
+                }
+            return null;
+        });
+        await page.mouse.move(spot!.x, spot!.y);
+        await page.mouse.move(spot!.x + 2, spot!.y + 2);
+        await expect
+            .poll(() =>
+                page
+                    .locator('.nm-attn-line')
+                    .evaluateAll((l) => l.some((e) => Number((e as SVGElement).style.opacity) > 0))
+            )
+            .toBe(true);
+        await page.setViewportSize({ width: 1300, height: 1000 });
+        const where = () =>
+            page
+                .locator('.nm-card')
+                .first()
+                .evaluate((el) => el.style.translate);
+        await expect(page.locator('.nm')).toHaveJSProperty(
+            'clientWidth',
+            await page.locator('.nm').evaluate((el) => el.clientWidth)
+        );
+        await page.waitForTimeout(400); // past the redraw's debounce: the frame loop must survive it
+        const before = await where();
+        await expect.poll(where, { timeout: 4000 }).not.toBe(before);
+    });
+
+    test('a short window still draws the map', async ({ page }) => {
+        await page.setViewportSize({ width: 1280, height: 240 });
+        await page.goto('/');
+        await page.locator('.map-host').scrollIntoViewIfNeeded();
+        await page.evaluate(() => document.querySelector('.map-host')!.scrollIntoView({ block: 'center' }));
+        await expect(page.locator('.nm.booted')).toHaveCount(1);
+    });
+
+    test('a mouse click on a closed card follows the link at once', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await mapDrawn(page);
+        const card = page.locator('.nm-card').first();
+        const href = await card.getAttribute('href');
+        const box = (await card.boundingBox())!;
+        await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2); // sooner than the hover could unfold it
+        await expect(page).toHaveURL(new RegExp(`${href!.replace(/\./g, '\\.')}$`));
     });
 
     test('a card unfolding upward still covers the whole closed card', async ({ page }) => {
@@ -161,6 +222,8 @@ test.describe('project map', () => {
         await page.locator('.query button[data-domain="devops"]').click();
         await expect(page.locator('.work')).toHaveAttribute('data-view', 'list');
         await expect(page.locator('.project-list')).toBeVisible();
+        await page.locator('.work-view [data-view="map"]').click(); // still nothing to show there
+        await expect(page.locator('.work')).toHaveAttribute('data-view', 'list');
     });
 
     test('asking for a domain lights its projects up', async ({ page }) => {
@@ -215,6 +278,16 @@ test.describe('project list', () => {
         await expect(page.locator('.project-list')).toBeHidden();
     });
 
+    test('a short filtered list has no "Show" button', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'the chips are desktop only');
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await page.locator('.work-view [data-view="list"]').click();
+        const domain = PROJECTS.find((p) => PROJECTS.filter((q) => q.category === p.category).length <= 6)!.category;
+        await page.locator(`.query button[data-domain="${domain}"]`).click();
+        await expect(page.locator('.list-more')).toBeHidden();
+    });
+
     test('desktop: a domain chip filters the list, and the page count follows', async ({ page, isMobile }) => {
         test.skip(isMobile, 'the chips are desktop only');
         await page.goto('/');
@@ -233,7 +306,7 @@ test.describe('project list', () => {
         page,
         isMobile
     }) => {
-        test.skip(isMobile, 'resizes the window');
+        test.skip(isMobile, 'a phone has no map to widen into');
         await page.setViewportSize({ width: 800, height: 900 });
         await page.goto('/');
         await page.locator('.work').scrollIntoViewIfNeeded();

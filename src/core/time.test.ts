@@ -13,6 +13,11 @@ describe('dates', () => {
         expect(thisMonth(new Date('2027-01-31'))).toBe(2027);
     });
 
+    it('reads today in UTC, so every machine builds the same month', () => {
+        expect(thisMonth(new Date('2026-11-30T23:30:00Z'))).toBeCloseTo(2026 + 10 / 12);
+        expect(thisMonth(new Date('2026-12-01T00:30:00Z'))).toBeCloseTo(2026 + 11 / 12);
+    });
+
     it('rounds to the nearest month, just past its start so that month counts as reached', () => {
         expect(monthName(nearestMonth(2026.65), 'en')).toBe('Sep 2026');
         expect(nearestMonth(2026.65)).toBeGreaterThan(yearOf('2026-09'));

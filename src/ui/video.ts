@@ -48,11 +48,35 @@ export function stillAttrs(p: ProjectEntry, sizes: string, full = false): string
 let observer: IntersectionObserver | undefined;
 const onScreen = new Set<HTMLVideoElement>();
 let tabListening = false;
+/** Videos the visitor paused: coming back on screen must not start them again. */
+const heldByVisitor = new WeakSet<HTMLVideoElement>();
+/** Pauses made here, to tell them from the visitor's. */
+const pausedHere = new WeakSet<HTMLVideoElement>();
+
+function stop(video: HTMLVideoElement): void {
+    pausedHere.add(video);
+    video.pause();
+}
+
+/** Autoplay can be refused (e.g. data saver): the poster stays. */
+function start(video: HTMLVideoElement): void {
+    if (!heldByVisitor.has(video)) video.play().catch(() => {});
+}
+
+function watchVisitor(video: HTMLVideoElement): void {
+    video.addEventListener('pause', () => {
+        if (!pausedHere.delete(video)) heldByVisitor.add(video);
+    });
+    video.addEventListener('play', () => {
+        pausedHere.delete(video);
+        heldByVisitor.delete(video);
+    });
+}
 
 /**
  * Play the videos under `root` only while they are on (or near) screen and the tab is shown, and pause them otherwise.
  * Videos are rendered with preload="none", so nothing downloads until a video first comes into view.
- * With reduced motion, videos never autoplay and keep showing their poster.
+ * With reduced motion, videos never autoplay and keep showing their poster. A video the visitor paused stays paused.
  */
 export function playVideosWhenVisible(root: ParentNode): void {
     observer?.disconnect();
@@ -62,8 +86,8 @@ export function playVideosWhenVisible(root: ParentNode): void {
         tabListening = true;
         document.addEventListener('visibilitychange', () => {
             for (const video of onScreen)
-                if (document.hidden) video.pause();
-                else video.play().catch(() => {});
+                if (document.hidden) stop(video);
+                else start(video);
         });
     }
 
@@ -73,14 +97,17 @@ export function playVideosWhenVisible(root: ParentNode): void {
                 const video = entry.target as HTMLVideoElement;
                 if (entry.isIntersecting) {
                     onScreen.add(video);
-                    if (!document.hidden) video.play().catch(() => {}); // autoplay can be refused (e.g. data saver); the poster stays
+                    if (!document.hidden) start(video);
                 } else {
                     onScreen.delete(video);
-                    video.pause();
+                    stop(video);
                 }
             }
         },
         { rootMargin: '200px 0px' }
     );
-    root.querySelectorAll('video').forEach((video) => observer?.observe(video));
+    root.querySelectorAll('video').forEach((video) => {
+        watchVisitor(video);
+        observer?.observe(video);
+    });
 }

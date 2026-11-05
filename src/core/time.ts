@@ -7,8 +7,8 @@ import type { Lang } from './lang.ts';
 /** 'YYYY-MM' -> fractional year (2026-04 -> 2026.25). */
 export const yearOf = (month: string) => Number(month.slice(0, 4)) + (Number(month.slice(5, 7)) - 1) / 12;
 
-/** Today, as a fractional year at the start of the current month. */
-export const thisMonth = (now = new Date()) => now.getFullYear() + now.getMonth() / 12;
+/** Today, as a fractional year at the start of the current month. In UTC: every machine builds the same month. */
+export const thisMonth = (now = new Date()) => now.getUTCFullYear() + now.getUTCMonth() / 12;
 
 /** The month nearest a time, just past its start: steps of that month count as done. */
 export const nearestMonth = (time: number) => Math.round(time * 12) / 12 + 1e-9;

@@ -624,7 +624,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['TypeScript', 'Vite', 'Vitest', 'Playwright', 'CI/CD'],
         category: 'fullstack',
         year: 'Personal',
-        date: '2026-07',
+        date: '2026-06',
         team: {
             size: 1,
             role: {

@@ -5,7 +5,7 @@ name: Weekly rebuild
 #
 # One-time setup: in Vercel (Project, Settings, Git, Deploy Hooks) create a hook for the `main` branch, then add its
 # URL as the repository secret VERCEL_DEPLOY_HOOK (GitHub, Settings, Secrets and variables, Actions).
-# Without the secret this job only prints a warning. Scheduled workflows run from the default branch.
+# Without the secret this job fails, so a site that stopped rebuilding shows up. Scheduled workflows run from the default branch.
 
 on:
     schedule:
@@ -25,8 +25,8 @@ jobs:
                   HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
               run: |
                   if [ -z "$HOOK" ]; then
-                    echo "::warning::VERCEL_DEPLOY_HOOK is not set, nothing was rebuilt (see the setup note at the top of this file)"
-                    exit 0
+                    echo "::error::VERCEL_DEPLOY_HOOK is not set, nothing was rebuilt (see the setup note at the top of this file)"
+                    exit 1
                   fi
                   curl --fail --silent --show-error -X POST "$HOOK" > /dev/null
                   echo "Rebuild requested"

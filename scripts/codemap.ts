@@ -1,6 +1,6 @@
 // Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and
 // who uses it, in one small Markdown file (.claude/codemap.md). Reading it replaces opening dozens of files.
-// Usage: npm run codemap (Node runs this TypeScript file as it is; the pre-commit hook regenerates it, so it never goes stale).
+// Usage: npm run codemap (Node runs this TypeScript file as it is; the pre-commit hook regenerates it).
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, normalize, relative } from 'node:path';

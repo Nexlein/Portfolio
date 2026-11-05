@@ -141,7 +141,8 @@ export function valueIteration(s: Stage): void {
     s.onClick((p) => {
         const x = Math.floor(p.x / CELL),
             y = Math.floor(p.y / CELL);
-        if (x === goal.x && y === goal.y) return;
+        // The reward stays free when it holds still. Otherwise it is under the cursor, so that is where a click lands
+        if (s.still && x === goal.x && y === goal.y) return;
         const i = y * cols + x;
         wall[i] = wall[i] ? 0 : 1;
         V[i] = 0;

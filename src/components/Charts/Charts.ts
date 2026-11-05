@@ -41,7 +41,7 @@ export function initPathChart(): void {
             .filter((p) => p.what && p.t >= t0 - 1e-9)
             .map((p) => PATH.L + ((p.t - t0) / (now - t0)) * span);
         // The marks sit above the plot, so the crosshair listens on the whole svg and the plot's own bounds decide
-        svg.addEventListener('pointermove', (e) => {
+        const track = (e: PointerEvent) => {
             const r = svg.getBoundingClientRect(),
                 px = ((e.clientX - r.left) / r.width) * PATH.W;
             if (px < PATH.L || px > PATH.L + span) return hide();
@@ -72,8 +72,12 @@ export function initPathChart(): void {
                 width = plot.clientWidth;
             tip.style.left = `${Math.min(Math.max((sx / PATH.W) * width, room), width - room)}px`;
             tip.style.top = `${(py / PATH.H) * 100}%`;
-        });
-        svg.addEventListener('pointerleave', hide);
+        };
+        svg.addEventListener('pointermove', track);
+        svg.addEventListener('pointerdown', track); // a tap moves nothing first
+        // A finger leaves as soon as it lifts: the tooltip stays until the next tap elsewhere
+        svg.addEventListener('pointerleave', (e) => e.pointerType === 'touch' || hide());
+        document.addEventListener('pointerdown', (e) => svg.contains(e.target as Node) || hide());
     };
 
     host.querySelectorAll<HTMLButtonElement>('.path-range button').forEach((b) =>
@@ -277,7 +281,7 @@ export function initNumbers(): void {
         cards.forEach((c, i) => {
             const d = (i - cur + n) % n;
             c.dataset.pos = d < 3 ? String(d) : 'back';
-            c.inert = d !== 0;
+            c.setAttribute('aria-hidden', String(d !== 0)); // not inert: a click on a peeking card brings it forward
             c.classList.toggle('leaving', i === prev && !user);
         });
         const front = cards[cur];

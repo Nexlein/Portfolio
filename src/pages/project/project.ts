@@ -6,7 +6,6 @@ import { initAnalytics } from '@/core/analytics';
 import { initNav } from '@/components/Nav/Nav';
 import { boot } from '@/ui/boot';
 import { initReveals } from '@/ui/reveal';
-import { prefersReducedMotion } from '@/ui/motion';
 import { playVideosWhenVisible } from '@/ui/video';
 import { initGallery } from './gallery';
 
@@ -22,7 +21,6 @@ function initMedia(): void {
     const gallery = media.querySelector<HTMLElement>('.gallery');
     if (gallery) initGallery(gallery);
     playVideosWhenVisible(media);
-    if (prefersReducedMotion()) media.querySelector('video')?.setAttribute('controls', ''); // no autoplay: let them press play
 }
 
 boot(initAnalytics, initNav, initOverlaps, initReveals, initMedia);

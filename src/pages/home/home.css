@@ -259,10 +259,6 @@
     gap: 8px;
 }
 
-.exp-nav[hidden] {
-    display: none;
-}
-
 .exp-count {
     margin-right: 6px;
     color: var(--muted);
@@ -380,7 +376,9 @@
     .features {
         display: flex;
         overflow-x: auto;
-        padding-bottom: 20px;
+        margin: -6px -6px 0; /* room for the focus ring, which a scroller would clip */
+        padding: 6px 6px 20px;
+        scroll-padding-inline: 6px;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
     }
@@ -408,7 +406,6 @@
 /* How I work: a thin strip under the hero, three plain columns */
 .method {
     padding: clamp(40px, 6vh, 72px) 0 0;
-    scroll-margin-top: var(--nav-h);
 }
 
 .method-title {
@@ -507,7 +504,7 @@
 
     /* The two others step back */
     .method-items:has(.method-item:hover) .method-item:not(:hover) {
-        opacity: 0.55;
+        opacity: 0.6;
     }
 }
 

@@ -199,6 +199,7 @@ ${shown.map(cardHtml).join('')}</div>`;
         for (const g of [layersG, wiresG, neuronsG, synsG, signalsG, labelsG]) g.innerHTML = '';
         syns = [];
         signals = [];
+        attended = []; // they point at the cards about to be replaced
         cards = layout(W, H, fit, shown).map((star) => ({
             star,
             el: elOf(star.p),
@@ -284,10 +285,11 @@ ${shown.map(cardHtml).join('')}</div>`;
     new IntersectionObserver(
         ([e]) => {
             visible = e.isIntersecting;
-            if (visible) boot(performance.now());
+            // Most of the map, or as much of it as a short window can hold
+            if (e.intersectionRatio >= 0.35 || e.intersectionRect.height >= innerHeight * 0.75) boot(performance.now());
             wake();
         },
-        { threshold: 0.35 }
+        { threshold: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35] }
     ).observe(web);
     document.addEventListener('visibilitychange', () => wake());
 
@@ -560,8 +562,9 @@ ${shown.map(cardHtml).join('')}</div>`;
         });
         a.addEventListener('click', (e) => {
             const c = cardOf(a);
-            if (c && !a.classList.contains('open')) {
-                e.preventDefault(); // first tap unfolds, the second follows the link
+            // A first tap unfolds, the second follows the link. A mouse has hover for that: its click is always a click
+            if (c && !a.classList.contains('open') && e.pointerType !== 'mouse') {
+                e.preventDefault();
                 open(c);
             }
         });

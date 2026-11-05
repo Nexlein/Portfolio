@@ -6,6 +6,11 @@ export function firstSentence(text: string): string {
     return `${stripTags(text.split('. ')[0]).replace(/\.$/, '')}.`;
 }
 
+/** A text cut at the last whole word within `max` characters: what a search result shows without cutting it itself. */
+export function clampWords(text: string, max = 155): string {
+    return text.length <= max ? text : `${text.slice(0, max).replace(/[\s,;:.]+\S*$/, '')}…`;
+}
+
 /** A number for an SVG attribute: one decimal is plenty. */
 export const f1 = (n: number) => n.toFixed(1);
 

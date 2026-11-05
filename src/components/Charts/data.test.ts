@@ -73,7 +73,7 @@ describe('the toolbox over time', () => {
 
     it('never goes down', () => {
         const values = skillSeries(PROJECTS, thisMonth()).map((p) => p.v);
-        expect(values).toEqual([...values].sort((a, b) => a - b)); // eslint-disable-line -- test-only copy
+        expect(values).toEqual(values.toSorted((a, b) => a - b));
     });
 
     it('counts a project from its own month on, and not a month before', () => {
@@ -102,6 +102,10 @@ describe('checkpoints on the series', () => {
     });
 });
 
+const usedBy = (tag: string, n: number) => Array.from({ length: n }, () => ({ ...PROJECTS[0], tags: [tag] }));
+const inPeriod = (year: ProjectEntry['year']) => ({ ...PROJECTS[0], year });
+const sixMonthsTo = (time: number) => pathSvg('en', skillSeries(PROJECTS, time), time - 6 / 12, time);
+
 describe('group counts', () => {
     it('gives every skill to the period that first used it, once', () => {
         expect(newSkillsPerPeriod(PROJECTS).reduce((a, b) => a + b, 0)).toBe(distinctSkills(PROJECTS));
@@ -114,10 +118,16 @@ describe('group counts', () => {
         expect(newSkillsPerPeriod([earlier, later])).toEqual([0, 1]);
     });
 
+    it('keeps every skill tied with the last one shown', () => {
+        const projects = [...usedBy('A', 3), ...usedBy('B', 2), ...usedBy('C', 2), ...usedBy('D', 1)];
+        expect(topSkills(projects, 2).map(([s]) => s)).toEqual(['a', 'b', 'c']);
+    });
+
     it('ranks the most used skills first', () => {
         const top = topSkills(PROJECTS);
-        expect(top.map(([, n]) => n)).toEqual([...top.map(([, n]) => n)].sort((a, b) => b - a)); // eslint-disable-line -- test-only copy
-        expect(top.length).toBeLessThanOrEqual(7);
+        const uses = top.map(([, n]) => n);
+        expect(uses).toEqual(uses.toSorted((a, b) => b - a));
+        expect(top.length).toBeGreaterThanOrEqual(7);
     });
 
     it('names the main language of a project, C/C++ as C++, and infrastructure when there is none', () => {
@@ -131,7 +141,12 @@ describe('group counts', () => {
     });
 
     it('lists the periods oldest first, and every project falls in one', () => {
-        expect(periodsIn(PROJECTS)).toEqual(['Tek1', 'Tek2', 'Personal', 'Tek3']);
+        expect(periodsIn([inPeriod('Tek3'), inPeriod('Tek1'), inPeriod('Tek2'), inPeriod('Personal')])).toEqual([
+            'Tek1',
+            'Tek2',
+            'Personal',
+            'Tek3'
+        ]);
         for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(p.year);
     });
 
@@ -215,7 +230,7 @@ describe('the change over a range (the headline of the path chart)', () => {
 
     it('differs from one range to the next (a longer range gains at least as much)', () => {
         const deltas = RANGES.map((r) => since(r.id).delta);
-        expect(deltas).toEqual([...deltas].sort((a, b) => a - b)); // eslint-disable-line -- test-only copy
+        expect(deltas).toEqual(deltas.toSorted((a, b) => a - b));
         expect(new Set(deltas).size).toBeGreaterThan(1);
     });
 
@@ -225,13 +240,14 @@ describe('the change over a range (the headline of the path chart)', () => {
     });
 
     it('reads as a sentence in both languages', () => {
-        expect(headline('en', points, '1y')).toMatch(/^▲ \+\d+ \(\d+ %\) past 12 months$/);
+        expect(headline('en', points, '1y')).toMatch(/^▲ \+\d+ \(\d+%\) past 12 months$/);
         expect(headline('en', points, '6m')).toMatch(/past 6 months$/);
         expect(headline('en', points, '1m')).toMatch(/past month$/);
-        expect(headline('en', points, 'max')).toMatch(/^▲ \+\d+ since Jul 2024$/);
+        expect(headline('en', points, 'max')).toMatch(/^▲ \+\d+ since [A-Z][a-z]{2} \d{4}$/);
         expect(headline('fr', points, '1y')).toMatch(/sur 12 mois$/);
         expect(headline('fr', points, '1m')).toMatch(/sur 1 mois$/);
-        expect(headline('fr', points, 'max')).toMatch(/depuis juil\. 2024$/);
+        expect(headline('fr', points, '1y')).toMatch(/\(\d+\u00a0%\)/);
+        expect(headline('fr', points, 'max')).toMatch(/depuis \S+ \d{4}$/);
     });
 
     it('shows only the numbers: no words about the range', () => {
@@ -243,7 +259,7 @@ describe('the change over a range (the headline of the path chart)', () => {
         const later = skillSeries(PROJECTS, 2099);
         const r = range('1y');
         const { text, over, up } = changeText('en', r, later, rangeStart(r, later, 2099));
-        expect(text).toBe('0 (0 %)');
+        expect(text).toBe('0 (0%)');
         expect(over).toBe('past 12 months');
         expect(up).toBe(false);
     });
@@ -334,11 +350,43 @@ describe('the axes of the path chart', () => {
     });
 });
 
+describe('the charts for a screen reader', () => {
+    it('say the values of the language columns and the heat map, not just their title', () => {
+        const html = numbers('en', PROJECTS, TODAY);
+        const languages = /class="columns"[^>]*aria-label="([^"]+)"/.exec(html)![1];
+        const heat = /class="heat"[^>]*aria-label="([^"]+)"/.exec(html)![1];
+        expect(languages).toMatch(/: \S+ \d/);
+        expect(heat).toMatch(/: \S+.* \d/);
+    });
+});
+
 describe('checkpoint names on the plot', () => {
+    it('never share a row when a name starting at the left edge runs into the next one', () => {
+        for (const date of CHECKPOINTS.map((c) => yearOf(c.date) + 5 / 12)) {
+            const rows = new Map<string, { left: number; right: number }[]>();
+            for (const m of sixMonthsTo(date).matchAll(
+                /<text class="(start|end|)" x="([\d.]+)" y="([\d.]+)">([^<]+)</g
+            )) {
+                const [, anchor, x, y, label] = m;
+                const width = (label.length * 3.3 + 8) * 2;
+                const left =
+                    anchor === 'start' ? Number(x) : anchor === 'end' ? Number(x) - width : Number(x) - width / 2;
+                const row = rows.get(y) ?? [];
+                for (const other of row) expect(left >= other.right || left + width <= other.left, label).toBe(true);
+                row.push({ left, right: left + width });
+                rows.set(y, row);
+            }
+        }
+    });
+
     it('stay inside the picture when a checkpoint sits at the start of a range', () => {
-        const points = skillSeries(PROJECTS, TODAY);
-        const month = pathSvg('en', points, TODAY - 1 / 12, TODAY); // the Issanka checkpoint is dated September 2026
-        expect(month).toMatch(/<text class="start"[^>]*>AI developer intern, Issanka<\/text>/);
-        expect(pathSvg('en', points, points[0].t, TODAY)).not.toContain('class="start"'); // nothing sticks out on Max
+        const latest = CHECKPOINTS[CHECKPOINTS.length - 1];
+        const from = yearOf(latest.date),
+            now = from + 1 / 12;
+        const points = skillSeries(PROJECTS, now);
+        expect(pathSvg('en', points, from, now)).toMatch(
+            new RegExp(`<text class="start"[^>]*>${latest.label.en}</text>`)
+        );
+        expect(pathSvg('en', points, points[0].t, now)).not.toContain('class="start"'); // nothing sticks out on Max
     });
 });

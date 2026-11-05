@@ -86,6 +86,27 @@ describe('playVideosWhenVisible', () => {
         expect(observed).toHaveLength(0);
     });
 
+    it('leaves a video the visitor paused alone when it comes back on screen', () => {
+        const [a] = renderVideos(1);
+        a.pause = vi.fn(() => a.dispatchEvent(new Event('pause')));
+        playVideosWhenVisible(document.body);
+        a.dispatchEvent(new Event('pause')); // the visitor pressed pause
+        callback([{ target: a, isIntersecting: true }]);
+        expect(a.play).not.toHaveBeenCalled();
+        a.dispatchEvent(new Event('play')); // and play again
+        callback([{ target: a, isIntersecting: true }]);
+        expect(a.play).toHaveBeenCalledOnce();
+    });
+
+    it('starts again a video it paused itself', () => {
+        const [a] = renderVideos(1);
+        a.pause = vi.fn(() => a.dispatchEvent(new Event('pause')));
+        playVideosWhenVisible(document.body);
+        callback([{ target: a, isIntersecting: false }]);
+        callback([{ target: a, isIntersecting: true }]);
+        expect(a.play).toHaveBeenCalledOnce();
+    });
+
     it('ignores a refused play() (the poster stays)', async () => {
         const [a] = renderVideos(1);
         a.play = vi.fn(() => Promise.reject(new DOMException('NotAllowedError')));

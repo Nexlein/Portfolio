@@ -51,7 +51,7 @@ export const EXPERIENCES: Experience[] = [
         id: 'issanka',
         title: { en: 'AI Developer Intern (Part-Time)', fr: 'Développeur IA (stage à temps partiel)' },
         org: 'Issanka',
-        period: { en: 'Sept 2026 - Feb 2027', fr: 'sept. 2026 - févr. 2027' },
+        period: { en: 'Sep 2026 - Feb 2027', fr: 'sept. 2026 - févr. 2027' },
         summary: {
             en: 'First mission: rebuilt issanka.com (new visual identity, faster pages, many bugs fixed), live since 9 October 2026.',
             fr: "Première mission : refonte d'issanka.com (nouvelle identité visuelle, pages plus rapides, nombreux bugs corrigés), en ligne depuis le 9 octobre 2026."
@@ -71,7 +71,7 @@ export const EXPERIENCES: Experience[] = [
         id: 'climb2c',
         title: { en: 'Full-Stack & AI Developer Intern', fr: 'Développeur full-stack et IA (stage)' },
         org: 'Climb2C (Eliona Conseil)',
-        period: { en: 'Sept - Dec 2025', fr: 'sept. - déc. 2025' },
+        period: { en: 'Sep - Dec 2025', fr: 'sept. - déc. 2025' },
         summary: {
             en: "Sole developer of an internal RAG system and a client questionnaire whose answers drive Climb2C's offers.",
             fr: "Conception en solo d'un système RAG interne et d'un questionnaire client dont les réponses orientent les offres de Climb2C."
@@ -188,7 +188,7 @@ export const CHECKPOINTS: Checkpoint[] = [
     {
         id: 'high-school',
         date: '2024-07',
-        label: { en: 'Baccalauréat + C bootcamp', fr: 'Bac + bootcamp C' },
+        label: { en: 'Baccalaureate + C bootcamp', fr: 'Bac + bootcamp C' },
         skills: ['C']
     },
     { id: 'epitech', date: '2024-09', label: { en: 'Epitech, year 1', fr: 'Epitech, 1re année' } },
@@ -217,8 +217,8 @@ export const NOW = {
         en: 'First mission: issanka.com, live since 9 October',
         fr: 'Première mission : issanka.com, en ligne depuis le 9 octobre'
     },
-    detail: { en: 'Sept 2026 - Feb 2027 · Epitech year 3', fr: 'sept. 2026 - févr. 2027 · 3e année à Epitech' },
-    availability: { en: 'Intern at Issanka · since Sept 2026', fr: 'En stage chez Issanka · depuis sept. 2026' }
+    detail: { en: 'Sep 2026 - Feb 2027 · Epitech year 3', fr: 'sept. 2026 - févr. 2027 · 3e année à Epitech' },
+    availability: { en: 'Intern at Issanka · since Sep 2026', fr: 'En stage chez Issanka · depuis sept. 2026' }
 } satisfies Record<string, Text>;
 
 /** Where the owner works from: the CV header. */

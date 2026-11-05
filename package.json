@@ -13,8 +13,8 @@
         "codemap": "node scripts/codemap.ts",
         "lint": "oxlint --type-aware && stylelint \"src/**/*.css\"",
         "lint:fix": "oxlint --type-aware --fix && stylelint \"src/**/*.css\" --fix",
-        "format": "prettier --write .",
-        "format:check": "prettier --check .",
+        "format": "git ls-files -z | xargs -0 prettier --ignore-unknown --write",
+        "format:check": "git ls-files -z | xargs -0 prettier --ignore-unknown --check",
         "audit": "npm audit --audit-level=high",
         "knip": "knip --config config/knip.json",
         "media": "node scripts/media.ts",
@@ -45,6 +45,6 @@
         "vitest": "^5.0.5"
     },
     "engines": {
-        "node": ">=24"
+        "node": "24.x"
     }
 }

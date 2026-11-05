@@ -7,7 +7,8 @@ import type { HtmlTagDescriptor, Plugin } from 'vite';
  *    Also marks html.js, so content waiting for a scroll reveal stays visible without JavaScript.
  * 2. Language: first visit from a French browser to an English page redirects to the French page. It never runs
  *    on French pages (a shared /fr/ link stays French), on data-static pages (the 404: /fr/<bad path> would be a
- *    404 again), or once the visitor picked a language with the toggle (stored in localStorage).
+ *    404 again), once the visitor picked a language with the toggle (stored in localStorage), or when they come from
+ *    this site (storage can be blocked, and the toggle must still reach the English page).
  * 3. The 404: Vercel serves the one English /404.html for every unknown URL, so under /fr/ it moves on to the
  *    French 404 page (/fr/404.html), which is not itself under /fr/<bad path>.
  *
@@ -29,7 +30,7 @@ export const HEAD_SCRIPT = `(function () {
         return;
     }
     if (root.lang !== 'en' || root.hasAttribute('data-static')) return;
-    if (chosen || navigator.language.slice(0, 2) !== 'fr') return;
+    if (chosen || navigator.language.slice(0, 2) !== 'fr' || document.referrer.indexOf(location.origin + '/') === 0) return;
     root.style.visibility = 'hidden';
     location.replace('/fr' + location.pathname + location.search + location.hash);
 })();`;

@@ -34,7 +34,7 @@ npm run dev
 | `npm run dev`          | Start the Vite dev server                                        |
 | `npm run build`        | Typecheck and build to `dist/`                                   |
 | `npm run preview`      | Serve the production build locally                               |
-| `npm run typecheck`    | Run `tsc --noEmit`                                               |
+| `npm run typecheck`    | Run `tsc --noEmit` on the site, then on the scripts and configs  |
 | `npm test`             | Run Vitest                                                       |
 | `npm run test:e2e`     | Build, then run Playwright (see Browser tests)                   |
 | `npm run cv:pdf`       | Render the CV to PDF, after a build                              |
@@ -58,7 +58,7 @@ src/
 │   ├── Footer/       Site footer (build time)
 │   ├── Hero/         Hero canvas and its simulations (sims/)
 │   ├── Nav/          Top nav (build time) + pill, theme menu (Nav.ts)
-│   └── NeuralMap/    Project map: similarity and layout (graph.ts, pure), canvas and cards (NeuralMap.ts)
+│   └── NeuralMap/    Project map: similarity and layout (graph.ts) and motion (scene.ts), both without DOM; cards (NeuralMap.ts)
 ├── core/             Site facts, translation, dates, structured data, analytics
 ├── data/             Site content: profile.ts (experience, education, skills, now, checkpoints), projects.ts, and the skill rule (skills.ts)
 ├── i18n/             Interface text (en, fr)
@@ -86,7 +86,7 @@ The map, the list, the charts, the counts, its page, the sitemap and the structu
 
 ### Browser tests
 
-Playwright (`e2e/`) runs desktop and mobile Chromium, plus Firefox and WebKit in CI, against the production build, served by `vite preview` with the production headers. Scenarios: every page loads with its fonts and no console errors, CSP violations or third-party requests; content without JavaScript; the project map (hover, click, domains) and the phone list; hero switch; path chart and numbers cards; copy email; themes; the EN/FR switch and first visit from a French browser; reduced motion; project pages (video, gallery, connected projects, back link); the CV PDF link. Any console error fails the test.
+Playwright (`e2e/`) runs desktop and mobile Chromium, plus Firefox and WebKit in CI, against the production build, served by `vite preview` with the production headers. Scenarios: every page loads with its fonts and no console errors, CSP violations or third-party requests; content without JavaScript; the project map (hover, click, domains) and the phone list; hero switch; path chart and numbers cards; copy email; themes; the EN/FR switch and first visit from a French browser; reduced motion; project pages (video, gallery, connected projects, back link); the CV PDF link. The shared `page` fixture fails a test on any console error; tests that open their own browser context are not covered.
 
 ## Languages (EN / FR)
 
@@ -105,7 +105,7 @@ Facts live in data files, written once with English and French side by side (`{ 
 
 Templates mark where content goes with `data-render="<block>"` (home sections, CV sections); `src/pages/content/render.ts` fills them at build time, so crawlers and the CV PDF see real text. `src/i18n/{en,fr}.ts` only holds interface text (navigation, headings, buttons). Text may use `<strong>`/`<br>`, never CSS classes.
 
-To add a job: append it to `EXPERIENCES`. It appears under the path chart, on the CV and in the CV PDF. Milestones without a project (school, certifications) go in `CHECKPOINTS` and show on the path chart.
+To add a job: append it to `EXPERIENCES`. It appears on the CV and in the CV PDF. To show it on the path chart and in the story under it, give it a checkpoint in `CHECKPOINTS`, as for milestones without a project (school, certifications).
 
 The path chart opens on Max; its buttons (1M, 6M, 1Y, Max, in `RANGES` in `src/components/Charts/data.ts`) change the headline (skills gained and the percentage over that range) and zoom the height on what changed. Steps are whole months, so there is no 1D or 1W. The band along its bottom counts Epitech school years (September to August) from the date of the `epitech` checkpoint: keep that checkpoint.
 
@@ -136,16 +136,16 @@ The CV PDF (`npm run cv:pdf`, after a build) fails if the CV no longer fits on o
 
 ## Media
 
-Project media lives in `public/projects/<id>/` and must be web-ready (a test enforces the formats):
+Project media lives in `public/projects/<id>/` and must be web-ready (a test checks the file types, not the sizes):
 
 - **Images**: WebP, at most 1200px on the long side (`ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_ratio=decrease" -quality 80 out.webp`).
 - **Videos**: H.264 MP4 without audio, at most 960px wide, `faststart`. Run `npm run media:video -- public/projects/<id>/<name>.mp4` to re-encode in place.
 - **Posters**: every video needs `<name>.poster.webp`. `npm run media` generates missing ones.
-- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. `npm run media` generates missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `npm run media -- --force=thumbs` would replace them with plain downscales.
+- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. `npm run media` generates missing ones (a test checks they exist). Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `npm run media -- --force=thumbs` would replace them with plain downscales.
 
 - **QR codes**: the CV prints `public/qrcode.svg` (home) or `public/qrcode-fr.svg` (French home). To redo one: `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`, then keep the files' style (a white square under one black path).
 
-Videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. With `prefers-reduced-motion` they never autoplay: they keep their poster and show controls.
+Videos load nothing until they scroll into view (`preload="none"` + an IntersectionObserver in `src/ui/video.ts`) and pause off screen. They always show controls, and one the visitor paused stays paused. With `prefers-reduced-motion` they never autoplay: they keep their poster.
 
 Fonts are self-hosted with Fontsource (latin subset), so pages make no third-party requests. Schibsted Grotesk is the variable font: one file for every weight.
 
@@ -159,7 +159,7 @@ To turn it on: Vercel dashboard → Project → Analytics → Enable.
 
 `vercel.json` sets the production headers: a strict Content-Security-Policy (our own origin only, no `unsafe-inline`), `nosniff`, no framing at all (`frame-ancestors 'none'`, `DENY`), a strict referrer policy and a restrictive `Permissions-Policy`. Hashed files in `/assets/` are cached for a year; project media for a day.
 
-`npm run preview` serves the build with the same headers, so CSP problems show up locally.
+`npm run preview` serves the build with the same security headers, without `upgrade-insecure-requests` (it would break `http://localhost`) and without the cache rules, so CSP problems show up locally.
 
 Because of the CSP:
 
@@ -177,3 +177,7 @@ Because of the CSP:
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
 - **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
+
+## License
+
+All rights reserved. The code is public to read.

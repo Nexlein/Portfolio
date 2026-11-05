@@ -1,26 +1,62 @@
 import { test, expect } from './fixtures';
+import { monthName, yearOf } from '../src/core/time';
+import { CHECKPOINTS } from '../src/data/profile';
 
 test.describe('charts', () => {
-    test('the path chart changes range and explains a point on hover', async ({ page, isMobile }) => {
+    test('the range buttons change the plot', async ({ page }) => {
         await page.goto('/');
         const chart = page.locator('.path-chart');
         await chart.scrollIntoViewIfNeeded();
         await chart.locator('.path-range button[data-range="1y"]').click();
         await expect(chart.locator('.path-range button[data-range="1y"]')).toHaveAttribute('aria-pressed', 'true');
-        if (!isMobile) {
-            await expect(chart).toHaveClass(/\bin\b/); // revealed: no longer moving
-            const hit = chart.locator('.hit');
-            const box = (await hit.boundingBox())!;
-            await hit.hover({ position: { x: box.width * 0.6, y: box.height / 2 }, force: true });
-            await expect(chart.locator('.path-tip')).toBeVisible();
-            // Back and forth: each range keeps its plot, and the one that comes back still answers the pointer
-            await chart.locator('.path-range button[data-range="max"]').click();
-            await chart.locator('.path-range button[data-range="1y"]').click();
-            await expect(chart.locator('.path-tip')).toBeHidden();
-            await expect(chart.locator('.path-svg')).toHaveCount(1);
-            await chart.locator('.hit').hover({ position: { x: box.width * 0.3, y: box.height / 2 }, force: true });
-            await expect(chart.locator('.path-tip')).toBeVisible();
-        }
+        await expect(chart.locator('.path-svg')).toHaveCount(1);
+    });
+
+    test('a point is explained on hover, on every range', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.goto('/');
+        const chart = page.locator('.path-chart');
+        await chart.scrollIntoViewIfNeeded();
+        await chart.locator('.path-range button[data-range="1y"]').click();
+        await expect(chart).toHaveClass(/\bin\b/); // revealed: no longer moving
+        const hit = chart.locator('.hit');
+        const box = (await hit.boundingBox())!;
+        await hit.hover({ position: { x: box.width * 0.6, y: box.height / 2 }, force: true });
+        await expect(chart.locator('.path-tip')).toBeVisible();
+        // Back and forth: each range keeps its plot, and the one that comes back still answers the pointer
+        await chart.locator('.path-range button[data-range="max"]').click();
+        await chart.locator('.path-range button[data-range="1y"]').click();
+        await expect(chart.locator('.path-tip')).toBeHidden();
+        await expect(chart.locator('.path-svg')).toHaveCount(1);
+        await chart.locator('.hit').hover({ position: { x: box.width * 0.3, y: box.height / 2 }, force: true });
+        await expect(chart.locator('.path-tip')).toBeVisible();
+    });
+
+    test('a tap explains a point, and a tap elsewhere puts it away', async ({ page, isMobile }) => {
+        test.skip(!isMobile, 'phones only');
+        await page.goto('/');
+        const chart = page.locator('.path-chart');
+        await chart.scrollIntoViewIfNeeded();
+        await expect(chart).toHaveClass(/\bin\b/);
+        const box = (await chart.locator('.hit').boundingBox())!;
+        await page.touchscreen.tap(box.x + box.width * 0.6, box.y + box.height / 2);
+        await expect(chart.locator('.path-tip')).toBeVisible();
+        await page.touchscreen.tap(box.x + box.width / 2, box.y - 40);
+        await expect(chart.locator('.path-tip')).toBeHidden();
+    });
+
+    test('the tooltip on a checkpoint gives its month and its own name', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'needs a mouse');
+        const last = CHECKPOINTS[CHECKPOINTS.length - 1];
+        await page.goto('/');
+        const chart = page.locator('.path-chart');
+        await chart.scrollIntoViewIfNeeded();
+        await expect(chart).toHaveClass(/\bin\b/);
+        await chart.locator(`.mark[data-cp="${last.id}"] .mark-hit`).hover({ force: true });
+        await expect(chart.locator('.path-tip .mono')).toHaveText(
+            new RegExp(`^${monthName(yearOf(last.date), 'en')} · year \\d$`)
+        );
+        await expect(chart.locator('.path-tip span').last()).toHaveText(last.label.en);
     });
 
     test('the headline follows the range, like a price chart', async ({ page }) => {
@@ -28,19 +64,16 @@ test.describe('charts', () => {
         const chart = page.locator('.path-chart');
         await chart.scrollIntoViewIfNeeded();
         const delta = chart.locator('.path-delta');
-        const texts: Record<string, string> = {};
         for (const [range, words] of [
             ['max', /^▲ \+\d+ since /],
-            ['1y', /^(▲ \+\d+ \(\d+ %\)|0 \(0 %\)) past 12 months$/], // 0 after a year without a new skill
+            ['1y', /^(▲ \+\d+ \(\d+%\)|0 \(0%\)) past 12 months$/], // 0 after a year without a new skill
             ['6m', /past 6 months$/],
             ['1m', /past month$/]
         ] as const) {
             await chart.locator(`.path-range [data-range="${range}"]`).click();
             await expect(chart.locator(`.path-range [data-range="${range}"]`)).toHaveAttribute('aria-pressed', 'true');
             await expect(delta).toHaveText(words);
-            texts[range] = (await delta.textContent())!;
         }
-        expect(new Set(Object.values(texts)).size).toBe(4); // each range says its own thing
         await expect(chart.locator('.path-total .count')).toHaveText(/^\d+$/); // the total itself stays the total
     });
 
@@ -76,7 +109,8 @@ test.describe('charts', () => {
     });
 
     test('the numbers are a deck: one chart in front, the arrows and the index bring another one forward', async ({
-        page
+        page,
+        isMobile
     }) => {
         await page.goto('/');
         const stage = page.locator('.numbers-row');
@@ -89,13 +123,27 @@ test.describe('charts', () => {
         await expect(front.locator('.card-k')).not.toHaveText(first!);
         await page.locator('.numbers-prev').click();
         await expect(front.locator('.card-k')).toHaveText(first!);
-        const third = page.locator('.numbers-index button').nth(3);
-        if (await third.isVisible()) {
-            await third.click(); // the index is desktop only
+        if (!isMobile) {
+            const third = page.locator('.numbers-index button').nth(3); // the index is desktop only
+            await third.click();
             await expect(third).toHaveAttribute('aria-current', 'true');
         }
         await expect(page.locator('.chart-card[data-pos="0"]')).toHaveCount(1);
         expect(await stage.evaluate((el) => el.scrollWidth <= el.clientWidth + 1)).toBe(true);
+    });
+
+    test('a click on a card peeking behind the front one brings it forward', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('.numbers-row').scrollIntoViewIfNeeded();
+        const front = page.locator('.chart-card[data-pos="0"] .card-k');
+        const first = await front.textContent();
+        const peek = await page.evaluate(() => {
+            const back = document.querySelector('.chart-card[data-pos="1"]')!.getBoundingClientRect();
+            const top = document.querySelector('.chart-card[data-pos="0"]')!.getBoundingClientRect();
+            return { x: (back.left + back.right) / 2, y: (back.top + top.top) / 2 };
+        });
+        await page.mouse.click(peek.x, peek.y);
+        await expect(front).not.toHaveText(first!);
     });
 
     test('the deck turns by itself, and stops while the pointer is on it', async ({ page }) => {
