@@ -59,8 +59,8 @@ src/
 │   ├── Hero/         Hero canvas and its simulations (sims/)
 │   ├── Nav/          Top nav (build time) + pill, theme menu (Nav.ts)
 │   └── NeuralMap/    Project map: similarity and layout (graph.ts, pure), canvas and cards (NeuralMap.ts)
-├── core/             Site facts, translation, structured data, analytics
-├── data/             Site content: profile.ts (experience, education, skills, now, checkpoints) and projects.ts
+├── core/             Site facts, translation, dates, structured data, analytics
+├── data/             Site content: profile.ts (experience, education, skills, now, checkpoints), projects.ts, and the skill rule (skills.ts)
 ├── i18n/             Interface text (en, fr)
 ├── pages/            Per-page blocks, entry scripts and styles (home, cv, project); content/render.ts maps blocks
 ├── styles/           Design tokens and themes (tokens.css), base styles (base.css)
@@ -119,7 +119,7 @@ All pages come from one list in `vite-plugins/pages.ts` (`PAGES`): path, templat
 
 `renderPage` (`vite-plugins/pages.ts`) writes every page's title, description, canonical URL and Open Graph / X tags: templates only keep what is not SEO. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). The home, CV and 404 pages share `public/og-image.png` (`og-image-fr.png` in French), 1200×630, drawn by `npm run media:brand` from the profile data; each project page uses its own `og.jpg`. `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
 
-A new page only needs its entry in `PAGES`: the tags and the sitemap follow, and `src/pages/pages.test.ts` checks them.
+A new page needs its entry in `PAGES`, its template in `vite.config.ts` and its `meta.*` text: the tags and the sitemap follow, and `src/pages/pages.test.ts` checks them. A new project needs none of this.
 
 ## Tests
 
