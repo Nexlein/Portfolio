@@ -177,3 +177,7 @@ Because of the CSP:
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
 - **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
+
+## License
+
+All rights reserved. The code is public to read.
