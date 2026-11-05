@@ -33,7 +33,7 @@
         "@types/node": "^24.19.2",
         "happy-dom": "^21.0.4",
         "husky": "^9.1.7",
-        "knip": "^6.44.0",
+        "knip": "^6.44.1",
         "lint-staged": "^17.6.0",
         "oxlint": "^1.90.0",
         "oxlint-tsgolint": "^7.0.2006",
@@ -42,7 +42,7 @@
         "stylelint-config-standard": "^40.0.0",
         "typescript": "^7.0.2",
         "vite": "^8.3.5",
-        "vitest": "^5.0.5"
+        "vitest": "^5.1.0"
     },
     "engines": {
         "node": "24.x"
