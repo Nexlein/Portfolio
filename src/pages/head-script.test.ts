@@ -23,7 +23,7 @@ function run({
     root.style.visibility = '';
     const replace = vi.fn();
     vi.stubGlobal('location', { pathname: path, search, hash, replace });
-    new Function(HEAD_SCRIPT)();
+    new Function(HEAD_SCRIPT)(); // oxlint-disable-line typescript/no-implied-eval -- runs it as the page would
     return { replace, hidden: root.style.visibility === 'hidden' };
 }
 

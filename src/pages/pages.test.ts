@@ -91,7 +91,7 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
         if (page.jsonLd)
             it('embeds valid JSON-LD', () => {
                 const block = doc.querySelector('script[type="application/ld+json"]')!;
-                const data = JSON.parse(block.textContent!);
+                const data = JSON.parse(block.textContent);
                 expect(data['@context']).toBe('https://schema.org');
                 expect(data).toEqual(JSON.parse(JSON.stringify(page.jsonLd!(lang))));
             });

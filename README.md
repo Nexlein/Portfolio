@@ -41,7 +41,7 @@ npm run dev
 | `npm run media`        | Generate missing posters, card copies and social images (ffmpeg) |
 | `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg) |
 | `npm run media:video`  | Re-encode a video for the web (ffmpeg)                           |
-| `npm run audit`        | Dependency audit (`config/audit-ci.jsonc`)                       |
+| `npm run audit`        | Fail on high or critical advisories (`npm audit`)                |
 | `npm run format`       | Format all files with Prettier                                   |
 | `npm run format:check` | Check formatting without writing                                 |
 
@@ -167,8 +167,8 @@ Because of the CSP:
 
 - **Pre-commit** (Husky + lint-staged): Oxlint/Stylelint autofix and Prettier on staged files, then typecheck and tests.
 - **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build; then browser tests and Lighthouse on the built site.
-- **Linting**: [Oxlint](https://oxc.rs) for TypeScript (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
-- **Audit**: fails on high/critical advisories. Accepted exceptions live in `config/audit-ci.jsonc`, each with a reason.
+- **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
+- **Audit**: `npm audit` fails on high/critical advisories.
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.

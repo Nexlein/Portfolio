@@ -1,6 +1,6 @@
 {
     "$schema": "./node_modules/oxlint/configuration_schema.json",
-    "plugins": ["typescript", "unicorn", "oxc", "import"],
+    "plugins": ["typescript", "unicorn", "oxc", "import", "vitest"],
     "categories": {
         "correctness": "error",
         "suspicious": "error",
@@ -10,12 +10,32 @@
         "browser": true,
         "builtin": true
     },
-    "rules": {},
+    "rules": {
+        // DOM code narrows event.target by hand: a guard for each one would only add noise
+        "typescript/no-unsafe-type-assertion": "off",
+        // `return void x` and exhaustive switches: both end every path on purpose
+        "typescript/consistent-return": "off",
+        "vitest/no-focused-tests": "error",
+        // expect(value, message) is Vitest's own form
+        "vitest/valid-expect": ["error", { "maxArgs": 2 }],
+        // Data-driven tests: an assertion per entry, some under a condition, some in a helper
+        "vitest/no-conditional-expect": "off",
+        "vitest/no-conditional-tests": "off",
+        "vitest/expect-expect": "off",
+        "vitest/require-mock-type-parameters": "off"
+    },
     "overrides": [
         {
             "files": ["e2e/**", "scripts/**"],
             "rules": {
                 "no-await-in-loop": "off"
+            }
+        },
+        {
+            "files": ["**/*.test.ts"],
+            "rules": {
+                // expect(video.pause) reads a spy, it never calls it
+                "typescript/unbound-method": "off"
             }
         }
     ]
