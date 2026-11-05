@@ -13,8 +13,7 @@ import { stillAttrs } from '../../ui/video.ts';
 import { numbers, pathChart } from '../../components/Charts/render.ts';
 import { monthName, thisMonth, yearOf } from '../../core/time.ts';
 import { firstSentence } from '../../core/text.ts';
-import { pickShown } from '../../components/NeuralMap/graph.ts';
-import { MAP_MAX } from '../../components/NeuralMap/limits.ts';
+import { MAP_MAX, pickShown } from '../../components/NeuralMap/graph.ts';
 
 const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`, slots);
 
@@ -60,9 +59,9 @@ export function projectList(lang: Lang): string {
     ).join('');
 }
 
-/** "Showing 24 of 40, the rest rotate in." — only when the map cannot hold everything. */
+/** "Showing 24 of 40." — only when the map cannot hold everything. */
 export function mapMore(lang: Lang): string {
-    const { shown } = pickShown(PROJECTS, MAP_MAX);
+    const shown = pickShown(PROJECTS, MAP_MAX);
     if (shown.length === PROJECTS.length) return '';
     return `${t(lang, 'work.more', { shown: shown.length, n: PROJECTS.length })} <button type="button" class="see-all">${t(lang, 'work.seeAll')}</button>`;
 }

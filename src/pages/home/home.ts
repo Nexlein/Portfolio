@@ -11,7 +11,6 @@ import { prefersReducedMotion } from '@/ui/motion';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
 import { initNumbers, initPathChart, initPathStory } from '@/components/Charts/Charts';
-import { MAP_MAX } from '@/components/NeuralMap/limits';
 import { boot } from '@/ui/boot';
 import { initReveals } from '@/ui/reveal';
 
@@ -98,7 +97,7 @@ function initWork(): void {
     // ── Map: loaded the first time it is shown (phones never download the map code)
     const mountMap = (): Promise<void> => {
         mounting ??= import('@/components/NeuralMap/NeuralMap').then(({ mountNeuralMap }) => {
-            map = mountNeuralMap(host, MAP_MAX);
+            map = mountNeuralMap(host);
             map.query(domain);
         });
         return mounting;

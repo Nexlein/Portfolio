@@ -10,6 +10,9 @@ import { skillsOf } from '../../data/skills.ts';
 /** Orbit per period, as a fraction of the usable ellipse: recent work closest to the centre. */
 export const ORBIT: Record<Period, number> = { Tek3: 0.4, Personal: 0.58, Tek2: 0.76, Tek1: 0.94 };
 
+/** Most projects the map shows at once: the list has the others. */
+export const MAP_MAX = 24;
+
 /** Card size the layout keeps apart (px). */
 export const CARD = { w: 190, h: 52, gap: 22 };
 
@@ -185,10 +188,9 @@ export function fitFor(W: number, H: number): { rx: number; ry: number } {
 }
 
 /** Which projects the map shows when it can hold `max`: featured first, then the most recent periods. */
-export function pickShown(projects: ProjectEntry[], max: number): { shown: ProjectEntry[]; hidden: ProjectEntry[] } {
-    const ranked = [
+export function pickShown(projects: ProjectEntry[], max: number): ProjectEntry[] {
+    return [
         ...projects.filter((p) => p.featured),
         ...PERIODS.toReversed().flatMap((y) => projects.filter((p) => !p.featured && p.year === y))
-    ];
-    return { shown: ranked.slice(0, max), hidden: ranked.slice(max) };
+    ].slice(0, max);
 }

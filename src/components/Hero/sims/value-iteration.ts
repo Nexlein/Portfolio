@@ -2,6 +2,7 @@
  * Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
  * A click toggles a wall and the policy re-plans around it.
  */
+import { seeded } from '@/core/seeded';
 import type { Stage } from './stage';
 
 const CELL = 30;
@@ -33,8 +34,7 @@ export function valueIteration(s: Stage): void {
         angle = new Float32Array(cols * rows);
         wall = new Uint8Array(cols * rows);
         // Short wall segments, seeded so the layout is stable, make the policy bend around obstacles
-        let seed = 7;
-        const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+        const rnd = seeded(7);
         for (let k = 0; k < (cols * rows) / 40; k++) {
             const x = Math.floor(rnd() * cols),
                 y = Math.floor(rnd() * rows),

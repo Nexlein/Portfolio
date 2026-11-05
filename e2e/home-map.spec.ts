@@ -33,14 +33,13 @@ test.describe('project map', () => {
         await mapDrawn(page);
         // Graze card A and move on to card B inside the hover-intent delay
         await page.evaluate(() => {
-            const [a, b] = [...document.querySelectorAll('.nm-card:not(.off)')];
+            const [a, b] = [...document.querySelectorAll('.nm-card')];
             const mouse = { pointerType: 'mouse' };
             a.dispatchEvent(new PointerEvent('pointerenter', mouse));
             a.dispatchEvent(new PointerEvent('pointerleave', mouse));
             b.dispatchEvent(new PointerEvent('pointerenter', mouse));
         });
-        const where = () =>
-            page.evaluate(() => (document.querySelector('.nm-card:not(.off)') as HTMLElement).style.translate);
+        const where = () => page.evaluate(() => (document.querySelector('.nm-card') as HTMLElement).style.translate);
         const before = await where();
         await expect.poll(where, { timeout: 4000 }).not.toBe(before); // it keeps drifting with the others
     });
@@ -50,7 +49,7 @@ test.describe('project map', () => {
         await page.locator('#work').scrollIntoViewIfNeeded();
         await mapDrawn(page);
         await page.evaluate(() => {
-            const card = document.querySelector('.nm-card:not(.off)')!;
+            const card = document.querySelector('.nm-card')!;
             card.dispatchEvent(new PointerEvent('pointerenter', { pointerType: 'mouse' }));
         });
         await expect(page.locator('.nm-card.near[data-score]').first()).toBeAttached();
@@ -68,7 +67,7 @@ test.describe('project map', () => {
         const gaps = await page.evaluate(async () => {
             const mouse = { pointerType: 'mouse' };
             const box = document.querySelector('.nm')!.getBoundingClientRect();
-            const low = [...document.querySelectorAll<HTMLElement>('.nm-card:not(.off)')].filter((card) => {
+            const low = [...document.querySelectorAll<HTMLElement>('.nm-card')].filter((card) => {
                 const { top, height } = card.getBoundingClientRect();
                 return top + height / 2 > box.top + box.height / 2; // only cards low on the map unfold upward
             });
@@ -96,7 +95,7 @@ test.describe('project map', () => {
     test('draws every project and unfolds one on hover, with its similar projects', async ({ page }) => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded();
-        const cards = page.locator('.nm-card:not(.off)');
+        const cards = page.locator('.nm-card');
         await expect(cards).toHaveCount(PROJECTS.length);
         await expect(page.locator('.project-list')).toBeHidden(); // the list is the other view
 
@@ -134,7 +133,7 @@ test.describe('project map', () => {
         const outside = () =>
             page.evaluate(() => {
                 const box = document.querySelector('.nm')!.getBoundingClientRect();
-                return [...document.querySelectorAll('.nm-card:not(.off)')].filter((c) => {
+                return [...document.querySelectorAll('.nm-card')].filter((c) => {
                     const r = c.getBoundingClientRect();
                     return r.right > box.right + 8 || r.left < box.left - 8;
                 }).length;
