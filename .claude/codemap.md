@@ -16,7 +16,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## e2e
 - **fixtures.ts** (35) — `page` that fails the test on any console error, uncaught exception or CSP violation, so every scenario also checks that nothing broke si...
   - exports: VideoOptions, test
-- tests: home.spec.ts, not-found.spec.ts, pages.spec.ts, project.spec.ts
+- tests: home-charts.spec.ts, home-hero.spec.ts, home-map.spec.ts, home-nav.spec.ts, home.spec.ts, not-found.spec.ts, pages.spec.ts, project.spec.ts
 
 ## scripts
 - **brand-images.ts** (71) — Social preview of the home page, one per language (public/og-image.png and og-image-fr.png, 1200x630, what LinkedIn and X expect) and the...
@@ -259,7 +259,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: videoType, videoPoster, THUMB_WIDTHS, thumbOf, stillImage, still, stillAttrs, playVideosWhenVisible
   - → data/projects, ui/motion
   - ← scripts/make-thumbs, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
-- tests: glide.test.ts, video.dom.test.ts, video.test.ts
+- tests: boot.test.ts, glide.test.ts, video.dom.test.ts, video.test.ts
 
 ## src
 - **vite-env.d.ts** (10) — / <reference types="vite/client" />
