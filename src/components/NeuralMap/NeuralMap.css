@@ -102,8 +102,8 @@
     stroke-opacity: 0.06;
 }
 
-.nm.focus :is(.nm-port:not(.hot), .nm-wire, .nm-neuron),
-.nm.focus :is(.nm-layer, .nm-layer-label) {
+.nm.booted.focus :is(.nm-port:not(.hot), .nm-wire, .nm-neuron),
+.nm.booted.focus :is(.nm-layer, .nm-layer-label) {
     opacity: 0.3;
 }
 
@@ -369,12 +369,12 @@
 }
 
 .nm.focus .nm-card:not(.open, .near) {
-    opacity: 0.4;
+    opacity: 0.6;
 }
 
 /* A domain is asked for (see query): its projects stay lit, the others dim until the filter is cleared */
 .nm.filtered .nm-card.dim:not(.open, .near) {
-    opacity: 0.3;
+    opacity: 0.6;
 }
 
 .nm-card.near {

@@ -2,8 +2,8 @@
  * What moves and where it goes on the project map, without any DOM: the map's card ports, its breeze, its hidden
  * neurons, where a layer's label fits, and the springs that move the cards. NeuralMap.ts draws the result.
  */
-import { seeded } from '../../core/seeded.ts';
-import { CARD } from './graph.ts';
+import { seeded } from '@/core/seeded';
+import { CARD } from './graph';
 
 export interface Pt {
     x: number;

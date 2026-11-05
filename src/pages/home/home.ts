@@ -96,9 +96,10 @@ function initWork(): void {
 
     // ── Map: loaded the first time it is shown (phones never download the map code)
     // Past its limit the map may have no card of a domain: dimming everything says nothing, the list has them all
+    const noCardOnMap = () => !!map && !!domain && !host.querySelector(`.nm-card[data-domain="${domain}"]`);
     const askMap = () => {
         map?.query(domain);
-        if (map && domain && !host.querySelector(`.nm-card[data-domain="${domain}"]`)) show('list');
+        if (view === 'map') show('map');
     };
     const mountMap = (): Promise<void> => {
         mounting ??= import('@/components/NeuralMap/NeuralMap').then(({ mountNeuralMap }) => {
@@ -108,14 +109,19 @@ function initWork(): void {
         return mounting;
     };
 
-    const show = (next: 'map' | 'list') => {
+    const show = (wanted: 'map' | 'list') => {
+        const next = wanted === 'map' && noCardOnMap() ? 'list' : wanted;
         view = next;
         section.dataset.view = next;
         switcher
             .querySelectorAll('button')
             .forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === next)));
         if (next === 'map') {
-            mountMap().catch(() => show('list')); // the code could not load (a stale page after a deploy): the list stays usable
+            // The code could not load (a stale page after a deploy): the list stays usable, and the next try starts afresh
+            mountMap().catch(() => {
+                mounting = undefined;
+                show('list');
+            });
         }
     };
 
