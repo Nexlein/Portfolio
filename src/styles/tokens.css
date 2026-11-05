@@ -60,8 +60,8 @@
     /* Chart series: the first (most used) is the accent */
     --c0: var(--signal);
     --c1: var(--cold);
-    --c2: color-mix(in oklab, var(--cold) 45%, var(--bg));
-    --c3: color-mix(in oklab, var(--ink) 35%, var(--bg));
+    --c2: color-mix(in oklab, var(--cold) 70%, var(--bg));
+    --c3: color-mix(in oklab, var(--ink) 50%, var(--bg));
     --c4: var(--third);
 }
 

@@ -8,7 +8,7 @@ import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
 import { f1, jsonBlock } from '../../core/text.ts';
 import { monthName, MONTHS, yearOf } from '../../core/time.ts';
-import { scoped, type Lang } from '../../core/translate.ts';
+import { domainName, scoped, type Lang } from '../../core/translate.ts';
 import {
     distinctSkills,
     domainAxes,
@@ -61,7 +61,8 @@ export function changeText(
             : range.months === 1
               ? t(lang, 'path.over1')
               : t(lang, 'path.over', { n: range.months });
-    const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${pct} %)`}`;
+    const percent = lang === 'fr' ? `${pct}\u00a0%` : `${pct}%`;
+    const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${percent})`}`;
     return { text, over, up: delta > 0 };
 }
 
@@ -118,13 +119,14 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
                 mx = x(yearOf(c.date)),
                 my = y(valueAt(points, yearOf(c.date))),
                 half = label.length * 3.3 + 8;
-            const row = rowsEnd.findIndex((end) => mx - half > end);
+            // A checkpoint at the very start or end of a range keeps its name inside the picture
+            const anchor = mx - half < 0 ? 'start' : mx + half > W ? 'end' : '';
+            const left = anchor === 'start' ? mx : anchor === 'end' ? mx - 2 * half : mx - half;
+            const row = rowsEnd.findIndex((end) => left > end);
             if (row < 0)
                 return `<g class="mark" data-cp="${c.id}"><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle></g>`;
-            rowsEnd[row] = mx + half;
-            // A checkpoint at the very start or end of a range keeps its name inside the picture
-            const anchor = mx - half < 0 ? ' start' : mx + half > W ? ' end' : '';
-            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text class="${anchor.trim()}" x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
+            rowsEnd[row] = left + 2 * half;
+            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text class="${anchor}" x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
         })
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria', { n: total })}">
@@ -191,7 +193,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
 /** A language's name, or the label of a group of them. */
 const languageName = (lang: Lang, key: string) =>
     key === OTHER ? t(lang, 'numbers.other') : key === INFRA ? t(lang, 'numbers.infra') : key;
-const domainLabel = (lang: Lang, key: string, set = 'domains') => t(lang, `${set}.${key}`);
+const domainShort = (lang: Lang, key: string) => t(lang, `domainsShort.${key}`);
 const period = (lang: Lang, y: string) => t(lang, `work.periods.${y}`).split(' · ')[0];
 
 function radar(lang: Lang, projects: ProjectEntry[]): string {
@@ -208,7 +210,7 @@ function radar(lang: Lang, projects: ProjectEntry[]): string {
             .map((_, i) => at(i, r(i)))
             .map(([px, py]) => `${f1(px)},${f1(py)}`)
             .join(' ');
-    return `<svg class="radar" viewBox="-100 10 460 240" role="img" aria-label="${keys.map((k, i) => `${domainLabel(lang, k)} ${counts[i]}`).join(', ')}">
+    return `<svg class="radar" viewBox="-100 10 460 240" role="img" aria-label="${keys.map((k, i) => `${domainName(lang, k)} ${counts[i]}`).join(', ')}">
 ${[0.25, 0.5, 0.75, 1].map((k) => `<polygon class="ring" points="${poly(() => Rr * k)}" />`).join('')}
 ${keys.map((_, i) => `<line class="spoke" x1="${C}" y1="${C}" x2="${f1(at(i, Rr)[0])}" y2="${f1(at(i, Rr)[1])}" />`).join('')}
 <polygon class="shape" points="${poly((i) => (Rr * counts[i]) / max)}" />
@@ -217,7 +219,7 @@ ${keys
         const [px, py] = at(i, (Rr * counts[i]) / max);
         const [lx, ly] = at(i, Rr + 18);
         const anchor = lx < C - 10 ? 'end' : lx > C + 10 ? 'start' : 'middle';
-        return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3" /><text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${anchor}">${domainLabel(lang, k, 'domainsShort')} · ${counts[i]}</text>`;
+        return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3" /><text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${anchor}">${domainShort(lang, k)} · ${counts[i]}</text>`;
     })
     .join('')}</svg>`;
 }
@@ -273,7 +275,13 @@ function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
                 .join('')}${columnLabel(period(lang, pers[i]), bx + bw / 2, H)}</g>`;
         })
         .join('');
-    return `<svg class="columns" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.languagesTitle')}">${bars}</svg>
+    const summary = pers
+        .map(
+            (y, i) =>
+                `${period(lang, y)}: ${keys.flatMap((k, j) => (data[i][j] ? [`${name(k)} ${data[i][j]}`] : [])).join(', ')}`
+        )
+        .join('; ');
+    return `<svg class="columns" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.languagesTitle')}. ${summary}">${bars}</svg>
 <ul class="key">${keys.map((k, i) => `<li><span class="c${i}"></span>${name(k)}</li>`).join('')}</ul>`;
 }
 
@@ -317,7 +325,7 @@ function chips(projects: ProjectEntry[], now: number): string {
         name = spelling(projects);
     return `<ul class="chips">${recent
         .slice(0, 18)
-        .map((s) => `<li>${name(s)}</li>`)
+        .map((s) => `<li lang="en">${name(s)}</li>`)
         .join('')}${recent.length > 18 ? `<li class="more">+${recent.length - 18}</li>` : ''}</ul>`;
 }
 
@@ -339,14 +347,20 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
                 .map((y, c) => {
                     const n = grid[r][c];
                     const x0 = left + c * cw;
-                    return `<rect class="cell${n ? '' : ' empty'}" x="${f1(x0 + 2)}" y="${f1(y0 + 2)}" width="${f1(cw - 4)}" height="${f1(ch - 4)}" rx="4"${n ? ` fill-opacity="${(0.18 + 0.82 * (n / max)).toFixed(2)}"` : ''}><title>${domainLabel(lang, d, 'domainsShort')} · ${period(lang, y)}: ${n}</title></rect>${n ? `<text class="n" x="${f1(x0 + cw / 2)}" y="${f1(y0 + ch / 2 + 3.5)}">${n}</text>` : ''}`;
+                    return `<rect class="cell${n ? '' : ' empty'}" x="${f1(x0 + 2)}" y="${f1(y0 + 2)}" width="${f1(cw - 4)}" height="${f1(ch - 4)}" rx="4"${n ? ` fill-opacity="${(0.18 + 0.42 * (n / max)).toFixed(2)}"` : ''}><title>${domainShort(lang, d)} · ${period(lang, y)}: ${n}</title></rect>${n ? `<text class="n" x="${f1(x0 + cw / 2)}" y="${f1(y0 + ch / 2 + 3.5)}">${n}</text>` : ''}`;
                 })
                 .join('');
-            return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${domainLabel(lang, d, 'domainsShort')}</text>${row}</g>`;
+            return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${domainShort(lang, d)}</text>${row}</g>`;
         })
         .join('');
     const cols = pers.map((y, c) => columnLabel(period(lang, y), left + c * cw + cw / 2, H)).join('');
-    return `<svg class="heat" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.heatTitle')}">${cells}${cols}</svg>`;
+    const summary = keys
+        .map(
+            (d, r) =>
+                `${domainShort(lang, d)}: ${pers.flatMap((y, c) => (grid[r][c] ? [`${period(lang, y)} ${grid[r][c]}`] : [])).join(', ')}`
+        )
+        .join('; ');
+    return `<svg class="heat" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.heatTitle')}. ${summary}">${cells}${cols}</svg>`;
 }
 
 const count = (n: number) => `<span class="count" data-to="${n}">${n}</span>`;

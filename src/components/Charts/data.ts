@@ -195,11 +195,12 @@ export function domainAxes(projects: ProjectEntry[]): { keys: string[]; counts: 
     return { keys, counts: keys.map((d) => projects.filter((p) => p.category === d).length) };
 }
 
-/** The most used skills across projects, most frequent first. */
+/** The most used skills across projects, most frequent first: `n` of them, and any tied with the last. */
 export function topSkills(projects: ProjectEntry[], n = 7): [string, number][] {
     const freq = new Map<string, number>();
     for (const p of projects) for (const s of new Set(skillsOf(p.tags))) freq.set(s, (freq.get(s) ?? 0) + 1);
-    return [...freq].toSorted((a, b) => b[1] - a[1]).slice(0, n);
+    const ranked = [...freq].toSorted((a, b) => b[1] - a[1]);
+    return ranked.filter(([, uses], i) => i < n || uses === ranked[n - 1][1]);
 }
 
 /** New skills per period: skills seen for the first time in that period's projects. */

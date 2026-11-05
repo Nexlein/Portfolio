@@ -144,7 +144,7 @@
 }
 
 .path-svg .marks.lit .mark:not(.on) {
-    opacity: 0.5;
+    opacity: 0.7;
 }
 
 .path-svg .mark.on .mark-dot {
@@ -239,10 +239,6 @@
     transform: translate(-50%, calc(-100% - 14px));
 }
 
-.path-tip[hidden] {
-    display: none;
-}
-
 .path-tip span:last-child {
     color: var(--muted);
     font-size: 12px;
@@ -278,10 +274,6 @@
     gap: 10px;
 }
 
-.numbers-nav[hidden] {
-    display: none;
-}
-
 .numbers-nav button {
     width: 36px;
     height: 36px;
@@ -290,11 +282,6 @@
     transition:
         opacity 200ms ease,
         border-color 200ms;
-}
-
-.numbers-nav button:disabled {
-    opacity: 0.35;
-    cursor: default;
 }
 
 /* Without JS: a plain grid of cards */
@@ -784,7 +771,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .path-chart .line,
+    .path-chart.drawn .line,
+    .path-chart.drawn :is(.area, .now, .marks),
     .numbers.deck .chart-card,
     .radar .shape,
     .donut .spin,
@@ -818,6 +806,6 @@
 }
 
 .heat text.n {
-    fill: var(--bg);
+    fill: var(--ink);
     font-weight: 500;
 }
