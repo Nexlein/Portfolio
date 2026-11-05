@@ -9,9 +9,8 @@ import { attr } from '../../core/text.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
 import { stillAttrs, videoPoster, videoType } from '../../ui/video.ts';
-import { monthName } from '../../components/Charts/render.ts';
-import { yearOf } from '../../components/Charts/data.ts';
-import { neighbours, periodOf, skillSet } from '../../components/NeuralMap/graph.ts';
+import { monthName, yearOf } from '../../core/time.ts';
+import { neighbours, skillSet } from '../../components/NeuralMap/graph.ts';
 
 const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `projectPage.${key}`, slots);
 const domainName = (lang: Lang, d: string) => lookup(lang, `home.domains.${d}`);
@@ -59,7 +58,7 @@ function specs(project: ProjectEntry, lang: Lang): string {
     const rows: [string, string][] = [
         [t(lang, 'started'), monthName(yearOf(project.date), lang)],
         [t(lang, 'domain'), domainName(lang, project.category)],
-        [t(lang, 'period'), lookup(lang, `home.work.periods.${periodOf(project)}`)],
+        [t(lang, 'period'), lookup(lang, `home.work.periods.${project.year}`)],
         ...(team ? [[t(lang, 'team'), team.size === 1 ? t(lang, 'solo') : t(lang, 'people', { n: team.size })]] : []),
         [t(lang, 'stack'), project.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('')]
     ] as [string, string][];

@@ -4,18 +4,12 @@
  * functions for interactions.
  */
 import { CHECKPOINTS, EXPERIENCES, type Checkpoint } from '../../data/profile.ts';
-import { DOMAINS, type ProjectEntry } from '../../data/projects.ts';
+import { yearOf } from '../../core/time.ts';
+import { DOMAINS, PERIODS, type Period, type ProjectEntry } from '../../data/projects.ts';
 import { skillNames, skillsOf } from '../../data/skills.ts';
-import { ORBIT, periodOf, type Period } from '../NeuralMap/graph.ts';
 import { schoolYear, valueAt } from './series.ts';
 
 export { valueAt, yDomain } from './series.ts';
-
-/** 'YYYY-MM' -> fractional year (2026-04 -> 2026.25). */
-export const yearOf = (month: string) => Number(month.slice(0, 4)) + (Number(month.slice(5, 7)) - 1) / 12;
-
-/** Today, as a fractional year at the start of the current month. */
-export const thisMonth = (now = new Date()) => now.getFullYear() + now.getMonth() / 12;
 
 /** How the data spells a normalised skill ('typescript' -> 'TypeScript'): projects, jobs and checkpoints alike. */
 export function spelling(projects: ProjectEntry[]): (skill: string) => string {
@@ -168,12 +162,8 @@ export const learnedSince = (projects: ProjectEntry[], now: number) =>
 
 // ── Group counts ────────────────────────────────────────────────────────────
 
-/** Oldest first: the map's orbits, which list the most recent period first. */
-const PERIODS: Period[] = [];
-for (const p of Object.keys(ORBIT) as Period[]) PERIODS.unshift(p);
-
 /** Periods present in the data, in time order. */
-export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => periodOf(p) === y));
+export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => p.year === y));
 
 const LANGUAGES = new Set(['C', 'C++', 'Python', 'TypeScript', 'JavaScript', 'Rust', 'Go', 'Java', 'C#', 'Bash']);
 export const INFRA = 'infra';
@@ -226,7 +216,7 @@ export function newSkillsPerPeriod(projects: ProjectEntry[]): number[] {
     const pers = periodsIn(projects);
     const first = new Map<string, Period>();
     for (const y of pers)
-        for (const p of projects.filter((q) => periodOf(q) === y))
+        for (const p of projects.filter((q) => q.year === y))
             for (const s of skillsOf(p.tags)) if (!first.has(s)) first.set(s, y);
     return pers.map((y) => [...first.values()].filter((v) => v === y).length);
 }

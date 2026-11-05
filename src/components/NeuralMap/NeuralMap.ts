@@ -13,23 +13,11 @@ import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/lang';
 import { firstSentence } from '@/core/text';
 import { NOW } from '@/data/profile';
-import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
+import { PERIODS, PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { stillAttrs } from '@/ui/video';
-import {
-    CARD,
-    fitFor,
-    layout,
-    neighbours,
-    NOW_BOX,
-    ORBIT,
-    periodOf,
-    pickShown,
-    similarity,
-    type Period,
-    type Star
-} from './graph';
+import { CARD, fitFor, layout, neighbours, NOW_BOX, ORBIT, pickShown, similarity, type Star } from './graph';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const OPEN_W = 330;
@@ -147,7 +135,7 @@ function cardHtml(p: ProjectEntry): string {
 <span class="nm-more"><span class="nm-inner">
   <span class="nm-media"><img ${stillAttrs(p, '164px')} alt="" loading="lazy" /></span>
   <span class="nm-desc">${firstSentence(p.description[lang])}</span>
-  <span class="mono nm-skills">${i18n.t(`home.work.periods.${periodOf(p)}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
+  <span class="mono nm-skills">${i18n.t(`home.work.periods.${p.year}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
   <span class="nm-go">${i18n.t('home.work.open')} <span aria-hidden="true">→</span></span>
 </span></span></a>`;
 }
@@ -262,9 +250,9 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         }));
 
         // Period layers: a dotted ellipse each, labelled in its widest gap that no card (of any layer) covers
-        (Object.keys(ORBIT) as Period[]).forEach((period, ring) => {
+        PERIODS.toReversed().forEach((period, ring) => {
             const r = ORBIT[period];
-            const own = cards.filter((c) => periodOf(c.star.p) === period);
+            const own = cards.filter((c) => c.star.p.year === period);
             const ang = own.map((c) => Math.atan2((c.y - cy) / fit.ry, (c.x - cx) / fit.rx));
             const text = svg('text', 'nm-layer-label', labelsG);
             text.textContent = i18n.t(`home.work.periods.${period}`);
@@ -562,7 +550,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         const pool = cards.filter((c) => !c.star.p.featured && c.act < 0.3 && !c.el.classList.contains('leaving'));
         if (!pool.length) return;
         const out = pool[Math.floor(Math.random() * pool.length)];
-        const score = (q: ProjectEntry) => similarity(out.star.p, q) + (periodOf(q) === periodOf(out.star.p) ? 0.5 : 0);
+        const score = (q: ProjectEntry) => similarity(out.star.p, q) + (q.year === out.star.p.year ? 0.5 : 0);
         swap(
             out,
             hidden.reduce((a, q) => (score(q) > score(a) ? q : a))

@@ -1,0 +1,21 @@
+import { describe, expect, it } from 'vitest';
+import { monthName, thisMonth, yearOf } from './time';
+
+describe('dates', () => {
+    it('reads a month as a fractional year (January is the year itself)', () => {
+        expect(yearOf('2026-01')).toBe(2026);
+        expect(yearOf('2026-04')).toBe(2026.25);
+        expect(yearOf('2026-12')).toBeCloseTo(2026 + 11 / 12);
+    });
+
+    it('puts today at the start of the current month', () => {
+        expect(thisMonth(new Date('2026-10-14'))).toBeCloseTo(2026 + 9 / 12);
+        expect(thisMonth(new Date('2027-01-31'))).toBe(2027);
+    });
+
+    it('names a month in each language', () => {
+        expect(monthName(yearOf('2026-04'), 'en')).toBe('Apr 2026');
+        expect(monthName(yearOf('2026-02'), 'fr')).toBe('févr. 2026');
+        expect(monthName(yearOf('2026-12'), 'en')).toBe('Dec 2026');
+    });
+});

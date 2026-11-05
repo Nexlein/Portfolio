@@ -4,15 +4,10 @@
  * - Similarity: Jaccard overlap of skills (src/data/skills.ts), same domain counts as shared.
  * - Direction from the centre = similarity (classical MDS), distance = period (recent work closest).
  */
-import type { ProjectEntry } from '../../data/projects.ts';
+import { PERIODS, type Period, type ProjectEntry } from '../../data/projects.ts';
 import { skillsOf } from '../../data/skills.ts';
 
-export type Period = 'Tek3' | 'Personal' | 'Tek2' | 'Tek1';
-
-/** Period of a project; untagged school projects are second-year ones. */
-export const periodOf = (p: ProjectEntry): Period => p.year ?? 'Tek2';
-
-/** Orbit per period, as a fraction of the usable ellipse: recent work closest to the centre (key order = recency). */
+/** Orbit per period, as a fraction of the usable ellipse: recent work closest to the centre. */
 export const ORBIT: Record<Period, number> = { Tek3: 0.4, Personal: 0.58, Tek2: 0.76, Tek1: 0.94 };
 
 /** Card size the layout keeps apart (px). */
@@ -117,7 +112,7 @@ function settle(
     const rank = raw.map((a, i) => raw.filter((b, j) => b < a || (b === a && j < i)).length);
     const stars = items.map((p, i) => {
         const angle = (-Math.PI + (2 * Math.PI * (rank[i] + 0.5)) / raw.length) * (1 - bend) + raw[i] * bend;
-        const r = ORBIT[periodOf(p)];
+        const r = ORBIT[p.year];
         return { p, x: cx + Math.cos(angle) * fit.rx * r, y: cy + Math.sin(angle) * fit.ry * r };
     });
     const { w, h, gap } = CARD;
@@ -193,7 +188,7 @@ export function fitFor(W: number, H: number): { rx: number; ry: number } {
 export function pickShown(projects: ProjectEntry[], max: number): { shown: ProjectEntry[]; hidden: ProjectEntry[] } {
     const ranked = [
         ...projects.filter((p) => p.featured),
-        ...(Object.keys(ORBIT) as Period[]).flatMap((y) => projects.filter((p) => !p.featured && periodOf(p) === y))
+        ...PERIODS.toReversed().flatMap((y) => projects.filter((p) => !p.featured && p.year === y))
     ];
     return { shown: ranked.slice(0, max), hidden: ranked.slice(max) };
 }

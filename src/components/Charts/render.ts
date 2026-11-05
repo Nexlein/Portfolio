@@ -7,8 +7,8 @@
 import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
 import type { Slots } from '../../core/lang.ts';
+import { monthName, MONTHS, yearOf } from '../../core/time.ts';
 import { lookup, type Lang } from '../../core/translate.ts';
-import { periodOf } from '../NeuralMap/graph.ts';
 import {
     distinctSkills,
     domainAxes,
@@ -29,21 +29,15 @@ import {
     topSkills,
     valueAt,
     yDomain,
-    yearOf,
     yTicks,
     type Point,
     type Range,
     type Tick
 } from './data.ts';
-import { monthLabel, PATH, pathSamples, type PathData } from './series.ts';
+import { PATH, pathSamples, type PathData } from './series.ts';
 
 const f1 = (n: number) => n.toFixed(1);
 const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`, slots);
-const MONTHS: Record<Lang, string[]> = {
-    en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    fr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
-};
-export const monthName = (time: number, lang: Lang) => monthLabel(time, MONTHS[lang]);
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
@@ -233,7 +227,7 @@ ${keys
 
 function donut(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
-    const counts = pers.map((y) => projects.filter((p) => periodOf(p) === y).length),
+    const counts = pers.map((y) => projects.filter((p) => p.year === y).length),
         total = counts.reduce((a, b) => a + b, 0);
     let acc = 0;
     const arcs = counts
@@ -259,7 +253,7 @@ function columnLabel(text: string, x: number, H: number): string {
 function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
     const { keys, bucket } = languageBuckets(projects);
-    const data = pers.map((y) => keys.map((l) => projects.filter((p) => periodOf(p) === y && bucket(p) === l).length));
+    const data = pers.map((y) => keys.map((l) => projects.filter((p) => p.year === y && bucket(p) === l).length));
     const max = Math.max(...data.map((r) => r.reduce((a, b) => a + b, 0)));
     const W = 300,
         H = 220,
@@ -334,8 +328,7 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
     const { keys } = domainAxes(projects);
     const inCell = (d: string, y: string) =>
-        projects.filter((p) => (d === OTHER ? !keys.includes(p.category) : p.category === d) && periodOf(p) === y)
-            .length;
+        projects.filter((p) => (d === OTHER ? !keys.includes(p.category) : p.category === d) && p.year === y).length;
     const grid = keys.map((d) => pers.map((y) => inCell(d, y)));
     const max = Math.max(...grid.flat(), 1);
     const W = 300,

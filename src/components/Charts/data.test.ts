@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { CHECKPOINTS, EXPERIENCES } from '@/data/profile';
+import { thisMonth, yearOf } from '@/core/time';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
 import { skillsOf } from '@/data/skills';
-import { periodOf } from '../NeuralMap/graph';
 import { changeText, numbers, pathChart, pathSvg, phaseLabel } from './render';
 import {
     distinctSkills,
@@ -19,12 +19,10 @@ import {
     schoolYearAt,
     skillSeries,
     spelling,
-    thisMonth,
     timeTicks,
     topSkills,
     valueAt,
     yDomain,
-    yearOf,
     yTicks
 } from './data';
 
@@ -33,23 +31,6 @@ const last = (points: ReturnType<typeof skillSeries>) => points[points.length - 
 
 /** A project with only what the numbers read: a month and some tags. */
 const project = (id: string, date: string, tags: string[]): ProjectEntry => ({ ...PROJECTS[0], id, date, tags });
-
-describe('dates', () => {
-    it('reads a month as a fractional year (January is the year itself)', () => {
-        expect(yearOf('2026-01')).toBe(2026);
-        expect(yearOf('2026-04')).toBe(2026.25);
-        expect(yearOf('2026-12')).toBeCloseTo(2026 + 11 / 12);
-    });
-
-    it('puts today at the start of the current month', () => {
-        expect(thisMonth(new Date('2026-10-14'))).toBeCloseTo(2026 + 9 / 12);
-        expect(thisMonth(new Date('2027-01-31'))).toBe(2027);
-    });
-
-    it('treats a project without a year as second-year work', () => {
-        expect(periodOf({ ...PROJECTS[0], year: undefined })).toBe('Tek2');
-    });
-});
 
 describe('spelling', () => {
     it('writes a skill as the data does', () => {
@@ -136,7 +117,7 @@ describe('group counts', () => {
 
     it('lists the periods oldest first, and every project falls in one', () => {
         expect(periodsIn(PROJECTS)).toEqual(['Tek1', 'Tek2', 'Personal', 'Tek3']);
-        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(periodOf(p));
+        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(p.year);
     });
 
     it('counts every project in one domain axis', () => {

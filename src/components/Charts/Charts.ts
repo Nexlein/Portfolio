@@ -3,10 +3,11 @@
  * arrows. The SVG is already in the page; this only adds behaviour (count-ups and reveals: src/ui/reveal.ts).
  */
 import { fill } from '@/core/lang';
+import { monthLabel } from '@/core/time';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { countUp } from '@/ui/reveal';
 import { trackScale } from '@/ui/svg-scale';
-import { monthLabel, PATH, pathSamples, schoolYear, valueAt, yDomain, type PathData } from './series';
+import { PATH, pathSamples, schoolYear, valueAt, yDomain, type PathData } from './series';
 
 /** How far (in chart units) the crosshair reaches for a checkpoint. */
 const SNAP = 14;

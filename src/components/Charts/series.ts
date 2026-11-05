@@ -26,10 +26,6 @@ export function yDomain(points: Step[], t0: number): { lo: number; hi: number } 
 /** The school year a time falls in, for school years starting at `start`: 0 before, then 1, 2, 3... */
 export const schoolYear = (time: number, start: number) => (time < start ? 0 : Math.floor(time - start + 1e-9) + 1);
 
-/** "Jan 2026" from a fractional year, with the month names of a language. */
-export const monthLabel = (time: number, months: readonly string[]) =>
-    `${months[Math.min(11, Math.round((time % 1) * 12))]} ${Math.floor(time + 1e-6)}`;
-
 export const PATH = { W: 1080, H: 360, L: 44, R: 60, T: 84, B: 30 };
 const smooth = (u: number) => u * u * (3 - 2 * u);
 
