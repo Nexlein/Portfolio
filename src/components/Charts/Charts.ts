@@ -128,6 +128,7 @@ function autoplay(o: {
     step: () => void;
 }): (restart?: boolean) => void {
     const { host, pointerRoot, hold, focusWithin } = o;
+    host.style.setProperty('--step', `${STEP_MS}ms`); // the fill line lasts as long as the step
     let timer = 0,
         visible = false,
         hover = false, // the pointer is on a part that pauses it

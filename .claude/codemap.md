@@ -27,9 +27,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - → data/projects, ui/video
 
 ## src/components/Charts
-- **Charts.css** (834) — Path chart and the numbers deck.
+- **Charts.css** (824) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (298) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
+- **Charts.ts** (299) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
   - exports: initPathChart, initPathStory, initNumbers
   - → core/lang, core/text, core/time, ui/motion, ui/reveal, ui/svg-scale, components/Charts/series
   - ← pages/home/home
@@ -106,7 +106,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: themes.test.ts
 
 ## src/components/NeuralMap
-- **NeuralMap.css** (461) — The project map (see NeuralMap.ts).
+- **NeuralMap.css** (457) — The project map (see NeuralMap.ts).
   - ← index.html
 - **NeuralMap.ts** (607) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
@@ -191,7 +191,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: typeset, experience, skills, education, certifications, projectBlocks, contact, QR_CODE, qr
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
-- **cv.css** (368) — CV: a sheet on the site's stage.
+- **cv.css** (366) — CV: a sheet on the site's stage.
   - ← cv.html
 - **cv.ts** (8) — CV page: the content is rendered at build time (src/pages/cv/blocks.ts); this adds the nav and the print button.
   - → core/analytics, components/Nav/Nav
@@ -205,7 +205,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/lang, core/translate, ui/icons, ui/video, components/Charts/render, core/time, core/text, components/NeuralMap/graph
   - ← pages/content/render
-- **home.css** (557) — Home sections that are not components of their own: selected work, the project list, experience, contact.
+- **home.css** (534) — Home sections that are not components of their own: selected work, the project list, experience, contact.
   - ← index.html
 - **home.ts** (253) — Home page.
   - → core/analytics, core/i18n, ui/glide, ui/motion, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, ui/boot, ui/reveal, components/NeuralMap/NeuralMap
@@ -222,7 +222,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **gallery.ts** (34) — Gallery on a project page: arrows, dots, arrow keys and a "2 / 4" counter.
   - exports: initGallery
   - ← pages/project/project
-- **project.css** (360) — Project page: a header, the media, a spec strip, then the projects the map links it to.
+- **project.css** (340) — Project page: a header, the media, a spec strip, then the projects the map links it to.
   - ← project.html
 - **project.ts** (29) — Project page entry point.
   - → core/analytics, components/Nav/Nav, ui/boot, ui/reveal, ui/motion, ui/video, pages/project/gallery
@@ -234,10 +234,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: render.test.ts
 
 ## src/styles
-- **base.css** (360) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
+- **base.css** (401) — Reset, type scale and the few shared building blocks of the redesign (buttons, links, sections, reveals).
   - → styles/tokens.css
   - ← 404.html, cv.html, index.html, project.html
-- **tokens.css** (81) — Design tokens.
+- **tokens.css** (82) — Design tokens.
   - ← styles/base.css
 
 ## src/ui

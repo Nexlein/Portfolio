@@ -27,14 +27,6 @@
     border-radius: 18px;
 }
 
-.feature:nth-child(2) {
-    transition-delay: 80ms, 80ms, 0ms, 0ms;
-}
-
-.feature:nth-child(3) {
-    transition-delay: 160ms, 160ms, 0ms, 0ms;
-}
-
 .feature-media {
     aspect-ratio: 4 / 3;
     overflow: hidden;
@@ -110,13 +102,9 @@
 }
 
 .list-ico {
-    display: grid;
-    flex: none;
-    place-items: center;
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: var(--raised);
 }
 
 .list-txt {
@@ -177,10 +165,6 @@
     font-size: 14px;
     cursor: pointer;
     transition: border-color 200ms;
-}
-
-.more-btn:hover {
-    border-color: var(--signal);
 }
 
 /* Rows that "Show more" brings in slide up one after the other */
@@ -303,7 +287,7 @@
 }
 
 .exp-card.playing .exp-progress {
-    animation: exp-fill var(--dur, 6500ms) linear both;
+    animation: exp-fill var(--step) linear both;
 }
 
 @keyframes exp-fill {
@@ -379,13 +363,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .feature:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow), var(--shadow-lift);
-    }
-
-    .feature:hover .feature-media img {
-        scale: 1.03;
+    .more-btn:hover {
+        border-color: var(--signal);
     }
 
     .spot:hover::before {
@@ -446,7 +425,6 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0 40px;
-    padding: 0 var(--gutter);
 }
 
 .method-item {
@@ -493,7 +471,6 @@
 
 .method-source {
     margin-top: 24px;
-    padding: 0 var(--gutter);
 }
 
 @media (hover: hover) and (pointer: fine) {

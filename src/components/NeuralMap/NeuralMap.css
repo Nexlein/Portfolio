@@ -220,13 +220,9 @@
 }
 
 .nm-ico {
-    display: grid;
-    flex: none;
-    place-items: center;
     width: 32px;
     height: 32px;
     border-radius: 9px;
-    background: var(--raised);
 }
 
 .domain-icon {
@@ -319,7 +315,7 @@
     border-color: color-mix(in sRGB, var(--signal) 55%, var(--hair));
     box-shadow:
         0 0 0 4px color-mix(in sRGB, var(--signal) 14%, transparent),
-        0 30px 60px rgb(0 0 0 / 40%);
+        0 30px 60px rgb(0 0 0 / calc(var(--depth) * 115%));
     transform: translate(calc(-50% + var(--dx)), -26px);
 }
 
