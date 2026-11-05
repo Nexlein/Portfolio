@@ -548,6 +548,10 @@
     .method-text {
         transition: none;
     }
+
+    .project-list li.row-in {
+        animation: none;
+    }
 }
 
 @media (width <= 760px) {

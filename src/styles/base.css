@@ -342,6 +342,16 @@ button {
     transition: scale 900ms var(--ease-out);
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .chart-card,
+    .related-card,
+    .feature,
+    .feature-media img,
+    .related-media img {
+        transition: none;
+    }
+}
+
 /* ...and their hover (after the rules above that share the element, for the order stylelint wants) */
 .exp-nav button:not(:disabled):hover,
 .numbers-nav button:not(:disabled):hover {

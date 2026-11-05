@@ -352,7 +352,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .related-card,
     .overlap-fill,
     .gallery img {
         transition: none;

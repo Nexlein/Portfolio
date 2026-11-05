@@ -682,6 +682,22 @@ test('reduced motion: no scroll reveal hides content and nothing moves on its ow
     await expect(page.locator('.avail-dot')).toHaveCSS('animation-name', 'none');
 });
 
+test('reduced motion: cards and rows change state at once', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'the map is for large screens');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/');
+    await page.locator('.map-host').scrollIntoViewIfNeeded();
+    await expect(page.locator('.nm.booted')).toHaveCount(1);
+    await page.locator('.numbers-row').scrollIntoViewIfNeeded();
+    const moving = await page
+        .locator('.nm-card, .numbers.deck .chart-card, .feature')
+        .evaluateAll((cards) => cards.filter((card) => getComputedStyle(card).transitionProperty !== 'none').length);
+    expect(moving).toBe(0);
+    const row = page.locator('.project-list li').first();
+    await row.evaluate((li) => li.classList.add('row-in'));
+    await expect(row).toHaveCSS('animation-name', 'none');
+});
+
 test.describe('navbar', () => {
     test('stays at the top while scrolling, on every page', async ({ page }) => {
         for (const path of ['/', '/cv.html', '/projects/zappy.html']) {

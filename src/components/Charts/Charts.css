@@ -795,7 +795,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .path-chart .line,
-    .chart-card,
+    .numbers.deck .chart-card,
     .radar .shape,
     .donut .spin,
     .columns .bar,

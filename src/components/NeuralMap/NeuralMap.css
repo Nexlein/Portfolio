@@ -483,6 +483,8 @@
     }
 
     .nm-card,
+    .nm-card.leaving,
+    .nm:not(.booting) .nm-card:not(.entering, .leaving),
     .nm-more,
     .nm-inner > * {
         transition: none;
