@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from './projects';
+import { EPITECH_START } from '@/components/Charts/data';
+import { schoolYear } from '@/components/Charts/series';
+import { yearOf } from '@/core/time';
 import { still, stillImage, THUMB_WIDTHS, thumbOf, videoPoster } from '@/ui/video';
 import { LANGS, lookup } from '@/core/translate';
 import { domainQuery } from '@/pages/home/blocks';
@@ -26,6 +29,11 @@ describe('PROJECTS data', () => {
 
     it('features exactly three projects (the "Selected work" row)', () => {
         expect(PROJECTS.filter((p) => p.featured)).toHaveLength(3);
+    });
+
+    it('dates every school project inside its school year', () => {
+        for (const p of PROJECTS.filter((q) => q.year !== 'Personal'))
+            expect(`Tek${schoolYear(yearOf(p.date), EPITECH_START)}`, p.id).toBe(p.year);
     });
 
     it('finds public files to check against', () => {

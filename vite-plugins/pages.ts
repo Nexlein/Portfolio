@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Window } from 'happy-dom';
 import type { Plugin } from 'vite';
-import { PROJECTS, projectPath } from '../src/data/projects.ts';
+import { PROJECTS, projectImage, projectPath } from '../src/data/projects.ts';
 import { OWNER, SITE } from '../src/core/site.ts';
 import { jsonBlock } from '../src/core/text.ts';
 import { cvPerson, profilePage, projectSource } from '../src/core/structured-data.ts';
@@ -68,7 +68,7 @@ export const PAGES: PageSpec[] = [
     fixedPage('/', 'index.html', 'home', profilePage, true),
     fixedPage('/cv.html', 'cv.html', 'cv', cvPerson),
     ...PROJECTS.map((project): PageSpec => {
-        const image = `${SITE}/projects/${project.id}/og.jpg`;
+        const image = SITE + projectImage(project.id);
         return {
             path: projectPath(project.id),
             template: 'project.html',

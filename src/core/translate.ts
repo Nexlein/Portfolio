@@ -18,6 +18,10 @@ export function lookup(lang: Lang, key: string, slots: Slots = {}): string {
     return fill(text, slots);
 }
 
+/** `lookup` under one part of the dictionary: `scoped('home')(lang, 'work.open')`. */
+export const scoped = (prefix: string) => (lang: Lang, key: string, slots?: Slots) =>
+    lookup(lang, `${prefix}.${key}`, slots);
+
 /** The name of a project domain ('ai'). */
 export const domainName = (lang: Lang, domain: string) => lookup(lang, `home.domains.${domain}`);
 
@@ -34,9 +38,5 @@ export function translateTree(root: ParentNode, lang: Lang): void {
     root.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
         const key = el.getAttribute('data-i18n');
         if (key) el.innerHTML = lookup(lang, key);
-    });
-    // Image descriptions: a data-i18n-alt key translates the alt attribute
-    root.querySelectorAll<HTMLElement>('[data-i18n-alt]').forEach((el) => {
-        el.setAttribute('alt', lookup(lang, el.getAttribute('data-i18n-alt')!));
     });
 }

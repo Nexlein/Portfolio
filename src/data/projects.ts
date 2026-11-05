@@ -52,6 +52,9 @@ export interface ProjectEntry {
     media: ProjectMedia;
 }
 
+/** A project's social image, made by `npm run media`. */
+export const projectImage = (id: string) => `/projects/${id}/og.jpg`;
+
 /** URL of a project's own page (default language). */
 export function projectPath(id: string): string {
     return `/projects/${id}.html`;
@@ -202,7 +205,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Next.js', 'Whisper'],
         category: 'fullstack',
         year: 'Tek3',
-        date: '2026-08',
+        date: '2026-09',
         team: {
             size: 3,
             role: {

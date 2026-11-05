@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { skillNames, skillsOf, skillsOfTag } from './skills';
+import { skillNames, skillsOf } from './skills';
 
 describe('skillsOf', () => {
     it('lowercases, splits C/C++, trims, merges RL and drops empties', () => {
@@ -15,11 +15,15 @@ describe('skillsOf', () => {
     });
 
     it('counts CI/CD as one skill', () => {
-        expect(skillsOfTag('CI/CD')).toEqual(['ci/cd']);
+        expect(skillsOf(['CI/CD'])).toEqual(['ci/cd']);
     });
 
     it('knows RL and Reinforcement Learning are the same skill', () => {
-        expect(skillsOfTag('RL')).toEqual(skillsOfTag('Reinforcement Learning'));
+        expect(skillsOf(['RL'])).toEqual(skillsOf(['Reinforcement Learning']));
+    });
+
+    it('takes a tag named like a built-in property for a plain skill', () => {
+        expect(skillsOf(['Constructor'])).toEqual(['constructor']);
     });
 
     it('keeps the tools of a field as skills of their own', () => {

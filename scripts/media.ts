@@ -7,10 +7,19 @@
 // Usage: npm run media [-- --force=posters,thumbs,og]   (requires ffmpeg; Node runs this TypeScript file as it is)
 import { execFileSync } from 'node:child_process';
 import { existsSync, statSync } from 'node:fs';
-import { PROJECTS } from '../src/data/projects.ts';
+import { projectImage, PROJECTS } from '../src/data/projects.ts';
 import { stillImage, THUMB_WIDTHS, thumbOf, videoPoster } from '../src/ui/video.ts';
 
-const forced = new Set(process.argv.flatMap((arg) => (arg.startsWith('--force=') ? arg.slice(8).split(',') : [])));
+const KINDS = ['posters', 'thumbs', 'og'];
+const forced = new Set<string>();
+for (const arg of process.argv.slice(2)) {
+    const kinds = arg.startsWith('--force=') ? arg.slice(8).split(',') : [''];
+    if (!kinds.every((kind) => KINDS.includes(kind))) {
+        console.error(`media: unknown argument ${arg}. Usage: npm run media [-- --force=${KINDS.join(',')}]`);
+        process.exit(1);
+    }
+    kinds.forEach((kind) => forced.add(kind));
+}
 
 const OG_FILTER =
     '[0]scale=1200:630:force_original_aspect_ratio=increase,crop=1200:630,boxblur=24,eq=brightness=-0.25[bg];' +
@@ -39,5 +48,5 @@ for (const project of PROJECTS) {
         }
     const still = media.type === 'video' ? videoPoster(media.src) : image;
     const social = ['-filter_complex', OG_FILTER, '-frames:v', '1', '-q:v', '4'];
-    make('og', `public/projects/${project.id}/og.jpg`, ['-i', `public${still}`, ...social]);
+    make('og', `public${projectImage(project.id)}`, ['-i', `public${still}`, ...social]);
 }

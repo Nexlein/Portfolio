@@ -3,16 +3,15 @@
  * Relative imports only: vite-plugins/pages.ts runs this from Node, without the '@/' alias.
  */
 import { PROJECTS, projectPath, type ProjectEntry, type ProjectMedia } from '../../data/projects.ts';
-import { skillsOfTag } from '../../data/skills.ts';
-import type { Slots } from '../../core/lang.ts';
+import { skillNames } from '../../data/skills.ts';
 import { attr, stripTags } from '../../core/text.ts';
-import { domainName, localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { domainName, localizedPath, lookup, scoped, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
 import { stillAttrs, videoPoster, videoType } from '../../ui/video.ts';
 import { monthName, yearOf } from '../../core/time.ts';
 import { neighbours, skillSet } from '../../components/NeuralMap/graph.ts';
 
-const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `projectPage.${key}`, slots);
+const t = scoped('projectPage');
 
 /** Plain-text description (dictionaries may contain inline HTML) for meta tags and JSON-LD. */
 export function projectDescription(project: ProjectEntry, lang: Lang): string {
@@ -74,16 +73,16 @@ function story(project: ProjectEntry, lang: Lang): string {
 }
 
 /** The skills two projects share, in the neighbour's own spelling. */
-export function sharedTags(project: ProjectEntry, other: ProjectEntry): string[] {
+export function sharedSkills(project: ProjectEntry, other: ProjectEntry): string[] {
     const mine = skillSet(project);
-    return other.tags.filter((tag) => skillsOfTag(tag).some((skill) => mine.has(skill)));
+    return [...skillNames(other.tags)].filter(([skill]) => mine.has(skill)).map(([, name]) => name);
 }
 
 /** The three projects the map links this one to, with how much they overlap and why. */
 function related(project: ProjectEntry, lang: Lang): string {
     return neighbours(project, PROJECTS)
         .map(({ q, s }) => {
-            const shared = sharedTags(project, q);
+            const shared = sharedSkills(project, q);
             const why = shared.length
                 ? `${t(lang, 'shares')} ${shared.join(', ')}`
                 : t(lang, 'sameDomain', { domain: domainName(lang, q.category) });

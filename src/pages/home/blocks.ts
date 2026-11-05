@@ -6,8 +6,7 @@
 import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, type Checkpoint } from '../../data/profile.ts';
 import { DOMAINS, PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
-import type { Slots } from '../../core/lang.ts';
-import { domainName, localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { domainName, localizedPath, scoped, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
 import { stillAttrs } from '../../ui/video.ts';
 import { numbers, pathChart } from '../../components/Charts/render.ts';
@@ -15,7 +14,7 @@ import { monthName, thisMonth, yearOf } from '../../core/time.ts';
 import { firstSentence } from '../../core/text.ts';
 import { MAP_MAX, pickShown } from '../../components/NeuralMap/graph.ts';
 
-const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`, slots);
+const t = scoped('home');
 
 /** First sentence of the description. */
 const oneLiner = (p: ProjectEntry, lang: Lang) => firstSentence(p.description[lang]);

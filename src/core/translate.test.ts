@@ -36,12 +36,6 @@ describe('translateTree', () => {
         document.body.innerHTML = '<p data-i18n="missing.key">y</p>';
         expect(() => translateTree(document, 'fr')).toThrow('missing.key');
     });
-
-    it('translates alt text marked with data-i18n-alt', () => {
-        document.body.innerHTML = '<img src="/qrcode.svg" alt="QR" data-i18n-alt="cv.controls.qr" />';
-        translateTree(document, 'fr');
-        expect(document.querySelector('img')!.alt).toBe(fr.cv.controls.qr);
-    });
 });
 
 describe('localized paths', () => {

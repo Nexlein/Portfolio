@@ -4,7 +4,7 @@
  */
 
 /** Other names of a skill, in lowercase, and how the site spells it. */
-const ALIASES: Record<string, string> = { rl: 'Reinforcement Learning' };
+const ALIASES = new Map([['rl', 'Reinforcement Learning']]);
 
 /** Tags whose '/' belongs to the name: 'C/C++' is two skills, 'CI/CD' is one. */
 const WHOLE = new Set(['ci/cd']);
@@ -15,14 +15,11 @@ function spelled(tag: string): string[] {
     return parts
         .map((part) => part.trim())
         .filter(Boolean)
-        .map((part) => ALIASES[part.toLowerCase()] ?? part);
+        .map((part) => ALIASES.get(part.toLowerCase()) ?? part);
 }
 
-/** The normalised skills of one tag. */
-export const skillsOfTag = (tag: string) => spelled(tag).map((skill) => skill.toLowerCase());
-
 /** The normalised skills of a list of tags, repeats kept. */
-export const skillsOf = (tags: string[]) => tags.flatMap(skillsOfTag);
+export const skillsOf = (tags: string[]) => tags.flatMap(spelled).map((skill) => skill.toLowerCase());
 
 /** Normalised skill -> the spelling the tags use ('typescript' -> 'TypeScript'). */
 export const skillNames = (tags: string[]) =>
