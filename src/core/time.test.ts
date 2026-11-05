@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { monthName, thisMonth, yearOf } from './time';
+import { monthName, nearestMonth, thisMonth, yearOf } from './time';
 
 describe('dates', () => {
     it('reads a month as a fractional year (January is the year itself)', () => {
@@ -11,6 +11,12 @@ describe('dates', () => {
     it('puts today at the start of the current month', () => {
         expect(thisMonth(new Date('2026-10-14'))).toBeCloseTo(2026 + 9 / 12);
         expect(thisMonth(new Date('2027-01-31'))).toBe(2027);
+    });
+
+    it('rounds to the nearest month, just past its start so that month counts as reached', () => {
+        expect(monthName(nearestMonth(2026.65), 'en')).toBe('Sep 2026');
+        expect(nearestMonth(2026.65)).toBeGreaterThan(yearOf('2026-09'));
+        expect(nearestMonth(2026.97)).toBeGreaterThan(yearOf('2027-01'));
     });
 
     it('names a month in each language', () => {

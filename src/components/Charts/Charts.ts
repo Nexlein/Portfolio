@@ -4,7 +4,7 @@
  */
 import { fill } from '@/core/lang';
 import { f1 } from '@/core/text';
-import { monthLabel } from '@/core/time';
+import { monthLabel, nearestMonth } from '@/core/time';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { countUp } from '@/ui/reveal';
 import { trackScale } from '@/ui/svg-scale';
@@ -54,7 +54,7 @@ export function initPathChart(): void {
             const [x0, y0] = samples[i - 1],
                 [x1, y1] = samples[i];
             const py = x1 === x0 ? y1 : y0 + (y1 - y0) * Math.min(1, Math.max(0, (sx - x0) / (x1 - x0)));
-            const time = t0 + ((sx - PATH.L) / span) * (now - t0);
+            const time = nearestMonth(t0 + ((sx - PATH.L) / span) * (now - t0)); // the month, count and year must agree
             cross.setAttribute('visibility', 'visible');
             const line = cross.querySelector('.cross-x')!;
             line.setAttribute('x1', f1(sx));
@@ -67,7 +67,10 @@ export function initPathChart(): void {
             const year = schoolYear(time, data.epitech);
             tip.innerHTML = `<span class="mono">${monthLabel(time, data.months)} · ${year ? data.years[Math.min(year, data.years.length) - 1] : data.before}</span><strong>${fill(data.skills, { n: valueAt(points, time) })}</strong><span>${last.what}</span>`;
             tip.hidden = false;
-            tip.style.left = `${(sx / PATH.W) * 100}%`;
+            // Held inside the plot: past its edge the page clips it (a phone, near today)
+            const room = tip.offsetWidth / 2,
+                width = plot.clientWidth;
+            tip.style.left = `${Math.min(Math.max((sx / PATH.W) * width, room), width - room)}px`;
             tip.style.top = `${(py / PATH.H) * 100}%`;
         });
         svg.addEventListener('pointerleave', hide);
@@ -280,7 +283,7 @@ export function initNumbers(): void {
         const front = cards[cur];
         if (!front.classList.contains('in')) {
             front.classList.add('in');
-            // The first card counts up with the deck's own reveal (src/ui/reveal.ts), once it is on screen
+            // The first card shows its number as it is: the others count up as they come forward
             if (prev >= 0) front.querySelectorAll<HTMLElement>('.count').forEach(countUp);
         }
         items.forEach((b, i) =>

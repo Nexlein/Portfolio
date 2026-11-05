@@ -34,14 +34,15 @@ const tagsOf = (id: string) => EXPERIENCES.find((e) => e.id === id)?.tags ?? [];
 
 /** Every dated step, oldest first: checkpoints (with their skills) and projects (with their tags). */
 function milestones(projects: ProjectEntry[]): Milestone[] {
+    // The last step of a month names its point: projects first, so a checkpoint keeps its own name
     const all: Milestone[] = [
+        ...projects.map((p) => ({ t: yearOf(p.date), id: p.id, project: p, adds: skillsOf(p.tags) })),
         ...CHECKPOINTS.map((c) => ({
             t: yearOf(c.date),
             id: c.id,
             checkpoint: c,
             adds: skillsOf([...(c.skills ?? []), ...tagsOf(c.id)])
-        })),
-        ...projects.map((p) => ({ t: yearOf(p.date), id: p.id, project: p, adds: skillsOf(p.tags) }))
+        }))
     ];
     return all.toSorted((a, b) => a.t - b.t);
 }
@@ -188,17 +189,10 @@ export function languageBuckets(projects: ProjectEntry[]): { keys: string[]; buc
     return { keys, bucket };
 }
 
-const DOMAIN_ORDER: readonly string[] = DOMAINS;
-
-/** Domains for the radar: up to 7 axes, the rest grouped as OTHER. */
+/** Domains for the radar: the ones the projects use, and how many projects each has. */
 export function domainAxes(projects: ProjectEntry[]): { keys: string[]; counts: number[] } {
-    const used = [...new Set(projects.map((p) => p.category as string))];
-    const ranked = [...DOMAIN_ORDER.filter((d) => used.includes(d)), ...used.filter((d) => !DOMAIN_ORDER.includes(d))];
-    const keys = ranked.length > 7 ? [...ranked.slice(0, 6), OTHER] : ranked;
-    const counts = keys.map(
-        (d) => projects.filter((p) => (d === OTHER ? !keys.includes(p.category) : p.category === d)).length
-    );
-    return { keys, counts };
+    const keys = DOMAINS.filter((d) => projects.some((p) => p.category === d));
+    return { keys, counts: keys.map((d) => projects.filter((p) => p.category === d).length) };
 }
 
 /** The most used skills across projects, most frequent first. */
@@ -210,12 +204,10 @@ export function topSkills(projects: ProjectEntry[], n = 7): [string, number][] {
 
 /** New skills per period: skills seen for the first time in that period's projects. */
 export function newSkillsPerPeriod(projects: ProjectEntry[]): number[] {
-    const pers = periodsIn(projects);
     const first = new Map<string, Period>();
-    for (const y of pers)
-        for (const p of projects.filter((q) => q.year === y))
-            for (const s of skillsOf(p.tags)) if (!first.has(s)) first.set(s, y);
-    return pers.map((y) => [...first.values()].filter((v) => v === y).length);
+    for (const p of projects.toSorted((a, b) => yearOf(a.date) - yearOf(b.date)))
+        for (const s of skillsOf(p.tags)) if (!first.has(s)) first.set(s, p.year);
+    return periodsIn(projects).map((y) => [...first.values()].filter((v) => v === y).length);
 }
 
 export const distinctSkills = (projects: ProjectEntry[]) => new Set(projects.flatMap((p) => skillsOf(p.tags))).size;

@@ -6,10 +6,9 @@
  */
 import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
-import type { Slots } from '../../core/lang.ts';
 import { f1, jsonBlock } from '../../core/text.ts';
 import { monthName, MONTHS, yearOf } from '../../core/time.ts';
-import { lookup, type Lang } from '../../core/translate.ts';
+import { scoped, type Lang } from '../../core/translate.ts';
 import {
     distinctSkills,
     domainAxes,
@@ -37,7 +36,7 @@ import {
 } from './data.ts';
 import { PATH, pathSamples, type PathData } from './series.ts';
 
-const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`, slots);
+const t = scoped('home');
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
@@ -189,10 +188,10 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
 
 // ── Numbers: small charts ───────────────────────────────────────
 
-/** A chart's groups that are neither a domain nor a language. */
-const groupName = (lang: Lang, key: string) =>
-    key === OTHER ? t(lang, 'numbers.other') : key === INFRA ? t(lang, 'numbers.infra') : null;
-const domainLabel = (lang: Lang, key: string, set = 'domains') => groupName(lang, key) ?? t(lang, `${set}.${key}`);
+/** A language's name, or the label of a group of them. */
+const languageName = (lang: Lang, key: string) =>
+    key === OTHER ? t(lang, 'numbers.other') : key === INFRA ? t(lang, 'numbers.infra') : key;
+const domainLabel = (lang: Lang, key: string, set = 'domains') => t(lang, `${set}.${key}`);
 const period = (lang: Lang, y: string) => t(lang, `work.periods.${y}`).split(' · ')[0];
 
 function radar(lang: Lang, projects: ProjectEntry[]): string {
@@ -258,7 +257,7 @@ function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
         col = (W - 60) / pers.length,
         bw = Math.min(54, col - 20),
         base = H - 28;
-    const name = (k: string) => groupName(lang, k) ?? k;
+    const name = (k: string) => languageName(lang, k);
     const bars = data
         .map((row, i) => {
             let acc = 0;
@@ -325,8 +324,7 @@ function chips(projects: ProjectEntry[], now: number): string {
 function heatmap(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
     const { keys } = domainAxes(projects);
-    const inCell = (d: string, y: string) =>
-        projects.filter((p) => (d === OTHER ? !keys.includes(p.category) : p.category === d) && p.year === y).length;
+    const inCell = (d: string, y: string) => projects.filter((p) => p.category === d && p.year === y).length;
     const grid = keys.map((d) => pers.map((y) => inCell(d, y)));
     const max = Math.max(...grid.flat(), 1);
     const W = 300,

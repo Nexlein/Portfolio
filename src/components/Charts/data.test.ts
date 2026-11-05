@@ -95,9 +95,23 @@ describe('the toolbox over time', () => {
     });
 });
 
+describe('checkpoints on the series', () => {
+    it.each(CHECKPOINTS)('$id names its month, even when a project started then too', (c) => {
+        const point = skillSeries(PROJECTS, yearOf('2099-01')).find((p) => p.t === yearOf(c.date));
+        expect(point?.m?.checkpoint?.id).toBe(c.id);
+    });
+});
+
 describe('group counts', () => {
     it('gives every skill to the period that first used it, once', () => {
         expect(newSkillsPerPeriod(PROJECTS).reduce((a, b) => a + b, 0)).toBe(distinctSkills(PROJECTS));
+    });
+
+    it('credits a skill to its earliest project, not to the period listed first', () => {
+        const earlier: ProjectEntry = { ...PROJECTS[0], tags: ['Zig'], year: 'Tek3', date: '2026-01' };
+        const later: ProjectEntry = { ...PROJECTS[0], tags: ['Zig'], year: 'Personal', date: '2026-06' };
+        expect(periodsIn([earlier, later])).toEqual(['Personal', 'Tek3']);
+        expect(newSkillsPerPeriod([earlier, later])).toEqual([0, 1]);
     });
 
     it('ranks the most used skills first', () => {

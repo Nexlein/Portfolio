@@ -10,6 +10,9 @@ export const yearOf = (month: string) => Number(month.slice(0, 4)) + (Number(mon
 /** Today, as a fractional year at the start of the current month. */
 export const thisMonth = (now = new Date()) => now.getFullYear() + now.getMonth() / 12;
 
+/** The month nearest a time, just past its start: steps of that month count as done. */
+export const nearestMonth = (time: number) => Math.round(time * 12) / 12 + 1e-9;
+
 /** "Jan 2026" from a fractional year, with the month names of a language. */
 export const monthLabel = (time: number, months: readonly string[]) =>
     `${months[Math.min(11, Math.round((time % 1) * 12))]} ${Math.floor(time + 1e-6)}`;

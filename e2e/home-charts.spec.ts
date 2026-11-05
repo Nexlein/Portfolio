@@ -60,6 +60,21 @@ test.describe('charts', () => {
         await expect(chart.locator('.path-tip .mono')).toHaveText(/\d{4} · (year \d|Before Epitech)/);
     });
 
+    test('the tooltip stays inside a narrow screen', async ({ page, isMobile }) => {
+        test.skip(isMobile, 'needs a mouse');
+        await page.setViewportSize({ width: 390, height: 800 });
+        await page.goto('/');
+        const chart = page.locator('.path-chart');
+        await chart.scrollIntoViewIfNeeded();
+        await expect(chart).toHaveClass(/\bin\b/);
+        const hit = chart.locator('.hit');
+        const box = (await hit.boundingBox())!;
+        await hit.hover({ position: { x: box.width - 1, y: box.height / 2 }, force: true });
+        const tip = chart.locator('.path-tip');
+        await expect(tip).toBeVisible();
+        expect(await tip.evaluate((el) => el.getBoundingClientRect().right)).toBeLessThanOrEqual(390);
+    });
+
     test('the numbers are a deck: one chart in front, the arrows and the index bring another one forward', async ({
         page
     }) => {
