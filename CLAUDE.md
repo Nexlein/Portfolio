@@ -27,14 +27,14 @@ Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.
 
 - Content changes: EN and FR together (`dictionaries.test.ts` checks keys).
 - New project: `src/data/projects.ts` + media in `public/projects/<id>/` (`npm run media` needs ffmpeg). Everything else follows.
-- Strict CSP (`vercel.json`, mirrored by `vite preview`): no inline `style=` / scripts / handlers in HTML. Set styles from JS via the CSSOM. The head script is allowed by hash: editing it means updating the hash (`headers.test.ts` prints it).
+- Strict CSP (`vercel.json`, mirrored by `vite preview` except `upgrade-insecure-requests`): no inline `style=` / scripts / handlers in HTML. Set styles from JS via the CSSOM. The head script is allowed by hash: editing it means updating the hash (`headers.test.ts` prints it).
 - Content must stay readable without JS (reveals only hide under `html.js`); respect `prefers-reduced-motion`.
 - Oxlint bans `Array#sort` (use `toSorted`), shadowed names, and inner functions that capture nothing (move them to module scope).
-- Don't edit generated output: `dist/`, `cv-pdf/`, `test-results/`, `graphify-out/`, `.claude/codemap.md`.
+- Don't edit generated output: `dist/`, `cv-pdf/`, `test-results/`, `.claude/codemap.md`.
 - Prettier: 4 spaces, 120 cols, single quotes, no trailing commas. Format touched files only.
 
 ## Git flow
 
 - `main` = production (Vercel). `dev` = integration. Work on `feat/*`, `fix/*`, `chore/*` from `dev`, PR into `dev`; `dev` → `main` to release.
-- Conventional commits (`feat(home): ...`). Pre-commit runs lint-staged, typecheck, tests, codemap; never `--no-verify`.
+- Conventional commits (`feat(home): ...`). Pre-commit runs a secret scan, lint-staged, typecheck, tests, codemap; never `--no-verify`.
 - Keep the `cv` GitHub release and its tag: `/cv.pdf` redirects to `releases/download/cv/...` (CI uploads the PDFs there from `main`). `v1-classic` = old site, tag `prototype-redesign` = design prototypes.

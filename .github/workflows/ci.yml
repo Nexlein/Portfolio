@@ -18,7 +18,7 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v7
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
             - uses: ./.github/actions/setup
 
@@ -45,7 +45,7 @@ jobs:
             - name: Build
               run: npx vite build
 
-            - uses: actions/upload-artifact@v7
+            - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
                   name: dist
                   path: dist
@@ -57,11 +57,11 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v7
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
             - uses: ./.github/actions/setup
 
-            - uses: actions/download-artifact@v8
+            - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
               with:
                   name: dist
                   path: dist
@@ -80,30 +80,24 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 15
         steps:
-            - uses: actions/checkout@v7
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
             - uses: ./.github/actions/setup
 
-            - uses: actions/download-artifact@v8
+            - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
               with:
                   name: dist
                   path: dist
 
-            # The runners' default apt mirror can drop to a trickle: 139 MB took 8 s one day, over 30 minutes the next.
-            # The grep fails the job if a new image moves that address and the sed stops working.
-            - name: Use the main Ubuntu mirror
-              run: |
-                  sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|' /etc/apt/apt-mirrors.txt
-                  ! grep -rsq 'azure\.archive\.ubuntu\.com' /etc/apt
-
-            - name: Install browsers
-              run: npx playwright install --with-deps chromium firefox webkit
+            - uses: ./.github/actions/browsers
+              with:
+                  browsers: chromium firefox webkit
 
             # Desktop and mobile Chromium, plus Firefox and WebKit, against the production build, served with the production headers
             - name: Run Playwright
               run: npx playwright test
 
-            - uses: actions/upload-artifact@v7
+            - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               if: failure()
               with:
                   name: playwright-report
@@ -116,23 +110,24 @@ jobs:
         runs-on: ubuntu-latest
         timeout-minutes: 10
         steps:
-            - uses: actions/checkout@v7
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
             - uses: ./.github/actions/setup
 
-            - uses: actions/download-artifact@v8
+            - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
               with:
                   name: dist
                   path: dist
 
-            - name: Install Chromium
-              run: npx playwright install --with-deps chromium
+            - uses: ./.github/actions/browsers
+              with:
+                  browsers: chromium
 
             # Prints /cv.html and /fr/cv.html to A4 and fails if the CV no longer fits on one page
             - name: Render the CV to PDF
               run: npm run cv:pdf
 
-            - uses: actions/upload-artifact@v7
+            - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
                   name: cv-pdf
                   path: cv-pdf
@@ -148,7 +143,7 @@ jobs:
         permissions:
             contents: write # the `cv` release
         steps:
-            - uses: actions/download-artifact@v8
+            - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
               with:
                   name: cv-pdf
                   path: cv-pdf
