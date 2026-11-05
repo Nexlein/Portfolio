@@ -148,4 +148,35 @@ describe('valueIteration', () => {
         click!({ x: 600 * 0.7, y: 400 * 0.35 }); // on the reward: nothing happens
         expect(drawnWalls()).toBe(before);
     });
+
+    it('a mouse click places a wall right under the cursor, where the running reward is', () => {
+        RecordingPath.arrows = [];
+        vi.stubGlobal('Path2D', RecordingPath);
+        let walls = 0;
+        const ctx = { clearRect() {}, fillRect: () => walls++, beginPath() {}, stroke() {}, arc() {}, fill() {} };
+        let click: ((p: { x: number; y: number }) => void) | undefined;
+        let draw: ((t: number) => void) | undefined;
+        const cursor = { x: 100, y: 300 };
+        valueIteration({
+            ctx: ctx as unknown as CanvasRenderingContext2D,
+            colors: { line: '#000', cold: '#000', signal: '#000' },
+            width: 600,
+            height: 400,
+            pointer: () => cursor,
+            wander: () => cursor,
+            onClick: (fn) => (click = fn),
+            onResize: () => {},
+            dispose: () => {},
+            loop: (frame) => (draw = frame),
+            still: false
+        });
+        const drawnWalls = () => {
+            walls = 0;
+            draw!(0);
+            return walls;
+        };
+        const before = drawnWalls();
+        click!(cursor);
+        expect(Math.abs(drawnWalls() - before)).toBe(1);
+    });
 });

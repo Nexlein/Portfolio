@@ -75,13 +75,33 @@ test.describe('hero', () => {
         page,
         isMobile
     }) => {
-        test.skip(isMobile, 'resizes the window');
+        test.skip(isMobile, 'a phone keeps its size');
         await page.setViewportSize({ width: 1280, height: 800 });
         await page.goto('/');
         await page.locator('.hero-pause').click();
         await page.locator('.hero-dot[aria-pressed="false"]').first().click();
         await expect.poll(() => painted(page)).toBe(true);
-        await page.setViewportSize({ width: 1100, height: 700 }); // resizing clears a canvas
+        await resized(page);
+        await expect.poll(() => painted(page)).toBe(true);
+    });
+
+    test('starts moving when reduced motion is turned off, and holds still when it comes back', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'a phone keeps its size');
+        const frames = await countFrames(page);
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/');
+        await expect.poll(() => painted(page)).toBe(true);
+        await expect(page.locator('.hero-pause')).toBeHidden();
+        const idle = await untilIdle(page, frames);
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
+        await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
+        await expect(page.locator('.hero-pause')).toBeVisible();
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await resized(page);
         await expect.poll(() => painted(page)).toBe(true);
     });
 
@@ -127,6 +147,14 @@ test.describe('hero title', () => {
     });
 });
 
+/** Resize the window and wait for the canvas to take the new size, which clears it (it happens after a debounce). */
+async function resized(page: Page): Promise<void> {
+    const width = () => page.locator('canvas.hero-field').evaluate((c: HTMLCanvasElement) => c.width);
+    const before = await width();
+    await page.setViewportSize({ width: 1100, height: 700 });
+    await expect.poll(width).not.toBe(before);
+}
+
 const painted = (page: Page) =>
     page.evaluate(() => {
         const canvas = document.querySelector<HTMLCanvasElement>('.hero-field')!;
@@ -142,7 +170,7 @@ test.describe('hero with reduced motion', () => {
         await page.setViewportSize({ width: 1280, height: 800 });
         await page.goto('/');
         await expect.poll(() => painted(page)).toBe(true);
-        await page.setViewportSize({ width: 1100, height: 700 }); // resizing clears a canvas
+        await resized(page);
         await expect.poll(() => painted(page)).toBe(true);
         await page.locator('.nav-theme-btn').click();
         await page.locator('[data-theme-id="daylight"]').click();

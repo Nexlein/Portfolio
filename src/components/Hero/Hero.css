@@ -109,7 +109,7 @@
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: color-mix(in sRGB, var(--muted) 45%, transparent);
+    background: color-mix(in sRGB, var(--muted) 80%, transparent);
     transition:
         background 200ms ease,
         scale 200ms var(--ease-out);
@@ -214,6 +214,11 @@
 @media (prefers-reduced-motion: reduce) {
     .scroll-cue {
         animation: none;
+    }
+
+    /* Nothing moves, so nothing to pause; it comes back if the setting is turned off mid-visit */
+    .hero-pause {
+        display: none;
     }
 }
 
