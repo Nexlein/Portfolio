@@ -330,14 +330,14 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         neurons.forEach((n, i) => {
             const near = neurons
                 .map((m, j) => ({ j, d: Math.hypot(m.x0 - n.x0, m.y0 - n.y0) }))
-                .filter(({ j, d }) => j !== i && d < 150);
-            for (let k = 0; k < 2 && near.length; k++) {
-                const best = near.reduce((a, b) => (b.d < a.d ? b : a));
-                near.splice(near.indexOf(best), 1);
-                const key = i < best.j ? `${i}|${best.j}` : `${best.j}|${i}`;
+                .filter(({ j, d }) => j !== i && d < 150)
+                .toSorted((a, b) => a.d - b.d)
+                .slice(0, 2);
+            for (const { j } of near) {
+                const key = i < j ? `${i}|${j}` : `${j}|${i}`;
                 if (wired.has(key)) continue;
                 wired.add(key);
-                wires.push({ n, m: neurons[best.j], line: svg('line', 'nm-wire', wiresG) });
+                wires.push({ n, m: neurons[j], line: svg('line', 'nm-wire', wiresG) });
             }
             const card = cards.find((c) => Math.hypot(c.x - n.x0, c.y - n.y0) < 150);
             if (card) wires.push({ n, m: card, line: svg('line', 'nm-wire', wiresG) });
@@ -383,16 +383,16 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     // Attention: the 3 nearest projects to the cursor, weighted by distance
     let attended: { c: Card; w: number }[] = [];
     const drawAttention = () => {
-        attended = [];
         const at = pointer;
-        if (at && !opened) {
-            const pool = cards.map((c) => ({ c, d: Math.hypot(c.x - at.x, c.y - at.y) }));
-            for (let k = 0; k < 3 && pool.length; k++) {
-                const best = pool.reduce((a, b) => (b.d < a.d ? b : a));
-                pool.splice(pool.indexOf(best), 1);
-                if (best.d < ATTN_REACH) attended.push({ c: best.c, w: 1 - best.d / ATTN_REACH });
-            }
-        }
+        attended =
+            at && !opened
+                ? cards
+                      .map((c) => ({ c, d: Math.hypot(c.x - at.x, c.y - at.y) }))
+                      .toSorted((a, b) => a.d - b.d)
+                      .slice(0, 3)
+                      .filter(({ d }) => d < ATTN_REACH)
+                      .map(({ c, d }) => ({ c, w: 1 - d / ATTN_REACH }))
+                : [];
         attn.forEach((line, k) => {
             const a = attended[k];
             if (!a || !at) {

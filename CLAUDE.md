@@ -29,7 +29,7 @@ Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.
 - New project: `src/data/projects.ts` + media in `public/projects/<id>/` (`media:*` scripts need ffmpeg). Everything else follows.
 - Strict CSP (`vercel.json`, mirrored by `vite preview`): no inline `style=` / scripts / handlers in HTML. Set styles from JS via the CSSOM. The head script is allowed by hash: editing it means updating the hash (`headers.test.ts` prints it).
 - Content must stay readable without JS (reveals only hide under `html.js`); respect `prefers-reduced-motion`.
-- Oxlint bans `Array#sort` (`toSorted` is unavailable too: lib is ES2020; pick with a loop or `reduce`), shadowed names, and inner functions that capture nothing (move them to module scope).
+- Oxlint bans `Array#sort` (use `toSorted`), shadowed names, and inner functions that capture nothing (move them to module scope).
 - Don't edit generated output: `dist/`, `cv-pdf/`, `test-results/`, `graphify-out/`, `.claude/codemap.md`.
 - Prettier: 4 spaces, 120 cols, single quotes, no trailing commas. Format touched files only.
 

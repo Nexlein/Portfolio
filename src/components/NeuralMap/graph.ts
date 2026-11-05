@@ -34,14 +34,11 @@ export function similarity(a: ProjectEntry, b: ProjectEntry): number {
 
 /** The 3 most similar projects in `pool`. */
 export function neighbours(p: ProjectEntry, pool: ProjectEntry[]): { q: ProjectEntry; s: number }[] {
-    const scored = pool.filter((q) => q !== p).map((q) => ({ q, s: similarity(p, q) }));
-    const top: { q: ProjectEntry; s: number }[] = [];
-    for (let k = 0; k < 3 && scored.length; k++) {
-        const best = scored.reduce((a, b) => (b.s > a.s ? b : a));
-        top.push(best);
-        scored.splice(scored.indexOf(best), 1);
-    }
-    return top;
+    return pool
+        .filter((q) => q !== p)
+        .map((q) => ({ q, s: similarity(p, q) }))
+        .toSorted((a, b) => b.s - a.s)
+        .slice(0, 3);
 }
 
 /** Classical MDS: 2D coordinates whose distances approximate 1 - similarity. */

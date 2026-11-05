@@ -49,14 +49,7 @@ function milestones(projects: ProjectEntry[]): Milestone[] {
         })),
         ...projects.map((p) => ({ t: yearOf(p.date), id: p.id, project: p, adds: skillsOf(p.tags) }))
     ];
-    // Stable insertion by date (the codebase lint bans Array#sort; ES2020 has no toSorted)
-    const out: Milestone[] = [];
-    for (const m of all) {
-        let i = out.length;
-        while (i > 0 && out[i - 1].t > m.t) i--;
-        out.splice(i, 0, m);
-    }
-    return out;
+    return all.toSorted((a, b) => a.t - b.t);
 }
 
 export interface Point {
@@ -200,13 +193,9 @@ export function languageBuckets(projects: ProjectEntry[]): { keys: string[]; buc
     const tally = new Map<string, number>();
     for (const p of projects)
         if (languageOf(p) !== INFRA) tally.set(languageOf(p), (tally.get(languageOf(p)) ?? 0) + 1);
-    const top: string[] = [];
-    for (let k = 0; k < 3 && tally.size; k++) {
-        const best = [...tally].reduce((a, e) => (e[1] > a[1] ? e : a));
-        top.push(best[0]);
-        tally.delete(best[0]);
-    }
-    const keys = [...top, ...(tally.size ? [OTHER] : []), INFRA];
+    const ranked = [...tally].toSorted((a, b) => b[1] - a[1]).map(([language]) => language);
+    const top = ranked.slice(0, 3);
+    const keys = [...top, ...(ranked.length > top.length ? [OTHER] : []), INFRA];
     const bucket = (p: ProjectEntry) =>
         languageOf(p) === INFRA ? INFRA : top.includes(languageOf(p)) ? languageOf(p) : OTHER;
     return { keys, bucket };
@@ -229,13 +218,7 @@ export function domainAxes(projects: ProjectEntry[]): { keys: string[]; counts: 
 export function topSkills(projects: ProjectEntry[], n = 7): [string, number][] {
     const freq = new Map<string, number>();
     for (const p of projects) for (const s of new Set(skillsOf(p.tags))) freq.set(s, (freq.get(s) ?? 0) + 1);
-    const out: [string, number][] = [];
-    for (const e of freq) {
-        let i = out.length;
-        while (i > 0 && out[i - 1][1] < e[1]) i--;
-        out.splice(i, 0, e);
-    }
-    return out.slice(0, n);
+    return [...freq].toSorted((a, b) => b[1] - a[1]).slice(0, n);
 }
 
 /** New skills per period: skills seen for the first time in that period's projects. */

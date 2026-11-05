@@ -34,7 +34,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: initPathChart, initPathStory, initNumbers
   - → core/lang, ui/motion, ui/reveal, ui/svg-scale, components/Charts/series
   - ← pages/home/home
-- **data.ts** (252) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
+- **data.ts** (235) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
   - exports: yearOf, thisMonth, spelling, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, data/projects, data/skills, components/NeuralMap/graph, components/Charts/series
   - ← components/Charts/render, pages/home/blocks, pages/project/render
@@ -113,7 +113,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/lang, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph
   - ← pages/home/home
-- **graph.ts** (203) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
+- **graph.ts** (200) — The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which ones are shown when there a...
   - exports: Period, periodOf, ORBIT, CARD, NOW_BOX, skillSet, similarity, neighbours, mds, Star, layout, fitFor, pickShown
   - → data/projects, data/skills
   - ← components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
