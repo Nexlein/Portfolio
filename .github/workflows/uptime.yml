@@ -3,6 +3,9 @@ name: Uptime check
 # Fails (GitHub then emails you about the failed scheduled run) when production is down or broken: a page that
 # does not answer, the French 404 gone, the CV links not reaching a PDF. Scheduled workflows run from the default
 # branch. Run it by hand from the Actions tab to test it.
+#
+# GitHub turns scheduled workflows off after 60 days without repository activity (public repositories): after a quiet
+# spell, this check and the weekly rebuild may have stopped. The Actions tab shows it, and turns them back on.
 
 on:
     schedule:
