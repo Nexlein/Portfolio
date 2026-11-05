@@ -7,8 +7,14 @@
     box-sizing: border-box;
 }
 
+/* A component's own display beats the browser's rule for hidden: what a script hides must stay hidden */
+[hidden] {
+    display: none !important;
+}
+
 /* The page scrollbar follows the theme: a quiet thumb in the theme's muted colour */
 html {
+    scroll-padding-top: var(--nav-h); /* anything scrolled to, a link's target or a focused element, clears the nav */
     scrollbar-width: thin;
     scrollbar-color: color-mix(in sRGB, var(--muted) 55%, transparent) transparent;
 }
@@ -46,6 +52,11 @@ button {
     outline: 2px solid var(--signal);
     outline-offset: 3px;
     border-radius: 6px;
+}
+
+/* A section that took the focus after a glide: the visitor did not tab to it, there is nothing to ring */
+[tabindex='-1']:focus-visible {
+    outline: none;
 }
 
 .sr-only {
@@ -149,6 +160,7 @@ button {
 .link {
     display: inline-flex;
     gap: 4px;
+    padding-block: 1px;
     color: var(--signal);
     font-size: 15px;
     font-weight: 500;
@@ -182,7 +194,6 @@ button {
 /* ── Sections ── */
 .section {
     padding: clamp(96px, 14vh, 160px) 0 0;
-    scroll-margin-top: var(--nav-h);
 }
 
 .section-head {
@@ -209,6 +220,24 @@ button {
 .js .reveal:not(.in) {
     opacity: 0;
     translate: 0 16px;
+}
+
+/* On paper nothing scrolls into view */
+@media print {
+    .js .reveal:not(.in) {
+        opacity: 1;
+        translate: none;
+    }
+}
+
+/* Forced colours drop backgrounds, the only mark of what is selected */
+@media (forced-colors: active) {
+    [aria-pressed='true'],
+    [aria-current],
+    [aria-checked='true'] {
+        outline: 2px solid;
+        outline-offset: -2px;
+    }
 }
 
 /* Cards share one surface */
@@ -271,7 +300,7 @@ button {
 .segmented button[aria-pressed='true'] {
     background: var(--surface);
     color: var(--ink);
-    box-shadow: 0 1px 3px rgb(0 0 0 / 18%);
+    box-shadow: 0 1px 3px rgb(0 0 0 / calc(var(--depth) * 50%));
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -394,7 +423,7 @@ button {
 }
 
 /* ...and their hover (after the rules above that share the element, for the order stylelint wants) */
-.exp-nav button:not(:disabled):hover,
-.numbers-nav button:not(:disabled):hover {
+.exp-nav button:hover,
+.numbers-nav button:hover {
     border-color: var(--signal);
 }

@@ -21,9 +21,14 @@ for (const { path, heading } of pages) {
 
         const fontsLoaded = await page.evaluate(async () => {
             await document.fonts.ready;
-            return document.fonts.check('16px "Schibsted Grotesk Variable"');
+            return [...document.fonts].some((f) => f.family.includes('Schibsted Grotesk') && f.status === 'loaded');
         });
         expect(fontsLoaded).toBe(true);
+        const shownThoughHidden = await page.evaluate(
+            () =>
+                [...document.querySelectorAll('[hidden]')].filter((e) => getComputedStyle(e).display !== 'none').length
+        );
+        expect(shownThoughHidden).toBe(0);
         // The fixture fails the test on console errors or CSP violations
     });
 }

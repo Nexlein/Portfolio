@@ -6,6 +6,7 @@
 .project-back {
     display: inline-flex;
     gap: 6px;
+    padding-block: 2px;
     color: var(--muted);
     font-size: 14px;
     transition: color 160ms ease;

@@ -20,16 +20,18 @@ export function countUp(el: HTMLElement): void {
 
 /** Reveal animations, count-ups and the chart draw-in start once each block comes into view. */
 export function initReveals(): void {
-    const io = new IntersectionObserver(
-        (entries) =>
-            entries.forEach((e) => {
-                if (!e.isIntersecting) return;
-                const n = e.target as HTMLElement;
-                n.classList.add('in', 'drawn');
-                n.querySelectorAll<HTMLElement>('.path-total .count').forEach(countUp);
-                io.unobserve(n);
-            }),
-        { rootMargin: '0px 0px -12% 0px' }
-    );
+    const reveal = (n: Element) => {
+        n.classList.add('in', 'drawn');
+        n.querySelectorAll<HTMLElement>('.path-total .count').forEach(countUp);
+        io.unobserve(n);
+    };
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => e.isIntersecting && reveal(e.target)), {
+        rootMargin: '0px 0px -12% 0px'
+    });
     document.querySelectorAll('.reveal').forEach((n) => io.observe(n));
+    // Tab can land on a block in the bottom strip the observer leaves out: what has the focus must show
+    document.addEventListener('focusin', (e) => {
+        const n = (e.target as Element).closest('.reveal:not(.in)');
+        if (n) reveal(n);
+    });
 }

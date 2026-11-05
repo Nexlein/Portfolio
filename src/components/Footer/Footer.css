@@ -19,7 +19,9 @@
 
 /* Room around the 13px links, so each is a 24px-plus touch target */
 .footer nav a {
+    min-width: 24px;
     padding-block: 4px;
+    text-align: center;
 }
 
 .footer-source {

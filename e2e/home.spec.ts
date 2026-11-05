@@ -13,7 +13,7 @@ test.describe('without JavaScript', () => {
         await expect(page.locator('.chart-card')).toHaveCount(7);
         await expect(page.locator('#contact .copy-email')).toHaveCount(1);
         await expect(page.locator('#method .method-item')).toHaveCount(3);
-        await expect(page.locator('.hero-copy h1')).toBeVisible(); // reveals never hide content without JS
+        await expect(page.locator('.hero-copy')).toHaveCSS('opacity', '1'); // reveals never hide content without JS
     });
 });
 
@@ -26,8 +26,8 @@ test.describe('how I work', () => {
         await items.nth(1).scrollIntoViewIfNeeded();
         await expect(items.nth(0)).toHaveCSS('opacity', '1');
         await items.nth(1).hover();
-        await expect(items.nth(0)).toHaveCSS('opacity', '0.55');
-        await expect(items.nth(2)).toHaveCSS('opacity', '0.55');
+        await expect(items.nth(0)).toHaveCSS('opacity', '0.6');
+        await expect(items.nth(2)).toHaveCSS('opacity', '0.6');
         await expect(items.nth(1)).toHaveCSS('opacity', '1');
         await expect(items.nth(1).locator('h3')).toHaveCSS('background-position', /^0(px|%) 0(px|%)$/);
         await expect(items.nth(1).locator('.method-n')).toHaveCSS('letter-spacing', /^\d+(\.\d+)?px$/);
@@ -56,8 +56,23 @@ test('reduced motion: no scroll reveal hides content and nothing moves on its ow
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
     await page.locator('.numbers-row').scrollIntoViewIfNeeded();
-    await expect(page.locator('.chart-card').first()).toBeVisible();
+    await expect(page.locator('.chart-card').first()).toHaveCSS('opacity', '1');
     await expect(page.locator('.avail-dot')).toHaveCSS('animation-name', 'none');
+});
+
+test('Tab never lands on a block that is still hidden', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'needs a keyboard');
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const focused = page.locator('.feature:focus');
+    for (let i = 0; i < 30 && !(await focused.count()); i++) await page.keyboard.press('Tab');
+    await expect(focused).toHaveCSS('opacity', '1');
+});
+
+test('printing the home page shows blocks nobody scrolled to', async ({ page }) => {
+    await page.goto('/');
+    await page.emulateMedia({ media: 'print' });
+    await expect(page.locator('.reveal').last()).toHaveCSS('opacity', '1');
 });
 
 test('reduced motion: cards and rows change state at once', async ({ page, isMobile }) => {
@@ -66,9 +81,11 @@ test('reduced motion: cards and rows change state at once', async ({ page, isMob
     await page.goto('/');
     await page.locator('.map-host').scrollIntoViewIfNeeded();
     await expect(page.locator('.nm.booted')).toHaveCount(1);
+    await page.locator('.path-chart').scrollIntoViewIfNeeded();
+    await expect(page.locator('.path-chart')).toHaveClass(/drawn/);
     await page.locator('.numbers-row').scrollIntoViewIfNeeded();
     const moving = await page
-        .locator('.nm-card, .numbers.deck .chart-card, .feature')
+        .locator('.nm-card, .numbers.deck .chart-card, .feature, .path-chart .line, .path-chart .area')
         .evaluateAll((cards) => cards.filter((card) => getComputedStyle(card).transitionProperty !== 'none').length);
     expect(moving).toBe(0);
     const row = page.locator('.project-list li').first();

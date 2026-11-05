@@ -15,13 +15,14 @@
     justify-content: space-between;
     height: var(--nav-h);
     padding: 0 max(var(--gutter), calc(50% - var(--max) / 2));
-    background: color-mix(in sRGB, var(--bg) 72%, transparent);
+    background: color-mix(in sRGB, var(--bg) 88%, transparent);
     backdrop-filter: saturate(1.8) blur(20px);
     border-bottom: 1px solid var(--hair);
     font-size: 13px;
 }
 
 .nav-name {
+    padding-block: 2px;
     font-weight: 600;
     letter-spacing: -0.01em;
     white-space: nowrap;
@@ -227,4 +228,12 @@
 
 .skip:focus-visible {
     transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-pill,
+    .nav-theme-menu,
+    .nav-themes.open .nav-theme-menu {
+        transition: none;
+    }
 }

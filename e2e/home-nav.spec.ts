@@ -1,4 +1,5 @@
 import { test, expect } from './fixtures';
+import { fill } from '../src/core/lang';
 import { en } from '../src/i18n/en';
 import { fr } from '../src/i18n/fr';
 
@@ -10,6 +11,18 @@ test.describe('theme', () => {
         await expect(page.locator('html')).toHaveAttribute('data-theme', 'daylight');
         await page.reload();
         await expect(page.locator('html')).toHaveAttribute('data-theme', 'daylight');
+    });
+
+    test('a page the back button restores follows a theme picked since', async ({ page }) => {
+        await page.goto('/');
+        const theme = await page.evaluate(() =>
+            document.documentElement.dataset.theme === 'daylight' ? 'midnight' : 'daylight'
+        );
+        await page.evaluate((t) => {
+            localStorage.setItem('theme', t);
+            window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+        }, theme);
+        await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
     });
 
     test('follows a light system preference on a first visit', async ({ browser }) => {
@@ -30,6 +43,7 @@ test.describe('language', () => {
         await page.goto('/fr/');
         await page.locator('#work').scrollIntoViewIfNeeded(); // the map's code too, on wide screens
         await page.waitForLoadState('networkidle');
+        expect(scripts.length).toBeGreaterThan(0);
         const code = (await Promise.all(scripts)).join('\n');
         expect(code).not.toContain(en.home.hero.title2b);
         expect(code).not.toContain(fr.home.hero.title2b);
@@ -37,7 +51,7 @@ test.describe('language', () => {
         await expect(page.locator('.toast')).toHaveText(new RegExp(`${fr.home.contact.copied}|@`));
         await page.locator('.path-range [data-range="1y"]').click();
         await expect(page.locator('.path-range [data-range="1y"]')).toHaveText(fr.home.path.ranges['1y']);
-        await expect(page.locator('.path-delta')).toContainText(fr.home.path.over.replace('{n}', '12'));
+        await expect(page.locator('.path-delta')).toContainText(fill(fr.home.path.over, { n: 12 }));
     });
 
     test('the switch opens the same page in the other language and remembers it', async ({ page }) => {

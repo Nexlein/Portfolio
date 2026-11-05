@@ -22,7 +22,7 @@ export function projectDescription(project: ProjectEntry, lang: Lang): string {
 function mediaHtml(media: ProjectMedia, title: string, lang: Lang): string {
     switch (media.type) {
         case 'video':
-            return `<video loop muted playsinline preload="none" aria-label="${attr(t(lang, 'video', { p: title }))}" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
+            return `<video controls loop muted playsinline preload="none" aria-label="${attr(t(lang, 'video', { p: title }))}" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
         case 'image':
             return `<img src="${media.src}" alt="${attr(media.alt[lang])}" />`;
         case 'gallery': {
@@ -55,7 +55,7 @@ function specs(project: ProjectEntry, lang: Lang): string {
         [t(lang, 'domain'), domainName(lang, project.category)],
         [t(lang, 'period'), lookup(lang, `home.work.periods.${project.year}`)],
         ...(team ? [[t(lang, 'team'), team.size === 1 ? t(lang, 'solo') : t(lang, 'people', { n: team.size })]] : []),
-        [t(lang, 'stack'), project.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('')]
+        [t(lang, 'stack'), project.tags.map((tag) => `<span class="project-tag" lang="en">${tag}</span>`).join('')]
     ] as [string, string][];
     return rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
 }
