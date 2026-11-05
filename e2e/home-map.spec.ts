@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
 import { test, expect } from './fixtures';
+import { MAP_MAX } from '../src/components/NeuralMap/graph';
 import { PROJECTS } from '../src/data/projects';
 
 /** The map has finished drawing itself in. */
@@ -96,7 +97,7 @@ test.describe('project map', () => {
         await page.goto('/');
         await page.locator('#work').scrollIntoViewIfNeeded();
         const cards = page.locator('.nm-card');
-        await expect(cards).toHaveCount(PROJECTS.length);
+        await expect(cards).toHaveCount(Math.min(PROJECTS.length, MAP_MAX));
         await expect(page.locator('.project-list')).toBeHidden(); // the list is the other view
 
         await expect(page.locator('.nm.booted')).toHaveCount(1); // the map has drawn itself in
@@ -149,6 +150,17 @@ test.describe('project map', () => {
         await expect(card).toHaveClass(/open/);
         await card.press('Enter');
         await expect(page).toHaveURL(/\/projects\/starttrek\.html$/);
+    });
+
+    test('a domain the map has no card for opens the list', async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/');
+        await page.locator('#work').scrollIntoViewIfNeeded();
+        await expect(page.locator('.nm.booted')).toHaveCount(1);
+        await page.locator('.nm-card[data-domain="devops"]').evaluateAll((cards) => cards.forEach((c) => c.remove()));
+        await page.locator('.query button[data-domain="devops"]').click();
+        await expect(page.locator('.work')).toHaveAttribute('data-view', 'list');
+        await expect(page.locator('.project-list')).toBeVisible();
     });
 
     test('asking for a domain lights its projects up', async ({ page }) => {

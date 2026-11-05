@@ -95,10 +95,15 @@ function initWork(): void {
     list.addEventListener('animationend', (e) => (e.target as HTMLElement).classList.remove('row-in'));
 
     // ── Map: loaded the first time it is shown (phones never download the map code)
+    // Past its limit the map may have no card of a domain: dimming everything says nothing, the list has them all
+    const askMap = () => {
+        map?.query(domain);
+        if (map && domain && !host.querySelector(`.nm-card[data-domain="${domain}"]`)) show('list');
+    };
     const mountMap = (): Promise<void> => {
         mounting ??= import('@/components/NeuralMap/NeuralMap').then(({ mountNeuralMap }) => {
             map = mountNeuralMap(host);
-            map.query(domain);
+            askMap();
         });
         return mounting;
     };
@@ -158,7 +163,7 @@ function initWork(): void {
             chips.forEach((c) => c.setAttribute('aria-pressed', String(on && c === chip)));
             domain = on ? chip.dataset.domain! : null;
             shown = LIST_PAGE;
-            map?.query(domain);
+            askMap();
             renderList();
             if (on && view === 'map')
                 host.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
