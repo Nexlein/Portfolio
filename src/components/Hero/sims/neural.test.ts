@@ -47,7 +47,7 @@ describe('neural', () => {
             onResize: () => {},
             dispose: () => {},
             loop: (frame) => frame(0),
-            reduced: false
+            still: false
         };
         neural(stage);
         expect(fills).toContain('signal');
@@ -81,7 +81,7 @@ describe('neural', () => {
             onResize: () => {},
             dispose: () => {},
             loop: (f) => (frame = f),
-            reduced: false
+            still: false
         });
         size.width = 100; // the neurons are now far outside
         const meanX = () => {

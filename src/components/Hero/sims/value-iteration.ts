@@ -78,7 +78,7 @@ export function valueIteration(s: Stage): void {
                         Math.sin(Math.atan2(by, bx) - angle[i]),
                         Math.cos(Math.atan2(by, bx) - angle[i])
                     );
-                    angle[i] += s.reduced ? d : d * 0.25; // ease the arrows toward the new decision
+                    angle[i] += s.still ? d : d * 0.25; // ease the arrows toward the new decision
                 }
             }
     };
@@ -145,7 +145,7 @@ export function valueIteration(s: Stage): void {
         const i = y * cols + x;
         wall[i] = wall[i] ? 0 : 1;
         V[i] = 0;
-        if (s.reduced) {
+        if (s.still) {
             for (let k = 0; k < cols + rows; k++) sweep();
             draw();
         }
@@ -155,7 +155,7 @@ export function valueIteration(s: Stage): void {
 
     let t = 0;
     s.loop(() => {
-        if (s.reduced) {
+        if (s.still) {
             for (let k = 0; k < cols + rows; k++) sweep();
             return draw();
         }

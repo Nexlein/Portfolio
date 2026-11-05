@@ -71,6 +71,38 @@ test.describe('hero', () => {
         await expect.poll(frames, { timeout: 15000 }).toBeGreaterThan(idle + 5);
     });
 
+    test('a simulation picked during a pause shows its picture, and keeps it through a resize', async ({
+        page,
+        isMobile
+    }) => {
+        test.skip(isMobile, 'resizes the window');
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/');
+        await page.locator('.hero-pause').click();
+        await page.locator('.hero-dot[aria-pressed="false"]').first().click();
+        await expect.poll(() => painted(page)).toBe(true);
+        await page.setViewportSize({ width: 1100, height: 700 }); // resizing clears a canvas
+        await expect.poll(() => painted(page)).toBe(true);
+    });
+
+    test('a resize that changes nothing leaves the canvas alone', async ({ page }) => {
+        await page.goto('/');
+        await page.locator('.hero-pause').click();
+        const marked = () =>
+            page.evaluate(() => {
+                const canvas = document.querySelector<HTMLCanvasElement>('.hero-field')!;
+                return canvas.getContext('2d')!.getImageData(0, 0, 1, 1).data[3] === 255;
+            });
+        await page.evaluate(() => {
+            const ctx = document.querySelector<HTMLCanvasElement>('.hero-field')!.getContext('2d')!;
+            ctx.fillStyle = '#f00';
+            ctx.fillRect(0, 0, 4, 4);
+            window.dispatchEvent(new Event('resize')); // a phone's address bar sliding away
+        });
+        await page.waitForTimeout(300); // past the resize debounce: the clear this guards against would have happened
+        expect(await marked()).toBe(true);
+    });
+
     test('old project links (/?project=id) open the project page', async ({ page }) => {
         await page.goto('/?project=arcade');
         await expect(page).toHaveURL(/\/projects\/arcade\.html$/);
@@ -95,7 +127,7 @@ test.describe('hero title', () => {
     });
 });
 
-const painted = (page: import('@playwright/test').Page) =>
+const painted = (page: Page) =>
     page.evaluate(() => {
         const canvas = document.querySelector<HTMLCanvasElement>('.hero-field')!;
         const data = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data;
