@@ -11,7 +11,7 @@
  */
 import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/lang';
-import { firstSentence } from '@/core/text';
+import { f1, firstSentence } from '@/core/text';
 import { NOW } from '@/data/profile';
 import { PERIODS, PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
@@ -34,7 +34,6 @@ import {
 const SVG = 'http://www.w3.org/2000/svg';
 const OPEN_W = 330;
 const ATTN_REACH = 340;
-const f1 = (n: number) => n.toFixed(1);
 
 /** The drifting map redraws about 30 times a second: every redraw restyles dozens of cards and hundreds of lines. */
 const FRAME_MS = 30;

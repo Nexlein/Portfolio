@@ -10,7 +10,6 @@ export type { Text };
 
 export interface Experience {
     id: string;
-    kind: 'job' | 'internship' | 'event';
     title: Text;
     org?: string;
     period: Text;
@@ -50,7 +49,6 @@ export interface CvProjectGroup {
 export const EXPERIENCES: Experience[] = [
     {
         id: 'issanka',
-        kind: 'internship',
         title: { en: 'AI Developer Intern (Part-Time)', fr: 'Développeur IA (stage à temps partiel)' },
         org: 'Issanka',
         period: { en: 'Sept 2026 - Feb 2027', fr: 'sept. 2026 - févr. 2027' },
@@ -71,7 +69,6 @@ export const EXPERIENCES: Experience[] = [
     },
     {
         id: 'climb2c',
-        kind: 'internship',
         title: { en: 'Full-Stack & AI Developer Intern', fr: 'Développeur full-stack et IA (stage)' },
         org: 'Climb2C (Eliona Conseil)',
         period: { en: 'Sept - Dec 2025', fr: 'sept. - déc. 2025' },
@@ -93,7 +90,6 @@ export const EXPERIENCES: Experience[] = [
     },
     {
         id: 'hackathons',
-        kind: 'event',
         title: { en: 'Hackathons & Cybersecurity', fr: 'Hackathons et cybersécurité' },
         period: { en: '2025 - 2026', fr: '2025 - 2026' },
         summary: {
@@ -227,17 +223,6 @@ export const NOW = {
 
 /** Where the owner works from: the CV header. */
 export const LOCATION: Text = { en: 'Montpellier, France · or remote', fr: 'Montpellier · ou télétravail' };
-
-/** Home timeline order (newest first), mixing experiences and education by id. A test checks every entry is listed once. */
-export const TIMELINE: string[] = [
-    'issanka',
-    'epitech',
-    'google-cloud',
-    'hackathons',
-    'climb2c',
-    'high-school',
-    'bia-psc'
-];
 
 export const SKILLS: SkillGroup[] = [
     {

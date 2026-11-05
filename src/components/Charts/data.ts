@@ -7,7 +7,7 @@ import { CHECKPOINTS, EXPERIENCES, type Checkpoint } from '../../data/profile.ts
 import { yearOf } from '../../core/time.ts';
 import { DOMAINS, PERIODS, type Period, type ProjectEntry } from '../../data/projects.ts';
 import { skillNames, skillsOf } from '../../data/skills.ts';
-import { schoolYear, valueAt } from './series.ts';
+import { valueAt } from './series.ts';
 
 export { valueAt, yDomain } from './series.ts';
 
@@ -97,9 +97,6 @@ export function changeSince(points: Point[], t0: number): { delta: number; pct: 
 
 /** Epitech's school years run September to August, counted from the month the first one started (the 'epitech' checkpoint). */
 export const EPITECH_START = yearOf(CHECKPOINTS.find((c) => c.id === 'epitech')!.date);
-
-/** The school year a time falls in: 0 before Epitech, then 1, 2, 3... */
-export const schoolYearAt = (time: number) => schoolYear(time, EPITECH_START);
 
 export interface Phase {
     /** 0 is the time before Epitech, then the school years 1, 2, 3... */

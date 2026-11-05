@@ -7,7 +7,7 @@ import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, type Checkpoint } from '../..
 import { DOMAINS, PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
 import type { Slots } from '../../core/lang.ts';
-import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { domainName, localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
 import { stillAttrs } from '../../ui/video.ts';
 import { numbers, pathChart } from '../../components/Charts/render.ts';
@@ -19,8 +19,6 @@ const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`
 
 /** First sentence of the description. */
 const oneLiner = (p: ProjectEntry, lang: Lang) => firstSentence(p.description[lang]);
-
-const domainName = (lang: Lang, d: string) => t(lang, `domains.${d}`);
 
 export function availability(lang: Lang): string {
     return NOW.availability[lang];
@@ -71,12 +69,12 @@ export function mapMore(lang: Lang): string {
  * (initPathStory) shows one at a time and turns it with the chart; without JS they read as a plain list.
  */
 export function experience(lang: Lang): string {
-    const entries = [...EXPERIENCES, ...EDUCATION];
     const panel = (c: Checkpoint) => {
-        const e = entries.find((x) => x.id === c.id)!;
-        const org = 'org' in e && e.org ? ` · ${e.org}` : '';
-        const when = 'kind' in e ? e.period[lang] : monthName(yearOf(c.date), lang);
-        const text = 'kind' in e ? e.summary[lang] : firstSentence(e.summary[lang]);
+        const job = EXPERIENCES.find((x) => x.id === c.id);
+        const e = job ?? EDUCATION.find((x) => x.id === c.id)!;
+        const org = job?.org ? ` · ${job.org}` : '';
+        const when = job ? job.period[lang] : monthName(yearOf(c.date), lang);
+        const text = job ? job.summary[lang] : firstSentence(e.summary[lang]);
         return `<article class="exp" data-cp="${c.id}"><p class="exp-when">${when}</p><div class="exp-what"><strong>${e.title[lang]}${org}</strong>
 <span>${text}</span></div></article>`;
     };

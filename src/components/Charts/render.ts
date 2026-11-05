@@ -7,6 +7,7 @@
 import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
 import type { Slots } from '../../core/lang.ts';
+import { f1, jsonBlock } from '../../core/text.ts';
 import { monthName, MONTHS, yearOf } from '../../core/time.ts';
 import { lookup, type Lang } from '../../core/translate.ts';
 import {
@@ -36,7 +37,6 @@ import {
 } from './data.ts';
 import { PATH, pathSamples, type PathData } from './series.ts';
 
-const f1 = (n: number) => n.toFixed(1);
 const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `home.${key}`, slots);
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
@@ -48,7 +48,6 @@ export function phaseLabel(lang: Lang, year: number, start: number, short = fals
     return short ? name : `${name} · ${start}-${String(start + 1).slice(2)}`;
 }
 
-/** The change since the start of a range, as the chart's headline says it: "▲ +37 (176 %) past 12 months". */
 /** The change over a range: `text` is what is shown (`▲ +21 (58 %)`), `over` names the range for screen readers (`past 12 months`). */
 export function changeText(
     lang: Lang,
@@ -131,7 +130,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
         .join('');
     return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria', { n: total })}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
-<g class="grid">${ticks.map((v, i) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text${ticks.length > 3 && i % 2 ? ' class="value-minor"' : ''} x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}${narrow.has(tk) ? '' : ' wide'}${x(tk.t) < L + 40 ? ' first' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
+<g class="grid">${ticks.map((v, i) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text${ticks.length > 3 && i % 2 ? ' class="value-minor"' : ''} x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${narrow.has(tk) ? '' : ' wide'}${x(tk.t) < L + 40 ? ' first' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
 <g class="phases">${phases}</g>
 <path class="line" pathLength="1" d="${line}" />
@@ -172,8 +171,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
             ranges.map(({ r, t0, change: c }) => [r.id, { t0, text: c.text, over: c.over, up: c.up }])
         )
     };
-    // A data block, never executed (the CSP's script-src does not apply). Escape '<' so text can't close the tag.
-    const json = JSON.stringify(data).replace(/</g, '\\u003c');
+    const json = jsonBlock(data); // a data block, never executed: the CSP's script-src does not apply
     const later = ranges
         .filter(({ r }) => r !== first)
         .map(({ r, t0 }) => `<template data-plot="${r.id}">${pathSvg(lang, points, t0, now)}</template>`)

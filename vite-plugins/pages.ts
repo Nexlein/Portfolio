@@ -4,6 +4,7 @@ import { Window } from 'happy-dom';
 import type { Plugin } from 'vite';
 import { PROJECTS, projectPath } from '../src/data/projects.ts';
 import { OWNER, SITE } from '../src/core/site.ts';
+import { jsonBlock } from '../src/core/text.ts';
 import { cvPerson, profilePage, projectSource } from '../src/core/structured-data.ts';
 import {
     clientStrings,
@@ -66,31 +67,28 @@ const fixedPage = (
 export const PAGES: PageSpec[] = [
     fixedPage('/', 'index.html', 'home', profilePage, true),
     fixedPage('/cv.html', 'cv.html', 'cv', cvPerson),
-    ...PROJECTS.map((project): PageSpec => ({
-        path: projectPath(project.id),
-        template: 'project.html',
-        title: () => `${project.title} — ${OWNER.name}`,
-        description: (lang) => projectDescription(project, lang),
-        image: () => `${SITE}/projects/${project.id}/og.jpg`,
-        imageAlt: () => project.title,
-        ogType: 'article',
-        jsonLd: (lang) =>
-            projectSource(project, lang, projectDescription(project, lang), `${SITE}/projects/${project.id}/og.jpg`),
-        fill: (document, lang) => {
-            renderContent(document, lang, projectPath(project.id)); // nav and footer
-            fillProjectPage(document, project, lang);
-        }
-    }))
+    ...PROJECTS.map((project): PageSpec => {
+        const image = `${SITE}/projects/${project.id}/og.jpg`;
+        return {
+            path: projectPath(project.id),
+            template: 'project.html',
+            title: () => `${project.title} — ${OWNER.name}`,
+            description: (lang) => projectDescription(project, lang),
+            image: () => image,
+            imageAlt: () => project.title,
+            ogType: 'article',
+            jsonLd: (lang) => projectSource(project, lang, projectDescription(project, lang), image),
+            fill: (document, lang) => {
+                renderContent(document, lang, projectPath(project.id)); // nav and footer
+                fillProjectPage(document, project, lang);
+            }
+        };
+    })
 ];
 
 /** The page Vercel serves for every unknown URL (/404.html, and /fr/404.html for the French copy). */
 export const NOT_FOUND: PageSpec = {
-    path: '/404.html',
-    template: '404.html',
-    title: (lang) => lookup(lang, 'meta.notFound.title'),
-    description: (lang) => lookup(lang, 'meta.notFound.description'),
-    image: DEFAULT_IMAGE,
-    imageAlt: (lang) => lookup(lang, 'meta.imageAlt'),
+    ...fixedPage('/404.html', '404.html', 'notFound'),
     unlisted: true,
     fill: (document, lang) => {
         renderContent(document, lang, '/404.html'); // nav and footer
@@ -158,14 +156,12 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
     }
 
     if (page.jsonLd) {
-        // A data block, never executed, so the CSP's script-src does not apply. Escape '<' so text can't close the tag.
-        const script = appendHead('script', { type: 'application/ld+json' });
-        script.textContent = JSON.stringify(page.jsonLd(lang)).replace(/</g, '\\u003c');
+        // A data block, never executed, so the CSP's script-src does not apply
+        appendHead('script', { type: 'application/ld+json' }).textContent = jsonBlock(page.jsonLd(lang));
     }
 
     if (page.strings) {
-        const script = appendHead('script', { type: 'application/json', id: STRINGS_ID });
-        script.textContent = JSON.stringify(clientStrings(lang)).replace(/</g, '\\u003c');
+        appendHead('script', { type: 'application/json', id: STRINGS_ID }).textContent = jsonBlock(clientStrings(lang));
     }
 
     const out = `<!doctype html>\n${document.documentElement.outerHTML}\n`;

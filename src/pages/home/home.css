@@ -59,12 +59,6 @@
     letter-spacing: -0.02em;
 }
 
-@media (width <= 900px) {
-    .features {
-        grid-template-columns: 1fr;
-    }
-}
-
 /* ── Work ── */
 .work-tools {
     display: flex;

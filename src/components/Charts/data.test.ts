@@ -4,8 +4,10 @@ import { thisMonth, yearOf } from '@/core/time';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
 import { skillsOf } from '@/data/skills';
 import { changeText, numbers, pathChart, pathSvg, phaseLabel } from './render';
+import { schoolYear } from './series';
 import {
     distinctSkills,
+    EPITECH_START,
     domainAxes,
     languageBuckets,
     languageOf,
@@ -16,7 +18,6 @@ import {
     RANGES,
     rangeStart,
     changeSince,
-    schoolYearAt,
     skillSeries,
     spelling,
     timeTicks,
@@ -236,12 +237,12 @@ describe('the change over a range (the headline of the path chart)', () => {
 
 describe('where the visitor was', () => {
     it('counts Epitech school years from September: before it 0, then 1, 2, 3', () => {
-        expect(schoolYearAt(yearOf('2024-07'))).toBe(0);
-        expect(schoolYearAt(yearOf('2024-09'))).toBe(1);
-        expect(schoolYearAt(yearOf('2025-08'))).toBe(1);
-        expect(schoolYearAt(yearOf('2025-09'))).toBe(2);
-        expect(schoolYearAt(yearOf('2026-05'))).toBe(2);
-        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: year 3
+        expect(schoolYear(yearOf('2024-07'), EPITECH_START)).toBe(0);
+        expect(schoolYear(yearOf('2024-09'), EPITECH_START)).toBe(1);
+        expect(schoolYear(yearOf('2025-08'), EPITECH_START)).toBe(1);
+        expect(schoolYear(yearOf('2025-09'), EPITECH_START)).toBe(2);
+        expect(schoolYear(yearOf('2026-05'), EPITECH_START)).toBe(2);
+        expect(schoolYear(TODAY, EPITECH_START)).toBe(3); // October 2026: year 3
     });
 
     it('covers the whole window with consecutive phases, clipped to it', () => {

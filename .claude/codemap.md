@@ -21,26 +21,25 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## scripts
 - **brand-images.ts** (71) — Social preview of the home page, one per language (public/og-image.png and og-image-fr.png, 1200x630, what LinkedIn and X expect) and the...
   - → data/profile, core/site, core/translate
-- **codemap.ts** (114) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
+- **codemap.ts** (113) — Code map for AI assistants and new contributors: every source file with its purpose, exports, local imports and who uses it, in one small...
 - **cv-pdf.ts** (59) — Render the CV page to PDF in every language, from the production build (run `vite build` first).
-  - exports: PDFS
 - **media.ts** (44) — Everything generated from a project's media, each step needing the one before: a poster per video, card-sized copies of a still that is a...
   - → data/projects, ui/video
 
 ## src/components/Charts
 - **Charts.css** (834) — Path chart and the numbers deck.
   - ← index.html
-- **Charts.ts** (297) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
+- **Charts.ts** (298) — Interactions on the build-time charts: the path chart's range buttons and crosshair, and the numbers deck's arrows.
   - exports: initPathChart, initPathStory, initNumbers
-  - → core/lang, core/time, ui/motion, ui/reveal, ui/svg-scale, components/Charts/series
+  - → core/lang, core/text, core/time, ui/motion, ui/reveal, ui/svg-scale, components/Charts/series
   - ← pages/home/home
-- **data.ts** (225) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
-  - exports: spelling, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, schoolYearAt, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
+- **data.ts** (222) — Numbers behind the charts, computed from the data only (projects.ts, profile.ts): nothing is typed in by hand.
+  - exports: spelling, Point, skillSeries, Range, RANGES, rangeStart, changeSince, EPITECH_START, Phase, phasesIn, Tick, timeTicks, yTicks, learnedSince, periodsIn, INFRA, OTHER, languageOf, languageBuckets, domainAxes, topSkills, newSkillsPerPeriod, distinctSkills
   - → data/profile, core/time, data/projects, data/skills, components/Charts/series
   - ← components/Charts/render
-- **render.ts** (395) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
+- **render.ts** (393) — Charts as static SVG, rendered at build time in every language (data-render="path-chart" / "numbers").
   - exports: phaseLabel, changeText, pathSvg, pathChart, numbers
-  - → data/profile, data/projects, core/lang, core/time, core/translate, components/Charts/data, components/Charts/series
+  - → data/profile, data/projects, core/lang, core/text, core/time, core/translate, components/Charts/data, components/Charts/series
   - ← pages/home/blocks
 - **series.ts** (71) — The path chart's geometry and the few rules the browser needs for its crosshair: pure functions of a series of steps, with no data imported.
   - exports: Step, valueAt, yDomain, schoolYear, PATH, pathSamples, PathData
@@ -97,7 +96,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: initNav
   - → components/Nav/themes
   - ← pages/cv/cv, pages/home/home, pages/notfound/notfound, pages/project/project
-- **render.ts** (44) — Top navigation, rendered at build time in every language (data-render="nav"), so links, the language switch and the theme menu are real H...
+- **render.ts** (42) — Top navigation, rendered at build time in every language (data-render="nav"), so links, the language switch and the theme menu are real H...
   - exports: renderNav
   - → core/translate, components/Nav/themes
   - ← pages/content/render
@@ -109,7 +108,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## src/components/NeuralMap
 - **NeuralMap.css** (461) — The project map (see NeuralMap.ts).
   - ← index.html
-- **NeuralMap.ts** (608) — The project map: projects as a small neural network.
+- **NeuralMap.ts** (607) — The project map: projects as a small neural network.
   - exports: NeuralMap, mountNeuralMap
   - → core/i18n, core/lang, core/text, data/profile, data/projects, ui/icons, ui/motion, ui/video, components/NeuralMap/graph, components/NeuralMap/scene
   - ← pages/home/home
@@ -144,22 +143,22 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - exports: SKILL_ENTITIES, profilePage, cvPerson, projectSource
   - → data/profile, data/projects, core/site, core/translate
   - ← vite-plugins/pages
-- **text.ts** (16) — First sentence of a text, without HTML tags, ending in one full stop ("A.
-  - exports: firstSentence, attr
-  - ← components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render
+- **text.ts** (22) — A text without its HTML tags.
+  - exports: stripTags, firstSentence, f1, jsonBlock, attr
+  - ← components/Charts/Charts, components/Charts/render, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/render, vite-plugins/pages
 - **time.ts** (23) — Dates as fractional years, the unit of the charts and of every month the pages print.
   - exports: yearOf, thisMonth, monthLabel, MONTHS, monthName
   - → core/lang
   - ← components/Charts/Charts, components/Charts/data, components/Charts/render, pages/home/blocks, pages/project/render
-- **translate.ts** (40) — Translation helpers for the build (vite-plugins/pages.ts, which pre-renders every page in every language) and for tests.
-  - exports: lookup, clientStrings, translateTree
+- **translate.ts** (43) — Translation helpers for the build (vite-plugins/pages.ts, which pre-renders every page in every language) and for tests.
+  - exports: lookup, domainName, clientStrings, translateTree
   - → i18n/en, i18n/fr, core/lang
   - ← scripts/brand-images, components/Charts/render, components/Footer/render, components/Nav/render, core/structured-data, data/profile, data/projects, pages/content/render, pages/cv/blocks, pages/home/blocks, pages/project/render, vite-plugins/pages
 - tests: analytics.test.ts, i18n.test.ts, structured-data.test.ts, text.test.ts, time.test.ts, translate.test.ts
 
 ## src/data
-- **profile.ts** (333) — Everything the site says about its owner, written once in every language.
-  - exports: Experience, Education, SkillGroup, CvProjectGroup, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, TIMELINE, SKILLS, CV_PROJECTS
+- **profile.ts** (318) — Everything the site says about its owner, written once in every language.
+  - exports: Experience, Education, SkillGroup, CvProjectGroup, EXPERIENCES, EDUCATION, Checkpoint, CHECKPOINTS, NOW, LOCATION, SKILLS, CV_PROJECTS
   - → core/translate
   - ← scripts/brand-images, components/Charts/data, components/Charts/render, components/NeuralMap/NeuralMap, core/structured-data, pages/cv/blocks, pages/home/blocks
 - **projects.ts** (672) — Single source of truth for all portfolio projects.
@@ -188,7 +187,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: render.test.ts
 
 ## src/pages/cv
-- **blocks.ts** (103) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+- **blocks.ts** (100) — CV blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
   - exports: typeset, experience, skills, education, certifications, projectBlocks, contact, QR_CODE, qr
   - → data/profile, data/projects, core/site, core/translate
   - ← pages/content/render
@@ -202,11 +201,11 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: head-script.test.ts, headers.test.ts, node-safe.test.ts, pages.test.ts, seo.test.ts
 
 ## src/pages/home
-- **blocks.ts** (115) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
+- **blocks.ts** (113) — Home page blocks, rendered at build time in every language (src/pages/content/render.ts calls them for the matching data-render names).
   - exports: availability, featured, workTitle, domainQuery, projectList, mapMore, experience, pathBlock, numbersBlock, method, methodSource, contact, email
   - → data/profile, data/projects, core/site, core/lang, core/translate, ui/icons, ui/video, components/Charts/render, core/time, core/text, components/NeuralMap/graph
   - ← pages/content/render
-- **home.css** (563) — Home sections that are not components of their own: selected work, the project list, experience, contact.
+- **home.css** (557) — Home sections that are not components of their own: selected work, the project list, experience, contact.
   - ← index.html
 - **home.ts** (253) — Home page.
   - → core/analytics, core/i18n, ui/glide, ui/motion, components/Nav/Nav, components/Hero/Hero, components/Charts/Charts, ui/boot, ui/reveal, components/NeuralMap/NeuralMap
@@ -228,7 +227,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **project.ts** (29) — Project page entry point.
   - → core/analytics, components/Nav/Nav, ui/boot, ui/reveal, ui/motion, ui/video, pages/project/gallery
   - ← project.html
-- **render.ts** (123) — Fill the project page template (project.html) for one project, at build time.
+- **render.ts** (119) — Fill the project page template (project.html) for one project, at build time.
   - exports: projectDescription, sharedTags, fillProjectPage
   - → data/projects, data/skills, core/lang, core/text, core/translate, ui/icons, ui/video, core/time, components/NeuralMap/graph
   - ← vite-plugins/pages
@@ -273,8 +272,8 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **vite-env.d.ts** (10) — / <reference types="vite/client" />
 
 ## vite-plugins
-- **pages.ts** (257) — One page of the site, in every language.
+- **pages.ts** (253) — One page of the site, in every language.
   - exports: PageSpec, PAGES, NOT_FOUND, outputFile, renderPage, sitemap, sitePages
-  - → data/projects, core/site, core/structured-data, core/translate, core/lang, pages/content/render, pages/project/render
+  - → data/projects, core/site, core/text, core/structured-data, core/translate, core/lang, pages/content/render, pages/project/render
 - **shared-head.ts** (75) — Runs in <head> before first paint, on every page: 1.
   - exports: HEAD_SCRIPT, sharedHead

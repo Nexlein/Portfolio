@@ -18,6 +18,9 @@ export function lookup(lang: Lang, key: string, slots: Slots = {}): string {
     return fill(text, slots);
 }
 
+/** The name of a project domain ('ai'). */
+export const domainName = (lang: Lang, domain: string) => lookup(lang, `home.domains.${domain}`);
+
 /**
  * The strings the home page's scripts write at runtime (toasts, labels, the map's cards): the `home` part of one
  * language, embedded in the page as JSON so the browser never downloads both dictionaries.

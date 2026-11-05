@@ -51,8 +51,9 @@ function initWork(): void {
         mounting: Promise<void> | undefined;
 
     // ── List: filtered by the domain chip, a page at a time
+    const rowsOfDomain = () => rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain);
     const renderList = (reveal = false) => {
-        const rowsIn = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain);
+        const rowsIn = rowsOfDomain();
         rows.forEach((li) => {
             const i = rowsIn.indexOf(li);
             const open = i >= 0 && i < shown;
@@ -68,8 +69,7 @@ function initWork(): void {
             left > 0 ? i18n.t('home.work.showMore', { n: Math.min(LIST_PAGE, left) }) : i18n.t('home.work.showLess');
     };
     moreBtn.addEventListener('click', () => {
-        const left = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain).length - shown;
-        if (left > 0) {
+        if (rowsOfDomain().length > shown) {
             list.getAnimations().forEach((a) => a.cancel()); // a running one would pin the height being measured
             const from = list.offsetHeight;
             shown += LIST_PAGE;

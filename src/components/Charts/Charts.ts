@@ -3,6 +3,7 @@
  * arrows. The SVG is already in the page; this only adds behaviour (count-ups and reveals: src/ui/reveal.ts).
  */
 import { fill } from '@/core/lang';
+import { f1 } from '@/core/text';
 import { monthLabel } from '@/core/time';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { countUp } from '@/ui/reveal';
@@ -56,12 +57,12 @@ export function initPathChart(): void {
             const time = t0 + ((sx - PATH.L) / span) * (now - t0);
             cross.setAttribute('visibility', 'visible');
             const line = cross.querySelector('.cross-x')!;
-            line.setAttribute('x1', sx.toFixed(1));
-            line.setAttribute('x2', sx.toFixed(1));
-            line.setAttribute('y1', py.toFixed(1));
+            line.setAttribute('x1', f1(sx));
+            line.setAttribute('x2', f1(sx));
+            line.setAttribute('y1', f1(py));
             const dot = cross.querySelector('.cross-dot')!;
-            dot.setAttribute('cx', sx.toFixed(1));
-            dot.setAttribute('cy', py.toFixed(1));
+            dot.setAttribute('cx', f1(sx));
+            dot.setAttribute('cy', f1(py));
             const last = points.reduce((l, p) => (p.t <= time && p.what ? p : l), points[0]);
             const year = schoolYear(time, data.epitech);
             tip.innerHTML = `<span class="mono">${monthLabel(time, data.months)} · ${year ? data.years[Math.min(year, data.years.length) - 1] : data.before}</span><strong>${fill(data.skills, { n: valueAt(points, time) })}</strong><span>${last.what}</span>`;

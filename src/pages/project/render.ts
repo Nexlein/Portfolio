@@ -5,22 +5,18 @@
 import { PROJECTS, projectPath, type ProjectEntry, type ProjectMedia } from '../../data/projects.ts';
 import { skillsOfTag } from '../../data/skills.ts';
 import type { Slots } from '../../core/lang.ts';
-import { attr } from '../../core/text.ts';
-import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { attr, stripTags } from '../../core/text.ts';
+import { domainName, localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
 import { stillAttrs, videoPoster, videoType } from '../../ui/video.ts';
 import { monthName, yearOf } from '../../core/time.ts';
 import { neighbours, skillSet } from '../../components/NeuralMap/graph.ts';
 
 const t = (lang: Lang, key: string, slots?: Slots) => lookup(lang, `projectPage.${key}`, slots);
-const domainName = (lang: Lang, d: string) => lookup(lang, `home.domains.${d}`);
 
 /** Plain-text description (dictionaries may contain inline HTML) for meta tags and JSON-LD. */
 export function projectDescription(project: ProjectEntry, lang: Lang): string {
-    return project.description[lang]
-        .replace(/<[^>]+>/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
+    return stripTags(project.description[lang]).replace(/\s+/g, ' ').trim();
 }
 
 /** The media frame: a lazy video (started on screen by playVideosWhenVisible), an image, or a gallery. */
