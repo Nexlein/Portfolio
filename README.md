@@ -115,9 +115,9 @@ All pages come from one list in `vite-plugins/pages.ts` (`PAGES`): path, templat
 
 ## SEO and social previews
 
-Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). The home, CV and 404 pages share `public/og-image.png` (`og-image-fr.png` in French), 1200×630, drawn by `npm run media:brand` from the profile data; each project page uses its own `og.jpg`. `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
+`renderPage` (`vite-plugins/pages.ts`) writes every page's title, description, canonical URL and Open Graph / X tags: templates only keep what is not SEO. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). The home, CV and 404 pages share `public/og-image.png` (`og-image-fr.png` in French), 1200×630, drawn by `npm run media:brand` from the profile data; each project page uses its own `og.jpg`. `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
 
-When adding a page, give it these tags and a sitemap entry; `src/pages/seo.test.ts` fails until you do.
+A new page only needs its entry in `PAGES`: the tags and the sitemap follow, and `src/pages/pages.test.ts` checks them.
 
 ## Tests
 

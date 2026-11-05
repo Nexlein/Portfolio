@@ -29,6 +29,8 @@ export interface PageSpec {
     description: (lang: Lang) => string;
     image: (lang: Lang) => string;
     imageAlt: (lang: Lang) => string;
+    /** Open Graph type: 'website' unless a page says otherwise. */
+    ogType?: string;
     jsonLd?: (lang: Lang) => object;
     /** Served as the 404: no canonical or language alternates, not in the sitemap. */
     unlisted?: boolean;
@@ -71,6 +73,7 @@ export const PAGES: PageSpec[] = [
         description: (lang) => projectDescription(project, lang),
         image: () => `${SITE}/projects/${project.id}/og.jpg`,
         imageAlt: () => project.title,
+        ogType: 'article',
         jsonLd: (lang) =>
             projectSource(project, lang, projectDescription(project, lang), `${SITE}/projects/${project.id}/og.jpg`),
         fill: (document, lang) => {
@@ -115,15 +118,6 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
     const head = document.head;
     const url = (l: Lang) => SITE + localizedPath(page.path, l);
 
-    const setMeta = (attr: 'name' | 'property', name: string, content: string) => {
-        let meta = head.querySelector(`meta[${attr}="${name}"]`);
-        if (!meta) {
-            meta = document.createElement('meta');
-            meta.setAttribute(attr, name);
-            head.appendChild(meta);
-        }
-        meta.setAttribute('content', content);
-    };
     const appendHead = (tag: string, attrs: Record<string, string>) => {
         const el = document.createElement(tag);
         for (const [name, value] of Object.entries(attrs)) el.setAttribute(name, value);
@@ -137,22 +131,28 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
 
     const title = page.title(lang);
     const description = page.description(lang);
-    document.title = title;
-    setMeta('name', 'description', description);
-    setMeta('property', 'og:title', title);
-    setMeta('property', 'og:description', description);
-    setMeta('property', 'og:url', url(lang));
-    setMeta('property', 'og:image', page.image(lang));
-    setMeta('property', 'og:image:alt', page.imageAlt(lang));
-    setMeta('property', 'og:locale', OG_LOCALE[lang]);
-    head.querySelectorAll('meta[property="og:locale:alternate"]').forEach((el) => el.remove());
+    appendHead('title', {}).textContent = title;
+    appendHead('meta', { name: 'description', content: description });
+    const openGraph = {
+        type: page.ogType ?? 'website',
+        site_name: OWNER.alias,
+        title,
+        description,
+        url: url(lang),
+        image: page.image(lang),
+        'image:width': '1200',
+        'image:height': '630',
+        'image:alt': page.imageAlt(lang),
+        locale: OG_LOCALE[lang]
+    };
+    for (const [name, content] of Object.entries(openGraph)) appendHead('meta', { property: `og:${name}`, content });
     for (const other of LANGS.filter((l) => l !== lang)) {
         appendHead('meta', { property: 'og:locale:alternate', content: OG_LOCALE[other] });
     }
+    appendHead('meta', { name: 'twitter:card', content: 'summary_large_image' });
 
-    head.querySelector('link[rel="canonical"]')?.setAttribute('href', url(lang));
-    head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
     if (!page.unlisted) {
+        appendHead('link', { rel: 'canonical', href: url(lang) });
         for (const l of LANGS) appendHead('link', { rel: 'alternate', hreflang: l, href: url(l) });
         appendHead('link', { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LANG) });
     }
