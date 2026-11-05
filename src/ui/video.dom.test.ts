@@ -91,6 +91,7 @@ describe('playVideosWhenVisible', () => {
         a.play = vi.fn(() => Promise.reject(new DOMException('NotAllowedError')));
         playVideosWhenVisible(document.body);
         callback([{ target: a, isIntersecting: true }]);
-        await expect(Promise.resolve()).resolves.toBeUndefined(); // no unhandled rejection
+        expect(a.play).toHaveBeenCalledOnce();
+        await new Promise((resolve) => setTimeout(resolve)); // a rejection nobody caught would fail the run from here
     });
 });

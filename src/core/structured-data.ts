@@ -3,7 +3,7 @@
  * Pure functions, no browser APIs, so Node can run them from the Vite plugins.
  */
 import { SKILLS } from '../data/profile.ts';
-import type { ProjectEntry } from '../data/projects.ts';
+import { projectPath, type ProjectEntry } from '../data/projects.ts';
 import { OWNER, SITE } from './site.ts';
 import { localizedPath, lookup, type Lang } from './translate.ts';
 
@@ -69,7 +69,7 @@ export function projectSource(project: ProjectEntry, lang: Lang, description: st
         '@type': 'SoftwareSourceCode',
         name: project.title,
         description,
-        url: SITE + localizedPath(`/projects/${project.id}.html`, lang),
+        url: SITE + localizedPath(projectPath(project.id), lang),
         image,
         inLanguage: lang,
         dateCreated: project.date, // 'YYYY-MM', a valid partial ISO date

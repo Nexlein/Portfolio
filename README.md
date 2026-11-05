@@ -29,23 +29,25 @@ npm run dev
 
 ## Scripts
 
-| Script                  | Description                                                      |
-| ----------------------- | ---------------------------------------------------------------- |
-| `npm run dev`           | Start the Vite dev server                                        |
-| `npm run build`         | Typecheck and build to `dist/`                                   |
-| `npm run preview`       | Serve the production build locally                               |
-| `npm run typecheck`     | Run `tsc --noEmit`                                               |
-| `npm test`              | Run Vitest                                                       |
-| `npm run lint`          | Lint TS (Oxlint) and CSS (Stylelint)                             |
-| `npm run lint:fix`      | Lint and autofix                                                 |
-| `npm run media:posters` | Generate missing video posters (ffmpeg)                          |
-| `npm run media:thumbs`  | Generate missing card-sized copies of project images (ffmpeg)    |
-| `npm run media:og`      | Generate missing per-project social images (ffmpeg)              |
-| `npm run media:brand`   | Redraw the home social image and the icons (Chromium, no ffmpeg) |
-| `npm run media:video`   | Re-encode a video for the web (ffmpeg)                           |
-| `npm run audit`         | Dependency audit (`config/audit-ci.jsonc`)                       |
-| `npm run format`        | Format all files with Prettier                                   |
-| `npm run format:check`  | Check formatting without writing                                 |
+| Script                 | Description                                                      |
+| ---------------------- | ---------------------------------------------------------------- |
+| `npm run dev`          | Start the Vite dev server                                        |
+| `npm run build`        | Typecheck and build to `dist/`                                   |
+| `npm run preview`      | Serve the production build locally                               |
+| `npm run typecheck`    | Run `tsc --noEmit`                                               |
+| `npm test`             | Run Vitest                                                       |
+| `npm run test:e2e`     | Build, then run Playwright (see Browser tests)                   |
+| `npm run cv:pdf`       | Render the CV to PDF, after a build                              |
+| `npm run codemap`      | Refresh `.claude/codemap.md` (the pre-commit hook does too)      |
+| `npm run knip`         | Find dead code                                                   |
+| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint)                             |
+| `npm run lint:fix`     | Lint and autofix                                                 |
+| `npm run media`        | Generate missing posters, card copies and social images (ffmpeg) |
+| `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg) |
+| `npm run media:video`  | Re-encode a video for the web (ffmpeg)                           |
+| `npm run audit`        | Fail on high or critical advisories (`npm audit`)                |
+| `npm run format`       | Format all files with Prettier                                   |
+| `npm run format:check` | Check formatting without writing                                 |
 
 ## Project structure
 
@@ -57,8 +59,8 @@ src/
 │   ├── Hero/         Hero canvas and its simulations (sims/)
 │   ├── Nav/          Top nav (build time) + pill, theme menu (Nav.ts)
 │   └── NeuralMap/    Project map: similarity and layout (graph.ts, pure), canvas and cards (NeuralMap.ts)
-├── core/             Site facts, translation, structured data, analytics
-├── data/             Site content: profile.ts (experience, education, skills, now, checkpoints) and projects.ts
+├── core/             Site facts, translation, dates, structured data, analytics
+├── data/             Site content: profile.ts (experience, education, skills, now, checkpoints), projects.ts, and the skill rule (skills.ts)
 ├── i18n/             Interface text (en, fr)
 ├── pages/            Per-page blocks, entry scripts and styles (home, cv, project); content/render.ts maps blocks
 ├── styles/           Design tokens and themes (tokens.css), base styles (base.css)
@@ -77,14 +79,14 @@ Conventions:
 ## Adding a project
 
 1. Put the media in `public/projects/<id>/` (see Media).
-2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), its period (`year`: `Tek1`, `Tek2`, `Tek3` or `Personal`; without it a project counts as `Tek2`), and `featured: true` for the three on the home page.
-3. Run `npm run media:og` for its social image, and `npm run media:thumbs` if its still is an image.
+2. Add a `ProjectEntry` to `src/data/projects.ts`: title, `{ en, fr }` description, tags, category, start month (`date`), its period (`year`: `Tek1`, `Tek2`, `Tek3` or `Personal`), and `featured: true` for the three on the home page.
+3. Run `npm run media` for its poster, card copies and social image.
 
 The map, the list, the charts, the counts, its page, the sitemap and the structured data follow.
 
 ### Browser tests
 
-Playwright (`e2e/`) runs desktop and mobile Chromium against the production build, served by `vite preview` with the production headers. Scenarios: every page loads with its fonts and no console errors, CSP violations or third-party requests; content without JavaScript; the project map (hover, click, domains) and the phone list; hero switch; path chart and numbers cards; copy email; themes; the EN/FR switch and first visit from a French browser; reduced motion; project pages (video, gallery, connected projects, back link); the CV PDF link. Any console error fails the test.
+Playwright (`e2e/`) runs desktop and mobile Chromium, plus Firefox and WebKit in CI, against the production build, served by `vite preview` with the production headers. Scenarios: every page loads with its fonts and no console errors, CSP violations or third-party requests; content without JavaScript; the project map (hover, click, domains) and the phone list; hero switch; path chart and numbers cards; copy email; themes; the EN/FR switch and first visit from a French browser; reduced motion; project pages (video, gallery, connected projects, back link); the CV PDF link. Any console error fails the test.
 
 ## Languages (EN / FR)
 
@@ -109,15 +111,15 @@ The path chart opens on Max; its buttons (1M, 6M, 1Y, Max, in `RANGES` in `src/c
 
 ## Project pages
 
-Every project in `src/data/projects.ts` gets its own page, `/projects/<id>.html` and `/fr/projects/<id>.html`, rendered at build time from `project.html` (`src/pages/project/render.ts`): media, specs, and the three projects the map links it to. Adding a project adds its page, sitemap entry and structured data automatically; it only needs a social image: run `npm run media:og` (creates `public/projects/<id>/og.jpg`, 1200×630).
+Every project in `src/data/projects.ts` gets its own page, `/projects/<id>.html` and `/fr/projects/<id>.html`, rendered at build time from `project.html` (`src/pages/project/render.ts`): media, specs, and the three projects the map links it to. Adding a project adds its page, sitemap entry and structured data automatically; it only needs a social image: `npm run media` creates `public/projects/<id>/og.jpg`, 1200×630.
 
 All pages come from one list in `vite-plugins/pages.ts` (`PAGES`): path, template, title, description, social image and JSON-LD per page, rendered in every language. `sitemap.xml` is generated from the same list.
 
 ## SEO and social previews
 
-Each page declares its own description, canonical URL and Open Graph / X tags in its `<head>`. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). The home, CV and 404 pages share `public/og-image.png` (`og-image-fr.png` in French), 1200×630, drawn by `npm run media:brand` from the profile data; each project page uses its own `og.jpg`. `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
+`renderPage` (`vite-plugins/pages.ts`) writes every page's title, description, canonical URL and Open Graph / X tags: templates only keep what is not SEO. Titles and descriptions come from `meta.*` in the dictionaries (see Languages). The home, CV and 404 pages share `public/og-image.png` (`og-image-fr.png` in French), 1200×630, drawn by `npm run media:brand` from the profile data; each project page uses its own `og.jpg`. `public/robots.txt` and the generated `sitemap.xml` point crawlers at `https://nexlein.vercel.app`.
 
-When adding a page, give it these tags and a sitemap entry; `src/pages/seo.test.ts` fails until you do.
+A new page needs its entry in `PAGES`, its template in `vite.config.ts` and its `meta.*` text: the tags and the sitemap follow, and `src/pages/pages.test.ts` checks them. A new project needs none of this.
 
 ## Tests
 
@@ -138,8 +140,8 @@ Project media lives in `public/projects/<id>/` and must be web-ready (a test enf
 
 - **Images**: WebP, at most 1200px on the long side (`ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_ratio=decrease" -quality 80 out.webp`).
 - **Videos**: H.264 MP4 without audio, at most 960px wide, `faststart`. Run `npm run media:video -- public/projects/<id>/<name>.mp4` to re-encode in place.
-- **Posters**: every video needs `<name>.poster.webp`. Run `npm run media:posters` to generate missing ones.
-- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. Run `npm run media:thumbs` to generate missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `media:thumbs -- --force` would replace them with plain downscales.
+- **Posters**: every video needs `<name>.poster.webp`. `npm run media` generates missing ones.
+- **Card copies**: a project whose still is an image (its image, or a gallery's first picture) needs `<name>.320.webp` and `<name>.640.webp`, which cards load through `srcset` instead of the full image. `npm run media` generates missing ones (a test checks they exist). Sensai, Bernstein and Survivor use hand-made crops of their composite image instead (a readable part at card size): `npm run media -- --force=thumbs` would replace them with plain downscales.
 
 - **QR codes**: the CV prints `public/qrcode.svg` (home) or `public/qrcode-fr.svg` (French home). To redo one: `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`, then keep the files' style (a white square under one black path).
 
@@ -167,11 +169,11 @@ Because of the CSP:
 
 ## Quality checks
 
-- **Pre-commit** (Husky + lint-staged): Oxlint/Stylelint autofix and Prettier on staged files, then typecheck and tests.
-- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, typecheck, tests, build; then browser tests and Lighthouse on the built site.
-- **Linting**: [Oxlint](https://oxc.rs) for TypeScript (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
-- **Audit**: fails on high/critical advisories. Accepted exceptions live in `config/audit-ci.jsonc`, each with a reason.
-- **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95; performance below 80 warns. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
+- **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, then typecheck, tests and the code map.
+- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
+- **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
+- **Audit**: `npm audit` fails on high/critical advisories.
+- **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Dependabot**: weekly npm and GitHub Actions updates.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
-- **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`.
+- **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.

@@ -43,7 +43,7 @@ export default defineConfig({
         alias: { '@': resolve(import.meta.dirname, 'src') }
     },
     build: {
-        rollupOptions: {
+        rolldownOptions: {
             input: {
                 main: resolve(import.meta.dirname, 'index.html'),
                 cv: resolve(import.meta.dirname, 'cv.html'),

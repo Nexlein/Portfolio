@@ -80,7 +80,7 @@ export const en = {
             ask: 'Light up a domain',
             mapLabel:
                 'Projects as a network: the most recent closest to the center, links join projects that share skills (brighter = more similar). Hover or focus a project to preview it; select it to open its page.',
-            more: 'Showing {shown} of {n}, the rest rotate in.',
+            more: 'Showing {shown} of {n}.',
             seeAll: 'See all projects',
             viewLabel: 'Projects view',
             viewMap: 'Map',

@@ -26,7 +26,7 @@ export function initReveals(): void {
                 if (!e.isIntersecting) return;
                 const n = e.target as HTMLElement;
                 n.classList.add('in', 'drawn');
-                n.querySelectorAll<HTMLElement>('.chart-card:not([inert]) .count, .path-total .count').forEach(countUp);
+                n.querySelectorAll<HTMLElement>('.path-total .count').forEach(countUp);
                 io.unobserve(n);
             }),
         { rootMargin: '0px 0px -12% 0px' }

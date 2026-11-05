@@ -342,6 +342,57 @@ button {
     transition: scale 900ms var(--ease-out);
 }
 
+/* Side by side, they rise one after the other */
+.feature:nth-child(2),
+.related-card:nth-child(2) {
+    transition-delay: 80ms, 80ms, 0ms, 0ms;
+}
+
+.feature:nth-child(3),
+.related-card:nth-child(3) {
+    transition-delay: 160ms, 160ms, 0ms, 0ms;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .chart-card.in:hover,
+    .feature:hover,
+    .related-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow), var(--shadow-lift);
+    }
+
+    .feature:hover .feature-media img,
+    .related-card:hover .related-media img {
+        scale: 1.03;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chart-card,
+    .related-card,
+    .feature,
+    .feature-media img,
+    .related-media img {
+        transition: none;
+    }
+}
+
+/* A project's domain icon on its tile, and the skills written as pills: sizes stay with each */
+.list-ico,
+.nm-ico {
+    display: grid;
+    flex: none;
+    place-items: center;
+    background: var(--raised);
+}
+
+.chips li,
+.project-tag {
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: var(--raised);
+}
+
 /* ...and their hover (after the rules above that share the element, for the order stylelint wants) */
 .exp-nav button:not(:disabled):hover,
 .numbers-nav button:not(:disabled):hover {

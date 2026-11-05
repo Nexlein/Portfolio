@@ -209,9 +209,6 @@
 
 .project-tag {
     padding: 3px 10px;
-    border: 1px solid var(--hair);
-    border-radius: 999px;
-    background: var(--raised);
     font-size: 13px;
 }
 
@@ -229,14 +226,6 @@
     grid-template-rows: auto 1fr;
     overflow: hidden;
     border-radius: 24px;
-}
-
-.related-card:nth-child(2) {
-    transition-delay: 80ms, 80ms, 0ms, 0ms;
-}
-
-.related-card:nth-child(3) {
-    transition-delay: 160ms, 160ms, 0ms, 0ms;
 }
 
 .related-media {
@@ -317,15 +306,6 @@
     .gallery-btn:hover {
         background: rgb(0 0 0 / 65%);
     }
-
-    .related-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow), var(--shadow-lift);
-    }
-
-    .related-card:hover .related-media img {
-        scale: 1.03;
-    }
 }
 
 @media (width <= 900px) {
@@ -352,7 +332,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .related-card,
     .overlap-fill,
     .gallery img {
         transition: none;

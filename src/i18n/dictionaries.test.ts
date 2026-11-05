@@ -21,8 +21,10 @@ const sources = {
     ...import.meta.glob<string>(['../**/*.ts', '!../**/*.test.ts'], { query: '?raw', import: 'default', eager: true })
 };
 const usedKeys = new Set(
-    Object.values(sources).flatMap((src) => [...src.matchAll(/data-i18n(?:-alt)?="([^"$]+)"/g)].map((m) => m[1]))
+    Object.values(sources).flatMap((src) => [...src.matchAll(/data-i18n="([^"$]+)"/g)].map((m) => m[1]))
 );
+
+const slots = (text: unknown) => [...String(text).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).toSorted();
 
 describe('translation dictionaries', () => {
     it('en and fr define the same keys', () => {
@@ -34,6 +36,10 @@ describe('translation dictionaries', () => {
             expect(typeof value, key).toBe('string');
             expect((value as string).trim(), key).not.toBe('');
         }
+    });
+
+    it('en and fr fill the same {slots}', () => {
+        for (const [key, text] of Object.entries(flat.en)) expect(slots(flat.fr[key]), key).toEqual(slots(text));
     });
 
     it('finds data-i18n keys to check', () => {

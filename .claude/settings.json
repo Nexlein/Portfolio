@@ -10,7 +10,7 @@
             "Bash(npm run audit*)",
             "Bash(npx prettier*)",
             "Bash(npx playwright test*)",
-            "Bash(node scripts/codemap.mjs*)",
+            "Bash(node scripts/codemap.ts*)",
             "Bash(gh pr view*)",
             "Bash(gh pr checks*)",
             "Bash(gh pr list*)",

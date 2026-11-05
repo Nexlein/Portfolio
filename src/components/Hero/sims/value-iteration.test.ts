@@ -44,7 +44,7 @@ function run(width: number, height: number) {
         onResize: () => {},
         dispose: () => {},
         loop: (frame) => frame(0),
-        reduced: true
+        still: true
     };
     valueIteration(stage);
     return RecordingPath.arrows;
@@ -93,7 +93,7 @@ describe('valueIteration', () => {
                 draw = frame;
                 frame(0);
             },
-            reduced: true
+            still: true
         } satisfies Stage;
         valueIteration(stage);
         Object.assign(size, { width: 390, height: 844 }); // a phone turned upright
@@ -131,7 +131,7 @@ describe('valueIteration', () => {
                 draw = frame;
                 frame(0);
             },
-            reduced: true
+            still: true
         } satisfies Stage;
         valueIteration(stage);
         const drawnWalls = () => {

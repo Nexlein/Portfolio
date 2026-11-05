@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
     group: ci-${{ github.ref }}
-    cancel-in-progress: true
+    cancel-in-progress: ${{ github.ref != 'refs/heads/main' }} # a run on main may be publishing the CV
 
 jobs:
     check:
@@ -20,15 +20,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@v5
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - name: Audit
               run: npm run audit
@@ -67,15 +59,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@v5
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - uses: actions/download-artifact@v8
               with:
@@ -85,7 +69,7 @@ jobs:
             # Audits pages from dist/ served by vite preview with the production headers, CSP included (median of 3
             # runs): accessibility, best practices and SEO must stay >= 95, performance >= 85 (it scores 94 to 99
             # locally; the margin is for shared CI runners).
-            - uses: treosh/lighthouse-ci-action@v12
+            - uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # 12.6.2
               with:
                   configPath: ./config/lighthouserc.json
                   uploadArtifacts: true
@@ -98,15 +82,7 @@ jobs:
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@v5
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - uses: actions/download-artifact@v8
               with:
@@ -139,20 +115,10 @@ jobs:
         needs: check
         runs-on: ubuntu-latest
         timeout-minutes: 10
-        permissions:
-            contents: write # publish to the `cv` release (main only)
         steps:
             - uses: actions/checkout@v7
 
-            # Node from mise.toml: same version as local
-            - uses: jdx/mise-action@v5
-
-            - uses: actions/cache@v6
-              with:
-                  path: ~/.npm
-                  key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-            - run: npm ci
+            - uses: ./.github/actions/setup
 
             - uses: actions/download-artifact@v8
               with:
@@ -172,11 +138,26 @@ jobs:
                   path: cv-pdf
                   retention-days: 7
 
+    # Apart from cv-pdf so that the write token never sits next to npm ci or a third-party action
+    publish-cv:
+        name: Publish CV
+        needs: cv-pdf
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: write # the `cv` release
+        steps:
+            - uses: actions/download-artifact@v8
+              with:
+                  name: cv-pdf
+                  path: cv-pdf
+
             # /cv.pdf and /fr/cv.pdf redirect to these files (vercel.json)
             - name: Publish to the cv release
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
                   GH_TOKEN: ${{ github.token }}
+                  GH_REPO: ${{ github.repository }}
               run: |
                   gh release view cv > /dev/null 2>&1 || gh release create cv --title "CV (latest)" --latest=false \
                     --notes "Rendered from the CV page on every push to main. Stable links: https://nexlein.vercel.app/cv.pdf (EN) and https://nexlein.vercel.app/fr/cv.pdf (FR)."

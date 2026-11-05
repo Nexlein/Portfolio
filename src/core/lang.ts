@@ -25,6 +25,14 @@ export function localizedPath(path: string, lang: Lang): string {
 /** Id of the JSON block the build writes into pages whose scripts need strings (src/core/i18n.ts reads it). */
 export const STRINGS_ID = 'i18n';
 
+/** What goes in a text's {slots}. */
+export type Slots = Record<string, string | number>;
+
+/** Fill the {slots} of a text; one without a value stays as it is. */
+export function fill(text: string, slots: Slots): string {
+    return text.replace(/\{(\w+)\}/g, (slot, name: string) => String(slots[name] ?? slot));
+}
+
 /** Look up a dotted key ('projectPage.back') in a dictionary; falls back to the key itself so gaps are visible. */
 export function lookupIn(dictionary: unknown, key: string): string {
     let node = dictionary;

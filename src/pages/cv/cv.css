@@ -271,8 +271,6 @@
     background: var(--paper-ink);
 }
 
-/* Toolbox: the path chart, in miniature */
-
 @media (hover: hover) and (pointer: fine) {
     .sheet a:hover {
         color: var(--paper-accent);

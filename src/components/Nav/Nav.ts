@@ -129,7 +129,9 @@ function initThemes(nav: HTMLElement): void {
         if (!wrap.contains(e.target as Node)) setOpen(false);
     });
     wrap.addEventListener('focusout', (e) => {
-        if (!wrap.contains(e.relatedTarget as Node | null)) setOpen(false);
+        // No target: a click on a button moved no focus (Safari). Clicks outside are the pointerdown above
+        const to = e.relatedTarget as Node | null;
+        if (to && !wrap.contains(to)) setOpen(false);
     });
     wrap.addEventListener('keydown', (e) => {
         if (e.key !== 'Escape') return;

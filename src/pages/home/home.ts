@@ -11,7 +11,6 @@ import { prefersReducedMotion } from '@/ui/motion';
 import { initNav } from '@/components/Nav/Nav';
 import { initHero } from '@/components/Hero/Hero';
 import { initNumbers, initPathChart, initPathStory } from '@/components/Charts/Charts';
-import { MAP_MAX } from '@/components/NeuralMap/limits';
 import { boot } from '@/ui/boot';
 import { initReveals } from '@/ui/reveal';
 
@@ -52,8 +51,9 @@ function initWork(): void {
         mounting: Promise<void> | undefined;
 
     // ── List: filtered by the domain chip, a page at a time
+    const rowsOfDomain = () => rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain);
     const renderList = (reveal = false) => {
-        const rowsIn = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain);
+        const rowsIn = rowsOfDomain();
         rows.forEach((li) => {
             const i = rowsIn.indexOf(li);
             const open = i >= 0 && i < shown;
@@ -66,13 +66,10 @@ function initWork(): void {
         const left = rowsIn.length - shown;
         more.hidden = rowsIn.length <= LIST_PAGE;
         moreBtn.textContent =
-            left > 0
-                ? i18n.t('home.work.showMore').replace('{n}', String(Math.min(LIST_PAGE, left)))
-                : i18n.t('home.work.showLess');
+            left > 0 ? i18n.t('home.work.showMore', { n: Math.min(LIST_PAGE, left) }) : i18n.t('home.work.showLess');
     };
     moreBtn.addEventListener('click', () => {
-        const left = rows.filter((li) => !domain || li.querySelector('a')!.dataset.domain === domain).length - shown;
-        if (left > 0) {
+        if (rowsOfDomain().length > shown) {
             list.getAnimations().forEach((a) => a.cancel()); // a running one would pin the height being measured
             const from = list.offsetHeight;
             shown += LIST_PAGE;
@@ -98,10 +95,15 @@ function initWork(): void {
     list.addEventListener('animationend', (e) => (e.target as HTMLElement).classList.remove('row-in'));
 
     // ── Map: loaded the first time it is shown (phones never download the map code)
+    // Past its limit the map may have no card of a domain: dimming everything says nothing, the list has them all
+    const askMap = () => {
+        map?.query(domain);
+        if (map && domain && !host.querySelector(`.nm-card[data-domain="${domain}"]`)) show('list');
+    };
     const mountMap = (): Promise<void> => {
         mounting ??= import('@/components/NeuralMap/NeuralMap').then(({ mountNeuralMap }) => {
-            map = mountNeuralMap(host, MAP_MAX);
-            map.query(domain);
+            map = mountNeuralMap(host);
+            askMap();
         });
         return mounting;
     };
@@ -161,7 +163,7 @@ function initWork(): void {
             chips.forEach((c) => c.setAttribute('aria-pressed', String(on && c === chip)));
             domain = on ? chip.dataset.domain! : null;
             shown = LIST_PAGE;
-            map?.query(domain);
+            askMap();
             renderList();
             if (on && view === 'map')
                 host.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });

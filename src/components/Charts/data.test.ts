@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { CHECKPOINTS, EXPERIENCES } from '@/data/profile';
+import { thisMonth, yearOf } from '@/core/time';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
-import { periodOf } from '../NeuralMap/graph';
+import { skillsOf } from '@/data/skills';
 import { changeText, numbers, pathChart, pathSvg, phaseLabel } from './render';
+import { schoolYear } from './series';
 import {
     distinctSkills,
+    EPITECH_START,
     domainAxes,
     languageBuckets,
     languageOf,
@@ -15,15 +18,12 @@ import {
     RANGES,
     rangeStart,
     changeSince,
-    schoolYearAt,
     skillSeries,
-    skills,
-    thisMonth,
+    spelling,
     timeTicks,
     topSkills,
     valueAt,
     yDomain,
-    yearOf,
     yTicks
 } from './data';
 
@@ -33,44 +33,29 @@ const last = (points: ReturnType<typeof skillSeries>) => points[points.length - 
 /** A project with only what the numbers read: a month and some tags. */
 const project = (id: string, date: string, tags: string[]): ProjectEntry => ({ ...PROJECTS[0], id, date, tags });
 
-describe('dates', () => {
-    it('reads a month as a fractional year (January is the year itself)', () => {
-        expect(yearOf('2026-01')).toBe(2026);
-        expect(yearOf('2026-04')).toBe(2026.25);
-        expect(yearOf('2026-12')).toBeCloseTo(2026 + 11 / 12);
+describe('spelling', () => {
+    it('writes a skill as the data does', () => {
+        const name = spelling([{ ...PROJECTS[0], tags: ['FastAPI', 'PostgreSQL'] }]);
+        expect(name('fastapi')).toBe('FastAPI');
+        expect(name('postgresql')).toBe('PostgreSQL');
     });
 
-    it('puts today at the start of the current month', () => {
-        expect(thisMonth(new Date('2026-10-14'))).toBeCloseTo(2026 + 9 / 12);
-        expect(thisMonth(new Date('2027-01-31'))).toBe(2027);
+    it('also knows the skills of jobs and checkpoints', () => {
+        expect(spelling([])('google cloud')).toBe('Google Cloud');
     });
 
-    it('treats a project without a year as second-year work', () => {
-        expect(periodOf({ ...PROJECTS[0], year: undefined })).toBe('Tek2');
-    });
-});
-
-describe('skills', () => {
-    it('lowercases, splits C/C++, trims, merges RL and drops empties', () => {
-        expect(skills(['C/C++', ' Python ', 'RL', 'Net / work', 'C/'])).toEqual([
-            'c',
-            'c++',
-            'python',
-            'reinforcement learning',
-            'net',
-            'work',
-            'c'
-        ]);
+    it('leaves an unknown skill as it is', () => {
+        expect(spelling([])('no such skill')).toBe('no such skill');
     });
 });
 
 /** What the path chart says ("58 skills", "+37 in 12 months"), recomputed the plain way for the tests to compare with. */
 const known = (t: number) => {
     const all: [number, string[]][] = [
-        ...PROJECTS.map((p): [number, string[]] => [yearOf(p.date), skills(p.tags)]),
+        ...PROJECTS.map((p): [number, string[]] => [yearOf(p.date), skillsOf(p.tags)]),
         ...CHECKPOINTS.map((c): [number, string[]] => [
             yearOf(c.date),
-            skills([...(c.skills ?? []), ...(EXPERIENCES.find((e) => e.id === c.id)?.tags ?? [])])
+            skillsOf([...(c.skills ?? []), ...(EXPERIENCES.find((e) => e.id === c.id)?.tags ?? [])])
         ])
     ];
     return new Set(all.filter(([d]) => d <= t).flatMap(([, s]) => s)).size;
@@ -110,9 +95,23 @@ describe('the toolbox over time', () => {
     });
 });
 
+describe('checkpoints on the series', () => {
+    it.each(CHECKPOINTS)('$id names its month, even when a project started then too', (c) => {
+        const point = skillSeries(PROJECTS, yearOf('2099-01')).find((p) => p.t === yearOf(c.date));
+        expect(point?.m?.checkpoint?.id).toBe(c.id);
+    });
+});
+
 describe('group counts', () => {
     it('gives every skill to the period that first used it, once', () => {
         expect(newSkillsPerPeriod(PROJECTS).reduce((a, b) => a + b, 0)).toBe(distinctSkills(PROJECTS));
+    });
+
+    it('credits a skill to its earliest project, not to the period listed first', () => {
+        const earlier: ProjectEntry = { ...PROJECTS[0], tags: ['Zig'], year: 'Tek3', date: '2026-01' };
+        const later: ProjectEntry = { ...PROJECTS[0], tags: ['Zig'], year: 'Personal', date: '2026-06' };
+        expect(periodsIn([earlier, later])).toEqual(['Personal', 'Tek3']);
+        expect(newSkillsPerPeriod([earlier, later])).toEqual([0, 1]);
     });
 
     it('ranks the most used skills first', () => {
@@ -133,7 +132,7 @@ describe('group counts', () => {
 
     it('lists the periods oldest first, and every project falls in one', () => {
         expect(periodsIn(PROJECTS)).toEqual(['Tek1', 'Tek2', 'Personal', 'Tek3']);
-        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(periodOf(p));
+        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(p.year);
     });
 
     it('counts every project in one domain axis', () => {
@@ -252,12 +251,12 @@ describe('the change over a range (the headline of the path chart)', () => {
 
 describe('where the visitor was', () => {
     it('counts Epitech school years from September: before it 0, then 1, 2, 3', () => {
-        expect(schoolYearAt(yearOf('2024-07'))).toBe(0);
-        expect(schoolYearAt(yearOf('2024-09'))).toBe(1);
-        expect(schoolYearAt(yearOf('2025-08'))).toBe(1);
-        expect(schoolYearAt(yearOf('2025-09'))).toBe(2);
-        expect(schoolYearAt(yearOf('2026-05'))).toBe(2);
-        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: year 3
+        expect(schoolYear(yearOf('2024-07'), EPITECH_START)).toBe(0);
+        expect(schoolYear(yearOf('2024-09'), EPITECH_START)).toBe(1);
+        expect(schoolYear(yearOf('2025-08'), EPITECH_START)).toBe(1);
+        expect(schoolYear(yearOf('2025-09'), EPITECH_START)).toBe(2);
+        expect(schoolYear(yearOf('2026-05'), EPITECH_START)).toBe(2);
+        expect(schoolYear(TODAY, EPITECH_START)).toBe(3); // October 2026: year 3
     });
 
     it('covers the whole window with consecutive phases, clipped to it', () => {

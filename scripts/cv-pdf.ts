@@ -5,7 +5,7 @@ import { mkdir } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 import { preview } from 'vite';
 
-export const PDFS = [
+const PDFS = [
     { path: '/cv.html', file: 'Nielsen-Combe-Bracciale-CV-EN.pdf' },
     { path: '/fr/cv.html', file: 'Nielsen-Combe-Bracciale-CV-FR.pdf' }
 ];

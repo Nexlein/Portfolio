@@ -4,32 +4,22 @@
  * functions for interactions.
  */
 import { CHECKPOINTS, EXPERIENCES, type Checkpoint } from '../../data/profile.ts';
-import { DOMAINS, type ProjectEntry } from '../../data/projects.ts';
-import { ORBIT, periodOf, type Period } from '../NeuralMap/graph.ts';
-import { schoolYear, valueAt } from './series.ts';
+import { yearOf } from '../../core/time.ts';
+import { DOMAINS, PERIODS, type Period, type ProjectEntry } from '../../data/projects.ts';
+import { skillNames, skillsOf } from '../../data/skills.ts';
+import { valueAt } from './series.ts';
 
 export { valueAt, yDomain } from './series.ts';
 
-/** 'YYYY-MM' -> fractional year (2026-04 -> 2026.25). */
-export const yearOf = (month: string) => Number(month.slice(0, 4)) + (Number(month.slice(5, 7)) - 1) / 12;
-
-/** Today, as a fractional year at the start of the current month. */
-export const thisMonth = (now = new Date()) => now.getFullYear() + now.getMonth() / 12;
-
-/** Normalised skill names: lowercase, 'C/C++' split, RL aliases merged. */
-export function skills(tags: string[]): string[] {
-    return tags.flatMap((raw) =>
-        raw
-            .toLowerCase()
-            .split('/')
-            .map((s) => s.trim())
-            .map((s) => (s === 'rl' ? 'reinforcement learning' : s))
-            .filter(Boolean)
-    );
+/** How the data spells a normalised skill ('typescript' -> 'TypeScript'): projects, jobs and checkpoints alike. */
+export function spelling(projects: ProjectEntry[]): (skill: string) => string {
+    const names = skillNames([
+        ...projects.flatMap((p) => p.tags),
+        ...EXPERIENCES.flatMap((e) => e.tags ?? []),
+        ...CHECKPOINTS.flatMap((c) => c.skills ?? [])
+    ]);
+    return (skill) => names.get(skill) ?? skill;
 }
-
-/** Display form of a normalised skill. */
-export const prettySkill = (s: string) => (s.length <= 3 ? s.toUpperCase() : s[0].toUpperCase() + s.slice(1));
 
 interface Milestone {
     t: number;
@@ -44,23 +34,17 @@ const tagsOf = (id: string) => EXPERIENCES.find((e) => e.id === id)?.tags ?? [];
 
 /** Every dated step, oldest first: checkpoints (with their skills) and projects (with their tags). */
 function milestones(projects: ProjectEntry[]): Milestone[] {
+    // The last step of a month names its point: projects first, so a checkpoint keeps its own name
     const all: Milestone[] = [
+        ...projects.map((p) => ({ t: yearOf(p.date), id: p.id, project: p, adds: skillsOf(p.tags) })),
         ...CHECKPOINTS.map((c) => ({
             t: yearOf(c.date),
             id: c.id,
             checkpoint: c,
-            adds: skills([...(c.skills ?? []), ...tagsOf(c.id)])
-        })),
-        ...projects.map((p) => ({ t: yearOf(p.date), id: p.id, project: p, adds: skills(p.tags) }))
+            adds: skillsOf([...(c.skills ?? []), ...tagsOf(c.id)])
+        }))
     ];
-    // Stable insertion by date (the codebase lint bans Array#sort; ES2020 has no toSorted)
-    const out: Milestone[] = [];
-    for (const m of all) {
-        let i = out.length;
-        while (i > 0 && out[i - 1].t > m.t) i--;
-        out.splice(i, 0, m);
-    }
-    return out;
+    return all.toSorted((a, b) => a.t - b.t);
 }
 
 export interface Point {
@@ -114,9 +98,6 @@ export function changeSince(points: Point[], t0: number): { delta: number; pct: 
 
 /** Epitech's school years run September to August, counted from the month the first one started (the 'epitech' checkpoint). */
 export const EPITECH_START = yearOf(CHECKPOINTS.find((c) => c.id === 'epitech')!.date);
-
-/** The school year a time falls in: 0 before Epitech, then 1, 2, 3... */
-export const schoolYearAt = (time: number) => schoolYear(time, EPITECH_START);
 
 export interface Phase {
     /** 0 is the time before Epitech, then the school years 1, 2, 3... */
@@ -179,12 +160,8 @@ export const learnedSince = (projects: ProjectEntry[], now: number) =>
 
 // ── Group counts ────────────────────────────────────────────────────────────
 
-/** Oldest first: the map's orbits, which list the most recent period first. */
-const PERIODS: Period[] = [];
-for (const p of Object.keys(ORBIT) as Period[]) PERIODS.unshift(p);
-
 /** Periods present in the data, in time order. */
-export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => periodOf(p) === y));
+export const periodsIn = (projects: ProjectEntry[]) => PERIODS.filter((y) => projects.some((p) => p.year === y));
 
 const LANGUAGES = new Set(['C', 'C++', 'Python', 'TypeScript', 'JavaScript', 'Rust', 'Go', 'Java', 'C#', 'Bash']);
 export const INFRA = 'infra';
@@ -204,52 +181,33 @@ export function languageBuckets(projects: ProjectEntry[]): { keys: string[]; buc
     const tally = new Map<string, number>();
     for (const p of projects)
         if (languageOf(p) !== INFRA) tally.set(languageOf(p), (tally.get(languageOf(p)) ?? 0) + 1);
-    const top: string[] = [];
-    for (let k = 0; k < 3 && tally.size; k++) {
-        const best = [...tally].reduce((a, e) => (e[1] > a[1] ? e : a));
-        top.push(best[0]);
-        tally.delete(best[0]);
-    }
-    const keys = [...top, ...(tally.size ? [OTHER] : []), INFRA];
+    const ranked = [...tally].toSorted((a, b) => b[1] - a[1]).map(([language]) => language);
+    const top = ranked.slice(0, 3);
+    const keys = [...top, ...(ranked.length > top.length ? [OTHER] : []), INFRA];
     const bucket = (p: ProjectEntry) =>
         languageOf(p) === INFRA ? INFRA : top.includes(languageOf(p)) ? languageOf(p) : OTHER;
     return { keys, bucket };
 }
 
-const DOMAIN_ORDER: readonly string[] = DOMAINS;
-
-/** Domains for the radar: up to 7 axes, the rest grouped as OTHER. */
+/** Domains for the radar: the ones the projects use, and how many projects each has. */
 export function domainAxes(projects: ProjectEntry[]): { keys: string[]; counts: number[] } {
-    const used = [...new Set(projects.map((p) => p.category as string))];
-    const ranked = [...DOMAIN_ORDER.filter((d) => used.includes(d)), ...used.filter((d) => !DOMAIN_ORDER.includes(d))];
-    const keys = ranked.length > 7 ? [...ranked.slice(0, 6), OTHER] : ranked;
-    const counts = keys.map(
-        (d) => projects.filter((p) => (d === OTHER ? !keys.includes(p.category) : p.category === d)).length
-    );
-    return { keys, counts };
+    const keys = DOMAINS.filter((d) => projects.some((p) => p.category === d));
+    return { keys, counts: keys.map((d) => projects.filter((p) => p.category === d).length) };
 }
 
 /** The most used skills across projects, most frequent first. */
 export function topSkills(projects: ProjectEntry[], n = 7): [string, number][] {
     const freq = new Map<string, number>();
-    for (const p of projects) for (const s of new Set(skills(p.tags))) freq.set(s, (freq.get(s) ?? 0) + 1);
-    const out: [string, number][] = [];
-    for (const e of freq) {
-        let i = out.length;
-        while (i > 0 && out[i - 1][1] < e[1]) i--;
-        out.splice(i, 0, e);
-    }
-    return out.slice(0, n);
+    for (const p of projects) for (const s of new Set(skillsOf(p.tags))) freq.set(s, (freq.get(s) ?? 0) + 1);
+    return [...freq].toSorted((a, b) => b[1] - a[1]).slice(0, n);
 }
 
 /** New skills per period: skills seen for the first time in that period's projects. */
 export function newSkillsPerPeriod(projects: ProjectEntry[]): number[] {
-    const pers = periodsIn(projects);
     const first = new Map<string, Period>();
-    for (const y of pers)
-        for (const p of projects.filter((q) => periodOf(q) === y))
-            for (const s of skills(p.tags)) if (!first.has(s)) first.set(s, y);
-    return pers.map((y) => [...first.values()].filter((v) => v === y).length);
+    for (const p of projects.toSorted((a, b) => yearOf(a.date) - yearOf(b.date)))
+        for (const s of skillsOf(p.tags)) if (!first.has(s)) first.set(s, p.year);
+    return periodsIn(projects).map((y) => [...first.values()].filter((v) => v === y).length);
 }
 
-export const distinctSkills = (projects: ProjectEntry[]) => new Set(projects.flatMap((p) => skills(p.tags))).size;
+export const distinctSkills = (projects: ProjectEntry[]) => new Set(projects.flatMap((p) => skillsOf(p.tags))).size;

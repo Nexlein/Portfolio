@@ -3,7 +3,7 @@
  * data-render names). The same HTML is the web page and, printed by scripts/cv-pdf.ts, the PDF.
  * Relative imports only: rendered from Node.
  */
-import { CV_PROJECTS, EDUCATION, EXPERIENCES, LOCATION, SKILLS } from '../../data/profile.ts';
+import { CV_PROJECTS, EDUCATION, EXPERIENCES, LOCATION, SKILLS, type Education } from '../../data/profile.ts';
 import { PROJECTS, projectPath } from '../../data/projects.ts';
 import { OWNER, SITE } from '../../core/site.ts';
 import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
@@ -45,20 +45,17 @@ export const skills = (lang: Lang) =>
 /** Certifications are not studies: they get their own short list. */
 const CERT_IDS = new Set(['google-cloud']);
 
+const schoolEntry = (lang: Lang, e: Education) =>
+    `<div class="cv-entry">${head(e.cvTitle[lang], e.cvHidePeriod ? '' : e.period[lang])}<p>${typeset(lang, e.cvSummary[lang])}</p></div>`;
+
 export const education = (lang: Lang) =>
     EDUCATION.filter((e) => !CERT_IDS.has(e.id))
-        .map(
-            (e) =>
-                `<div class="cv-entry">${head(e.cvTitle[lang], e.cvHidePeriod ? '' : e.period[lang])}<p>${typeset(lang, e.cvSummary[lang])}</p></div>`
-        )
+        .map((e) => schoolEntry(lang, e))
         .join('');
 
 export const certifications = (lang: Lang) =>
     EDUCATION.filter((e) => CERT_IDS.has(e.id))
-        .map(
-            (e) =>
-                `<div class="cv-entry">${head(e.cvTitle[lang], e.period[lang])}<p>${typeset(lang, e.cvSummary[lang])}</p></div>`
-        )
+        .map((e) => schoolEntry(lang, e))
         .join('');
 
 /** A project's title, linked to its page (clickable in the PDF too). */

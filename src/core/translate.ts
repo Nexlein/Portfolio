@@ -5,16 +5,25 @@
  */
 import { en } from '../i18n/en.ts';
 import { fr } from '../i18n/fr.ts';
-import { lookupIn, type Lang } from './lang.ts';
+import { fill, lookupIn, type Lang, type Slots } from './lang.ts';
 
 export { DEFAULT_LANG, LANGS, langOfPath, localizedPath, type Lang, type Text } from './lang.ts';
 
 const dictionaries: Record<Lang, typeof en> = { en, fr };
 
-/** Look up a dotted key ('projectPage.back'); falls back to the key itself so gaps are visible. */
-export function lookup(lang: Lang, key: string): string {
-    return lookupIn(dictionaries[lang], key);
+/** Look up a dotted key ('projectPage.back') and fill its {slots}. A missing key stops the build: no visitor reads one. */
+export function lookup(lang: Lang, key: string, slots: Slots = {}): string {
+    const text = lookupIn(dictionaries[lang], key);
+    if (text === key) throw new Error(`No ${lang} text for "${key}"`);
+    return fill(text, slots);
 }
+
+/** `lookup` under one part of the dictionary: `scoped('home')(lang, 'work.open')`. */
+export const scoped = (prefix: string) => (lang: Lang, key: string, slots?: Slots) =>
+    lookup(lang, `${prefix}.${key}`, slots);
+
+/** The name of a project domain ('ai'). */
+export const domainName = (lang: Lang, domain: string) => lookup(lang, `home.domains.${domain}`);
 
 /**
  * The strings the home page's scripts write at runtime (toasts, labels, the map's cards): the `home` part of one
@@ -29,9 +38,5 @@ export function translateTree(root: ParentNode, lang: Lang): void {
     root.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
         const key = el.getAttribute('data-i18n');
         if (key) el.innerHTML = lookup(lang, key);
-    });
-    // Image descriptions: a data-i18n-alt key translates the alt attribute
-    root.querySelectorAll<HTMLElement>('[data-i18n-alt]').forEach((el) => {
-        el.setAttribute('alt', lookup(lang, el.getAttribute('data-i18n-alt')!));
     });
 }

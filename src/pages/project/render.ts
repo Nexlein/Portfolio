@@ -3,30 +3,26 @@
  * Relative imports only: vite-plugins/pages.ts runs this from Node, without the '@/' alias.
  */
 import { PROJECTS, projectPath, type ProjectEntry, type ProjectMedia } from '../../data/projects.ts';
-import { attr } from '../../core/text.ts';
-import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { skillNames } from '../../data/skills.ts';
+import { attr, stripTags } from '../../core/text.ts';
+import { domainName, localizedPath, lookup, scoped, type Lang } from '../../core/translate.ts';
 import { Icons, domainIcon } from '../../ui/icons.ts';
 import { stillAttrs, videoPoster, videoType } from '../../ui/video.ts';
-import { monthName } from '../../components/Charts/render.ts';
-import { yearOf } from '../../components/Charts/data.ts';
-import { neighbours, periodOf, skillSet } from '../../components/NeuralMap/graph.ts';
+import { monthName, yearOf } from '../../core/time.ts';
+import { neighbours, skillSet } from '../../components/NeuralMap/graph.ts';
 
-const t = (lang: Lang, key: string) => lookup(lang, `projectPage.${key}`);
-const domainName = (lang: Lang, d: string) => lookup(lang, `home.domains.${d}`);
+const t = scoped('projectPage');
 
 /** Plain-text description (dictionaries may contain inline HTML) for meta tags and JSON-LD. */
 export function projectDescription(project: ProjectEntry, lang: Lang): string {
-    return project.description[lang]
-        .replace(/<[^>]+>/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
+    return stripTags(project.description[lang]).replace(/\s+/g, ' ').trim();
 }
 
 /** The media frame: a lazy video (started on screen by playVideosWhenVisible), an image, or a gallery. */
 function mediaHtml(media: ProjectMedia, title: string, lang: Lang): string {
     switch (media.type) {
         case 'video':
-            return `<video loop muted playsinline preload="none" aria-label="${attr(t(lang, 'video').replace('{p}', title))}" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
+            return `<video loop muted playsinline preload="none" aria-label="${attr(t(lang, 'video', { p: title }))}" poster="${videoPoster(media.src)}"><source src="${media.src}" type="${videoType(media.src)}"></video>`;
         case 'image':
             return `<img src="${media.src}" alt="${attr(media.alt[lang])}" />`;
         case 'gallery': {
@@ -40,9 +36,7 @@ function mediaHtml(media: ProjectMedia, title: string, lang: Lang): string {
             const dots = media.images
                 .map(
                     (_, i) =>
-                        `<button type="button" data-idx="${i}" aria-label="${t(lang, 'image')
-                            .replace('{i}', String(i + 1))
-                            .replace('{n}', String(n))}"${i ? '' : ' aria-current="true"'}></button>`
+                        `<button type="button" data-idx="${i}" aria-label="${t(lang, 'image', { i: i + 1, n })}"${i ? '' : ' aria-current="true"'}></button>`
                 )
                 .join('');
             return `<div class="gallery" role="group" aria-roledescription="carousel" aria-label="${t(lang, 'gallery')}">${images}
@@ -59,15 +53,8 @@ function specs(project: ProjectEntry, lang: Lang): string {
     const rows: [string, string][] = [
         [t(lang, 'started'), monthName(yearOf(project.date), lang)],
         [t(lang, 'domain'), domainName(lang, project.category)],
-        [t(lang, 'period'), lookup(lang, `home.work.periods.${periodOf(project)}`)],
-        ...(team
-            ? [
-                  [
-                      t(lang, 'team'),
-                      team.size === 1 ? t(lang, 'solo') : t(lang, 'people').replace('{n}', String(team.size))
-                  ]
-              ]
-            : []),
+        [t(lang, 'period'), lookup(lang, `home.work.periods.${project.year}`)],
+        ...(team ? [[t(lang, 'team'), team.size === 1 ? t(lang, 'solo') : t(lang, 'people', { n: team.size })]] : []),
         [t(lang, 'stack'), project.tags.map((tag) => `<span class="project-tag">${tag}</span>`).join('')]
     ] as [string, string][];
     return rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
@@ -86,30 +73,25 @@ function story(project: ProjectEntry, lang: Lang): string {
 }
 
 /** The skills two projects share, in the neighbour's own spelling. */
-function sharedTags(project: ProjectEntry, other: ProjectEntry): string[] {
+export function sharedSkills(project: ProjectEntry, other: ProjectEntry): string[] {
     const mine = skillSet(project);
-    return other.tags.filter((tag) =>
-        tag
-            .toLowerCase()
-            .split('/')
-            .some((part) => mine.has(part.trim()))
-    );
+    return [...skillNames(other.tags)].filter(([skill]) => mine.has(skill)).map(([, name]) => name);
 }
 
 /** The three projects the map links this one to, with how much they overlap and why. */
 function related(project: ProjectEntry, lang: Lang): string {
     return neighbours(project, PROJECTS)
         .map(({ q, s }) => {
-            const shared = sharedTags(project, q);
+            const shared = sharedSkills(project, q);
             const why = shared.length
                 ? `${t(lang, 'shares')} ${shared.join(', ')}`
-                : t(lang, 'sameDomain').replace('{domain}', domainName(lang, q.category));
+                : t(lang, 'sameDomain', { domain: domainName(lang, q.category) });
             const overlap = Math.round(s * 100);
             return `<a class="related-card surface reveal" href="${localizedPath(projectPath(q.id), lang)}">
 <span class="related-media"><img ${stillAttrs(q, '(width <= 800px) 92vw, 340px', true)} alt="" loading="lazy" width="640" height="400" /></span>
 <span class="related-body"><span class="related-domain">${domainIcon(q.category)}${domainName(lang, q.category)}</span>
 <strong>${q.title}</strong><span class="related-why">${why}</span>
-<span class="overlap"><span class="overlap-bar"><span class="overlap-fill" data-overlap="${overlap}"></span></span><span class="mono">${t(lang, 'overlap').replace('{n}', String(overlap))}</span></span></span></a>`;
+<span class="overlap"><span class="overlap-bar"><span class="overlap-fill" data-overlap="${overlap}"></span></span><span class="mono">${t(lang, 'overlap', { n: overlap })}</span></span></span></a>`;
         })
         .join('');
 }

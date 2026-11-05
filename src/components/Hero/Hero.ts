@@ -107,7 +107,7 @@ function rotateTitle(hero: HTMLElement, paused: () => boolean): void {
     const keys = ['title2', 'title2b', 'title2c'];
     let index = 0;
     window.setInterval(() => {
-        if (paused() || document.hidden || scrollY > hero.offsetHeight / 2) return;
+        if (paused() || prefersReducedMotion() || document.hidden || scrollY > hero.offsetHeight / 2) return;
         line.classList.add('cycling', 'out');
         window.setTimeout(() => {
             index = (index + 1) % keys.length;
