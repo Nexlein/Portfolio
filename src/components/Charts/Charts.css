@@ -144,7 +144,7 @@
 }
 
 .path-svg .marks.lit .mark:not(.on) {
-    opacity: 0.5;
+    opacity: 0.7;
 }
 
 .path-svg .mark.on .mark-dot {
@@ -232,15 +232,11 @@
     border-radius: 10px;
     background: color-mix(in sRGB, var(--raised) 92%, transparent);
     backdrop-filter: blur(12px);
-    box-shadow: 0 10px 24px rgb(0 0 0 / 25%);
+    box-shadow: var(--shadow-pop);
     font-size: 13px;
     white-space: nowrap;
     pointer-events: none;
     transform: translate(-50%, calc(-100% - 14px));
-}
-
-.path-tip[hidden] {
-    display: none;
 }
 
 .path-tip span:last-child {
@@ -278,10 +274,6 @@
     gap: 10px;
 }
 
-.numbers-nav[hidden] {
-    display: none;
-}
-
 .numbers-nav button {
     width: 36px;
     height: 36px;
@@ -290,11 +282,6 @@
     transition:
         opacity 200ms ease,
         border-color 200ms;
-}
-
-.numbers-nav button:disabled {
-    opacity: 0.35;
-    cursor: default;
 }
 
 /* Without JS: a plain grid of cards */
@@ -374,7 +361,7 @@
 }
 
 .numbers.playing .numbers-index button[aria-current]::after {
-    animation: deck-fill 6500ms linear both;
+    animation: deck-fill var(--step) linear both;
 }
 
 @keyframes deck-fill {
@@ -681,21 +668,11 @@
 
 .chips li {
     padding: 4px 10px;
-    border: 1px solid var(--hair);
-    border-radius: 999px;
-    background: var(--raised);
     font-size: 12px;
 }
 
 .chips .more {
     color: var(--signal);
-}
-
-@media (hover: hover) and (pointer: fine) {
-    .chart-card.in:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow), var(--shadow-lift);
-    }
 }
 
 @media (width <= 900px) {
@@ -794,8 +771,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .path-chart .line,
-    .chart-card,
+    .path-chart.drawn .line,
+    .path-chart.drawn :is(.area, .now, .marks),
+    .numbers.deck .chart-card,
     .radar .shape,
     .donut .spin,
     .columns .bar,
@@ -828,6 +806,6 @@
 }
 
 .heat text.n {
-    fill: var(--bg);
+    fill: var(--ink);
     font-weight: 500;
 }

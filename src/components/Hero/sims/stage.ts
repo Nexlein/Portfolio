@@ -1,12 +1,14 @@
 /**
  * What every hero simulation needs: a sized canvas, the theme's colours, the cursor over the hero, clicks on the
  * hero's empty space, and a frame loop that pauses off-screen, stops when the canvas is swapped out, and draws a
- * single still frame for reduced motion.
+ * single still frame when nothing animates (reduced motion, the pause button).
  */
 import { prefersReducedMotion } from '@/ui/motion';
 
 /** Set by the hero's pause button: every frame loop holds still until it is cleared. */
 let paused = false;
+const isStill = () => paused || prefersReducedMotion();
+
 /** The wake of every live loop, so that resuming (or turning reduced motion off) restarts them. */
 const wakers = new Set<() => void>();
 
@@ -35,9 +37,10 @@ export interface Stage {
     onResize: (fn: () => void) => void;
     /** Remove every listener and observer this stage added (the canvas is being swapped out). */
     dispose: () => void;
-    /** Run `frame` every animation frame while on screen and the tab is shown; once only with reduced motion. */
+    /** Run `frame` every animation frame while on screen and the tab is shown; once only while `still`. */
     loop: (frame: (t: number) => void) => void;
-    reduced: boolean;
+    /** True while nothing animates (reduced motion, the pause button): a simulation shows its finished picture. */
+    readonly still: boolean;
 }
 
 export function stage(canvas: HTMLCanvasElement): Stage {
@@ -51,15 +54,22 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         colors.signal = s.getPropertyValue('--signal').trim();
     };
     const resizers: (() => void)[] = [];
-    // With reduced motion nothing animates: the single frame is drawn again whenever the canvas is cleared or recoloured
-    let redraw: (() => void) | undefined;
+    // When nothing animates, the picture is drawn again whenever the canvas is cleared or recoloured
+    let drawOnce: (() => void) | undefined;
+    const redraw = () => {
+        if (isStill()) drawOnce?.();
+    };
+    let sized = '';
     const size = () => {
         const dpr = Math.min(1.5, devicePixelRatio || 1); // abstract art: no need for full Retina pixels
+        const next = `${canvas.clientWidth}x${canvas.clientHeight}@${dpr}`;
+        if (next === sized) return; // e.g. a phone's address bar sliding away: setting the size would clear the canvas
+        sized = next;
         canvas.width = canvas.clientWidth * dpr;
         canvas.height = canvas.clientHeight * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         resizers.forEach((fn) => fn());
-        redraw?.();
+        redraw();
     };
     let pointer: Point | null = null;
     const local = (e: PointerEvent | MouseEvent): Point => {
@@ -75,7 +85,7 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         'themechange',
         () => {
             read();
-            redraw?.();
+            redraw();
         },
         { signal }
     );
@@ -100,10 +110,16 @@ export function stage(canvas: HTMLCanvasElement): Stage {
     signal.addEventListener('abort', () => visibility.disconnect());
     document.addEventListener('visibilitychange', () => wake?.(), { signal });
     // The setting can change mid-visit: loops hold still while it is on and start again when it is turned off
-    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => wake?.(), { signal });
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener(
+        'change',
+        () => {
+            wake?.();
+            redraw();
+        },
+        { signal }
+    );
     read();
     size();
-    const reduced = prefersReducedMotion();
 
     return {
         ctx,
@@ -131,16 +147,12 @@ export function stage(canvas: HTMLCanvasElement): Stage {
         onResize: (fn) => resizers.push(fn),
         dispose: () => life.abort(),
         loop: (frame) => {
-            if (reduced) {
-                redraw = () => frame(performance.now());
-                return redraw();
-            }
+            drawOnce = () => frame(performance.now());
             let running = false; // a frame is queued
             const tick = (t: number) => {
                 // Scrolled away, tab hidden, paused, reduced motion turned on or replaced by another simulation:
                 // stop asking for frames until `wake`
-                if (!canvas.isConnected || !seen || document.hidden || paused || prefersReducedMotion())
-                    return void (running = false);
+                if (!canvas.isConnected || !seen || document.hidden || isStill()) return void (running = false);
                 frame(t);
                 requestAnimationFrame(tick);
             };
@@ -153,7 +165,10 @@ export function stage(canvas: HTMLCanvasElement): Stage {
             wakers.add(restart);
             signal.addEventListener('abort', () => wakers.delete(restart));
             wake();
+            if (isStill()) drawOnce(); // nothing will animate: it holds still, with something to show
         },
-        reduced
+        get still() {
+            return isStill();
+        }
     };
 }

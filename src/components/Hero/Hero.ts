@@ -55,7 +55,6 @@ export function initHero(): void {
     show(current, false);
     pager.hidden = false;
 
-    if (prefersReducedMotion()) return;
     let paused = false;
     const pause = document.createElement('button');
     pause.type = 'button';
@@ -70,6 +69,7 @@ export function initHero(): void {
     });
     pager.append(pause);
     rotateTitle(hero, () => paused);
+    if (prefersReducedMotion()) return;
     let ticking = false;
     let progress = 0;
     window.addEventListener('resize', () => (height = hero.offsetHeight), { passive: true });
@@ -107,7 +107,7 @@ function rotateTitle(hero: HTMLElement, paused: () => boolean): void {
     const keys = ['title2', 'title2b', 'title2c'];
     let index = 0;
     window.setInterval(() => {
-        if (paused() || document.hidden || scrollY > hero.offsetHeight / 2) return;
+        if (paused() || prefersReducedMotion() || document.hidden || scrollY > hero.offsetHeight / 2) return;
         line.classList.add('cycling', 'out');
         window.setTimeout(() => {
             index = (index + 1) % keys.length;
@@ -124,7 +124,9 @@ function initCue(hero: HTMLElement): void {
     window.addEventListener(
         'scroll',
         () => {
-            cue.style.opacity = String(Math.max(0, 1 - scrollY / 120));
+            const left = Math.max(0, 1 - scrollY / 120);
+            cue.style.opacity = String(left);
+            cue.style.visibility = left ? '' : 'hidden'; // gone from sight, gone from the Tab order
         },
         { passive: true }
     );

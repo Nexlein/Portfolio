@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { CHECKPOINTS, EXPERIENCES } from '@/data/profile';
+import { thisMonth, yearOf } from '@/core/time';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
-import { periodOf } from '../NeuralMap/graph';
+import { skillsOf } from '@/data/skills';
 import { changeText, numbers, pathChart, pathSvg, phaseLabel } from './render';
+import { schoolYear } from './series';
 import {
     distinctSkills,
+    EPITECH_START,
     domainAxes,
     languageBuckets,
     languageOf,
@@ -15,15 +18,12 @@ import {
     RANGES,
     rangeStart,
     changeSince,
-    schoolYearAt,
     skillSeries,
-    skills,
-    thisMonth,
+    spelling,
     timeTicks,
     topSkills,
     valueAt,
     yDomain,
-    yearOf,
     yTicks
 } from './data';
 
@@ -33,44 +33,29 @@ const last = (points: ReturnType<typeof skillSeries>) => points[points.length - 
 /** A project with only what the numbers read: a month and some tags. */
 const project = (id: string, date: string, tags: string[]): ProjectEntry => ({ ...PROJECTS[0], id, date, tags });
 
-describe('dates', () => {
-    it('reads a month as a fractional year (January is the year itself)', () => {
-        expect(yearOf('2026-01')).toBe(2026);
-        expect(yearOf('2026-04')).toBe(2026.25);
-        expect(yearOf('2026-12')).toBeCloseTo(2026 + 11 / 12);
+describe('spelling', () => {
+    it('writes a skill as the data does', () => {
+        const name = spelling([{ ...PROJECTS[0], tags: ['FastAPI', 'PostgreSQL'] }]);
+        expect(name('fastapi')).toBe('FastAPI');
+        expect(name('postgresql')).toBe('PostgreSQL');
     });
 
-    it('puts today at the start of the current month', () => {
-        expect(thisMonth(new Date('2026-10-14'))).toBeCloseTo(2026 + 9 / 12);
-        expect(thisMonth(new Date('2027-01-31'))).toBe(2027);
+    it('also knows the skills of jobs and checkpoints', () => {
+        expect(spelling([])('google cloud')).toBe('Google Cloud');
     });
 
-    it('treats a project without a year as second-year work', () => {
-        expect(periodOf({ ...PROJECTS[0], year: undefined })).toBe('Tek2');
-    });
-});
-
-describe('skills', () => {
-    it('lowercases, splits C/C++, trims, merges RL and drops empties', () => {
-        expect(skills(['C/C++', ' Python ', 'RL', 'Net / work', 'C/'])).toEqual([
-            'c',
-            'c++',
-            'python',
-            'reinforcement learning',
-            'net',
-            'work',
-            'c'
-        ]);
+    it('leaves an unknown skill as it is', () => {
+        expect(spelling([])('no such skill')).toBe('no such skill');
     });
 });
 
 /** What the path chart says ("58 skills", "+37 in 12 months"), recomputed the plain way for the tests to compare with. */
 const known = (t: number) => {
     const all: [number, string[]][] = [
-        ...PROJECTS.map((p): [number, string[]] => [yearOf(p.date), skills(p.tags)]),
+        ...PROJECTS.map((p): [number, string[]] => [yearOf(p.date), skillsOf(p.tags)]),
         ...CHECKPOINTS.map((c): [number, string[]] => [
             yearOf(c.date),
-            skills([...(c.skills ?? []), ...(EXPERIENCES.find((e) => e.id === c.id)?.tags ?? [])])
+            skillsOf([...(c.skills ?? []), ...(EXPERIENCES.find((e) => e.id === c.id)?.tags ?? [])])
         ])
     ];
     return new Set(all.filter(([d]) => d <= t).flatMap(([, s]) => s)).size;
@@ -88,7 +73,7 @@ describe('the toolbox over time', () => {
 
     it('never goes down', () => {
         const values = skillSeries(PROJECTS, thisMonth()).map((p) => p.v);
-        expect(values).toEqual([...values].sort((a, b) => a - b)); // eslint-disable-line -- test-only copy
+        expect(values).toEqual(values.toSorted((a, b) => a - b));
     });
 
     it('counts a project from its own month on, and not a month before', () => {
@@ -110,15 +95,39 @@ describe('the toolbox over time', () => {
     });
 });
 
+describe('checkpoints on the series', () => {
+    it.each(CHECKPOINTS)('$id names its month, even when a project started then too', (c) => {
+        const point = skillSeries(PROJECTS, yearOf('2099-01')).find((p) => p.t === yearOf(c.date));
+        expect(point?.m?.checkpoint?.id).toBe(c.id);
+    });
+});
+
+const usedBy = (tag: string, n: number) => Array.from({ length: n }, () => ({ ...PROJECTS[0], tags: [tag] }));
+const inPeriod = (year: ProjectEntry['year']) => ({ ...PROJECTS[0], year });
+const sixMonthsTo = (time: number) => pathSvg('en', skillSeries(PROJECTS, time), time - 6 / 12, time);
+
 describe('group counts', () => {
     it('gives every skill to the period that first used it, once', () => {
         expect(newSkillsPerPeriod(PROJECTS).reduce((a, b) => a + b, 0)).toBe(distinctSkills(PROJECTS));
     });
 
+    it('credits a skill to its earliest project, not to the period listed first', () => {
+        const earlier: ProjectEntry = { ...PROJECTS[0], tags: ['Zig'], year: 'Tek3', date: '2026-01' };
+        const later: ProjectEntry = { ...PROJECTS[0], tags: ['Zig'], year: 'Personal', date: '2026-06' };
+        expect(periodsIn([earlier, later])).toEqual(['Personal', 'Tek3']);
+        expect(newSkillsPerPeriod([earlier, later])).toEqual([0, 1]);
+    });
+
+    it('keeps every skill tied with the last one shown', () => {
+        const projects = [...usedBy('A', 3), ...usedBy('B', 2), ...usedBy('C', 2), ...usedBy('D', 1)];
+        expect(topSkills(projects, 2).map(([s]) => s)).toEqual(['a', 'b', 'c']);
+    });
+
     it('ranks the most used skills first', () => {
         const top = topSkills(PROJECTS);
-        expect(top.map(([, n]) => n)).toEqual([...top.map(([, n]) => n)].sort((a, b) => b - a)); // eslint-disable-line -- test-only copy
-        expect(top.length).toBeLessThanOrEqual(7);
+        const uses = top.map(([, n]) => n);
+        expect(uses).toEqual(uses.toSorted((a, b) => b - a));
+        expect(top.length).toBeGreaterThanOrEqual(7);
     });
 
     it('names the main language of a project, C/C++ as C++, and infrastructure when there is none', () => {
@@ -132,8 +141,13 @@ describe('group counts', () => {
     });
 
     it('lists the periods oldest first, and every project falls in one', () => {
-        expect(periodsIn(PROJECTS)).toEqual(['Tek1', 'Tek2', 'Personal', 'Tek3']);
-        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(periodOf(p));
+        expect(periodsIn([inPeriod('Tek3'), inPeriod('Tek1'), inPeriod('Tek2'), inPeriod('Personal')])).toEqual([
+            'Tek1',
+            'Tek2',
+            'Personal',
+            'Tek3'
+        ]);
+        for (const p of PROJECTS) expect(periodsIn(PROJECTS)).toContain(p.year);
     });
 
     it('counts every project in one domain axis', () => {
@@ -216,7 +230,7 @@ describe('the change over a range (the headline of the path chart)', () => {
 
     it('differs from one range to the next (a longer range gains at least as much)', () => {
         const deltas = RANGES.map((r) => since(r.id).delta);
-        expect(deltas).toEqual([...deltas].sort((a, b) => a - b)); // eslint-disable-line -- test-only copy
+        expect(deltas).toEqual(deltas.toSorted((a, b) => a - b));
         expect(new Set(deltas).size).toBeGreaterThan(1);
     });
 
@@ -226,13 +240,14 @@ describe('the change over a range (the headline of the path chart)', () => {
     });
 
     it('reads as a sentence in both languages', () => {
-        expect(headline('en', points, '1y')).toMatch(/^▲ \+\d+ \(\d+ %\) past 12 months$/);
+        expect(headline('en', points, '1y')).toMatch(/^▲ \+\d+ \(\d+%\) past 12 months$/);
         expect(headline('en', points, '6m')).toMatch(/past 6 months$/);
         expect(headline('en', points, '1m')).toMatch(/past month$/);
-        expect(headline('en', points, 'max')).toMatch(/^▲ \+\d+ since Jul 2024$/);
+        expect(headline('en', points, 'max')).toMatch(/^▲ \+\d+ since [A-Z][a-z]{2} \d{4}$/);
         expect(headline('fr', points, '1y')).toMatch(/sur 12 mois$/);
         expect(headline('fr', points, '1m')).toMatch(/sur 1 mois$/);
-        expect(headline('fr', points, 'max')).toMatch(/depuis juil\. 2024$/);
+        expect(headline('fr', points, '1y')).toMatch(/\(\d+\u00a0%\)/);
+        expect(headline('fr', points, 'max')).toMatch(/depuis \S+ \d{4}$/);
     });
 
     it('shows only the numbers: no words about the range', () => {
@@ -244,7 +259,7 @@ describe('the change over a range (the headline of the path chart)', () => {
         const later = skillSeries(PROJECTS, 2099);
         const r = range('1y');
         const { text, over, up } = changeText('en', r, later, rangeStart(r, later, 2099));
-        expect(text).toBe('0 (0 %)');
+        expect(text).toBe('0 (0%)');
         expect(over).toBe('past 12 months');
         expect(up).toBe(false);
     });
@@ -252,12 +267,12 @@ describe('the change over a range (the headline of the path chart)', () => {
 
 describe('where the visitor was', () => {
     it('counts Epitech school years from September: before it 0, then 1, 2, 3', () => {
-        expect(schoolYearAt(yearOf('2024-07'))).toBe(0);
-        expect(schoolYearAt(yearOf('2024-09'))).toBe(1);
-        expect(schoolYearAt(yearOf('2025-08'))).toBe(1);
-        expect(schoolYearAt(yearOf('2025-09'))).toBe(2);
-        expect(schoolYearAt(yearOf('2026-05'))).toBe(2);
-        expect(schoolYearAt(TODAY)).toBe(3); // October 2026: year 3
+        expect(schoolYear(yearOf('2024-07'), EPITECH_START)).toBe(0);
+        expect(schoolYear(yearOf('2024-09'), EPITECH_START)).toBe(1);
+        expect(schoolYear(yearOf('2025-08'), EPITECH_START)).toBe(1);
+        expect(schoolYear(yearOf('2025-09'), EPITECH_START)).toBe(2);
+        expect(schoolYear(yearOf('2026-05'), EPITECH_START)).toBe(2);
+        expect(schoolYear(TODAY, EPITECH_START)).toBe(3); // October 2026: year 3
     });
 
     it('covers the whole window with consecutive phases, clipped to it', () => {
@@ -335,11 +350,43 @@ describe('the axes of the path chart', () => {
     });
 });
 
+describe('the charts for a screen reader', () => {
+    it('say the values of the language columns and the heat map, not just their title', () => {
+        const html = numbers('en', PROJECTS, TODAY);
+        const languages = /class="columns"[^>]*aria-label="([^"]+)"/.exec(html)![1];
+        const heat = /class="heat"[^>]*aria-label="([^"]+)"/.exec(html)![1];
+        expect(languages).toMatch(/: \S+ \d/);
+        expect(heat).toMatch(/: \S+.* \d/);
+    });
+});
+
 describe('checkpoint names on the plot', () => {
+    it('never share a row when a name starting at the left edge runs into the next one', () => {
+        for (const date of CHECKPOINTS.map((c) => yearOf(c.date) + 5 / 12)) {
+            const rows = new Map<string, { left: number; right: number }[]>();
+            for (const m of sixMonthsTo(date).matchAll(
+                /<text class="(start|end|)" x="([\d.]+)" y="([\d.]+)">([^<]+)</g
+            )) {
+                const [, anchor, x, y, label] = m;
+                const width = (label.length * 3.3 + 8) * 2;
+                const left =
+                    anchor === 'start' ? Number(x) : anchor === 'end' ? Number(x) - width : Number(x) - width / 2;
+                const row = rows.get(y) ?? [];
+                for (const other of row) expect(left >= other.right || left + width <= other.left, label).toBe(true);
+                row.push({ left, right: left + width });
+                rows.set(y, row);
+            }
+        }
+    });
+
     it('stay inside the picture when a checkpoint sits at the start of a range', () => {
-        const points = skillSeries(PROJECTS, TODAY);
-        const month = pathSvg('en', points, TODAY - 1 / 12, TODAY); // the Issanka checkpoint is dated September 2026
-        expect(month).toMatch(/<text class="start"[^>]*>AI developer intern, Issanka<\/text>/);
-        expect(pathSvg('en', points, points[0].t, TODAY)).not.toContain('class="start"'); // nothing sticks out on Max
+        const latest = CHECKPOINTS[CHECKPOINTS.length - 1];
+        const from = yearOf(latest.date),
+            now = from + 1 / 12;
+        const points = skillSeries(PROJECTS, now);
+        expect(pathSvg('en', points, from, now)).toMatch(
+            new RegExp(`<text class="start"[^>]*>${latest.label.en}</text>`)
+        );
+        expect(pathSvg('en', points, points[0].t, now)).not.toContain('class="start"'); // nothing sticks out on Max
     });
 });

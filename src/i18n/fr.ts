@@ -80,7 +80,7 @@ export const fr = {
             ask: 'Activer un domaine',
             mapLabel:
                 'Les projets en réseau : les plus récents au centre, reliés quand ils partagent des compétences (lien plus lumineux = plus proches). Survolez ou sélectionnez un projet pour un aperçu ; validez pour ouvrir sa page.',
-            more: '{shown} projets affichés sur {n}, les autres apparaissent à tour de rôle.',
+            more: '{shown} projets affichés sur {n}.',
             seeAll: 'Voir tous les projets',
             viewLabel: 'Affichage des projets',
             viewMap: 'Carte',

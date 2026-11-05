@@ -1,0 +1,22 @@
+name: Browsers
+description: Playwright's browsers and the system packages they need
+
+inputs:
+    browsers:
+        description: The browsers to install, separated by spaces
+        required: true
+
+runs:
+    using: composite
+    steps:
+        # The runners' default apt mirror can drop to a trickle: 139 MB took 8 s one day, over 30 minutes the next.
+        # The grep fails the job if a new image moves that address and the sed stops working.
+        - name: Use the main Ubuntu mirror
+          shell: bash
+          run: |
+              sudo sed -i 's|azure\.archive\.ubuntu\.com|archive.ubuntu.com|' /etc/apt/apt-mirrors.txt
+              ! grep -rsq 'azure\.archive\.ubuntu\.com' /etc/apt
+
+        - name: Install browsers
+          shell: bash
+          run: npx playwright install --with-deps ${{ inputs.browsers }}

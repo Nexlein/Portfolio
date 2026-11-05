@@ -21,9 +21,14 @@ for (const { path, heading } of pages) {
 
         const fontsLoaded = await page.evaluate(async () => {
             await document.fonts.ready;
-            return document.fonts.check('16px "Schibsted Grotesk Variable"');
+            return [...document.fonts].some((f) => f.family.includes('Schibsted Grotesk') && f.status === 'loaded');
         });
         expect(fontsLoaded).toBe(true);
+        const shownThoughHidden = await page.evaluate(
+            () =>
+                [...document.querySelectorAll('[hidden]')].filter((e) => getComputedStyle(e).display !== 'none').length
+        );
+        expect(shownThoughHidden).toBe(0);
         // The fixture fails the test on console errors or CSP violations
     });
 }
@@ -42,8 +47,10 @@ for (const path of ['/', '/fr/', '/projects/zappy.html'])
 
 test('no request leaves our own origin', async ({ page, baseURL }) => {
     const external: string[] = [];
+    // blob: never reaches the network: WebKit builds the icons of native video controls that way
+    const own = [baseURL!, `blob:${baseURL!}`, 'data:'];
     page.on('request', (req) => {
-        if (!req.url().startsWith(baseURL!) && !req.url().startsWith('data:')) external.push(req.url());
+        if (!own.some((start) => req.url().startsWith(start))) external.push(req.url());
     });
     for (const { path } of pages) await page.goto(path, { waitUntil: 'load' });
     expect(external).toEqual([]);
@@ -88,6 +95,8 @@ test.describe('404 page', () => {
 for (const width of [320, 280])
     test.describe(`at ${width}px wide on a touch screen`, () => {
         test.use({ viewport: { width, height: 640 }, hasTouch: true, isMobile: true });
+        // This block sets its own screen: the phone project would run the desktop one's tests again
+        test.beforeEach(() => test.skip(test.info().project.name === 'mobile', 'same run as desktop'));
 
         for (const { path } of pages)
             test(`${path} does not scroll sideways`, async ({ page }) => {

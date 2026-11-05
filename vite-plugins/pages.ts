@@ -2,8 +2,9 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Window } from 'happy-dom';
 import type { Plugin } from 'vite';
-import { PROJECTS, projectPath } from '../src/data/projects.ts';
+import { PROJECTS, projectImage, projectPath } from '../src/data/projects.ts';
 import { OWNER, SITE } from '../src/core/site.ts';
+import { clampWords, jsonBlock } from '../src/core/text.ts';
 import { cvPerson, profilePage, projectSource } from '../src/core/structured-data.ts';
 import {
     clientStrings,
@@ -29,6 +30,8 @@ export interface PageSpec {
     description: (lang: Lang) => string;
     image: (lang: Lang) => string;
     imageAlt: (lang: Lang) => string;
+    /** Open Graph type: 'website' unless a page says otherwise. */
+    ogType?: 'website' | 'article';
     jsonLd?: (lang: Lang) => object;
     /** Served as the 404: no canonical or language alternates, not in the sitemap. */
     unlisted?: boolean;
@@ -64,30 +67,28 @@ const fixedPage = (
 export const PAGES: PageSpec[] = [
     fixedPage('/', 'index.html', 'home', profilePage, true),
     fixedPage('/cv.html', 'cv.html', 'cv', cvPerson),
-    ...PROJECTS.map((project): PageSpec => ({
-        path: projectPath(project.id),
-        template: 'project.html',
-        title: () => `${project.title} — ${OWNER.name}`,
-        description: (lang) => projectDescription(project, lang),
-        image: () => `${SITE}/projects/${project.id}/og.jpg`,
-        imageAlt: () => project.title,
-        jsonLd: (lang) =>
-            projectSource(project, lang, projectDescription(project, lang), `${SITE}/projects/${project.id}/og.jpg`),
-        fill: (document, lang) => {
-            renderContent(document, lang, projectPath(project.id)); // nav and footer
-            fillProjectPage(document, project, lang);
-        }
-    }))
+    ...PROJECTS.map((project): PageSpec => {
+        const image = SITE + projectImage(project.id);
+        return {
+            path: projectPath(project.id),
+            template: 'project.html',
+            title: () => `${project.title} — ${OWNER.name}`,
+            description: (lang) => clampWords(projectDescription(project, lang)),
+            image: () => image,
+            imageAlt: () => project.title,
+            ogType: 'article',
+            jsonLd: (lang) => projectSource(project, lang, projectDescription(project, lang), image),
+            fill: (document, lang) => {
+                renderContent(document, lang, projectPath(project.id)); // nav and footer
+                fillProjectPage(document, project, lang);
+            }
+        };
+    })
 ];
 
 /** The page Vercel serves for every unknown URL (/404.html, and /fr/404.html for the French copy). */
 export const NOT_FOUND: PageSpec = {
-    path: '/404.html',
-    template: '404.html',
-    title: (lang) => lookup(lang, 'meta.notFound.title'),
-    description: (lang) => lookup(lang, 'meta.notFound.description'),
-    image: DEFAULT_IMAGE,
-    imageAlt: (lang) => lookup(lang, 'meta.imageAlt'),
+    ...fixedPage('/404.html', '404.html', 'notFound'),
     unlisted: true,
     fill: (document, lang) => {
         renderContent(document, lang, '/404.html'); // nav and footer
@@ -115,19 +116,17 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
     const head = document.head;
     const url = (l: Lang) => SITE + localizedPath(page.path, l);
 
-    const setMeta = (attr: 'name' | 'property', name: string, content: string) => {
-        let meta = head.querySelector(`meta[${attr}="${name}"]`);
-        if (!meta) {
-            meta = document.createElement('meta');
-            meta.setAttribute(attr, name);
-            head.appendChild(meta);
-        }
-        meta.setAttribute('content', content);
-    };
     const appendHead = (tag: string, attrs: Record<string, string>) => {
         const el = document.createElement(tag);
         for (const [name, value] of Object.entries(attrs)) el.setAttribute(name, value);
         head.appendChild(el);
+        return el;
+    };
+    // What crawlers read comes before the stylesheets and scripts; the big data blocks go last
+    const firstAsset = head.querySelector('link, script, style');
+    const seoTag = (tag: string, attrs: Record<string, string>) => {
+        const el = appendHead(tag, attrs);
+        head.insertBefore(el, firstAsset);
         return el;
     };
 
@@ -137,35 +136,39 @@ export function renderPage(html: string, page: PageSpec, lang: Lang): string {
 
     const title = page.title(lang);
     const description = page.description(lang);
-    document.title = title;
-    setMeta('name', 'description', description);
-    setMeta('property', 'og:title', title);
-    setMeta('property', 'og:description', description);
-    setMeta('property', 'og:url', url(lang));
-    setMeta('property', 'og:image', page.image(lang));
-    setMeta('property', 'og:image:alt', page.imageAlt(lang));
-    setMeta('property', 'og:locale', OG_LOCALE[lang]);
-    head.querySelectorAll('meta[property="og:locale:alternate"]').forEach((el) => el.remove());
+    seoTag('title', {}).textContent = title;
+    seoTag('meta', { name: 'description', content: description });
+    const openGraph = {
+        type: page.ogType ?? 'website',
+        site_name: OWNER.alias,
+        title,
+        description,
+        url: url(lang),
+        image: page.image(lang),
+        'image:width': '1200',
+        'image:height': '630',
+        'image:alt': page.imageAlt(lang),
+        locale: OG_LOCALE[lang]
+    };
+    for (const [name, content] of Object.entries(openGraph)) seoTag('meta', { property: `og:${name}`, content });
     for (const other of LANGS.filter((l) => l !== lang)) {
-        appendHead('meta', { property: 'og:locale:alternate', content: OG_LOCALE[other] });
+        seoTag('meta', { property: 'og:locale:alternate', content: OG_LOCALE[other] });
     }
+    seoTag('meta', { name: 'twitter:card', content: 'summary_large_image' });
 
-    head.querySelector('link[rel="canonical"]')?.setAttribute('href', url(lang));
-    head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
     if (!page.unlisted) {
-        for (const l of LANGS) appendHead('link', { rel: 'alternate', hreflang: l, href: url(l) });
-        appendHead('link', { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LANG) });
+        seoTag('link', { rel: 'canonical', href: url(lang) });
+        for (const l of LANGS) seoTag('link', { rel: 'alternate', hreflang: l, href: url(l) });
+        seoTag('link', { rel: 'alternate', hreflang: 'x-default', href: url(DEFAULT_LANG) });
     }
 
     if (page.jsonLd) {
-        // A data block, never executed, so the CSP's script-src does not apply. Escape '<' so text can't close the tag.
-        const script = appendHead('script', { type: 'application/ld+json' });
-        script.textContent = JSON.stringify(page.jsonLd(lang)).replace(/</g, '\\u003c');
+        // A data block, never executed, so the CSP's script-src does not apply
+        appendHead('script', { type: 'application/ld+json' }).textContent = jsonBlock(page.jsonLd(lang));
     }
 
     if (page.strings) {
-        const script = appendHead('script', { type: 'application/json', id: STRINGS_ID });
-        script.textContent = JSON.stringify(clientStrings(lang)).replace(/</g, '\\u003c');
+        appendHead('script', { type: 'application/json', id: STRINGS_ID }).textContent = jsonBlock(clientStrings(lang));
     }
 
     const out = `<!doctype html>\n${document.documentElement.outerHTML}\n`;

@@ -6,21 +6,18 @@
 import { CHECKPOINTS, EDUCATION, EXPERIENCES, NOW, type Checkpoint } from '../../data/profile.ts';
 import { DOMAINS, PROJECTS, projectPath, type ProjectEntry } from '../../data/projects.ts';
 import { OWNER } from '../../core/site.ts';
-import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { domainName, localizedPath, scoped, type Lang } from '../../core/translate.ts';
 import { domainIcon } from '../../ui/icons.ts';
 import { stillAttrs } from '../../ui/video.ts';
-import { monthName, numbers, pathChart } from '../../components/Charts/render.ts';
-import { thisMonth, yearOf } from '../../components/Charts/data.ts';
+import { numbers, pathChart } from '../../components/Charts/render.ts';
+import { monthName, thisMonth, yearOf } from '../../core/time.ts';
 import { firstSentence } from '../../core/text.ts';
-import { pickShown } from '../../components/NeuralMap/graph.ts';
-import { MAP_MAX } from '../../components/NeuralMap/limits.ts';
+import { MAP_MAX, pickShown } from '../../components/NeuralMap/graph.ts';
 
-const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
+const t = scoped('home');
 
 /** First sentence of the description. */
 const oneLiner = (p: ProjectEntry, lang: Lang) => firstSentence(p.description[lang]);
-
-const domainName = (lang: Lang, d: string) => t(lang, `domains.${d}`);
 
 export function availability(lang: Lang): string {
     return NOW.availability[lang];
@@ -38,7 +35,7 @@ export function featured(lang: Lang): string {
 
 /** "17 projects. / One network." as two masked lines. */
 export function workTitle(lang: Lang): string {
-    return `<span class="line"><span>${t(lang, 'work.title1').replace('{n}', String(PROJECTS.length))}</span></span><span class="line"><span class="recede">${t(lang, 'work.title2')}</span></span>`;
+    return `<span class="line"><span>${t(lang, 'work.title1', { n: PROJECTS.length })}</span></span><span class="line"><span class="recede">${t(lang, 'work.title2')}</span></span>`;
 }
 
 /** One button per domain present in the data, in a stable order. */
@@ -59,11 +56,11 @@ export function projectList(lang: Lang): string {
     ).join('');
 }
 
-/** "Showing 24 of 40, the rest rotate in." — only when the map cannot hold everything. */
+/** "Showing 24 of 40." — only when the map cannot hold everything. */
 export function mapMore(lang: Lang): string {
-    const { shown } = pickShown(PROJECTS, MAP_MAX);
+    const shown = pickShown(PROJECTS, MAP_MAX);
     if (shown.length === PROJECTS.length) return '';
-    return `${t(lang, 'work.more').replace('{shown}', String(shown.length)).replace('{n}', String(PROJECTS.length))} <button type="button" class="see-all">${t(lang, 'work.seeAll')}</button>`;
+    return `${t(lang, 'work.more', { shown: shown.length, n: PROJECTS.length })} <button type="button" class="see-all">${t(lang, 'work.seeAll')}</button>`;
 }
 
 /**
@@ -71,12 +68,12 @@ export function mapMore(lang: Lang): string {
  * (initPathStory) shows one at a time and turns it with the chart; without JS they read as a plain list.
  */
 export function experience(lang: Lang): string {
-    const entries = [...EXPERIENCES, ...EDUCATION];
     const panel = (c: Checkpoint) => {
-        const e = entries.find((x) => x.id === c.id)!;
-        const org = 'org' in e && e.org ? ` · ${e.org}` : '';
-        const when = 'kind' in e ? e.period[lang] : monthName(yearOf(c.date), lang);
-        const text = 'kind' in e ? e.summary[lang] : firstSentence(e.summary[lang]);
+        const job = EXPERIENCES.find((x) => x.id === c.id);
+        const e = job ?? EDUCATION.find((x) => x.id === c.id)!;
+        const org = job?.org ? ` · ${job.org}` : '';
+        const when = job ? job.period[lang] : monthName(yearOf(c.date), lang);
+        const text = job ? job.summary[lang] : firstSentence(e.summary[lang]);
         return `<article class="exp" data-cp="${c.id}"><p class="exp-when">${when}</p><div class="exp-what"><strong>${e.title[lang]}${org}</strong>
 <span>${text}</span></div></article>`;
     };

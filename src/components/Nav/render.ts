@@ -3,7 +3,7 @@
  * and the theme menu are real HTML before any script runs. Nav.ts adds the behaviour.
  * Relative imports only: vite-plugins/pages.ts renders this from Node.
  */
-import { localizedPath, lookup, type Lang } from '../../core/translate.ts';
+import { LANGS, localizedPath, lookup, type Lang } from '../../core/translate.ts';
 import { THEMES } from './themes.ts';
 
 const SECTIONS = ['work', 'path', 'contact'] as const;
@@ -14,12 +14,10 @@ export function renderNav(lang: Lang, path: string): string {
     const home = localizedPath('/', lang);
     const onHome = path === '/';
     const anchor = (id: string) => (onHome ? `#${id}` : `${home}#${id}`);
-    const languages = (['en', 'fr'] as const)
-        .map(
-            (l) =>
-                `<a href="${localizedPath(path, l)}" hreflang="${l}" lang="${l}" data-lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${l.toUpperCase()}</a>`
-        )
-        .join('');
+    const languages = LANGS.map(
+        (l) =>
+            `<a href="${localizedPath(path, l)}" hreflang="${l}" lang="${l}" data-lang="${l}"${l === lang ? ' aria-current="true"' : ''}>${l.toUpperCase()}</a>`
+    ).join('');
     const themes = THEMES.map(
         (id) =>
             `<button type="button" role="menuitemradio" aria-checked="false" data-theme-id="${id}"><span class="swatch" data-theme="${id}" aria-hidden="true"></span>${lookup(lang, `site.themes.${id}`)}</button>`

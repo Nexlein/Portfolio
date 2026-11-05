@@ -5,7 +5,7 @@ import { mkdir } from 'node:fs/promises';
 import { chromium } from '@playwright/test';
 import { preview } from 'vite';
 
-export const PDFS = [
+const PDFS = [
     { path: '/cv.html', file: 'Nielsen-Combe-Bracciale-CV-EN.pdf' },
     { path: '/fr/cv.html', file: 'Nielsen-Combe-Bracciale-CV-FR.pdf' }
 ];
@@ -25,7 +25,8 @@ try {
         await page.emulateMedia({ media: 'print' });
         const overflow = await page.evaluate(() => {
             const sheet = document.querySelector('.sheet');
-            return sheet ? sheet.scrollHeight - sheet.clientHeight : 0;
+            if (!sheet) throw new Error('no .sheet on the CV page: the A4 check would measure nothing');
+            return sheet.scrollHeight - sheet.clientHeight;
         });
         await page.emulateMedia({ media: null });
         if (overflow > 0) {

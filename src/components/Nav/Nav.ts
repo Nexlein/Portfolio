@@ -1,5 +1,13 @@
 import { THEMES, type Theme } from './themes';
 
+const stored = (key: string) => {
+    try {
+        return localStorage.getItem(key);
+    } catch {
+        return null;
+    }
+};
+
 const store = (key: string, value: string) => {
     try {
         localStorage.setItem(key, value);
@@ -50,6 +58,8 @@ function initPill(nav: HTMLElement): void {
     const pill = nav.querySelector<HTMLElement>('.nav-pill')!;
     const links = [...nav.querySelectorAll<HTMLAnchorElement>('.nav-link')];
     let active: HTMLAnchorElement | null = null;
+    // A tap leaves :hover stuck on a touch screen: only a real pointer holds the pill
+    const hovering = () => matchMedia('(hover: hover)').matches && nav.matches(':hover');
     const moveTo = (a: HTMLAnchorElement | null) => {
         pill.classList.toggle('on', !!a && a.offsetWidth > 0);
         if (!a || !a.offsetWidth) return;
@@ -70,14 +80,14 @@ function initPill(nav: HTMLElement): void {
             links.forEach((a) =>
                 a === active ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current')
             );
-            if (!nav.matches(':hover')) moveTo(active);
+            if (!hovering()) moveTo(active);
         },
         { rootMargin: '-45% 0px -50% 0px' }
     );
     sections.forEach((s) => spy.observe(s));
 
     // The pill is measured in pixels: measure again once the web font is in and when the window changes
-    const rest = () => nav.matches(':hover') || moveTo(active);
+    const rest = () => hovering() || moveTo(active);
     window.addEventListener('resize', rest);
     void document.fonts?.ready.then(rest);
 }
@@ -96,15 +106,19 @@ function initThemes(nav: HTMLElement): void {
         if (open) (items.find((b) => b.getAttribute('aria-checked') === 'true') ?? items[0]).focus();
     };
 
+    const apply = (theme: Theme) => {
+        document.documentElement.dataset.theme = theme;
+        window.dispatchEvent(new CustomEvent('themechange', { detail: theme }));
+        sync();
+    };
+
     button.addEventListener('click', () => setOpen(!wrap.classList.contains('open')));
     items.forEach((b, i) => {
         b.addEventListener('click', () => {
             const theme = b.dataset.themeId as Theme;
             if (!THEMES.includes(theme)) return;
-            document.documentElement.dataset.theme = theme;
             store('theme', theme);
-            window.dispatchEvent(new CustomEvent('themechange', { detail: theme }));
-            sync();
+            apply(theme);
             setOpen(false);
             button.focus();
         });
@@ -129,12 +143,21 @@ function initThemes(nav: HTMLElement): void {
         if (!wrap.contains(e.target as Node)) setOpen(false);
     });
     wrap.addEventListener('focusout', (e) => {
-        if (!wrap.contains(e.relatedTarget as Node | null)) setOpen(false);
+        // No target: focus left the window, or a click on a button moved none (Safari). Clicks outside are pointerdown
+        const to = e.relatedTarget as Node | null;
+        if (to ? !wrap.contains(to) : !document.hasFocus()) setOpen(false);
     });
     wrap.addEventListener('keydown', (e) => {
         if (e.key !== 'Escape') return;
         setOpen(false);
         button.focus();
+    });
+    // The back button can restore a page as it was left: it missed a theme picked on another page
+    window.addEventListener('pageshow', (e) => {
+        if (!e.persisted) return;
+        setOpen(false);
+        const theme = stored('theme') as Theme | null;
+        if (theme && THEMES.includes(theme) && theme !== currentTheme()) apply(theme);
     });
     sync();
 }

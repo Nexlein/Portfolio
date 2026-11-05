@@ -27,14 +27,6 @@
     border-radius: 18px;
 }
 
-.feature:nth-child(2) {
-    transition-delay: 80ms, 80ms, 0ms, 0ms;
-}
-
-.feature:nth-child(3) {
-    transition-delay: 160ms, 160ms, 0ms, 0ms;
-}
-
 .feature-media {
     aspect-ratio: 4 / 3;
     overflow: hidden;
@@ -57,12 +49,6 @@
 .feature-body strong {
     font-size: 17px;
     letter-spacing: -0.02em;
-}
-
-@media (width <= 900px) {
-    .features {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* ── Work ── */
@@ -116,13 +102,9 @@
 }
 
 .list-ico {
-    display: grid;
-    flex: none;
-    place-items: center;
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: var(--raised);
 }
 
 .list-txt {
@@ -183,10 +165,6 @@
     font-size: 14px;
     cursor: pointer;
     transition: border-color 200ms;
-}
-
-.more-btn:hover {
-    border-color: var(--signal);
 }
 
 /* Rows that "Show more" brings in slide up one after the other */
@@ -281,10 +259,6 @@
     gap: 8px;
 }
 
-.exp-nav[hidden] {
-    display: none;
-}
-
 .exp-count {
     margin-right: 6px;
     color: var(--muted);
@@ -309,7 +283,7 @@
 }
 
 .exp-card.playing .exp-progress {
-    animation: exp-fill var(--dur, 6500ms) linear both;
+    animation: exp-fill var(--step) linear both;
 }
 
 @keyframes exp-fill {
@@ -385,13 +359,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .feature:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow), var(--shadow-lift);
-    }
-
-    .feature:hover .feature-media img {
-        scale: 1.03;
+    .more-btn:hover {
+        border-color: var(--signal);
     }
 
     .spot:hover::before {
@@ -407,7 +376,9 @@
     .features {
         display: flex;
         overflow-x: auto;
-        padding-bottom: 20px;
+        margin: -6px -6px 0; /* room for the focus ring, which a scroller would clip */
+        padding: 6px 6px 20px;
+        scroll-padding-inline: 6px;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
     }
@@ -435,7 +406,6 @@
 /* How I work: a thin strip under the hero, three plain columns */
 .method {
     padding: clamp(40px, 6vh, 72px) 0 0;
-    scroll-margin-top: var(--nav-h);
 }
 
 .method-title {
@@ -452,7 +422,6 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0 40px;
-    padding: 0 var(--gutter);
 }
 
 .method-item {
@@ -499,7 +468,6 @@
 
 .method-source {
     margin-top: 24px;
-    padding: 0 var(--gutter);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -536,7 +504,7 @@
 
     /* The two others step back */
     .method-items:has(.method-item:hover) .method-item:not(:hover) {
-        opacity: 0.55;
+        opacity: 0.6;
     }
 }
 
@@ -547,6 +515,10 @@
     .method-item h3,
     .method-text {
         transition: none;
+    }
+
+    .project-list li.row-in {
+        animation: none;
     }
 }
 

@@ -6,37 +6,34 @@
  *   each step. Hovering a project, or asking for a domain, starts one too.
  * - The cursor is an input: nearby hidden neurons light up, attention lines reach the 3 nearest projects.
  * - Living motion: a slow breeze moves neighbours together, synapses act as soft springs, events push.
- * - More than `max` projects: the extra ones rotate in, one every ~8 s, most similar first.
+ * - More than MAP_MAX projects: the map shows the first ones (pickShown), the list always has them all.
  * The static project list stays the source of truth (no JavaScript, phones); this map is drawn on top of it.
  */
 import { i18n } from '@/core/i18n';
 import { localizedPath } from '@/core/lang';
-import { firstSentence } from '@/core/text';
+import { f1, firstSentence } from '@/core/text';
 import { NOW } from '@/data/profile';
-import { PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
+import { PERIODS, PROJECTS, projectPath, type ProjectEntry } from '@/data/projects';
 import { domainIcon } from '@/ui/icons';
 import { prefersReducedMotion as reduced } from '@/ui/motion';
 import { stillAttrs } from '@/ui/video';
+import { CARD, fitFor, layout, MAP_MAX, neighbours, NOW_BOX, ORBIT, pickShown, type Star } from './graph';
 import {
-    CARD,
-    fitFor,
-    layout,
-    neighbours,
-    NOW_BOX,
-    ORBIT,
-    periodOf,
-    pickShown,
-    similarity,
-    type Period,
-    type Star
-} from './graph';
+    breeze,
+    port,
+    quad,
+    scatterNeurons,
+    SPRING,
+    stepBodies,
+    widestGap,
+    wireNeurons,
+    type Body,
+    type Pt
+} from './scene';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const OPEN_W = 330;
-const HALF = { w: 95, h: 26 }; // card half size, for ports
 const ATTN_REACH = 340;
-const NEURONS = 72;
-const f1 = (n: number) => n.toFixed(1);
 
 /** The drifting map redraws about 30 times a second: every redraw restyles dozens of cards and hundreds of lines. */
 const FRAME_MS = 30;
@@ -53,20 +50,10 @@ function put(el: Element, name: string, value: string): void {
     else el.setAttribute(name, value);
 }
 
-interface Pt {
-    x: number;
-    y: number;
-}
-
-interface Card extends Pt {
+interface Card extends Body {
     star: Star;
     el: HTMLAnchorElement;
-    hold: boolean;
     delay: number;
-    ox: number;
-    oy: number;
-    vx: number;
-    vy: number;
     act: number; // activation 0..1, shown as a glow
     shown: number; // last activation written to the DOM
     timer: number; // pending hover-intent timeout (open or close) of this card
@@ -114,31 +101,6 @@ function svg<K extends keyof SVGElementTagNameMap>(tag: K, cls: string, parent: 
     return node;
 }
 
-/** Where the line from a card's centre toward `to` leaves the card. */
-function port(c: Pt, to: Pt): Pt {
-    const dx = to.x - c.x,
-        dy = to.y - c.y;
-    const t = Math.min(HALF.w / (Math.abs(dx) || 1e-6), HALF.h / (Math.abs(dy) || 1e-6), 1);
-    return { x: c.x + dx * t, y: c.y + dy * t };
-}
-
-function quad(p: Pt, c: Pt, q: Pt, u: number): Pt {
-    const v = 1 - u;
-    return { x: v * v * p.x + 2 * u * v * c.x + u * u * q.x, y: v * v * p.y + 2 * u * v * c.y + u * u * q.y };
-}
-
-/** Slow breeze: two long travelling waves, so nearby things lean the same way. */
-function breeze(x: number, y: number, s: number): Pt {
-    return {
-        x: 35 * Math.sin(0.0042 * x - 0.0026 * y + 0.42 * s) + 18 * Math.sin(0.0019 * x + 0.0047 * y + 0.27 * s + 1.3),
-        y: 27 * Math.cos(0.0035 * x + 0.0039 * y + 0.36 * s) + 14 * Math.sin(-0.0024 * x + 0.0051 * y + 0.23 * s + 0.7)
-    };
-}
-
-function seeded(seed: number): () => number {
-    return () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-}
-
 function cardHtml(p: ProjectEntry): string {
     const lang = i18n.getLang();
     return `<a class="nm-card" href="${localizedPath(projectPath(p.id), lang)}" data-id="${p.id}" data-domain="${p.category}">
@@ -147,7 +109,7 @@ function cardHtml(p: ProjectEntry): string {
 <span class="nm-more"><span class="nm-inner">
   <span class="nm-media"><img ${stillAttrs(p, '164px')} alt="" loading="lazy" /></span>
   <span class="nm-desc">${firstSentence(p.description[lang])}</span>
-  <span class="mono nm-skills">${i18n.t(`home.work.periods.${periodOf(p)}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
+  <span class="mono nm-skills">${i18n.t(`home.work.periods.${p.year}`)} · ${p.tags.slice(0, 4).join(' · ')}</span>
   <span class="nm-go">${i18n.t('home.work.open')} <span aria-hidden="true">→</span></span>
 </span></span></a>`;
 }
@@ -161,19 +123,16 @@ function nowHtml(): string {
 }
 
 export interface NeuralMap {
-    /** Light up a domain and keep it lit (the other projects dim): its hidden projects are called in, then its
-     * projects fire. `null` clears the filter. */
+    /** Light up a domain and keep it lit (the other projects dim): its projects fire. `null` clears the filter. */
     query: (domain: string | null) => void;
-    /** Projects shown / total. */
-    shown: number;
 }
 
-export function mountNeuralMap(host: HTMLElement, max = 24): NeuralMap {
-    const { shown, hidden } = pickShown(PROJECTS, max);
+export function mountNeuralMap(host: HTMLElement): NeuralMap {
+    const shown = pickShown(PROJECTS, MAP_MAX);
     host.innerHTML = `<div class="nm" role="group" aria-label="${i18n.t('home.work.mapLabel')}">
 <svg aria-hidden="true"><g class="nm-layers"></g><g class="nm-wires"></g><g class="nm-neurons"></g><g class="nm-syns"></g><g class="nm-signals"></g><g class="nm-attn"></g><g class="nm-labels"></g></svg>
 ${nowHtml()}
-${PROJECTS.map(cardHtml).join('')}</div>`;
+${shown.map(cardHtml).join('')}</div>`;
 
     const web = host.querySelector<HTMLElement>('.nm')!;
     const group = (c: string) => web.querySelector(`.nm-${c}`)!;
@@ -187,7 +146,6 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     const now = web.querySelector<HTMLElement>('.nm-now')!;
     const els = [...web.querySelectorAll<HTMLAnchorElement>('.nm-card')];
     const elOf = (p: ProjectEntry) => els.find((c) => c.dataset.id === p.id)!;
-    for (const p of hidden) elOf(p).classList.add('off');
 
     let cards: Card[] = [],
         syns: Synapse[] = [],
@@ -196,15 +154,12 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         signals: Signal[] = [];
     const attn = Array.from({ length: 3 }, () => svg('line', 'nm-attn-line', attnG));
 
-    /** Synapses: each shown project to its 2 most similar shown ones. Rebuilt when a project rotates in. */
-    const wire = (fresh?: Card) => {
+    /** Synapses: each shown project to its 2 most similar shown ones. */
+    const wire = () => {
         const byId = new Map(cards.map((c) => [c.star.p.id, c]));
         const seen = new Set<string>();
-        for (const sy of syns) for (const n of [sy.path, sy.pa, sy.pb]) n.remove();
-        syns = [];
-        const pool = cards.map((c) => c.star.p);
         for (const c of cards)
-            for (const { q, s } of neighbours(c.star.p, pool).slice(0, 2)) {
+            for (const { q, s } of neighbours(c.star.p, shown).slice(0, 2)) {
                 const key = c.star.p.id < q.id ? `${c.star.p.id}|${q.id}` : `${q.id}|${c.star.p.id}`;
                 if (seen.has(key)) continue;
                 seen.add(key);
@@ -220,7 +175,6 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
                     pt.setAttribute('r', '2.2');
                     pt.style.setProperty('--d', delay);
                 }
-                if (fresh && (c === fresh || b === fresh)) path.classList.add('grow');
                 syns.push({
                     a: c,
                     b,
@@ -245,6 +199,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         for (const g of [layersG, wiresG, neuronsG, synsG, signalsG, labelsG]) g.innerHTML = '';
         syns = [];
         signals = [];
+        attended = []; // they point at the cards about to be replaced
         cards = layout(W, H, fit, shown).map((star) => ({
             star,
             el: elOf(star.p),
@@ -262,9 +217,9 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         }));
 
         // Period layers: a dotted ellipse each, labelled in its widest gap that no card (of any layer) covers
-        (Object.keys(ORBIT) as Period[]).forEach((period, ring) => {
+        PERIODS.toReversed().forEach((period, ring) => {
             const r = ORBIT[period];
-            const own = cards.filter((c) => periodOf(c.star.p) === period);
+            const own = cards.filter((c) => c.star.p.year === period);
             const ang = own.map((c) => Math.atan2((c.y - cy) / fit.ry, (c.x - cx) / fit.rx));
             const text = svg('text', 'nm-layer-label', labelsG);
             text.textContent = i18n.t(`home.work.periods.${period}`);
@@ -273,27 +228,15 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             const clear = (x: number, y: number) =>
                 cards.every((c) => Math.abs(c.x - x) >= (CARD.w + tw) / 2 || Math.abs(c.y - y) >= (CARD.h + th) / 2) &&
                 (Math.abs(x - cx) >= (NOW_BOX.w + tw) / 2 || Math.abs(y - cy) >= (NOW_BOX.h + th) / 2);
-            let best = { gap: -1, mid: -Math.PI / 2 },
-                fallback = best;
-            for (let k = 0; k < 48; k++) {
-                const a = -Math.PI + (k / 48) * Math.PI * 2;
-                const gap = Math.min(
-                    ...ang.map((b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)))),
-                    Math.PI
-                );
-                if (gap > fallback.gap) fallback = { gap, mid: a };
-                if (gap > best.gap && clear(cx + Math.cos(a) * fit.rx * r, cy + Math.sin(a) * fit.ry * r))
-                    best = { gap, mid: a };
-            }
-            if (best.gap < 0) best = fallback;
+            const mid = widestGap(ang, (a) => clear(cx + Math.cos(a) * fit.rx * r, cy + Math.sin(a) * fit.ry * r));
             const e = svg('ellipse', 'nm-layer', layersG);
             e.setAttribute('cx', f1(cx));
             e.setAttribute('cy', f1(cy));
             e.setAttribute('rx', f1(fit.rx * r));
             e.setAttribute('ry', f1(fit.ry * r));
             e.style.setProperty('--d', `${100 + ring * 300}ms`);
-            text.setAttribute('x', f1(cx + Math.cos(best.mid) * fit.rx * r));
-            text.setAttribute('y', f1(cy + Math.sin(best.mid) * fit.ry * r + 3.5));
+            text.setAttribute('x', f1(cx + Math.cos(mid) * fit.rx * r));
+            text.setAttribute('y', f1(cy + Math.sin(mid) * fit.ry * r + 3.5));
             const box = text.getBBox(),
                 plate = svg('rect', 'nm-layer-plate', labelsG);
             labelsG.insertBefore(plate, text);
@@ -308,40 +251,17 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         cards.forEach((c) => c.el.style.setProperty('--d', `${c.delay}ms`));
         wire();
 
-        // Hidden neurons: seeded, inside the outer layer, clear of cards and of "Now"
-        const rnd = seeded(4242);
-        const fx = fit.rx + 70,
-            fy = fit.ry + 20;
-        neurons = [];
-        for (let tries = 0; neurons.length < NEURONS && tries < 4000; tries++) {
-            const x = cx + (rnd() * 2 - 1) * fx,
-                y = cy + (rnd() * 2 - 1) * fy;
-            if (Math.hypot((x - cx) / fx, (y - cy) / fy) > 1) continue;
-            if (Math.abs(x - cx) < 170 && Math.abs(y - cy) < 62) continue;
-            if (cards.some((c) => Math.abs(x - c.x) < HALF.w + 14 && Math.abs(y - c.y) < HALF.h + 14)) continue;
-            if (neurons.some((n) => Math.hypot(n.x0 - x, n.y0 - y) < 34)) continue;
+        const spots = scatterNeurons({ x: cx, y: cy }, fit, cards);
+        neurons = spots.map(({ x, y, delay }) => {
             const dot = svg('circle', 'nm-neuron', neuronsG);
-            dot.style.setProperty('--d', `${Math.round(rnd() * 500)}ms`);
-            neurons.push({ x0: x, y0: y, x, y, act: 0, dot });
-        }
-        // Sparse wiring: each neuron to its 2 nearest neurons, and to a project if one is close
-        wires = [];
-        const wired = new Set<string>();
-        neurons.forEach((n, i) => {
-            const near = neurons
-                .map((m, j) => ({ j, d: Math.hypot(m.x0 - n.x0, m.y0 - n.y0) }))
-                .filter(({ j, d }) => j !== i && d < 150);
-            for (let k = 0; k < 2 && near.length; k++) {
-                const best = near.reduce((a, b) => (b.d < a.d ? b : a));
-                near.splice(near.indexOf(best), 1);
-                const key = i < best.j ? `${i}|${best.j}` : `${best.j}|${i}`;
-                if (wired.has(key)) continue;
-                wired.add(key);
-                wires.push({ n, m: neurons[best.j], line: svg('line', 'nm-wire', wiresG) });
-            }
-            const card = cards.find((c) => Math.hypot(c.x - n.x0, c.y - n.y0) < 150);
-            if (card) wires.push({ n, m: card, line: svg('line', 'nm-wire', wiresG) });
+            dot.style.setProperty('--d', `${delay}ms`);
+            return { x0: x, y0: y, x, y, act: 0, dot };
         });
+        wires = wireNeurons(spots, cards).map(({ from, to }) => ({
+            n: neurons[from],
+            m: typeof to === 'number' ? neurons[to] : to,
+            line: svg('line', 'nm-wire', wiresG)
+        }));
 
         now.style.left = `${cx}px`;
         now.style.top = `${cy}px`;
@@ -365,10 +285,11 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     new IntersectionObserver(
         ([e]) => {
             visible = e.isIntersecting;
-            if (visible) boot(performance.now());
+            // Most of the map, or as much of it as a short window can hold
+            if (e.intersectionRatio >= 0.35 || e.intersectionRect.height >= innerHeight * 0.75) boot(performance.now());
             wake();
         },
-        { threshold: 0.35 }
+        { threshold: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35] }
     ).observe(web);
     document.addEventListener('visibilitychange', () => wake());
 
@@ -383,16 +304,16 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     // Attention: the 3 nearest projects to the cursor, weighted by distance
     let attended: { c: Card; w: number }[] = [];
     const drawAttention = () => {
-        attended = [];
         const at = pointer;
-        if (at && !opened) {
-            const pool = cards.map((c) => ({ c, d: Math.hypot(c.x - at.x, c.y - at.y) }));
-            for (let k = 0; k < 3 && pool.length; k++) {
-                const best = pool.reduce((a, b) => (b.d < a.d ? b : a));
-                pool.splice(pool.indexOf(best), 1);
-                if (best.d < ATTN_REACH) attended.push({ c: best.c, w: 1 - best.d / ATTN_REACH });
-            }
-        }
+        attended =
+            at && !opened
+                ? cards
+                      .map((c) => ({ c, d: Math.hypot(c.x - at.x, c.y - at.y) }))
+                      .toSorted((a, b) => a.d - b.d)
+                      .slice(0, 3)
+                      .filter(({ d }) => d < ATTN_REACH)
+                      .map(({ c, d }) => ({ c, w: 1 - d / ATTN_REACH }))
+                : [];
         attn.forEach((line, k) => {
             const a = attended[k];
             if (!a || !at) {
@@ -406,45 +327,6 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             line.setAttribute('y2', f1(p.y));
             line.style.opacity = String(a.w * 0.85);
         });
-    };
-
-    // Living motion: rest springs, breeze, synapses as soft springs, pushes from events
-    const K = 6,
-        DAMP = 2.4,
-        LINK = 3;
-    const physics = (dt: number, s: number) => {
-        const h = Math.min(dt, 34) / 1000;
-        const f = new Map<Card, Pt>();
-        for (const c of cards) {
-            const w = breeze(c.star.x, c.star.y, s);
-            f.set(c, { x: w.x - K * c.ox - DAMP * c.vx, y: w.y - K * c.oy - DAMP * c.vy });
-        }
-        for (const sy of syns) {
-            const dx = (sy.b.ox - sy.a.ox) * LINK,
-                dy = (sy.b.oy - sy.a.oy) * LINK;
-            f.get(sy.a)!.x += dx;
-            f.get(sy.a)!.y += dy;
-            f.get(sy.b)!.x -= dx;
-            f.get(sy.b)!.y -= dy;
-        }
-        if (pointer)
-            for (const { c, w } of attended) {
-                const dx = pointer.x - c.x,
-                    dy = pointer.y - c.y,
-                    d = Math.hypot(dx, dy) || 1;
-                f.get(c)!.x += (dx / d) * 18 * w;
-                f.get(c)!.y += (dy / d) * 18 * w;
-            }
-        for (const c of cards) {
-            if (c.hold) {
-                c.vx = c.vy = 0; // the hovered card stays exactly where it is
-                continue;
-            }
-            c.vx += f.get(c)!.x * h;
-            c.vy += f.get(c)!.y * h;
-            c.ox += c.vx * h;
-            c.oy += c.vy * h;
-        }
     };
 
     // Spreading activation
@@ -521,54 +403,6 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         }
     };
 
-    // Rotation: past `max` projects, one shown project leaves every ~8 s and a related hidden one takes its place.
-    // Paused while the pointer is on the map, while a card is open, off-screen and with reduced motion.
-    const swap = (out: Card, inP: ProjectEntry) => {
-        const outP = out.star.p,
-            inEl = elOf(inP);
-        // Swaps are scheduled ahead (a query staggers them): by now the card may already be leaving, or the project
-        // may have come in elsewhere. Swapping again would show a project twice and drop another one
-        if (!cards.includes(out) || out.el.classList.contains('leaving') || !hidden.includes(inP)) return;
-        out.el.classList.add('leaving');
-        setTimeout(() => {
-            if (!cards.includes(out)) return; // the map was rebuilt meanwhile (a resize): its new cards are in place
-            // The leaving card may have been hovered or open meanwhile: leave nothing of that behind
-            if (opened === out) close(out);
-            clearTimeout(out.timer);
-            out.hold = false;
-            out.el.classList.remove('open', 'near');
-            delete out.el.dataset.score;
-            out.el.classList.add('off');
-            out.el.classList.remove('leaving');
-            hidden.splice(hidden.indexOf(inP), 1);
-            hidden.push(outP);
-            shown.splice(shown.indexOf(outP), 1, inP);
-            out.star.p = inP;
-            out.el = inEl;
-            put(inEl, 'translate', `${f1(out.x)}px ${f1(out.y)}px`);
-            inEl.classList.add('entering');
-            inEl.classList.remove('off');
-            void inEl.offsetWidth;
-            inEl.classList.remove('entering');
-            wire(out);
-            applyFilter();
-            out.act = 0.8; // the newcomer arrives lit
-        }, 450);
-    };
-    let nextSwap = 0;
-    const rotate = (t: number) => {
-        if (!hidden.length || opened || pointer || reduced() || t < Math.max(nextSwap, bootEnd + 4000)) return;
-        nextSwap = t + 8000;
-        const pool = cards.filter((c) => !c.star.p.featured && c.act < 0.3 && !c.el.classList.contains('leaving'));
-        if (!pool.length) return;
-        const out = pool[Math.floor(Math.random() * pool.length)];
-        const score = (q: ProjectEntry) => similarity(out.star.p, q) + (periodOf(q) === periodOf(out.star.p) ? 0.5 : 0);
-        swap(
-            out,
-            hidden.reduce((a, q) => (score(q) > score(a) ? q : a))
-        );
-    };
-
     let last = performance.now();
     let running = false; // a frame is queued
     const frame = (t: number) => {
@@ -577,10 +411,10 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         if (t - last < FRAME_MS) return void requestAnimationFrame(frame); // 30 fps is plenty for a slow drift
         const dt = Math.min(50, t - last);
         last = t;
-        if (visible && cards.length) {
+        if (cards.length) {
             const calm = reduced(),
                 s = t / 1000;
-            if (!calm) physics(dt, s);
+            if (!calm) stepBodies(cards, syns, attended, pointer, dt, s);
             for (const c of cards) {
                 c.x = c.star.x + c.ox;
                 c.y = c.star.y + c.oy;
@@ -590,8 +424,8 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             for (const n of neurons) {
                 if (!calm) {
                     const w = breeze(n.x0, n.y0, s);
-                    n.x = n.x0 + w.x / K;
-                    n.y = n.y0 + w.y / K;
+                    n.x = n.x0 + w.x / SPRING;
+                    n.y = n.y0 + w.y / SPRING;
                 }
                 n.act *= decay;
                 if (pointer) {
@@ -630,7 +464,6 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
                 put(sy.pb, 'cy', f1(q.y));
             }
             if (!calm) signalStep(t);
-            rotate(t);
             drawAttention();
             for (const c of cards) {
                 c.act *= decay;
@@ -657,7 +490,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         for (const c of cards) clearTimeout(c.timer);
         if (opened) close(opened);
         for (const el of els) {
-            el.classList.remove('open', 'near', 'leaving'); // 'leaving': a swap the rebuild cut short
+            el.classList.remove('open', 'near');
             delete el.dataset.score;
         }
         web.classList.remove('focus');
@@ -669,7 +502,7 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
             for (const n of [sy.path, sy.pa, sy.pb]) n.classList.toggle('hot', on);
             const other = (sy.a === c ? sy.b : sy.a).el;
             other.classList.toggle('near', on);
-            if (on) other.dataset.score = i18n.t('home.work.similar').replace('{s}', String(Math.round(sy.s * 100)));
+            if (on) other.dataset.score = i18n.t('home.work.similar', { s: Math.round(sy.s * 100) });
             else delete other.dataset.score;
         }
     };
@@ -729,8 +562,9 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
         });
         a.addEventListener('click', (e) => {
             const c = cardOf(a);
-            if (c && !a.classList.contains('open')) {
-                e.preventDefault(); // first tap unfolds, the second follows the link
+            // A first tap unfolds, the second follows the link. A mouse has hover for that: its click is always a click
+            if (c && !a.classList.contains('open') && e.pointerType !== 'mouse') {
+                e.preventDefault();
                 open(c);
             }
         });
@@ -761,42 +595,15 @@ ${PROJECTS.map(cardHtml).join('')}</div>`;
     wake();
 
     return {
-        shown: shown.length,
         query: (domain) => {
             filter = domain;
             applyFilter();
             if (!domain) return;
-            // Hidden projects of that domain come in first, each replacing a different one of the most related shown ones
-            const calls = hidden.filter((p) => p.category === domain).slice(0, 2);
-            const taken = new Set<Card>();
-            calls.forEach((p, i) => {
-                const out = cards
-                    .filter(
-                        (c) =>
-                            c.star.p.category !== domain &&
-                            !c.star.p.featured &&
-                            c !== opened &&
-                            !taken.has(c) &&
-                            !c.el.classList.contains('leaving')
-                    )
-                    .reduce<Card | null>(
-                        (a, c) => (!a || similarity(c.star.p, p) > similarity(a.star.p, p) ? c : a),
-                        null
-                    );
-                if (!out) return;
-                taken.add(out);
-                setTimeout(() => swap(out, p), i * 300);
-            });
-            setTimeout(
-                () => {
-                    const t = performance.now();
-                    nextThought = t + 4000;
-                    cards
-                        .filter((c) => c.star.p.category === domain)
-                        .forEach((c, i) => (reduced() ? (c.act = 1) : spread(c, t + i * 140, 0.95, new Set())));
-                },
-                calls.length ? 700 : 0
-            );
+            const t = performance.now();
+            nextThought = t + 4000;
+            cards
+                .filter((c) => c.star.p.category === domain)
+                .forEach((c, i) => (reduced() ? (c.act = 1) : spread(c, t + i * 140, 0.95, new Set())));
         }
     };
 }

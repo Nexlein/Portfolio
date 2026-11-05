@@ -16,7 +16,7 @@ export function ease(t: number): number {
 }
 
 function glideTo(target: HTMLElement): void {
-    const margin = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    const margin = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
     const from = scrollY;
     const to = Math.max(0, target.getBoundingClientRect().top + scrollY - margin);
     const start = performance.now();

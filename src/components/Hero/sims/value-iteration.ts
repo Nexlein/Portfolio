@@ -2,6 +2,7 @@
  * Value iteration on a grid: every cell's arrow points along the best path to the reward (the cursor).
  * A click toggles a wall and the policy re-plans around it.
  */
+import { seeded } from '@/core/seeded';
 import type { Stage } from './stage';
 
 const CELL = 30;
@@ -33,8 +34,7 @@ export function valueIteration(s: Stage): void {
         angle = new Float32Array(cols * rows);
         wall = new Uint8Array(cols * rows);
         // Short wall segments, seeded so the layout is stable, make the policy bend around obstacles
-        let seed = 7;
-        const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+        const rnd = seeded(7);
         for (let k = 0; k < (cols * rows) / 40; k++) {
             const x = Math.floor(rnd() * cols),
                 y = Math.floor(rnd() * rows),
@@ -78,7 +78,7 @@ export function valueIteration(s: Stage): void {
                         Math.sin(Math.atan2(by, bx) - angle[i]),
                         Math.cos(Math.atan2(by, bx) - angle[i])
                     );
-                    angle[i] += s.reduced ? d : d * 0.25; // ease the arrows toward the new decision
+                    angle[i] += s.still ? d : d * 0.25; // ease the arrows toward the new decision
                 }
             }
     };
@@ -141,11 +141,12 @@ export function valueIteration(s: Stage): void {
     s.onClick((p) => {
         const x = Math.floor(p.x / CELL),
             y = Math.floor(p.y / CELL);
-        if (x === goal.x && y === goal.y) return;
+        // The reward stays free when it holds still. Otherwise it is under the cursor, so that is where a click lands
+        if (s.still && x === goal.x && y === goal.y) return;
         const i = y * cols + x;
         wall[i] = wall[i] ? 0 : 1;
         V[i] = 0;
-        if (s.reduced) {
+        if (s.still) {
             for (let k = 0; k < cols + rows; k++) sweep();
             draw();
         }
@@ -155,7 +156,7 @@ export function valueIteration(s: Stage): void {
 
     let t = 0;
     s.loop(() => {
-        if (s.reduced) {
+        if (s.still) {
             for (let k = 0; k < cols + rows; k++) sweep();
             return draw();
         }

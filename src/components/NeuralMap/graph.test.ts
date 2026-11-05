@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from '@/data/projects';
-import { CARD, fitFor, layout, mds, neighbours, NOW_BOX, periodOf, pickShown, similarity, skillSet } from './graph';
+import { CARD, fitFor, layout, mds, neighbours, NOW_BOX, pickShown, similarity, skillSet } from './graph';
 
 /** `n` projects made from the real ones (same skills, other ids), as when the portfolio grows. */
 function grown(n: number): ProjectEntry[] {
@@ -62,8 +62,7 @@ describe.each([
     });
 
     it('still has room when the portfolio reaches 40 projects (24 shown)', () => {
-        const { shown } = pickShown(grown(40), 24);
-        const stars = layout(W, H, fit, shown);
+        const stars = layout(W, H, fit, pickShown(grown(40), 24));
         expect(overlaps(stars)).toBe(0);
         expect(stars.every(inside)).toBe(true);
     });
@@ -118,17 +117,15 @@ describe('small inputs', () => {
 
 describe('pickShown', () => {
     it('shows everything while it fits', () => {
-        expect(pickShown(PROJECTS, 24)).toEqual({ shown: expect.any(Array), hidden: [] });
-        expect(pickShown(PROJECTS, 24).shown).toHaveLength(PROJECTS.length);
+        expect(pickShown(PROJECTS, 24)).toHaveLength(PROJECTS.length);
     });
 
     it('keeps featured projects, then the most recent, when it does not', () => {
-        const { shown, hidden } = pickShown(grown(40), 24);
+        const shown = pickShown(grown(40), 24);
         expect(shown).toHaveLength(24);
-        expect(hidden).toHaveLength(16);
         expect(shown.slice(0, 3).every((p) => p.featured)).toBe(true);
         const order = ['Tek3', 'Personal', 'Tek2', 'Tek1'];
-        const rest = shown.slice(3).map((p) => order.indexOf(periodOf(p)));
-        expect(rest).toEqual([...rest].sort((a, b) => a - b)); // eslint-disable-line -- test-only copy
+        const rest = shown.slice(3).map((p) => order.indexOf(p.year));
+        expect(rest).toEqual(rest.toSorted((a, b) => a - b));
     });
 });

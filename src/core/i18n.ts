@@ -1,4 +1,4 @@
-import { lookupIn, STRINGS_ID, type Lang } from './lang';
+import { fill, lookupIn, STRINGS_ID, type Lang, type Slots } from './lang';
 
 export type { Lang };
 
@@ -27,10 +27,10 @@ class I18nService {
         return this.lang;
     }
 
-    /** Translate a dotted key ('home.contact.copied') in the page's language. */
-    t(key: string): string {
+    /** Translate a dotted key ('home.contact.copied') in the page's language, and fill its {slots}. */
+    t(key: string, slots: Slots = {}): string {
         this.strings ??= embedded();
-        return lookupIn(this.strings, key);
+        return fill(lookupIn(this.strings, key), slots);
     }
 }
 

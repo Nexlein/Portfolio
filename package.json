@@ -11,33 +11,32 @@
         "test:e2e": "vite build && playwright test",
         "cv:pdf": "node scripts/cv-pdf.ts",
         "codemap": "node scripts/codemap.ts",
-        "lint": "oxlint && stylelint \"src/**/*.css\"",
-        "lint:fix": "oxlint --fix && stylelint \"src/**/*.css\" --fix",
-        "format": "prettier --write .",
-        "format:check": "prettier --check .",
-        "audit": "audit-ci --config config/audit-ci.jsonc",
+        "lint": "oxlint --type-aware && stylelint \"src/**/*.css\"",
+        "lint:fix": "oxlint --type-aware --fix && stylelint \"src/**/*.css\" --fix",
+        "format": "git ls-files -z | xargs -0 prettier --ignore-unknown --write",
+        "format:check": "git ls-files -z | xargs -0 prettier --ignore-unknown --check",
+        "audit": "npm audit --audit-level=high",
         "knip": "knip --config config/knip.json",
-        "media:posters": "bash scripts/make-posters.sh",
-        "media:thumbs": "node scripts/make-thumbs.ts",
-        "media:og": "bash scripts/make-og-images.sh",
+        "media": "node scripts/media.ts",
         "media:brand": "node scripts/brand-images.ts",
         "media:video": "bash scripts/optimize-video.sh",
         "prepare": "husky"
     },
     "keywords": [],
     "author": "Nielsen COMBE--BRACCIALE",
-    "license": "ISC",
+    "private": true,
     "type": "module",
     "devDependencies": {
         "@fontsource-variable/schibsted-grotesk": "^5.3.0",
         "@fontsource/ibm-plex-mono": "^5.3.0",
         "@playwright/test": "^1.64.1",
-        "audit-ci": "^7.1.0",
+        "@types/node": "^24.19.2",
         "happy-dom": "^21.0.4",
         "husky": "^9.1.7",
         "knip": "^6.44.0",
         "lint-staged": "^17.6.0",
         "oxlint": "^1.90.0",
+        "oxlint-tsgolint": "^7.0.2006",
         "prettier": "^3.9.10",
         "stylelint": "^17.16.0",
         "stylelint-config-standard": "^40.0.0",
@@ -46,6 +45,6 @@
         "vitest": "^5.0.5"
     },
     "engines": {
-        "node": ">=24"
+        "node": "24.x"
     }
 }

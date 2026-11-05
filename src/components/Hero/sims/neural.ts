@@ -107,7 +107,7 @@ export function neural(s: Stage): void {
             act[i] = 1;
             nextSpark = now + 900;
         }
-        if (s.reduced) excite({ x: W * 0.65, y: H * 0.4 }, 220);
+        if (s.still) excite({ x: W * 0.65, y: H * 0.4 }, 220);
         const all = links();
         act = propagate(act, all);
         draw(all);

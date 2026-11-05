@@ -15,6 +15,7 @@ test.describe('project page', () => {
             await expect(page.locator('#project-desc')).toHaveText(video.description.en);
             await expect(page.locator('#project-github')).toHaveAttribute('href', video.github);
             await expect(page.locator('#project-media video')).toHaveJSProperty('paused', false);
+            await expect(page.locator('#project-media video')).toHaveAttribute('controls', ''); // it plays by itself: it can be stopped
         });
     });
 

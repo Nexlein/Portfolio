@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { NOT_FOUND, outputFile, PAGES, renderPage, sitemap, type PageSpec } from '../../vite-plugins/pages';
 import { HEAD_SCRIPT } from '../../vite-plugins/shared-head';
 import { PROJECTS } from '@/data/projects';
-import { SITE } from '@/core/site';
+import { OWNER, SITE } from '@/core/site';
 import { LANGS, localizedPath, lookup, type Lang } from '@/core/translate';
 import { QR_CODE } from './cv/blocks';
 
@@ -35,22 +35,33 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
             }
         });
 
+        it('leaves no {slot} unfilled in what visitors read', () => {
+            const html = doc.documentElement.cloneNode(true) as HTMLElement;
+            html.querySelectorAll('script, template').forEach((el) => el.remove());
+            expect(html.outerHTML).not.toMatch(/\{\w+\}/);
+        });
+
         it('has a localized title, a real description and matching social tags', () => {
             expect(doc.title).toBe(page.title(lang));
             const description = meta(doc, 'name', 'description')!;
             expect(description.length).toBeGreaterThan(50);
+            expect(description.length).toBeLessThanOrEqual(160); // what a search result shows
             expect(description).toBe(page.description(lang));
             expect(meta(doc, 'property', 'og:title')).toBe(doc.title);
             expect(meta(doc, 'property', 'og:description')).toBe(description);
             expect(meta(doc, 'property', 'og:url')).toBe(url);
             expect(meta(doc, 'property', 'og:locale')).toBe(lang === 'fr' ? 'fr_FR' : 'en_US');
             expect(meta(doc, 'name', 'twitter:card')).toBe('summary_large_image');
+            expect(meta(doc, 'property', 'og:type')).toBe(page.template === 'project.html' ? 'article' : 'website');
+            expect(meta(doc, 'property', 'og:site_name')).toBe(OWNER.alias);
         });
 
         it('points og:image at a 1200x630 file that exists', () => {
+            expect(meta(doc, 'property', 'og:image:width')).toBe('1200');
+            expect(meta(doc, 'property', 'og:image:height')).toBe('630');
             const image = meta(doc, 'property', 'og:image')!;
             expect(image.startsWith(SITE)).toBe(true);
-            expect(publicFiles, `${image} (npm run media:og, or media:brand for og-image)`).toContain(
+            expect(publicFiles, `${image} (npm run media, or media:brand for og-image)`).toContain(
                 new URL(image).pathname
             );
         });
@@ -85,7 +96,7 @@ describe.each(PAGES.map((p) => [p.path, p] as const))('%s', (_path, page) => {
         if (page.jsonLd)
             it('embeds valid JSON-LD', () => {
                 const block = doc.querySelector('script[type="application/ld+json"]')!;
-                const data = JSON.parse(block.textContent!);
+                const data = JSON.parse(block.textContent);
                 expect(data['@context']).toBe('https://schema.org');
                 expect(data).toEqual(JSON.parse(JSON.stringify(page.jsonLd!(lang))));
             });

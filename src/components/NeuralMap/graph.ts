@@ -1,18 +1,17 @@
 /**
  * The maths behind the project map, without any DOM: which projects are similar, where each one sits, and which
  * ones are shown when there are more than the map can hold.
- * - Similarity: Jaccard overlap of skills (tags split on '/', RL aliases merged, same domain counts as shared).
+ * - Similarity: Jaccard overlap of skills (src/data/skills.ts), same domain counts as shared.
  * - Direction from the centre = similarity (classical MDS), distance = period (recent work closest).
  */
-import type { ProjectEntry } from '../../data/projects.ts';
+import { PERIODS, type Period, type ProjectEntry } from '../../data/projects.ts';
+import { skillsOf } from '../../data/skills.ts';
 
-export type Period = 'Tek3' | 'Personal' | 'Tek2' | 'Tek1';
-
-/** Period of a project; untagged school projects are second-year ones. */
-export const periodOf = (p: ProjectEntry): Period => p.year ?? 'Tek2';
-
-/** Orbit per period, as a fraction of the usable ellipse: recent work closest to the centre (key order = recency). */
+/** Orbit per period, as a fraction of the usable ellipse: recent work closest to the centre. */
 export const ORBIT: Record<Period, number> = { Tek3: 0.4, Personal: 0.58, Tek2: 0.76, Tek1: 0.94 };
+
+/** Most projects the map shows at once: the list has the others. */
+export const MAP_MAX = 24;
 
 /** Card size the layout keeps apart (px). */
 export const CARD = { w: 190, h: 52, gap: 22 };
@@ -21,18 +20,7 @@ export const CARD = { w: 190, h: 52, gap: 22 };
  * tallest (156px measured, 7 lines), the height leaves a little room. */
 export const NOW_BOX = { w: 300, h: 170 };
 
-const RL = new Set(['rl', 'gymnasium', 'stable-baselines3']);
-
-export function skillSet(p: ProjectEntry): Set<string> {
-    const out = new Set<string>();
-    for (const raw of p.tags)
-        for (const part of raw.toLowerCase().split('/')) {
-            const t = part.trim();
-            if (t) out.add(RL.has(t) ? 'reinforcement learning' : t);
-        }
-    out.add(`domain:${p.category}`);
-    return out;
-}
+export const skillSet = (p: ProjectEntry) => new Set([...skillsOf(p.tags), `domain:${p.category}`]);
 
 /** Jaccard similarity of two projects' skills, 0..1. */
 export function similarity(a: ProjectEntry, b: ProjectEntry): number {
@@ -44,14 +32,11 @@ export function similarity(a: ProjectEntry, b: ProjectEntry): number {
 
 /** The 3 most similar projects in `pool`. */
 export function neighbours(p: ProjectEntry, pool: ProjectEntry[]): { q: ProjectEntry; s: number }[] {
-    const scored = pool.filter((q) => q !== p).map((q) => ({ q, s: similarity(p, q) }));
-    const top: { q: ProjectEntry; s: number }[] = [];
-    for (let k = 0; k < 3 && scored.length; k++) {
-        const best = scored.reduce((a, b) => (b.s > a.s ? b : a));
-        top.push(best);
-        scored.splice(scored.indexOf(best), 1);
-    }
-    return top;
+    return pool
+        .filter((q) => q !== p)
+        .map((q) => ({ q, s: similarity(p, q) }))
+        .toSorted((a, b) => b.s - a.s)
+        .slice(0, 3);
 }
 
 /** Classical MDS: 2D coordinates whose distances approximate 1 - similarity. */
@@ -130,7 +115,7 @@ function settle(
     const rank = raw.map((a, i) => raw.filter((b, j) => b < a || (b === a && j < i)).length);
     const stars = items.map((p, i) => {
         const angle = (-Math.PI + (2 * Math.PI * (rank[i] + 0.5)) / raw.length) * (1 - bend) + raw[i] * bend;
-        const r = ORBIT[periodOf(p)];
+        const r = ORBIT[p.year];
         return { p, x: cx + Math.cos(angle) * fit.rx * r, y: cy + Math.sin(angle) * fit.ry * r };
     });
     const { w, h, gap } = CARD;
@@ -203,10 +188,9 @@ export function fitFor(W: number, H: number): { rx: number; ry: number } {
 }
 
 /** Which projects the map shows when it can hold `max`: featured first, then the most recent periods. */
-export function pickShown(projects: ProjectEntry[], max: number): { shown: ProjectEntry[]; hidden: ProjectEntry[] } {
-    const ranked = [
+export function pickShown(projects: ProjectEntry[], max: number): ProjectEntry[] {
+    return [
         ...projects.filter((p) => p.featured),
-        ...(Object.keys(ORBIT) as Period[]).flatMap((y) => projects.filter((p) => !p.featured && periodOf(p) === y))
-    ];
-    return { shown: ranked.slice(0, max), hidden: ranked.slice(max) };
+        ...PERIODS.toReversed().flatMap((y) => projects.filter((p) => !p.featured && p.year === y))
+    ].slice(0, max);
 }

@@ -102,8 +102,8 @@
     stroke-opacity: 0.06;
 }
 
-.nm.focus :is(.nm-port:not(.hot), .nm-wire, .nm-neuron),
-.nm.focus :is(.nm-layer, .nm-layer-label) {
+.nm.booted.focus :is(.nm-port:not(.hot), .nm-wire, .nm-neuron),
+.nm.booted.focus :is(.nm-layer, .nm-layer-label) {
     opacity: 0.3;
 }
 
@@ -220,13 +220,9 @@
 }
 
 .nm-ico {
-    display: grid;
-    flex: none;
-    place-items: center;
     width: 32px;
     height: 32px;
     border-radius: 9px;
-    background: var(--raised);
 }
 
 .domain-icon {
@@ -319,7 +315,7 @@
     border-color: color-mix(in sRGB, var(--signal) 55%, var(--hair));
     box-shadow:
         0 0 0 4px color-mix(in sRGB, var(--signal) 14%, transparent),
-        0 30px 60px rgb(0 0 0 / 40%);
+        0 30px 60px rgb(0 0 0 / calc(var(--depth) * 115%));
     transform: translate(calc(-50% + var(--dx)), -26px);
 }
 
@@ -363,13 +359,22 @@
     transition-delay: 200ms;
 }
 
+.nm:not(.booting) .nm-card {
+    transition:
+        width 340ms var(--ease-out),
+        border-color 200ms,
+        box-shadow 300ms var(--ease-out),
+        opacity 600ms ease-out,
+        scale 700ms var(--ease-out);
+}
+
 .nm.focus .nm-card:not(.open, .near) {
-    opacity: 0.4;
+    opacity: 0.6;
 }
 
 /* A domain is asked for (see query): its projects stay lit, the others dim until the filter is cleared */
 .nm.filtered .nm-card.dim:not(.open, .near) {
-    opacity: 0.3;
+    opacity: 0.6;
 }
 
 .nm-card.near {
@@ -389,46 +394,6 @@
     font-family: var(--font-mono);
     font-size: 12px;
     font-weight: 500;
-}
-
-/* Rotation: projects leave and arrive */
-.nm-card.off {
-    display: none;
-}
-
-.nm-card.leaving,
-.nm-card.entering {
-    opacity: 0;
-    scale: 0.92;
-}
-
-.nm-card.leaving {
-    transition:
-        opacity 420ms ease-in,
-        scale 420ms ease-in;
-}
-
-.nm:not(.booting) .nm-card:not(.entering, .leaving) {
-    transition:
-        width 340ms var(--ease-out),
-        border-color 200ms,
-        box-shadow 300ms var(--ease-out),
-        opacity 600ms ease-out,
-        scale 700ms var(--ease-out);
-}
-
-.nm.booted .nm-syn.grow {
-    animation: nm-grow 900ms ease-out both;
-}
-
-@keyframes nm-grow {
-    from {
-        stroke-dashoffset: 1;
-    }
-
-    to {
-        stroke-dashoffset: 0;
-    }
 }
 
 /* ── Boot: hidden until first view, then layers, cards inside out, synapses ── */
@@ -483,6 +448,7 @@
     }
 
     .nm-card,
+    .nm:not(.booting) .nm-card,
     .nm-more,
     .nm-inner > * {
         transition: none;

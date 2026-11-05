@@ -11,6 +11,10 @@ import type { Text } from '../core/translate.ts';
 export const DOMAINS = ['ai', 'fullstack', 'systems', 'graphical', 'devops'] as const;
 type ProjectCategory = (typeof DOMAINS)[number];
 
+/** When a project was made, oldest first. */
+export const PERIODS = ['Tek1', 'Tek2', 'Personal', 'Tek3'] as const;
+export type Period = (typeof PERIODS)[number];
+
 interface ProjectMediaVideo {
     type: 'video';
     src: string; // path relative to /public
@@ -35,7 +39,7 @@ export interface ProjectEntry {
     description: Text;
     tags: string[];
     category: ProjectCategory;
-    year?: 'Tek1' | 'Tek2' | 'Tek3' | 'Personal';
+    year: Period;
     /** Month the project started, 'YYYY-MM'. Drives the path chart and "learned this year". */
     date: string;
     /** Shown in "Selected work" and always on the map. */
@@ -47,6 +51,9 @@ export interface ProjectEntry {
     github: string; // full URL or '' to hide the link
     media: ProjectMedia;
 }
+
+/** A project's social image, made by `npm run media`. */
+export const projectImage = (id: string) => `/projects/${id}/og.jpg`;
 
 /** URL of a project's own page (default language). */
 export function projectPath(id: string): string {
@@ -198,7 +205,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['TypeScript', 'Express', 'Prisma', 'PostgreSQL', 'Next.js', 'Whisper'],
         category: 'fullstack',
         year: 'Tek3',
-        date: '2026-08',
+        date: '2026-09',
         team: {
             size: 3,
             role: {
@@ -229,6 +236,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'Dynamic Loading', 'OOP', 'Game Dev'],
         category: 'graphical',
+        year: 'Tek2',
         date: '2026-03',
         team: {
             size: 2,
@@ -253,6 +261,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'Graphics', 'Maths', 'Dynamic Loading'],
         category: 'graphical',
+        year: 'Tek2',
         date: '2026-04',
         team: {
             size: 4,
@@ -292,6 +301,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'Concurrency', 'IPC'],
         category: 'systems',
+        year: 'Tek2',
         date: '2026-05',
         team: {
             size: 3,
@@ -312,6 +322,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Python', 'Machine Learning', 'Data Science', 'scikit-learn', 'NLP'],
         category: 'ai',
+        year: 'Tek2',
         date: '2026-02',
         team: {
             size: 2,
@@ -343,6 +354,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Python', 'PyTorch', 'RL', 'DQN'],
         category: 'ai',
+        year: 'Tek2',
         date: '2026-04',
         team: {
             size: 3,
@@ -367,6 +379,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C/C++', 'Python', 'Network', 'FSM', 'Utility AI', 'Game Dev'],
         category: 'systems',
+        year: 'Tek2',
         date: '2026-05',
         team: {
             size: 5,
@@ -394,6 +407,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['n8n', 'LLM', 'Mistral AI', 'Supabase', 'Python', 'Docker'],
         category: 'ai',
+        year: 'Tek2',
         date: '2026-05',
         team: {
             size: 2,
@@ -421,6 +435,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Security', 'LLM', 'Prompt Engineering', 'Ollama', 'Bash'],
         category: 'ai',
+        year: 'Tek2',
         date: '2026-03',
         team: {
             size: 2,
@@ -448,6 +463,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Jenkins', 'Docker', 'CI/CD', 'Groovy', 'YAML'],
         category: 'devops',
+        year: 'Tek2',
         date: '2026-03',
         team: {
             size: 2,
@@ -475,6 +491,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['Ansible', 'IaC', 'PostgreSQL', 'Redis', 'Linux'],
         category: 'devops',
+        year: 'Tek2',
         date: '2026-05',
         team: {
             size: 2,
@@ -502,6 +519,7 @@ export const PROJECTS: ProjectEntry[] = [
         },
         tags: ['C++', 'OOP', 'Simulation'],
         category: 'systems',
+        year: 'Tek2',
         date: '2026-02',
         team: {
             size: 2,
@@ -606,7 +624,7 @@ export const PROJECTS: ProjectEntry[] = [
         tags: ['TypeScript', 'Vite', 'Vitest', 'Playwright', 'CI/CD'],
         category: 'fullstack',
         year: 'Personal',
-        date: '2026-07',
+        date: '2026-06',
         team: {
             size: 1,
             role: {

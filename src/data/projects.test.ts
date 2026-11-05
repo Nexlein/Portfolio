@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { PROJECTS, type ProjectEntry } from './projects';
+import { EPITECH_START } from '@/components/Charts/data';
+import { schoolYear } from '@/components/Charts/series';
+import { yearOf } from '@/core/time';
 import { still, stillImage, THUMB_WIDTHS, thumbOf, videoPoster } from '@/ui/video';
 import { LANGS, lookup } from '@/core/translate';
 import { domainQuery } from '@/pages/home/blocks';
@@ -28,6 +31,18 @@ describe('PROJECTS data', () => {
         expect(PROJECTS.filter((p) => p.featured)).toHaveLength(3);
     });
 
+    it('dates every school project inside its school year', () => {
+        for (const p of PROJECTS.filter((q) => q.year !== 'Personal'))
+            expect(`Tek${schoolYear(yearOf(p.date), EPITECH_START)}`, p.id).toBe(p.year);
+    });
+
+    it('spells a skill one way across the projects', () => {
+        const spellings = new Map<string, Set<string>>();
+        for (const tag of PROJECTS.flatMap((p) => p.tags))
+            spellings.set(tag.toLowerCase(), (spellings.get(tag.toLowerCase()) ?? new Set()).add(tag));
+        for (const [skill, names] of spellings) expect(names.size, skill).toBe(1);
+    });
+
     it('finds public files to check against', () => {
         expect(publicFiles.size).toBeGreaterThan(0);
     });
@@ -43,11 +58,11 @@ describe('PROJECTS data', () => {
             }
         });
 
-        it.each(posterPaths(project))('poster %s exists (npm run media:posters)', (src) => {
+        it.each(posterPaths(project))('poster %s exists (npm run media)', (src) => {
             expect(publicFiles).toContain(src);
         });
 
-        it('has the card-sized copies its cards show (npm run media:thumbs)', () => {
+        it('has the card-sized copies its cards show (npm run media)', () => {
             const image = stillImage(project);
             const copies = image ? THUMB_WIDTHS.map((w) => thumbOf(image, w)) : [still(project)];
             for (const src of copies) expect(publicFiles).toContain(src);

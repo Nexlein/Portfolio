@@ -6,8 +6,9 @@
  */
 import { CHECKPOINTS } from '../../data/profile.ts';
 import type { ProjectEntry } from '../../data/projects.ts';
-import { lookup, type Lang } from '../../core/translate.ts';
-import { periodOf } from '../NeuralMap/graph.ts';
+import { f1, jsonBlock } from '../../core/text.ts';
+import { monthName, MONTHS, yearOf } from '../../core/time.ts';
+import { domainName, scoped, type Lang } from '../../core/translate.ts';
 import {
     distinctSkills,
     domainAxes,
@@ -18,31 +19,24 @@ import {
     OTHER,
     periodsIn,
     phasesIn,
-    prettySkill,
     RANGES,
     changeSince,
     EPITECH_START,
     rangeStart,
     skillSeries,
+    spelling,
     timeTicks,
     topSkills,
     valueAt,
     yDomain,
-    yearOf,
     yTicks,
     type Point,
     type Range,
     type Tick
 } from './data.ts';
-import { monthLabel, PATH, pathSamples, type PathData } from './series.ts';
+import { PATH, pathSamples, type PathData } from './series.ts';
 
-const f1 = (n: number) => n.toFixed(1);
-const t = (lang: Lang, key: string) => lookup(lang, `home.${key}`);
-const MONTHS: Record<Lang, string[]> = {
-    en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    fr: ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.']
-};
-export const monthName = (time: number, lang: Lang) => monthLabel(time, MONTHS[lang]);
+const t = scoped('home');
 
 // ── Path: a performance chart of the skill toolbox ─────────────────────────
 
@@ -53,7 +47,6 @@ export function phaseLabel(lang: Lang, year: number, start: number, short = fals
     return short ? name : `${name} · ${start}-${String(start + 1).slice(2)}`;
 }
 
-/** The change since the start of a range, as the chart's headline says it: "▲ +37 (176 %) past 12 months". */
 /** The change over a range: `text` is what is shown (`▲ +21 (58 %)`), `over` names the range for screen readers (`past 12 months`). */
 export function changeText(
     lang: Lang,
@@ -64,11 +57,12 @@ export function changeText(
     const { delta, pct } = changeSince(points, t0);
     const over =
         range.months === null
-            ? t(lang, 'path.since').replace('{d}', monthName(points[0].t + 2 / 12, lang)) // the first step is two months in
+            ? t(lang, 'path.since', { d: monthName(points[0].t + 2 / 12, lang) }) // the first step is two months in
             : range.months === 1
               ? t(lang, 'path.over1')
-              : t(lang, 'path.over').replace('{n}', String(range.months));
-    const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${pct} %)`}`;
+              : t(lang, 'path.over', { n: range.months });
+    const percent = lang === 'fr' ? `${pct}\u00a0%` : `${pct}%`;
+    const text = `${delta > 0 ? '▲ +' : ''}${delta}${pct === null ? '' : ` (${percent})`}`;
     return { text, over, up: delta > 0 };
 }
 
@@ -125,18 +119,19 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
                 mx = x(yearOf(c.date)),
                 my = y(valueAt(points, yearOf(c.date))),
                 half = label.length * 3.3 + 8;
-            const row = rowsEnd.findIndex((end) => mx - half > end);
+            // A checkpoint at the very start or end of a range keeps its name inside the picture
+            const anchor = mx - half < 0 ? 'start' : mx + half > W ? 'end' : '';
+            const left = anchor === 'start' ? mx : anchor === 'end' ? mx - 2 * half : mx - half;
+            const row = rowsEnd.findIndex((end) => left > end);
             if (row < 0)
                 return `<g class="mark" data-cp="${c.id}"><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5"><title>${label}</title></circle></g>`;
-            rowsEnd[row] = mx + half;
-            // A checkpoint at the very start or end of a range keeps its name inside the picture
-            const anchor = mx - half < 0 ? ' start' : mx + half > W ? ' end' : '';
-            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text class="${anchor.trim()}" x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
+            rowsEnd[row] = left + 2 * half;
+            return `<g class="mark" data-cp="${c.id}"><line x1="${f1(mx)}" x2="${f1(mx)}" y1="${18 + row * 22}" y2="${f1(my)}" /><text class="${anchor}" x="${f1(mx)}" y="${12 + row * 22}">${label}</text><circle class="mark-hit" cx="${f1(mx)}" cy="${f1(my)}" r="16" /><circle class="mark-dot" cx="${f1(mx)}" cy="${f1(my)}" r="3.5" /></g>`;
         })
         .join('');
-    return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria').replace('{n}', String(total))}">
+    return `<svg class="path-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'path.aria', { n: total })}">
 <defs><linearGradient id="path-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" class="stop-top" /><stop offset="1" class="stop-bottom" /></linearGradient></defs>
-<g class="grid">${ticks.map((v, i) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text${ticks.length > 3 && i % 2 ? ' class="value-minor"' : ''} x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${axis.length > 7 && tk.month !== 0 && i !== 0 ? ' minor' : ''}${narrow.has(tk) ? '' : ' wide'}${x(tk.t) < L + 40 ? ' first' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
+<g class="grid">${ticks.map((v, i) => `<line x1="${L}" x2="${W - R}" y1="${f1(y(v))}" y2="${f1(y(v))}" /><text${ticks.length > 3 && i % 2 ? ' class="value-minor"' : ''} x="${W - R + 10}" y="${f1(y(v) + 4)}">${v}</text>`).join('')}${axis.map((tk, i) => `<text class="tick${narrow.has(tk) ? '' : ' wide'}${x(tk.t) < L + 40 ? ' first' : ''}" x="${f1(x(tk.t))}" y="${H - 8}">${MONTHS[lang][tk.month]}${tk.month === 0 || i === 0 ? ` ${tk.year}` : ''}</text>`).join('')}</g>
 <path class="area" d="${line}L${f1(x(now))} ${H - B}L${f1(x(t0))} ${H - B}Z" />
 <g class="phases">${phases}</g>
 <path class="line" pathLength="1" d="${line}" />
@@ -149,7 +144,7 @@ export function pathSvg(lang: Lang, points: Point[], t0: number, now: number): s
 /** What a step is, in words: a checkpoint's name, "<project> started", or nothing (the start and end points). */
 function whatOf(lang: Lang, p: Point): string {
     if (p.m?.checkpoint) return p.m.checkpoint.label[lang];
-    return p.m?.project ? t(lang, 'path.shipped').replace('{p}', p.m.project.title) : '';
+    return p.m?.project ? t(lang, 'path.shipped', { p: p.m.project.title }) : '';
 }
 
 /**
@@ -177,8 +172,7 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
             ranges.map(({ r, t0, change: c }) => [r.id, { t0, text: c.text, over: c.over, up: c.up }])
         )
     };
-    // A data block, never executed (the CSP's script-src does not apply). Escape '<' so text can't close the tag.
-    const json = JSON.stringify(data).replace(/</g, '\\u003c');
+    const json = jsonBlock(data); // a data block, never executed: the CSP's script-src does not apply
     const later = ranges
         .filter(({ r }) => r !== first)
         .map(({ r, t0 }) => `<template data-plot="${r.id}">${pathSvg(lang, points, t0, now)}</template>`)
@@ -196,12 +190,10 @@ export function pathChart(lang: Lang, projects: ProjectEntry[], now: number): st
 
 // ── Numbers: small charts ───────────────────────────────────────
 
-const label = (lang: Lang, key: string, set = 'domains') => {
-    if (key === OTHER) return t(lang, 'numbers.other');
-    if (key === INFRA) return t(lang, 'numbers.infra');
-    const domain = lookup(lang, `home.${set}.${key}`);
-    return domain.startsWith('home.') ? key : domain;
-};
+/** A language's name, or the label of a group of them. */
+const languageName = (lang: Lang, key: string) =>
+    key === OTHER ? t(lang, 'numbers.other') : key === INFRA ? t(lang, 'numbers.infra') : key;
+const domainShort = (lang: Lang, key: string) => t(lang, `domainsShort.${key}`);
 const period = (lang: Lang, y: string) => t(lang, `work.periods.${y}`).split(' · ')[0];
 
 function radar(lang: Lang, projects: ProjectEntry[]): string {
@@ -218,7 +210,7 @@ function radar(lang: Lang, projects: ProjectEntry[]): string {
             .map((_, i) => at(i, r(i)))
             .map(([px, py]) => `${f1(px)},${f1(py)}`)
             .join(' ');
-    return `<svg class="radar" viewBox="-100 10 460 240" role="img" aria-label="${keys.map((k, i) => `${label(lang, k)} ${counts[i]}`).join(', ')}">
+    return `<svg class="radar" viewBox="-100 10 460 240" role="img" aria-label="${keys.map((k, i) => `${domainName(lang, k)} ${counts[i]}`).join(', ')}">
 ${[0.25, 0.5, 0.75, 1].map((k) => `<polygon class="ring" points="${poly(() => Rr * k)}" />`).join('')}
 ${keys.map((_, i) => `<line class="spoke" x1="${C}" y1="${C}" x2="${f1(at(i, Rr)[0])}" y2="${f1(at(i, Rr)[1])}" />`).join('')}
 <polygon class="shape" points="${poly((i) => (Rr * counts[i]) / max)}" />
@@ -227,14 +219,14 @@ ${keys
         const [px, py] = at(i, (Rr * counts[i]) / max);
         const [lx, ly] = at(i, Rr + 18);
         const anchor = lx < C - 10 ? 'end' : lx > C + 10 ? 'start' : 'middle';
-        return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3" /><text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${anchor}">${label(lang, k, 'domainsShort')} · ${counts[i]}</text>`;
+        return `<circle class="pt" cx="${f1(px)}" cy="${f1(py)}" r="3" /><text x="${f1(lx)}" y="${f1(ly + 4)}" text-anchor="${anchor}">${domainShort(lang, k)} · ${counts[i]}</text>`;
     })
     .join('')}</svg>`;
 }
 
 function donut(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
-    const counts = pers.map((y) => projects.filter((p) => periodOf(p) === y).length),
+    const counts = pers.map((y) => projects.filter((p) => p.year === y).length),
         total = counts.reduce((a, b) => a + b, 0);
     let acc = 0;
     const arcs = counts
@@ -260,14 +252,14 @@ function columnLabel(text: string, x: number, H: number): string {
 function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
     const { keys, bucket } = languageBuckets(projects);
-    const data = pers.map((y) => keys.map((l) => projects.filter((p) => periodOf(p) === y && bucket(p) === l).length));
+    const data = pers.map((y) => keys.map((l) => projects.filter((p) => p.year === y && bucket(p) === l).length));
     const max = Math.max(...data.map((r) => r.reduce((a, b) => a + b, 0)));
     const W = 300,
         H = 220,
         col = (W - 60) / pers.length,
         bw = Math.min(54, col - 20),
         base = H - 28;
-    const name = (k: string) => label(lang, k);
+    const name = (k: string) => languageName(lang, k);
     const bars = data
         .map((row, i) => {
             let acc = 0;
@@ -283,7 +275,13 @@ function stackedLanguages(lang: Lang, projects: ProjectEntry[]): string {
                 .join('')}${columnLabel(period(lang, pers[i]), bx + bw / 2, H)}</g>`;
         })
         .join('');
-    return `<svg class="columns" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.languagesTitle')}">${bars}</svg>
+    const summary = pers
+        .map(
+            (y, i) =>
+                `${period(lang, y)}: ${keys.flatMap((k, j) => (data[i][j] ? [`${name(k)} ${data[i][j]}`] : [])).join(', ')}`
+        )
+        .join('; ');
+    return `<svg class="columns" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.languagesTitle')}. ${summary}">${bars}</svg>
 <ul class="key">${keys.map((k, i) => `<li><span class="c${i}"></span>${name(k)}</li>`).join('')}</ul>`;
 }
 
@@ -309,32 +307,32 @@ const short = (s: string) => (s.length > 16 ? `${s.slice(0, 15)}…` : s);
 
 function topSkillBars(projects: ProjectEntry[]): string {
     const best = topSkills(projects),
-        max = best[0]?.[1] ?? 1;
+        max = best[0]?.[1] ?? 1,
+        name = spelling(projects);
     const W = 300,
         row = 26;
-    return `<svg class="bars" viewBox="0 0 ${W} ${best.length * row}" role="img" aria-label="${best.map(([s, n]) => `${prettySkill(s)} ${n}`).join(', ')}">
+    return `<svg class="bars" viewBox="0 0 ${W} ${best.length * row}" role="img" aria-label="${best.map(([s, n]) => `${name(s)} ${n}`).join(', ')}">
 ${best
     .map(
         ([s, n], i) =>
-            `<g class="bar-row"><text class="name" x="0" y="${i * row + 15}">${short(prettySkill(s))}<title>${prettySkill(s)}</title></text><rect class="track" x="128" y="${i * row + 8}" width="140" height="6" rx="3" /><rect class="fill" x="128" y="${i * row + 8}" width="${f1((140 * n) / max)}" height="6" rx="3" /><text class="value" x="${W}" y="${i * row + 15}" text-anchor="end">${n}</text></g>`
+            `<g class="bar-row"><text class="name" x="0" y="${i * row + 15}">${short(name(s))}<title>${name(s)}</title></text><rect class="track" x="128" y="${i * row + 8}" width="140" height="6" rx="3" /><rect class="fill" x="128" y="${i * row + 8}" width="${f1((140 * n) / max)}" height="6" rx="3" /><text class="value" x="${W}" y="${i * row + 15}" text-anchor="end">${n}</text></g>`
     )
     .join('')}</svg>`;
 }
 
 function chips(projects: ProjectEntry[], now: number): string {
-    const recent = learnedSince(projects, now);
+    const recent = learnedSince(projects, now),
+        name = spelling(projects);
     return `<ul class="chips">${recent
         .slice(0, 18)
-        .map((s) => `<li>${prettySkill(s)}</li>`)
+        .map((s) => `<li lang="en">${name(s)}</li>`)
         .join('')}${recent.length > 18 ? `<li class="more">+${recent.length - 18}</li>` : ''}</ul>`;
 }
 
 function heatmap(lang: Lang, projects: ProjectEntry[]): string {
     const pers = periodsIn(projects);
     const { keys } = domainAxes(projects);
-    const inCell = (d: string, y: string) =>
-        projects.filter((p) => (d === OTHER ? !keys.includes(p.category) : p.category === d) && periodOf(p) === y)
-            .length;
+    const inCell = (d: string, y: string) => projects.filter((p) => p.category === d && p.year === y).length;
     const grid = keys.map((d) => pers.map((y) => inCell(d, y)));
     const max = Math.max(...grid.flat(), 1);
     const W = 300,
@@ -349,14 +347,20 @@ function heatmap(lang: Lang, projects: ProjectEntry[]): string {
                 .map((y, c) => {
                     const n = grid[r][c];
                     const x0 = left + c * cw;
-                    return `<rect class="cell${n ? '' : ' empty'}" x="${f1(x0 + 2)}" y="${f1(y0 + 2)}" width="${f1(cw - 4)}" height="${f1(ch - 4)}" rx="4"${n ? ` fill-opacity="${(0.18 + 0.82 * (n / max)).toFixed(2)}"` : ''}><title>${label(lang, d, 'domainsShort')} · ${period(lang, y)}: ${n}</title></rect>${n ? `<text class="n" x="${f1(x0 + cw / 2)}" y="${f1(y0 + ch / 2 + 3.5)}">${n}</text>` : ''}`;
+                    return `<rect class="cell${n ? '' : ' empty'}" x="${f1(x0 + 2)}" y="${f1(y0 + 2)}" width="${f1(cw - 4)}" height="${f1(ch - 4)}" rx="4"${n ? ` fill-opacity="${(0.18 + 0.42 * (n / max)).toFixed(2)}"` : ''}><title>${domainShort(lang, d)} · ${period(lang, y)}: ${n}</title></rect>${n ? `<text class="n" x="${f1(x0 + cw / 2)}" y="${f1(y0 + ch / 2 + 3.5)}">${n}</text>` : ''}`;
                 })
                 .join('');
-            return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${label(lang, d, 'domainsShort')}</text>${row}</g>`;
+            return `<g class="heat-row"><text class="row" x="${left - 8}" y="${f1(y0 + ch / 2 + 3.5)}" text-anchor="end">${domainShort(lang, d)}</text>${row}</g>`;
         })
         .join('');
     const cols = pers.map((y, c) => columnLabel(period(lang, y), left + c * cw + cw / 2, H)).join('');
-    return `<svg class="heat" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.heatTitle')}">${cells}${cols}</svg>`;
+    const summary = keys
+        .map(
+            (d, r) =>
+                `${domainShort(lang, d)}: ${pers.flatMap((y, c) => (grid[r][c] ? [`${period(lang, y)} ${grid[r][c]}`] : [])).join(', ')}`
+        )
+        .join('; ');
+    return `<svg class="heat" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t(lang, 'numbers.heatTitle')}. ${summary}">${cells}${cols}</svg>`;
 }
 
 const count = (n: number) => `<span class="count" data-to="${n}">${n}</span>`;
@@ -374,14 +378,14 @@ export function numbers(lang: Lang, projects: ProjectEntry[], now: number): stri
         recent = learnedSince(projects, now).length,
         series = skillSeries(projects, now),
         total = series[series.length - 1].v;
-    const n = (key: string, value: number) => t(lang, `numbers.${key}`).replace('{n}', count(value));
+    const n = (key: string, value: number) => t(lang, `numbers.${key}`, { n: count(value) });
     const cards = [
         chartCard(t(lang, 'numbers.coverage'), n('domains', domains), radar(lang, projects)),
         chartCard(t(lang, 'numbers.languages'), t(lang, 'numbers.languagesTitle'), stackedLanguages(lang, projects)),
         chartCard(
             t(lang, 'numbers.mostUsed'),
             // Projects alone, then with what jobs and certifications add: the path chart's headline number
-            n('distinct', distinctSkills(projects)).replace('{t}', count(total)),
+            t(lang, 'numbers.distinct', { n: count(distinctSkills(projects)), t: count(total) }),
             topSkillBars(projects)
         ),
         chartCard(t(lang, 'numbers.heat'), t(lang, 'numbers.heatTitle'), heatmap(lang, projects)),

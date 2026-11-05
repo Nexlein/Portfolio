@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CHECKPOINTS, CV_PROJECTS, EDUCATION, EXPERIENCES, NOW, SKILLS, TIMELINE, type Text } from './profile';
+import { CHECKPOINTS, CV_PROJECTS, EDUCATION, EXPERIENCES, NOW, SKILLS, type Text } from './profile';
 import { PROJECTS } from './projects';
 import { LANGS } from '@/core/translate';
 
@@ -25,11 +25,9 @@ describe('profile data', () => {
         for (const lang of LANGS) expect(text[lang]).not.toMatch(/\b(class|style)=/);
     });
 
-    it('lists every experience and education entry on the timeline exactly once', () => {
+    it('gives every experience and education entry its own id', () => {
         const ids = [...EXPERIENCES, ...EDUCATION].map((e) => e.id);
         expect(new Set(ids).size).toBe(ids.length);
-        expect(TIMELINE).toHaveLength(ids.length);
-        expect(new Set(TIMELINE)).toEqual(new Set(ids));
     });
 
     it('dates every checkpoint, oldest first, and points it at a real entry', () => {
