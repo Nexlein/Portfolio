@@ -1,5 +1,5 @@
 {
-    "$schema": "https://unpkg.com/knip@6/schema.json",
+    "$schema": "https://unpkg.com/knip/schema.json",
     "ignoreDependencies": ["@fontsource/ibm-plex-mono", "@fontsource-variable/schibsted-grotesk"],
-    "ignoreBinaries": ["ffmpeg"]
+    "ignoreBinaries": ["ffmpeg", "actionlint"]
 }

@@ -22,30 +22,17 @@ jobs:
 
             - uses: ./.github/actions/setup
 
-            - name: Audit
-              run: npm run audit
-
-            - name: Format
-              run: npm run format:check
-
-            - name: Lint
-              run: npm run lint
-
-            # Unused files, exports and dependencies (config/knip.json); new dead code fails the build
-            - name: Dead code
-              run: npm run knip
-
-            - name: Typecheck
-              run: npm run typecheck
-
-            # The workflows, their expressions and run: scripts (shellcheck), with the versions in mise.toml
-            - name: Workflows
-              run: mise install actionlint shellcheck && mise exec -- actionlint
+            # actionlint and shellcheck for the workflows check, at the versions in mise.toml
+            - name: Check tools
+              # The version calls fail the step if a tool is not on PATH (actionlint would skip shellcheck silently)
+              run: mise install actionlint shellcheck && actionlint --version && shellcheck --version
               env:
                   GITHUB_TOKEN: ${{ github.token }} # mise resolves the tools on GitHub: avoids the anonymous rate limit
 
-            - name: Test
-              run: npm test
+            # The same command as locally (package.json): audit, format, lint, dead code (config/knip.json), typecheck,
+            # workflows (actionlint, shellcheck on run: scripts), unit tests. It stops at the first that fails
+            - name: Check
+              run: npm run check
 
             # Typecheck already ran: only the bundle is left (npm run build would run tsc again)
             - name: Build

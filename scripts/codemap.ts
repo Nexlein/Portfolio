@@ -2,16 +2,17 @@
 // who uses it, in one small Markdown file (.claude/codemap.md). Reading it replaces opening dozens of files.
 // Usage: npm run codemap (Node runs this TypeScript file as it is; the pre-commit hook regenerates it).
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { posix } from 'node:path';
 
 // Git paths use forward slashes on every OS: posix keeps them so on Windows too, or no import would match
 const { dirname, join, normalize, relative } = posix;
 
 const OUT = '.claude/codemap.md';
-const files = execFileSync('git', ['ls-files', '-co', '--exclude-standard'], { encoding: 'utf8' })
+const files = execFileSync('git', ['ls-files'], { encoding: 'utf8' })
     .split('\n')
     .filter((f) => /^(src|vite-plugins|scripts|e2e)\/.*\.(ts|css)$|^[^/]+\.html$/.test(f))
+    .filter((f) => existsSync(f)) // a file deleted but not yet staged is still tracked
     .toSorted();
 const known = new Set(files);
 

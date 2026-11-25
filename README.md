@@ -20,34 +20,39 @@ Unknown addresses get `404.html` (Vercel serves it with status 404 at the addres
 
 ## Getting started
 
-Requires Node 26 (see `mise.toml`, installed by `mise install`).
+Requires [mise](https://mise.jdx.dev): `mise install` brings Node 26 and the tools the hooks and `npm run check` use (gitleaks, actionlint, shellcheck), at the versions in `mise.toml`.
 
 ```bash
+mise install
 npm ci
+npx playwright install chromium   # for npm run test:e2e, cv:pdf and media:brand
 npm run dev
 ```
 
+On Windows, Git runs the hooks outside your shell: add `%LOCALAPPDATA%\mise\shims` to your user `Path` so they find these tools ([mise docs](https://mise.jdx.dev/shell-setup.html#windows)). Without them, a commit still goes through with a note, and CI runs every check.
+
 ## Scripts
 
-| Script                 | Description                                                      |
-| ---------------------- | ---------------------------------------------------------------- |
-| `npm run dev`          | Start the Vite dev server                                        |
-| `npm run build`        | Typecheck and build to `dist/`                                   |
-| `npm run preview`      | Serve the production build locally                               |
-| `npm run typecheck`    | Run `tsc --noEmit` on the site, then on the scripts and configs  |
-| `npm test`             | Run Vitest                                                       |
-| `npm run test:e2e`     | Build, then run Playwright (see Browser tests)                   |
-| `npm run cv:pdf`       | Render the CV to PDF, after a build                              |
-| `npm run codemap`      | Refresh `.claude/codemap.md` (the pre-commit hook does too)      |
-| `npm run knip`         | Find dead code                                                   |
-| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint)                             |
-| `npm run lint:fix`     | Lint and autofix                                                 |
-| `npm run media`        | Generate missing posters, card copies and social images (ffmpeg) |
-| `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg) |
-| `npm run media:video`  | Re-encode a video for the web (ffmpeg)                           |
-| `npm run audit`        | Fail on high or critical advisories (`npm audit`)                |
-| `npm run format`       | Format all files with Prettier                                   |
-| `npm run format:check` | Check formatting without writing                                 |
+| Script                 | Description                                                                                                 |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Start the Vite dev server                                                                                   |
+| `npm run build`        | Typecheck and build to `dist/`                                                                              |
+| `npm run preview`      | Serve the production build locally                                                                          |
+| `npm run check`        | The CI checks in one command: audit, format, lint, dead code, typecheck, workflows (actionlint), unit tests |
+| `npm run typecheck`    | Run `tsc --noEmit` on the site, then on the scripts and configs                                             |
+| `npm test`             | Run Vitest                                                                                                  |
+| `npm run test:e2e`     | Build, then run Playwright (see Browser tests)                                                              |
+| `npm run cv:pdf`       | Render the CV to PDF, after a build                                                                         |
+| `npm run codemap`      | Refresh `.claude/codemap.md` (the pre-commit hook does too)                                                 |
+| `npm run knip`         | Find dead code                                                                                              |
+| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint)                                                                        |
+| `npm run lint:fix`     | Lint and autofix                                                                                            |
+| `npm run media`        | Generate missing posters, card copies and social images (ffmpeg)                                            |
+| `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg)                                            |
+| `npm run media:video`  | Re-encode a video for the web (ffmpeg, bash: from Git Bash on Windows)                                      |
+| `npm run audit`        | Fail on high or critical advisories (`npm audit`)                                                           |
+| `npm run format`       | Format all tracked files with Prettier                                                                      |
+| `npm run format:check` | Check formatting without writing                                                                            |
 
 ## Project structure
 
@@ -170,13 +175,13 @@ Because of the CSP:
 ## Quality checks
 
 - **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, actionlint on staged workflows, then typecheck, tests and the code map. gitleaks, actionlint and shellcheck come from `mise.toml` (`mise install`).
-- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, workflows (actionlint), tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
+- **CI** (GitHub Actions, on PRs and `main`): `npm run check` (dependency audit, format check, lint, dead code, typecheck, workflows, tests), then the build; then browser tests, Lighthouse and the CV PDF on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: `npm audit` fails on high/critical advisories.
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Renovate** (`renovate.json`): one PR a week into `dev` for npm minor and patch updates, one for GitHub Actions, one that refreshes `package-lock.json` (transitive dependencies), majors on their own. A Node major moves `mise.toml`, `engines` and `@types/node` in one PR, and the runtime is only proposed once that release is LTS. npm releases wait 3 days before a PR. Renovate reads `renovate.json` from `main` and stops on one invalid rule, so a PR that changes it runs Renovate's own validator (`.github/workflows/renovate-config.yml`).
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
-- **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
+- **Uptime** (`.github/workflows/uptime.yml`, scheduled every 6 hours; GitHub delays or skips scheduled runs, in practice about twice a day): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
 
 ## License
 

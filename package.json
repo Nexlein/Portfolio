@@ -7,6 +7,7 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
+        "check": "npm run audit && npm run format:check && npm run lint && npm run knip && npm run typecheck && actionlint && npm test",
         "test": "vitest run",
         "test:e2e": "vite build && playwright test",
         "cv:pdf": "node scripts/cv-pdf.ts",

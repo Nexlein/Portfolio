@@ -2,9 +2,9 @@ name: Renovate config
 
 # Renovate reads renovate.json from main only, and one invalid rule stops it entirely. Validate the file in the PR that
 # changes it, with the latest Renovate like the hosted app; --strict also fails on options that need migrating.
+# The job runs on every PR so that main can require it, and only validates when the PR changes renovate.json.
 on:
     pull_request:
-        paths: [renovate.json]
 
 permissions:
     contents: read
@@ -20,10 +20,24 @@ jobs:
         timeout-minutes: 5
         steps:
             - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  fetch-depth: 2 # the PR's merge commit and its first parent, the base branch
+
+            - name: Does this PR change renovate.json?
+              id: changed
+              run: |
+                  if git diff --quiet HEAD^1 HEAD -- renovate.json; then
+                    echo "renovate.json unchanged: nothing to validate"
+                    echo "renovate=false" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "renovate=true" >> "$GITHUB_OUTPUT"
+                  fi
 
             - uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+              if: steps.changed.outputs.renovate == 'true'
               with:
                   install_args: node # Node from mise.toml, as in the other jobs
 
             - name: Validate renovate.json
+              if: steps.changed.outputs.renovate == 'true'
               run: npx --yes --package renovate -- renovate-config-validator --strict
