@@ -9,7 +9,7 @@ import { posix } from 'node:path';
 const { dirname, join, normalize, relative } = posix;
 
 const OUT = '.claude/codemap.md';
-const files = execFileSync('git', ['ls-files', '-co', '--exclude-standard'], { encoding: 'utf8' })
+const files = execFileSync('git', ['ls-files'], { encoding: 'utf8' })
     .split('\n')
     .filter((f) => /^(src|vite-plugins|scripts|e2e)\/.*\.(ts|css)$|^[^/]+\.html$/.test(f))
     .toSorted();
