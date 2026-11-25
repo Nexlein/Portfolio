@@ -6,9 +6,9 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 ## (root)
 - **404.html** (42) — Template for /404.html and /fr/404.html: Vercel serves /404.html for every URL that matches nothing.
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/notfound/notfound.css, pages/notfound/notfound
-- **cv.html** (82)
+- **cv.html** (85) — Template for /cv.html and /fr/cv.html: the CV, also printed to PDF (npm run cv:pdf).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/cv/cv.css, pages/cv/cv
-- **index.html** (140)
+- **index.html** (143) — Template for / and /fr/: the home page.
   - → styles/base.css, components/Nav/Nav.css, components/Hero/Hero.css, components/NeuralMap/NeuralMap.css, components/Charts/Charts.css, components/Footer/Footer.css, pages/home/home.css, pages/home/home
 - **project.html** (60) — Template for /projects/<id>.html (and /fr/projects/<id>.html).
   - → styles/base.css, components/Nav/Nav.css, components/Footer/Footer.css, pages/project/project.css, pages/project/project
@@ -56,7 +56,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← pages/content/render
 
 ## src/components/Hero
-- **Hero.css** (247) — Sparser simulations get more presence
+- **Hero.css** (248) — Hero: full-height first screen, the simulation canvas behind the intro and its switch.
   - ← index.html
 - **Hero.ts** (134) — Hero: a live simulation behind the words (a random one per visit, a dot per simulation to switch), a pause button for everything that mov...
   - exports: initHero
@@ -172,10 +172,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - tests: profile.test.ts, projects.test.ts, skills.test.ts
 
 ## src/i18n
-- **en.ts** (229)
+- **en.ts** (230) — Interface text in English (keys mirror fr.ts).
   - exports: en
   - ← core/translate
-- **fr.ts** (229)
+- **fr.ts** (230) — Interface text in French (keys mirror en.ts).
   - exports: fr
   - ← core/translate
 - tests: dictionaries.test.ts
@@ -213,7 +213,7 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← index.html
 
 ## src/pages/notfound
-- **notfound.css** (14)
+- **notfound.css** (15) — 404 page: centred headline and the way back.
   - ← 404.html
 - **notfound.ts** (7) — 404 page: static content rendered at build time (see NOT_FOUND in vite-plugins/pages.ts); this only wakes the nav.
   - → core/analytics, components/Nav/Nav
@@ -263,18 +263,18 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
 - **svg-scale.ts** (12) — SVG text scales with its drawing: a chart drawn 1080 wide and shown 300px wide has labels 3.6 times smaller.
   - exports: trackScale
   - ← components/Charts/Charts
-- **video.ts** (114) — MIME type for a project video, from its extension.
+- **video.ts** (115) — Project media on cards and pages: video type and poster, card-sized image copies, lazy playback.
   - exports: videoType, videoPoster, THUMB_WIDTHS, thumbOf, stillImage, still, stillAttrs, playVideosWhenVisible
   - → data/projects, ui/motion
   - ← scripts/media, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
 - tests: boot.test.ts, glide.test.ts, video.dom.test.ts, video.test.ts
 
 ## src
-- **vite-env.d.ts** (10) — / <reference types="vite/client" />
+- **vite-env.d.ts** (11) — Ambient types: Vite client, the IS_VERCEL_BUILD flag and CSS imports.
 
 ## vite-plugins
-- **pages.ts** (260) — One page of the site, in every language.
+- **pages.ts** (261) — Vite plugin sitePages: renders every page in PAGES once per language at build time, and writes sitemap.xml.
   - exports: PageSpec, PAGES, NOT_FOUND, outputFile, renderPage, sitemap, sitePages
   - → data/projects, core/site, core/text, core/structured-data, core/translate, core/lang, pages/content/render, pages/project/render
-- **shared-head.ts** (76) — Runs in <head> before first paint, on every page: 1.
+- **shared-head.ts** (77) — Vite plugin sharedHead: the tags every page needs in <head> (favicon, theme and language script).
   - exports: HEAD_SCRIPT, sharedHead

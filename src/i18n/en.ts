@@ -1,3 +1,4 @@
+// Interface text in English (keys mirror fr.ts). Facts live in src/data/.
 export const en = {
     meta: {
         imageAlt: 'Nielsen COMBE--BRACCIALE, AI & full-stack developer',

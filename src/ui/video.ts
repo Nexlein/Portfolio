@@ -1,3 +1,4 @@
+// Project media on cards and pages: video type and poster, card-sized image copies, lazy playback.
 import type { ProjectEntry } from '../data/projects.ts';
 import { prefersReducedMotion } from './motion.ts';
 

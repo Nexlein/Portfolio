@@ -1,3 +1,4 @@
+// Ambient types: Vite client, the IS_VERCEL_BUILD flag and CSS imports.
 /// <reference types="vite/client" />
 
 /** True only for builds made on Vercel (see vite.config.ts). */
