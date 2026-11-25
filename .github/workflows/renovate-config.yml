@@ -1,0 +1,29 @@
+name: Renovate config
+
+# Renovate reads renovate.json from main only, and one invalid rule stops it entirely. Validate the file in the PR that
+# changes it, with the latest Renovate like the hosted app; --strict also fails on options that need migrating.
+on:
+    pull_request:
+        paths: [renovate.json]
+
+permissions:
+    contents: read
+
+concurrency:
+    group: renovate-config-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    validate:
+        name: Renovate config
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
+              with:
+                  install_args: node # Node from mise.toml, as in the other jobs
+
+            - name: Validate renovate.json
+              run: npx --yes --package renovate -- renovate-config-validator --strict

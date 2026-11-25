@@ -9,11 +9,16 @@
     },
     "packageRules": [
         {
-            "description": "One PR for every npm minor and patch update, with package.json ranges raised to match",
+            "description": "One PR for every npm minor and patch update",
             "matchManagers": ["npm"],
             "matchDepTypes": ["devDependencies"],
             "matchUpdateTypes": ["minor", "patch"],
-            "groupName": "npm minor and patch",
+            "groupName": "npm minor and patch"
+        },
+        {
+            "description": "Raise package.json ranges to the new version, not only the lockfile (a rule of its own: rangeStrategy applies before the update type is known)",
+            "matchManagers": ["npm"],
+            "matchDepTypes": ["devDependencies"],
             "rangeStrategy": "bump"
         },
         {
@@ -29,9 +34,9 @@
             "groupName": "Node"
         },
         {
-            "description": "Read gitleaks = \"8\" in mise.toml as a range (any 8.x), not as the exact version 8.0.0",
+            "description": "Read partial versions in mise.toml (gitleaks = \"8\") as ranges (any 8.x), not as exact versions (8.0.0)",
             "matchManagers": ["mise"],
-            "matchDepNames": ["gitleaks"],
+            "matchDepNames": ["gitleaks", "actionlint", "shellcheck"],
             "versioning": "npm"
         }
     ]

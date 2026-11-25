@@ -169,12 +169,12 @@ Because of the CSP:
 
 ## Quality checks
 
-- **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, then typecheck, tests and the code map.
-- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
+- **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, actionlint on staged workflows, then typecheck, tests and the code map. gitleaks, actionlint and shellcheck come from `mise.toml` (`mise install`).
+- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, workflows (actionlint), tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: `npm audit` fails on high/critical advisories.
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
-- **Renovate** (`renovate.json`): one PR a week into `dev` for npm minor and patch updates, one for GitHub Actions, one that refreshes `package-lock.json` (transitive dependencies), majors on their own. A Node major moves `mise.toml`, `engines` and `@types/node` in one PR, and the runtime is only proposed once that release is LTS. npm releases wait 3 days before a PR.
+- **Renovate** (`renovate.json`): one PR a week into `dev` for npm minor and patch updates, one for GitHub Actions, one that refreshes `package-lock.json` (transitive dependencies), majors on their own. A Node major moves `mise.toml`, `engines` and `@types/node` in one PR, and the runtime is only proposed once that release is LTS. npm releases wait 3 days before a PR. Renovate reads `renovate.json` from `main` and stops on one invalid rule, so a PR that changes it runs Renovate's own validator (`.github/workflows/renovate-config.yml`).
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
 - **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
 

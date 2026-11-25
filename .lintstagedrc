@@ -1,5 +1,6 @@
 {
     "*.{ts,js,mjs}": ["oxlint --type-aware --deny-warnings --fix", "prettier --write"],
     "*.css": ["stylelint --fix", "prettier --write"],
+    ".github/workflows/*.{yml,yaml}": "sh .husky/actionlint.sh",
     "!(*.{ts,js,mjs,css})": "prettier --ignore-unknown --write"
 }
