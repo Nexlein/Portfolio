@@ -13,7 +13,10 @@
             "type": "chrome",
             "request": "launch",
             "url": "http://localhost:5173",
-            "runtimeExecutable": "/usr/bin/brave-browser",
+            "linux": { "runtimeExecutable": "/usr/bin/brave-browser" },
+            "windows": {
+                "runtimeExecutable": "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe"
+            },
             "webRoot": "${workspaceFolder}"
         },
         {
