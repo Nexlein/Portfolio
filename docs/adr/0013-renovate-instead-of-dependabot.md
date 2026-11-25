@@ -6,7 +6,7 @@
 
 ## Context
 
-[#131](https://github.com/Nexlein/Portfolio/pull/131): "Renovate also covers mise.toml (Node, gitleaks), which Dependabot cannot read."
+`6f06c94` ([#131](https://github.com/Nexlein/Portfolio/pull/131)): "Renovate also covers mise.toml (Node, gitleaks), which Dependabot cannot read."
 
 ## Decision
 

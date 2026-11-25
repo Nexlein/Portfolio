@@ -49,6 +49,7 @@ Tags to keep (protected by a ruleset): `cv` (the CV release), `v1-classic` (the 
 | Actions                             | actions must be pinned to a full commit SHA (an unpinned `uses:` fails); default token read-only                                                               | Actions → General  |
 | Code security                       | CodeQL default setup, Dependabot security updates, secret scanning with push protection, private vulnerability reporting                                       | Advanced Security  |
 | Social preview                      | `public/og-image.png`                                                                                                                                          | General            |
+| About                               | description = README intro = `package.json` description (one sentence in three places, kept by hand); website = `SITE`                                         | repo home page, ⚙  |
 
 Required check names are job `name:` strings: see the warning in [checks.md](checks.md#ci).
 
@@ -68,27 +69,27 @@ Required check names are job `name:` strings: see the warning in [checks.md](che
 `/cv.pdf` and `/fr/cv.pdf` redirect (`vercel.json`) to the files of the GitHub release `cv` ([ADR 0007](adr/0007-cv-pdf-release.md)).
 
 - `CV PDF` renders the PDFs on every PR and push; `Publish CV` uploads them on pushes to `main` only, with `--clobber`.
-- The release stays the repository's "Latest" release, and its tag never moves (ruleset).
+- The redirects name the tag, not "latest": the release need not be GitHub's Latest (CI creates it with `--latest=false`). The tag never moves (ruleset).
 
 ## Scheduled jobs
 
-| Workflow                        | Schedule (UTC) | Does                                                                                                     |
-| ------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------- |
-| `.github/workflows/uptime.yml`  | `17 */6 * * *` | checks production: home and project page `zappy` (EN, FR), sitemap, both 404s, both CV links reach a PDF |
-| `.github/workflows/rebuild.yml` | Mondays 05:00  | calls the Vercel Deploy Hook, so dates computed at build time ("past 12 months") stay current            |
-| CodeQL                          | weekly         | code scanning                                                                                            |
+| Workflow                        | Schedule (UTC)          | Does                                                                                                     |
+| ------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------- |
+| `.github/workflows/uptime.yml`  | see its `cron`          | checks production: home and project page `zappy` (EN, FR), sitemap, both 404s, both CV links reach a PDF |
+| `.github/workflows/rebuild.yml` | see its `cron` (weekly) | calls the Vercel Deploy Hook, so dates computed at build time ("past 12 months") stay current            |
+| CodeQL                          | weekly                  | code scanning                                                                                            |
 
 - A failed scheduled run fails the workflow, and GitHub emails the owner.
-- Scheduled runs start late or get dropped under load ([GitHub docs](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)): uptime runs about twice a day, and the Monday rebuild has started between 10:00 and 16:00 UTC.
+- Scheduled runs start late or get dropped under load ([GitHub docs](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)): expect hours of delay, not minutes.
 - GitHub turns scheduled workflows off after 60 days without repository activity. After a quiet spell, check the Actions tab.
 - `rebuild.yml` fails on purpose when `VERCEL_DEPLOY_HOOK` is missing.
 
 ## Dependency updates
 
-| Source                      | Opens                                                                                                           | Into                                              |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| Renovate (`renovate.json`)  | weekly: npm minor and patch (one PR), GitHub Actions (one PR), lockfile refresh (one PR), each major on its own | `dev`                                             |
-| Dependabot security updates | a PR per advisory Renovate cannot fix (transitive)                                                              | `main`: retarget with `gh pr edit <n> --base dev` |
+| Source                      | Opens                                                                                                                                                 | Into                                              |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Renovate (`renovate.json`)  | weekly: npm minor and patch (one PR), GitHub Actions (one PR), lockfile refresh (one PR); npm majors one PR each, Actions majors in a PR of their own | `dev`                                             |
+| Dependabot security updates | a PR per advisory Renovate cannot fix (transitive)                                                                                                    | `main`: retarget with `gh pr edit <n> --base dev` |
 
 Renovate ([ADR 0013](adr/0013-renovate-instead-of-dependabot.md)):
 
@@ -106,7 +107,8 @@ Renovate opens it as one PR. By hand:
 
 1. `node` in `mise.toml`.
 2. `engines.node` and `@types/node` in `package.json`.
-3. Check that Vercel offers that major ([Vercel docs](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)).
+3. `npm install`, and commit the refreshed `package-lock.json` (`npm ci` refuses a stale one).
+4. Check that Vercel offers that major ([Vercel docs](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)).
 
 ### Move to a custom domain
 
@@ -119,4 +121,8 @@ Renovate opens it as one PR. By hand:
 | `scripts/brand-images.ts`, then `npm run media:brand` | URL on the social images                                                                   |
 | `public/qrcode.svg`, `public/qrcode-fr.svg`           | redo ([content.md](content.md#media))                                                      |
 | `src/core/structured-data.test.ts`                    | expected URLs                                                                              |
+| Vercel (Project → Settings → Domains)                 | add the domain; redirect `nexlein.vercel.app` to it                                        |
+| `README.md`, `CLAUDE.md`                              | live links                                                                                 |
+| GitHub About                                          | website                                                                                    |
+| The `cv` release notes                                | `gh release edit cv --notes ...`: `ci.yml` sets them only when it creates the release      |
 | Google Search Console                                 | new property; `public/googlebdd9a71b4a94f2b4.html` stays byte for byte (`.prettierignore`) |

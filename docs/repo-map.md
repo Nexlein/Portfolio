@@ -50,13 +50,13 @@ Where each thing is configured. Source files, with their exports and users, are 
 
 ## Editor and AI assistant
 
-| File                      | Role                                                                                       |
-| ------------------------- | ------------------------------------------------------------------------------------------ |
-| `.vscode/extensions.json` | recommended extensions: Prettier, Oxc, Stylelint, Vitest, Playwright                       |
-| `.vscode/launch.json`     | F5 configs: dev server, Brave on port 5173, debug the build's page rendering               |
-| `.claude/settings.json`   | shared Claude Code permissions (read-only commands allowed, destructive `git switch` asks) |
-| `.claude/launch.json`     | dev server for Claude's preview pane (port 5173)                                           |
-| `.claude/codemap.md`      | generated code map; do not edit                                                            |
-| `CLAUDE.md`               | rules for AI agents                                                                        |
+| File                      | Role                                                                                                                        |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `.vscode/extensions.json` | recommended extensions: Prettier, Oxc, Stylelint, Vitest, Playwright                                                        |
+| `.vscode/launch.json`     | F5 configs: dev server, Brave on port 5173, debug the build's page rendering                                                |
+| `.claude/settings.json`   | shared Claude Code permissions: checks, formatters, `git fetch`/`pull`/`switch` allowed; destructive `git switch` forms ask |
+| `.claude/launch.json`     | dev server for Claude's preview pane (port 5173)                                                                            |
+| `.claude/codemap.md`      | generated code map; do not edit                                                                                             |
+| `CLAUDE.md`               | rules for AI agents                                                                                                         |
 
 Personal settings stay local and untracked: `.claude/settings.local.json`, `.claude/worktrees/`, `.vscode/*` other than the two files above.

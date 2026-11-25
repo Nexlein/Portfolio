@@ -4,19 +4,19 @@ Facts live once, in `src/data/`, with English and French side by side (`{ en, fr
 
 ## What lives where
 
-| Content                                  | Where                                  | Shows on                                                   |
-| ---------------------------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| Jobs                                     | `EXPERIENCES` in `src/data/profile.ts` | CV, CV PDF, story under the path chart                     |
-| Education                                | `EDUCATION`                            | CV, home                                                   |
-| Path chart milestones                    | `CHECKPOINTS`                          | path chart and its story                                   |
-| What is happening now, availability      | `NOW`                                  | home, project map, social images                           |
-| City                                     | `LOCATION`                             | CV                                                         |
-| CV skills                                | `SKILLS`                               | CV, JSON-LD                                                |
-| Projects the CV lists                    | `CV_PROJECTS`                          | CV                                                         |
-| Projects                                 | `PROJECTS` in `src/data/projects.ts`   | map, list, charts, counts, project pages, sitemap, JSON-LD |
-| How tags become skills                   | `src/data/skills.ts`                   | map similarity, chart counts, "Shares..." on project pages |
-| Interface words (nav, headings, buttons) | `src/i18n/{en,fr}.ts`                  | every page                                                 |
-| Site URL, owner name                     | `src/core/site.ts`                     | every page, JSON-LD                                        |
+| Content                                                       | Where                                  | Shows on                                                   |
+| ------------------------------------------------------------- | -------------------------------------- | ---------------------------------------------------------- |
+| Jobs                                                          | `EXPERIENCES` in `src/data/profile.ts` | CV, CV PDF, story under the path chart                     |
+| Education                                                     | `EDUCATION`                            | CV, home                                                   |
+| Path chart milestones                                         | `CHECKPOINTS`                          | path chart and its story                                   |
+| What is happening now, availability                           | `NOW`                                  | home, project map, social images                           |
+| City                                                          | `LOCATION`                             | CV                                                         |
+| CV skills                                                     | `SKILLS`                               | CV, JSON-LD                                                |
+| Projects the CV lists                                         | `CV_PROJECTS`                          | CV                                                         |
+| Projects                                                      | `PROJECTS` in `src/data/projects.ts`   | map, list, charts, counts, project pages, sitemap, JSON-LD |
+| How tags become skills                                        | `src/data/skills.ts`                   | map similarity, chart counts, "Shares..." on project pages |
+| Interface words (nav, headings, buttons)                      | `src/i18n/{en,fr}.ts`                  | every page                                                 |
+| Site URL; owner name, email, links, city and school (`OWNER`) | `src/core/site.ts`                     | every page, social images, JSON-LD                         |
 
 ## Rules
 
@@ -25,7 +25,7 @@ Facts live once, in `src/data/`, with English and French side by side (`{ en, fr
 - No AI clichés. ASCII hyphens in date ranges (`2024-2026`).
 - The name is spelled `COMBE--BRACCIALE`.
 - Team projects: never "I built X". Say the team size and your own part (`team.role`).
-- Texts may use `<strong>` and `<br>`, never classes or styles (`src/data/profile.test.ts`).
+- Texts may use `<strong>` and `<br>`, never classes or styles. `src/data/profile.test.ts` rejects `class=` and `style=` in `profile.ts` only.
 - One spelling per skill across projects (`src/data/projects.test.ts`).
 - A `/` splits a tag into skills (`C/C++` is two), except the names in `WHOLE` (`CI/CD`). `ALIASES` maps other names (`RL`).
 - A CV skill label with `/` or `(` needs an entry in `SKILL_ENTITIES` (`src/core/structured-data.ts`), so search engines get real names.
@@ -41,7 +41,7 @@ Facts live once, in `src/data/`, with English and French side by side (`{ en, fr
     | Field         | Value                                                                                                                                                           |
     | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
     | `id`, `title` | URL id, display name                                                                                                                                            |
-    | `description` | `{ en, fr }`, over 40 characters each; the page meta clamps it to 155 at a word boundary                                                                        |
+    | `description` | `{ en, fr }`; minimum length in `src/data/projects.test.ts`, page meta clamped by `clampWords`                                                                  |
     | `tags`        | skills, one spelling each                                                                                                                                       |
     | `category`    | one of `DOMAINS`                                                                                                                                                |
     | `year`        | one of `PERIODS`                                                                                                                                                |
@@ -65,19 +65,20 @@ Its page, map node, list entry, counts, sitemap entry and JSON-LD follow. Then `
 2. To show it on the path chart and its story, add a `CHECKPOINTS` entry. Milestones without a project (school, certifications) work the same way.
 3. Keep the `epitech` checkpoint: the chart's school-year band counts from it.
 
-The path chart's ranges (1M, 6M, 1Y, Max) are `RANGES` in `src/components/Charts/data.ts`. Steps are whole months.
+The path chart's ranges are `RANGES` in `src/components/Charts/data.ts`. Steps are whole months.
 
 ### Update the profile or the CV
 
-1. Edit `src/data/profile.ts` (and the dictionaries for interface words).
+1. Edit `src/data/profile.ts`; city, school, email and links are `OWNER` in `src/core/site.ts`; interface words are in the dictionaries.
 2. `npm run media:brand` if availability, city, school or role changed: it redraws `public/og-image.png`, `og-image-fr.png`, `favicon.png` and `apple-touch-icon.png` from `NOW`, `OWNER` and the dictionaries. These files are committed outputs, not rebuilt on deploy.
 3. `npm run build`, then `npm run cv:pdf`: it fails if the CV no longer fits on one A4 page.
 
 ### Retire or rename a project
 
 1. Remove or rename it in `PROJECTS` and `public/projects/<id>/`.
-2. A retired URL: add its id to the redirect pattern in `vercel.json` (`/projects/:id(...)` → `/#work`, and the `/fr/` twin).
-3. `zappy` is the canary page. Renaming or retiring it means updating every file that names it:
+2. Update `CV_PROJECTS` in `src/data/profile.ts`: its `id` and `also` fields name projects, and only `id` is tested (a stale `also` prints the raw id).
+3. A retired URL: add its id to the redirect pattern in `vercel.json` (`/projects/:id(...)` → `/#work`, and the `/fr/` twin). A renamed one: redirect the old path to the new page.
+4. `zappy` is the canary page. Renaming or retiring it means updating every file that names it:
 
     | File                                                    | Uses it for                           |
     | ------------------------------------------------------- | ------------------------------------- |

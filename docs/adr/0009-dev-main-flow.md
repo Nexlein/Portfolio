@@ -12,7 +12,7 @@
 
 - `main` is production, `dev` integration. Work branches (`feat/*`, `fix/*`, `chore/*`) start from `dev` and come back by PR. A release is a PR from `dev` into `main`.
 - `main` requires the CI jobs, the Renovate config check and the Vercel deployment to pass, for admins too. No force push, no deletion.
-- Merge commits only, "so `dev` -> `main` can never be squashed by mistake" ([#136](https://github.com/Nexlein/Portfolio/pull/136)).
+- Merge commits only, "so `dev` → `main` can never be squashed by mistake" ([#136](https://github.com/Nexlein/Portfolio/pull/136)).
 - CI runs on PRs and on pushes to `main`: "every push to `dev` ran CI twice" ([#106](https://github.com/Nexlein/Portfolio/pull/106)).
 
 ## Consequences

@@ -2,11 +2,11 @@
 
 - Status: Accepted
 - Date: 2026-06-14 (first commit)
-- Links: first commit `734b13f`; redesign [#20](https://github.com/Nexlein/Portfolio/pull/20)
+- Links: first code commit `734b13f` (the very first, `75b1ab8`, holds media only); redesign [#20](https://github.com/Nexlein/Portfolio/pull/20)
 
 ## Context
 
-No reason was written at the time. What the code shows: a few pages, content known at build time, motion drawn on canvas and SVG. The first commit already used Vite and TypeScript, and no UI framework ever entered `package.json`. The redesign ([#20](https://github.com/Nexlein/Portfolio/pull/20), 2026-10-08) kept the stack.
+No reason was written at the time. What the code shows: a few pages, content known at build time, motion drawn on canvas and SVG. The first commit with code already used Vite and TypeScript, and no UI framework ever entered `package.json`. The redesign ([#20](https://github.com/Nexlein/Portfolio/pull/20), 2026-10-08) kept the stack.
 
 ## Decision
 

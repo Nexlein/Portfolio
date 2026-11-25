@@ -16,5 +16,5 @@ Node was pinned in `.nvmrc`, and the secret-scan hook read gitleaks from `PATH`,
 ## Consequences
 
 - A new machine starts with `mise install`. On Windows, `%LOCALAPPDATA%\mise\shims` goes on the user `Path`, or the hooks do not find the tools ([troubleshooting.md](../troubleshooting.md)).
-- Versions are majors (`gitleaks = "8"`); Renovate reads them as ranges ([ADR 0013](0013-renovate-instead-of-dependabot.md)).
+- Versions are partial (`gitleaks = "8"`, `shellcheck = "0.11"`); Renovate reads them as ranges ([ADR 0013](0013-renovate-instead-of-dependabot.md)).
 - `engines.node` in `package.json` follows the same major, and Vercel reads it.

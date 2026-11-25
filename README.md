@@ -8,13 +8,13 @@ Portfolio of Nielsen COMBE--BRACCIALE (Nexlein), AI & full-stack developer. Vani
 
 ![The site's social preview: name, role and availability](public/og-image.png)
 
-| What     | How                                                                                           |
-| -------- | --------------------------------------------------------------------------------------------- |
-| Pages    | home, one page per project, CV, 404; each in English and in French under `/fr/`               |
-| Build    | vanilla TypeScript and Vite, no framework; every page rendered at build time from `src/data/` |
-| Hosting  | Vercel: production from `main`, a preview per PR                                              |
-| Checks   | Git hooks, `npm run check`, browser tests, Lighthouse, CV PDF; required on `main`             |
-| Versions | Node and tools: [`mise.toml`](mise.toml). Packages: [`package.json`](package.json)            |
+| What     | How                                                                                               |
+| -------- | ------------------------------------------------------------------------------------------------- |
+| Pages    | home, one page per project, CV, 404; each in English and in French under `/fr/`                   |
+| Build    | vanilla TypeScript and Vite, no framework; every page rendered at build time from `src/data/`     |
+| Hosting  | Vercel: production from `main`, a preview per PR                                                  |
+| Checks   | Git hooks, `npm run check`, browser tests, Lighthouse, CV PDF; the CI ones are required on `main` |
+| Versions | Node and tools: [`mise.toml`](mise.toml). Packages: [`package.json`](package.json)                |
 
 ## Quick start
 
@@ -43,7 +43,7 @@ Only for some tasks:
 | Command                         | Does                                                                                                 |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `npm run dev`                   | dev server, port 5173                                                                                |
-| `npm run build`                 | typecheck, then build to `dist/`                                                                     |
+| `npm run build`                 | `tsc` on the site, then build to `dist/`                                                             |
 | `npm run preview`               | serve `dist/` with the production headers, port 4173                                                 |
 | `npm run check`                 | every CI check that needs no build: audit, format, lint, dead code, typecheck, workflows, unit tests |
 | `npm test`                      | unit tests (Vitest)                                                                                  |

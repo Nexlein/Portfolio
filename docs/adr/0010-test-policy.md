@@ -8,7 +8,7 @@
 
 - Playwright started with one retry in CI ([#12](https://github.com/Nexlein/Portfolio/pull/12)). Lighthouse performance started as a warning below 80, "since shared runners make it noisy" (`2876c06`).
 - The audit in [#63](https://github.com/Nexlein/Portfolio/pull/63) found a Firefox-only bug, a hash link landing 890 px off.
-- Running Firefox and WebKit on the owner's machine overloaded it.
+- Not written in the repo; observed by the owner: running Firefox and WebKit locally overloaded the owner's machine.
 
 ## Decision
 

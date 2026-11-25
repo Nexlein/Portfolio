@@ -23,15 +23,15 @@ flowchart LR
     script["Page script<br/>src/pages/name/name.ts"] -. motion, interaction .-> browser
 ```
 
-| Step                                          | Where                                               |
-| --------------------------------------------- | --------------------------------------------------- |
-| Facts, `{ en, fr }`                           | `src/data/` ([content.md](content.md))              |
-| Interface words                               | `src/i18n/{en,fr}.ts`                               |
-| Slots in templates                            | `data-render="<block>"`, `data-i18n="<key>"`        |
-| Block registry                                | `BLOCKS` in `src/pages/content/render.ts`           |
-| Page list, head tags, sitemap                 | `PAGES` and `renderPage` in `vite-plugins/pages.ts` |
-| Tags every page shares (favicon, head script) | `vite-plugins/shared-head.ts`                       |
-| Dev server                                    | same plugin, renders `/fr/*` on the fly             |
+| Step                                          | Where                                                                          |
+| --------------------------------------------- | ------------------------------------------------------------------------------ |
+| Facts, `{ en, fr }`                           | `src/data/` ([content.md](content.md))                                         |
+| Interface words                               | `src/i18n/{en,fr}.ts`                                                          |
+| Slots in templates                            | `data-render="<block>"`, `data-i18n="<key>"`                                   |
+| Block registry                                | `BLOCKS` in `src/pages/content/render.ts`                                      |
+| Page list (sitemap), the 404, head tags       | `PAGES`, `NOT_FOUND` and `renderPage` in `vite-plugins/pages.ts`               |
+| Tags every page shares (favicon, head script) | `vite-plugins/shared-head.ts`                                                  |
+| Dev server                                    | same plugin, renders every page in both languages and `sitemap.xml` on the fly |
 
 ## Pages
 
@@ -47,11 +47,11 @@ flowchart LR
 
 Redirects (`vercel.json`):
 
-| From                                                  | To                            | Kind      |
-| ----------------------------------------------------- | ----------------------------- | --------- |
-| `/cv.pdf`, `/fr/cv.pdf`                               | the `cv` GitHub release files | temporary |
-| `/availability.html`, `/fr/availability.html`         | `/#contact`, `/fr/#contact`   | permanent |
-| `/projects/{myradar,mytop,secured}.html` (and `/fr/`) | `/#work`, `/fr/#work`         | permanent |
+| From                                                                         | To                            | Kind      |
+| ---------------------------------------------------------------------------- | ----------------------------- | --------- |
+| `/cv.pdf`, `/fr/cv.pdf`                                                      | the `cv` GitHub release files | temporary |
+| `/availability.html`, `/fr/availability.html`                                | `/#contact`, `/fr/#contact`   | permanent |
+| retired project pages (the ids in the `/projects/:id(...)` rule, and `/fr/`) | `/#work`, `/fr/#work`         | permanent |
 
 ## Languages
 
@@ -80,7 +80,7 @@ flowchart TD
 
 The same script applies the stored theme (else Daylight for a light system preference, else Midnight) and adds `html.js`.
 
-Runtime strings: scripts that write text at runtime (toasts, button labels) call `i18n.t('<key>')` (`src/core/i18n.ts`). The build embeds only the `home.*` keys (`clientStrings` in `src/core/translate.ts`), and only on pages with `strings: true` in `PAGES` (the home page today). `src/i18n/dictionaries.test.ts` checks every key a script asks for: write it as a literal, or add it to the test's list of built keys.
+Runtime strings: scripts that write text at runtime (toasts, button labels) call `i18n.t('<key>')` (`src/core/i18n.ts`). The build embeds only the `home.*` keys (`clientStrings` in `src/core/translate.ts`), and only on pages with `strings: true` in `PAGES` (the home page today). `src/i18n/dictionaries.test.ts` checks that every key a script asks for exists in both dictionaries: write it as a literal, or add it to the test's list of built keys. It does not check that the page embeds it (`home.*`, `strings: true`); a missing string shows as its key.
 
 ## Head tags and SEO
 
@@ -116,7 +116,7 @@ Every file, with what it exports and who uses it: `.claude/codemap.md` (generate
 Imports:
 
 - Across folders: the `@/` alias (`@/core/i18n`). Within a folder: `./`.
-- Modules the build runs from Node (blocks, `render.ts`, data, Charts data and render, NeuralMap graph, Nav and Footer render) use relative `.ts` imports only. `src/pages/node-safe.test.ts` follows the imports from `vite-plugins/pages.ts` and `vite-plugins/shared-head.ts` and fails on anything else.
+- Everything `vite-plugins/*.ts` imports, transitively, runs in Node at build time: blocks, `render.ts`, `src/data/`, `src/core/`, `src/i18n/`, parts of `src/components/` and `src/ui/`. Those modules use relative `.ts` imports only. `src/pages/node-safe.test.ts` follows the imports from `vite-plugins/pages.ts` and `vite-plugins/shared-head.ts` and fails on anything else.
 - HTML templates stay at the repo root, so their URLs do not change.
 
 ## Security headers and CSP
@@ -129,12 +129,16 @@ Rules for HTML and scripts:
 - The one inline script is the head script, allowed by its sha256 hash.
 - Content stays readable without JavaScript: reveals hide only under `html.js`. Respect `prefers-reduced-motion`.
 
-| Header or rule              | Vercel (production) | `npm run preview` (port 4173)       | WebKit e2e server (port 4174, CI)                     |
-| --------------------------- | ------------------- | ----------------------------------- | ----------------------------------------------------- |
-| CSP and security headers    | `vercel.json`       | same                                | same                                                  |
-| `upgrade-insecure-requests` | yes                 | removed (breaks `http://localhost`) | removed                                               |
-| Cross-Origin-Opener-Policy  | yes                 | yes                                 | removed (`PREVIEW_WITHOUT_COOP`, WebKit stalls on it) |
-| Cache-Control rules         | `vercel.json`       | none                                | none                                                  |
+| Header or rule              | Vercel (production)    | `npm run preview` (port 4173)       | WebKit e2e server (port 4174, CI)                     |
+| --------------------------- | ---------------------- | ----------------------------------- | ----------------------------------------------------- |
+| CSP and security headers    | `vercel.json`          | same                                | same                                                  |
+| `upgrade-insecure-requests` | yes                    | removed (breaks `http://localhost`) | removed                                               |
+| Cross-Origin-Opener-Policy  | yes                    | yes                                 | removed (`PREVIEW_WITHOUT_COOP`, WebKit stalls on it) |
+| Cache-Control               | `vercel.json` rules    | `no-cache` on everything            | `no-cache` on everything                              |
+| Redirects (`vercel.json`)   | yes                    | not served (404)                    | not served                                            |
+| Unknown URL                 | `404.html`, status 404 | empty 404                           | empty 404 (`e2e/not-found.spec.ts` stubs it)          |
+
+`npm run dev` sends none of these headers: CSP problems show only in `npm run preview` and the browser tests.
 
 ## Runtime details
 
@@ -154,7 +158,7 @@ Rules for HTML and scripts:
 | 3. Entry script and styles                                                                          | `src/pages/<name>/<name>.ts`, `<name>.css`                           |
 | 4. Blocks, registered in `BLOCKS` (import them with a relative `.ts` path, like `home` and `cv`)    | `src/pages/<name>/blocks.ts`, `src/pages/content/render.ts`          |
 | 5. Page entry: `fixedPage(path, template, key, jsonLd?, strings?)`                                  | `PAGES` in `vite-plugins/pages.ts`                                   |
-| 6. Title, and a description of 51 to 160 characters                                                 | `meta.<key>.*` in `src/i18n/{en,fr}.ts`                              |
+| 6. Title and description (lengths checked by `src/pages/pages.test.ts`)                             | `meta.<key>.*` in `src/i18n/{en,fr}.ts`                              |
 | 7. Browser tests and Lighthouse                                                                     | page list in `e2e/pages.spec.ts`, URLs in `config/lighthouserc.json` |
 
 `src/pages/pages.test.ts` and `src/pages/content/render.test.ts` then check the tags, the sitemap and the blocks. A page whose script needs runtime strings outside `home.*` also needs `clientStrings` changed. A link to it in the top nav goes in `src/components/Nav/render.ts`.
@@ -162,8 +166,9 @@ Rules for HTML and scripts:
 ### Add a third-party origin
 
 1. Add the origin to the matching directive in the CSP in `vercel.json`.
-2. Loosen the lock in `src/pages/headers.test.ts` ("locks every fetch to our own origin").
+2. Loosen the matching lock in `src/pages/headers.test.ts`: "locks every fetch to our own origin", or for scripts and styles the test that pins `script-src` and `style-src`.
 3. Allow it in `e2e/pages.spec.ts` ("no request leaves our own origin").
+4. Add an ADR that supersedes [ADR 0004](adr/0004-no-third-party-requests.md) and amends [ADR 0005](adr/0005-strict-csp.md).
 
 ### Change the head script
 

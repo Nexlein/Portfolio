@@ -34,24 +34,20 @@ Commit message rule (`.husky/commit-msg`, local only, CI does not check it):
 
 Tools the hooks need (gitleaks, actionlint, shellcheck) come from `mise.toml` (`mise install`). Hooks are installed by `npm ci` (the `prepare` script). Never pass `--no-verify`.
 
-`npm run check` runs, and stops at the first failure:
-
-```
-npm run audit → format:check → lint → knip → typecheck → actionlint → npm test
-```
+`npm run check` runs the `check` script in `package.json`, and stops at the first failure.
 
 It needs the network (`npm audit`). `format:check` covers tracked files only (`scripts/format.ts`): stage a new file first.
 
 ## CI
 
-| Workflow                                | When                           | Jobs (`name:`)                                                                                        |
-| --------------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| `.github/workflows/ci.yml`              | every PR, every push to `main` | Format, typecheck, test, build → Lighthouse, Browser tests, CV PDF → Publish CV (push to `main` only) |
-| `.github/workflows/renovate-config.yml` | every PR                       | Renovate config (validates `renovate.json` only when the PR changes it)                               |
-| `.github/workflows/uptime.yml`          | every 6 hours, by hand         | Production answers ([operations.md](operations.md#scheduled-jobs))                                    |
-| `.github/workflows/rebuild.yml`         | weekly, by hand                | Rebuild production                                                                                    |
-| CodeQL (GitHub default setup)           | PRs, pushes, weekly            | analysis; not a required check                                                                        |
-| Dependabot security updates (GitHub)    | on an advisory                 | PRs into `main` ([operations.md](operations.md#dependency-updates))                                   |
+| Workflow                                | When                                      | Jobs (`name:`)                                                                                        |
+| --------------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `.github/workflows/ci.yml`              | every PR, every push to `main`            | Format, typecheck, test, build → Lighthouse, Browser tests, CV PDF → Publish CV (push to `main` only) |
+| `.github/workflows/renovate-config.yml` | every PR                                  | Renovate config (validates `renovate.json` only when the PR changes it)                               |
+| `.github/workflows/uptime.yml`          | scheduled, by hand                        | Production answers ([operations.md](operations.md#scheduled-jobs))                                    |
+| `.github/workflows/rebuild.yml`         | scheduled, by hand                        | Rebuild production                                                                                    |
+| CodeQL (GitHub default setup)           | PRs into `main`, pushes to `main`, weekly | analysis; not a required check; PRs into `dev` get none                                               |
+| Dependabot security updates (GitHub)    | on an advisory                            | PRs into `main` ([operations.md](operations.md#dependency-updates))                                   |
 
 Composite actions: `.github/actions/setup` (Node from `mise.toml`, npm cache, `npm ci`) and `.github/actions/browsers` (Playwright browsers and their system packages).
 
@@ -60,34 +56,34 @@ Composite actions: `.github/actions/setup` (Node from `mise.toml`, npm cache, `n
 
 ## Unit tests
 
-Vitest, colocated as `src/**/*.test.ts`. DOM tests start with `// @vitest-environment happy-dom`.
+Vitest, colocated as `src/**/*.test.ts`. DOM tests start with `// @vitest-environment happy-dom`. A new test file needs a row here: `src/docs.test.ts` fails otherwise.
 
-| Test                                                                                          | Checks                                                                                                              |
-| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `src/docs.test.ts`                                                                            | docs: relative links and anchors, repo paths, `npm run` scripts, indexes                                            |
-| `src/i18n/dictionaries.test.ts`                                                               | EN and FR have the same keys and `{slots}`; every key a page or script asks for exists                              |
-| `src/data/profile.test.ts`                                                                    | profile text in every language, no styling or classes, unique ids, ordered dates                                    |
-| `src/data/projects.test.ts`                                                                   | unique ids, exactly 3 featured, one spelling per skill, media exist (WebP/MP4, posters, card copies), alt texts     |
-| `src/data/skills.test.ts`                                                                     | tags to skills: `C/C++`, `RL`, `CI/CD`, case                                                                        |
-| `src/pages/pages.test.ts`                                                                     | every page in every language: lang, filled text, head tags, 1200×630 image, canonical, `hreflang`, JSON-LD, sitemap |
-| `src/pages/headers.test.ts`                                                                   | CSP: head script by hash only, no `unsafe-*`, own origin; no inline code in built HTML; redirects                   |
-| `src/pages/head-script.test.ts`                                                               | theme, blocked storage, first French visit; same script as injected                                                 |
-| `src/pages/node-safe.test.ts`                                                                 | Node-run modules import only `node:*`, `vite`, `happy-dom` or relative `.ts` files                                  |
-| `src/pages/seo.test.ts`                                                                       | `robots.txt` and the default social image                                                                           |
-| `src/pages/content/render.test.ts`                                                            | every `data-render` block exists and is used; CV renders per language                                               |
-| `src/pages/project/render.test.ts`                                                            | shared skills between projects                                                                                      |
-| `src/core/translate.test.ts`                                                                  | an unknown key stops the build; `data-i18n` filling                                                                 |
-| `src/core/i18n.test.ts`                                                                       | runtime strings read from the page                                                                                  |
-| `src/core/analytics.test.ts`                                                                  | analytics only on Vercel builds, same origin, once                                                                  |
-| `src/core/structured-data.test.ts`                                                            | JSON-LD blocks                                                                                                      |
-| `src/core/text.test.ts`, `src/core/time.test.ts`                                              | text helpers; month maths in UTC                                                                                    |
-| `src/components/Nav/themes.test.ts`                                                           | every theme has a token block and a name in both languages                                                          |
-| `src/components/NeuralMap/graph.test.ts`                                                      | map similarity; cards never overlap, up to 40 projects, every width                                                 |
-| `src/components/NeuralMap/scene.test.ts`                                                      | map geometry helpers                                                                                                |
-| `src/components/Charts/data.test.ts`                                                          | chart counts from the data                                                                                          |
-| `src/components/Hero/sims/neural.test.ts`, `src/components/Hero/sims/value-iteration.test.ts` | hero simulations                                                                                                    |
-| `src/ui/video.test.ts`, `src/ui/video.dom.test.ts`                                            | video helpers; play on screen only, reduced motion, manual pause                                                    |
-| `src/ui/boot.test.ts`, `src/ui/glide.test.ts`                                                 | page boot keeps going after an error; easing curve                                                                  |
+| Test                                                                                          | Checks                                                                                                                        |
+| --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `src/docs.test.ts`                                                                            | docs: relative links and anchors, tracked repo paths, `npm run` scripts, indexes, and a row in this table for every test file |
+| `src/i18n/dictionaries.test.ts`                                                               | EN and FR have the same keys and `{slots}`; every key a page or script asks for exists                                        |
+| `src/data/profile.test.ts`                                                                    | profile text in every language, no styling or classes, unique ids, ordered dates                                              |
+| `src/data/projects.test.ts`                                                                   | unique ids, exactly 3 featured, one spelling per skill, media exist (WebP/MP4, posters, card copies), alt texts               |
+| `src/data/skills.test.ts`                                                                     | tags to skills: `C/C++`, `RL`, `CI/CD`, case                                                                                  |
+| `src/pages/pages.test.ts`                                                                     | every page in every language: lang, filled text, head tags, 1200×630 image, canonical, `hreflang`, JSON-LD, sitemap           |
+| `src/pages/headers.test.ts`                                                                   | CSP: head script by hash only, no `unsafe-*`, own origin; no inline code in the HTML templates; redirects                     |
+| `src/pages/head-script.test.ts`                                                               | theme, blocked storage, first French visit; same script as injected                                                           |
+| `src/pages/node-safe.test.ts`                                                                 | Node-run modules import only `node:*`, `vite`, `happy-dom` or relative `.ts` files                                            |
+| `src/pages/seo.test.ts`                                                                       | `robots.txt` and the default social image                                                                                     |
+| `src/pages/content/render.test.ts`                                                            | every `data-render` block exists and is used; CV renders per language                                                         |
+| `src/pages/project/render.test.ts`                                                            | shared skills between projects                                                                                                |
+| `src/core/translate.test.ts`                                                                  | an unknown key stops the build; `data-i18n` filling                                                                           |
+| `src/core/i18n.test.ts`                                                                       | runtime strings read from the page                                                                                            |
+| `src/core/analytics.test.ts`                                                                  | analytics only on Vercel builds, same origin, once                                                                            |
+| `src/core/structured-data.test.ts`                                                            | JSON-LD blocks                                                                                                                |
+| `src/core/text.test.ts`, `src/core/time.test.ts`                                              | text helpers; month maths in UTC                                                                                              |
+| `src/components/Nav/themes.test.ts`                                                           | every theme has a token block and a name in both languages                                                                    |
+| `src/components/NeuralMap/graph.test.ts`                                                      | map similarity; cards never overlap, up to 40 projects, every width                                                           |
+| `src/components/NeuralMap/scene.test.ts`                                                      | map geometry helpers                                                                                                          |
+| `src/components/Charts/data.test.ts`                                                          | chart counts from the data                                                                                                    |
+| `src/components/Hero/sims/neural.test.ts`, `src/components/Hero/sims/value-iteration.test.ts` | hero simulations                                                                                                              |
+| `src/ui/video.test.ts`, `src/ui/video.dom.test.ts`                                            | video helpers; play on screen only, reduced motion, manual pause                                                              |
+| `src/ui/boot.test.ts`, `src/ui/glide.test.ts`                                                 | page boot keeps going after an error; easing curve                                                                            |
 
 ## Browser tests
 

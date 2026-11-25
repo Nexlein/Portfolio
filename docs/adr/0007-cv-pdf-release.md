@@ -16,6 +16,6 @@ The CV needs a stable PDF link in both languages that matches the CV page. Why a
 
 ## Consequences
 
-- The `cv` tag never moves (tag ruleset) and the release stays "Latest"; only its files change.
+- The `cv` tag never moves (tag ruleset); only its files change. The redirects name the tag, so the release need not be GitHub's "Latest" (`--latest=false`).
 - The live PDF changes only when `main` does.
 - The CV must fit on one A4 page in both languages: the `CV PDF` check fails otherwise.
