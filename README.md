@@ -20,12 +20,16 @@ Unknown addresses get `404.html` (Vercel serves it with status 404 at the addres
 
 ## Getting started
 
-Requires Node 26 (see `mise.toml`, installed by `mise install`).
+Requires [mise](https://mise.jdx.dev): `mise install` brings Node 26 and the tools the hooks and `npm run check` use (gitleaks, actionlint, shellcheck), at the versions in `mise.toml`.
 
 ```bash
+mise install
 npm ci
+npx playwright install chromium   # for npm run test:e2e, cv:pdf and media:brand
 npm run dev
 ```
+
+On Windows, Git runs the hooks outside your shell: add `%LOCALAPPDATA%\mise\shims` to your user `Path` so they find these tools ([mise docs](https://mise.jdx.dev/shell-setup.html#windows)). Without them, a commit still goes through with a note, and CI runs every check.
 
 ## Scripts
 
@@ -177,7 +181,7 @@ Because of the CSP:
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
 - **Renovate** (`renovate.json`): one PR a week into `dev` for npm minor and patch updates, one for GitHub Actions, one that refreshes `package-lock.json` (transitive dependencies), majors on their own. A Node major moves `mise.toml`, `engines` and `@types/node` in one PR, and the runtime is only proposed once that release is LTS. npm releases wait 3 days before a PR. Renovate reads `renovate.json` from `main` and stops on one invalid rule, so a PR that changes it runs Renovate's own validator (`.github/workflows/renovate-config.yml`).
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
-- **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
+- **Uptime** (`.github/workflows/uptime.yml`, scheduled every 6 hours; GitHub delays or skips scheduled runs, in practice about twice a day): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
 
 ## License
 
