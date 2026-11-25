@@ -1,7 +1,8 @@
 // Keeps the docs true: relative links and #anchors resolve, repo paths named in `code` exist, every `npm run <script>`
 // is in package.json, and the indexes list every page. External links stay out: the pre-commit hook runs offline.
+import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { join, posix, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const ROOT = resolve(import.meta.dirname, '..');
@@ -30,22 +31,33 @@ const UNTRACKED = [
     '.claude/settings.local.json',
     '.claude/worktrees'
 ];
+/** Tracked files and their folders, exact case: what GitHub serves. A file must be staged before a doc can name it. */
+const FILES = execFileSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter(Boolean);
+const TRACKED = new Set([
+    ...FILES,
+    ...FILES.flatMap((file) =>
+        file
+            .split('/')
+            .slice(0, -1)
+            .map((_, i, dirs) => dirs.slice(0, i + 1).join('/'))
+    )
+]);
+const isTracked = (path: string) => TRACKED.has(posix.normalize(path).replace(/\/$/, ''));
 /** Top-level folders: a `code` span that starts with one of them is a repo path. */
-const TOP = new Set(
-    readdirSync(ROOT, { withFileTypes: true })
-        .filter((entry) => entry.isDirectory() && entry.name !== '.git')
-        .map((entry) => entry.name)
-);
+const TOP = new Set(FILES.filter((file) => file.includes('/')).map((file) => file.split('/')[0]));
 const SCRIPTS = new Set(Object.keys(JSON.parse(read('package.json')).scripts));
 
 /** The doc's text outside fenced code blocks, and the fenced blocks' text. */
 function split(text: string): { prose: string; fenced: string } {
     const prose: string[] = [];
     const fenced: string[] = [];
-    let inFence = false;
+    let open = ''; // the fence that opened the current block, '' outside one
     for (const line of text.split('\n')) {
-        if (/^\s*(```|~~~)/.test(line)) inFence = !inFence;
-        else (inFence ? fenced : prose).push(line);
+        const fence = line.match(/^\s*(`{3,}|~{3,})/)?.[1];
+        if (fence && !open) open = fence;
+        else if (fence && fence[0] === open[0] && fence.length >= open.length && !line.trim().slice(fence.length))
+            open = '';
+        else (open ? fenced : prose).push(line);
     }
     return { prose: prose.join('\n'), fenced: fenced.join('\n') };
 }
@@ -101,8 +113,8 @@ describe('docs', () => {
         for (const doc of DOCS) {
             for (const target of localLinks(split(read(doc)).prose)) {
                 const [path, anchor] = target.split('#');
-                const file = path ? (path.startsWith('/') ? path.slice(1) : join(dirname(doc), path)) : doc;
-                if (!existsSync(join(ROOT, file))) broken.push(`${doc}: ${target}`);
+                const file = path ? (path.startsWith('/') ? path.slice(1) : posix.join(posix.dirname(doc), path)) : doc;
+                if (!isTracked(file)) broken.push(`${doc}: ${target}`);
                 else if (anchor && file.endsWith('.md') && !anchors(read(file)).has(anchor))
                     broken.push(`${doc}: ${target} (no such heading)`);
             }
@@ -113,7 +125,7 @@ describe('docs', () => {
     it('names only repo paths that exist', () => {
         const missing = DOCS.flatMap((doc) =>
             pathsIn(split(read(doc)).prose)
-                .filter((path) => !existsSync(join(ROOT, path)))
+                .filter((path) => !isTracked(path))
                 .map((path) => `${doc}: ${path}`)
         );
         expect(missing).toEqual([]);
@@ -141,12 +153,7 @@ describe('docs', () => {
 
     it('maps every test file in docs/checks.md', () => {
         const checks = read('docs/checks.md');
-        const tests = [
-            ...readdirSync(join(ROOT, 'src'), { recursive: true, encoding: 'utf8' }).filter((file) =>
-                file.endsWith('.test.ts')
-            ),
-            ...readdirSync(join(ROOT, 'e2e')).filter((file) => file.endsWith('.spec.ts'))
-        ].map((file) => file.split(/[\\/]/).pop()!);
-        expect(tests.filter((name) => !checks.includes(name))).toEqual([]);
+        const tests = FILES.filter((file) => /^src\/.+\.test\.ts$|^e2e\/.+\.spec\.ts$/.test(file));
+        expect(tests.filter((file) => !checks.includes(`\`${file}\``))).toEqual([]);
     });
 });
