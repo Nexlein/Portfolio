@@ -45,7 +45,7 @@ npm run dev
 | `npm run lint:fix`     | Lint and autofix                                                                                            |
 | `npm run media`        | Generate missing posters, card copies and social images (ffmpeg)                                            |
 | `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg)                                            |
-| `npm run media:video`  | Re-encode a video for the web (ffmpeg)                                                                      |
+| `npm run media:video`  | Re-encode a video for the web (ffmpeg, bash: from Git Bash on Windows)                                      |
 | `npm run audit`        | Fail on high or critical advisories (`npm audit`)                                                           |
 | `npm run format`       | Format all tracked files with Prettier                                                                      |
 | `npm run format:check` | Check formatting without writing                                                                            |
