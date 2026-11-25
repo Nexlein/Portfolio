@@ -94,6 +94,10 @@ test.describe('hero', () => {
         await page.emulateMedia({ reducedMotion: 'reduce' });
         await page.setViewportSize({ width: 1280, height: 800 });
         await page.goto('/');
+        // The motion switch belongs to the stage, the same for every simulation: test it on a light one. The hero picks
+        // one at random, and after Value iteration's ~2,800 arrow strokes a frame, Linux WebKit in CI (no GPU) stalls
+        // the page for seconds on the next resize
+        await showSim(page, 'flocking');
         await expect.poll(() => painted(page)).toBe(true);
         await expect(page.locator('.hero-pause')).toBeHidden();
         const idle = await untilIdle(page, frames);
@@ -146,6 +150,13 @@ test.describe('hero title', () => {
         await expect(page.locator('.hero h1')).toHaveAccessibleName(`${en.home.hero.title1} ${en.home.hero.title2}`);
     });
 });
+
+/** Shows simulation `id` (a click on its dot), unless the hero already runs it. */
+async function showSim(page: Page, id: keyof typeof en.home.hero.sims): Promise<void> {
+    const dot = page.getByRole('button', { name: en.home.hero.sims[id].name, exact: true });
+    if ((await dot.getAttribute('aria-pressed')) !== 'true') await dot.click();
+    await expect(page.locator('canvas.hero-field')).toHaveAttribute('data-sim', id);
+}
 
 /** Resize the window and wait for the canvas to take the new size, which clears it (it happens after a debounce). */
 async function resized(page: Page): Promise<void> {
