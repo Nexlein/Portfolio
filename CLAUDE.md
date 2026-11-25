@@ -13,7 +13,7 @@ Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.
 - Every page is rendered at build time, once per language (`vite-plugins/pages.ts`, `PAGES`). Templates (`index.html`, `cv.html`, `project.html`, `404.html`) mark slots with `data-render="<block>"` (filled by `src/pages/content/render.ts` from `src/pages/<page>/blocks.ts`) and `data-i18n="<key>"`. Visitors and crawlers get finished HTML; page scripts (`src/pages/<page>/<page>.ts`) only add motion and interaction.
 - Modules the build runs from Node (blocks, render.ts, data, Charts data/render, NeuralMap graph, Nav/Footer render) use relative `.ts` imports, never `@/` (`node-safe.test.ts`).
 - Facts live in `src/data/` (`profile.ts`, `projects.ts`), as `{ en, fr }`; interface words in `src/i18n/{en,fr}.ts`. Charts and the map compute everything from the data: real data only, nothing typed in by hand.
-- Design: tokens and themes in `src/styles/tokens.css` (`html[data-theme]`: midnight, daylight), shared pieces in `base.css`. Schibsted Grotesk + IBM Plex Mono. Amber `--signal` = activity, used sparingly.
+- Design: tokens and themes in `src/styles/tokens.css` (`html[data-theme]`; ids in `src/components/Nav/themes.ts`), shared pieces in `base.css`. Schibsted Grotesk + IBM Plex Mono. Amber `--signal` = activity, used sparingly.
 
 ## Commands
 

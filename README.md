@@ -23,11 +23,11 @@ Needs Git and [mise](https://mise.jdx.dev).
 ```bash
 mise install                      # Node and the hook tools, at the versions in mise.toml
 npm ci                            # dependencies, and the Git hooks
-npx playwright install chromium   # for test:e2e, cv:pdf and media:brand
+npx playwright install chromium   # optional: for test:e2e, cv:pdf and media:brand
 npm run dev                       # http://localhost:5173
 ```
 
-On Windows, add `%LOCALAPPDATA%\mise\shims` to your user `Path` so the hooks find mise's tools ([troubleshooting](docs/troubleshooting.md)).
+`git config core.hooksPath` should print `.husky/_`: the hooks are on. On Windows, add `%LOCALAPPDATA%\mise\shims` to your user `Path` so the hooks find mise's tools ([troubleshooting](docs/troubleshooting.md)).
 
 Only for some tasks:
 

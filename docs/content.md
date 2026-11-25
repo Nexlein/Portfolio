@@ -38,23 +38,26 @@ Facts live once, in `src/data/`, with English and French side by side (`{ en, fr
 1. Media in `public/projects/<id>/` (see [Media](#media)).
 2. A `ProjectEntry` in `PROJECTS`:
 
-    | Field         | Value                                                    |
-    | ------------- | -------------------------------------------------------- |
-    | `id`, `title` | URL id, display name                                     |
-    | `description` | `{ en, fr }`                                             |
-    | `tags`        | skills, one spelling each                                |
-    | `category`    | one of `DOMAINS`                                         |
-    | `year`        | one of `PERIODS` (`Tek1`, `Tek2`, `Tek3`, `Personal`)    |
-    | `date`        | start month, `YYYY-MM` (path chart, "learned this year") |
-    | `featured`    | `true` for the home page's "Selected work" (exactly 3)   |
-    | `team`        | `{ size, role }`, from the repository's history          |
-    | `result`      | one concrete outcome the repository shows                |
-    | `github`      | full URL, or `''` to hide the link                       |
-    | `media`       | `video`, `image` or `gallery`                            |
+    | Field         | Value                                                                                                                                                           |
+    | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | `id`, `title` | URL id, display name                                                                                                                                            |
+    | `description` | `{ en, fr }`, over 40 characters each; the page meta clamps it to 155 at a word boundary                                                                        |
+    | `tags`        | skills, one spelling each                                                                                                                                       |
+    | `category`    | one of `DOMAINS`                                                                                                                                                |
+    | `year`        | one of `PERIODS`                                                                                                                                                |
+    | `date`        | start month, `YYYY-MM` (path chart, "learned this year")                                                                                                        |
+    | `featured`    | `true` for the home page's "Selected work" (exactly 3)                                                                                                          |
+    | `team`        | `{ size, role }`, from the repository's history                                                                                                                 |
+    | `result`      | one concrete outcome the repository shows                                                                                                                       |
+    | `github`      | full URL, or `''` to hide the link                                                                                                                              |
+    | `media`       | `{ type: 'video', src }`, `{ type: 'image', src, alt }` or `{ type: 'gallery', images: [{ src, alt }] }`; `src` is relative to `public/`, `alt` is `{ en, fr }` |
 
 3. `npm run media`: poster, card copies and the 1200×630 social image `og.jpg`.
 
-Its page, map node, list entry, counts, sitemap entry and JSON-LD follow. `src/data/projects.test.ts` checks ids, media files and formats, texts in both languages.
+Its page, map node, list entry, counts, sitemap entry and JSON-LD follow. Then `npm test`:
+
+- `src/data/projects.test.ts` checks ids, media files and formats, description lengths, both languages, and exactly 3 `featured`.
+- `src/components/NeuralMap/graph.test.ts` fails if the map cannot place the new card without overlap: that is a layout limit (`src/components/NeuralMap/graph.ts`), not a data error.
 
 ### Add a job or a milestone
 
@@ -86,7 +89,7 @@ The path chart's ranges (1M, 6M, 1Y, Max) are `RANGES` in `src/components/Charts
     | `src/ui/video.test.ts`                                  | poster example                        |
     | `vite-plugins/pages.ts`, `src/components/Nav/render.ts` | comment examples                      |
 
-    `git grep -l zappy` lists them.
+    `git grep -l zappy` lists them, the docs' own examples included. The browser tests and Lighthouse URLs are only checked in CI.
 
 ## Media
 

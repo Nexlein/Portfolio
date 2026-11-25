@@ -141,23 +141,23 @@ Rules for HTML and scripts:
 - Fonts: Schibsted Grotesk (variable) and IBM Plex Mono, self-hosted with Fontsource, so pages make no third-party requests ([ADR 0004](adr/0004-no-third-party-requests.md)).
 - Videos: `preload="none"`, played only on screen (IntersectionObserver in `src/ui/video.ts`), paused off screen. A video the visitor paused stays paused. Under `prefers-reduced-motion` they never autoplay.
 - Analytics: Vercel Web Analytics, cookie-free, loaded only in builds made on Vercel (`IS_VERCEL_BUILD` in `vite.config.ts`, script in `src/core/analytics.ts`).
-- Themes: Midnight and Daylight, sets of custom properties on `html[data-theme]` in `src/styles/tokens.css`.
+- Themes: sets of custom properties on `html[data-theme]` in `src/styles/tokens.css`; the list is in `src/components/Nav/themes.ts`.
 
 ## Recipes
 
 ### Add a page
 
-| Step                                                               | File                                                                 |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| 1. Template with `data-render` / `data-i18n` slots, no inline code | `<name>.html` at the root                                            |
-| 2. Build input                                                     | `build.rolldownOptions.input` in `vite.config.ts`                    |
-| 3. Entry script and styles                                         | `src/pages/<name>/<name>.ts`, `<name>.css`                           |
-| 4. Blocks, registered in `BLOCKS`                                  | `src/pages/<name>/blocks.ts`, `src/pages/content/render.ts`          |
-| 5. Page entry: `fixedPage(path, template, key, jsonLd?, strings?)` | `PAGES` in `vite-plugins/pages.ts`                                   |
-| 6. Title and description                                           | `meta.<key>.*` in `src/i18n/{en,fr}.ts`                              |
-| 7. Browser tests and Lighthouse                                    | page list in `e2e/pages.spec.ts`, URLs in `config/lighthouserc.json` |
+| Step                                                                                                | File                                                                 |
+| --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| 1. Template with `data-render` / `data-i18n` slots, no inline code (start from a copy of `cv.html`) | `<name>.html` at the root                                            |
+| 2. Build input                                                                                      | `build.rolldownOptions.input` in `vite.config.ts`                    |
+| 3. Entry script and styles                                                                          | `src/pages/<name>/<name>.ts`, `<name>.css`                           |
+| 4. Blocks, registered in `BLOCKS` (import them with a relative `.ts` path, like `home` and `cv`)    | `src/pages/<name>/blocks.ts`, `src/pages/content/render.ts`          |
+| 5. Page entry: `fixedPage(path, template, key, jsonLd?, strings?)`                                  | `PAGES` in `vite-plugins/pages.ts`                                   |
+| 6. Title, and a description of 51 to 160 characters                                                 | `meta.<key>.*` in `src/i18n/{en,fr}.ts`                              |
+| 7. Browser tests and Lighthouse                                                                     | page list in `e2e/pages.spec.ts`, URLs in `config/lighthouserc.json` |
 
-`src/pages/pages.test.ts` and `src/pages/content/render.test.ts` then check the tags, the sitemap and the blocks. A page whose script needs runtime strings outside `home.*` also needs `clientStrings` changed.
+`src/pages/pages.test.ts` and `src/pages/content/render.test.ts` then check the tags, the sitemap and the blocks. A page whose script needs runtime strings outside `home.*` also needs `clientStrings` changed. A link to it in the top nav goes in `src/components/Nav/render.ts`.
 
 ### Add a third-party origin
 
@@ -168,14 +168,15 @@ Rules for HTML and scripts:
 ### Change the head script
 
 1. Edit `HEAD_SCRIPT` in `vite-plugins/shared-head.ts`.
-2. Run `npm test`: `src/pages/headers.test.ts` fails and prints the new hash.
+2. Run `npm test`: `src/pages/headers.test.ts` fails and prints the new hash on the `- Expected` line.
 3. Put the hash in `script-src` in `vercel.json`. `src/pages/head-script.test.ts` covers the behaviour.
 
 ### Add a theme
 
-1. Its block in `src/styles/tokens.css`.
+1. Its `[data-theme='<id>']` block in `src/styles/tokens.css`, with the same custom properties as the others.
 2. Its id in `src/components/Nav/themes.ts`.
-3. A swatch in `src/components/Nav/Nav.css`.
-4. Its name in both dictionaries.
+3. Its name under `site.themes` in both dictionaries.
 
-`src/components/Nav/themes.test.ts` checks that the token block, the id and both names match.
+The menu swatch is drawn from the token block.
+
+`src/components/Nav/themes.test.ts` checks the block, its properties, the id and both names.
