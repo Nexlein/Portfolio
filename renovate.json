@@ -1,0 +1,28 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended", ":semanticCommits", "schedule:weekly", "security:minimumReleaseAgeNpm"],
+    "baseBranchPatterns": ["dev"],
+    "timezone": "Europe/Paris",
+    "packageRules": [
+        {
+            "description": "One PR for every npm minor and patch update, with package.json ranges raised to match",
+            "matchManagers": ["npm"],
+            "matchDepTypes": ["devDependencies"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "groupName": "npm minor and patch",
+            "rangeStrategy": "bump"
+        },
+        {
+            "description": "One PR for every GitHub Actions update",
+            "matchManagers": ["github-actions"],
+            "groupName": "GitHub Actions",
+            "semanticCommitType": "ci"
+        },
+        {
+            "description": "A new Node major moves mise.toml, engines and @types/node together",
+            "matchDepNames": ["node", "@types/node"],
+            "matchUpdateTypes": ["major"],
+            "groupName": "Node"
+        }
+    ]
+}
