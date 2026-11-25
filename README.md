@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/Nexlein/Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Nexlein/Portfolio/actions/workflows/ci.yml)
 
-Personal portfolio of Nielsen COMBE--BRACCIALE (Nexlein), AI & full-stack developer. Built with vanilla TypeScript and Vite, deployed on Vercel. Content is available in English and French.
+Portfolio of Nielsen COMBE--BRACCIALE (Nexlein), AI & full-stack developer. Vanilla TypeScript and Vite, every page prerendered in English and French, with the map, charts and CV computed from the data.
 
 **[nexlein.vercel.app](https://nexlein.vercel.app)** · [Français](https://nexlein.vercel.app/fr/) · [CV (PDF)](https://nexlein.vercel.app/cv.pdf)
 
