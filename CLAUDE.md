@@ -18,10 +18,11 @@ Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.
 ## Commands
 
 - `npm run dev` · `npm run build` · `npm run preview` (production headers)
+- `npm run check`: the CI checks in one command (audit, format, lint, knip, typecheck, actionlint, tests); needs `mise install`
 - `npm run typecheck` · `npm test` (Vitest) · `npm run lint` (Oxlint + Stylelint) · `npm run format:check` · `npm run knip` (dead code)
 - `npm run test:e2e` (builds, then Playwright desktop + mobile) · `npm run cv:pdf` (after a build; fails if the CV leaves one A4 page)
 - `npm run codemap` (also run by pre-commit)
-- Done means: typecheck, lint, tests pass; e2e for UI changes; check the page in the browser for visual changes.
+- Done means: `npm run check` passes; e2e for UI changes; check the page in the browser for visual changes.
 
 ## Rules
 

@@ -29,25 +29,26 @@ npm run dev
 
 ## Scripts
 
-| Script                 | Description                                                      |
-| ---------------------- | ---------------------------------------------------------------- |
-| `npm run dev`          | Start the Vite dev server                                        |
-| `npm run build`        | Typecheck and build to `dist/`                                   |
-| `npm run preview`      | Serve the production build locally                               |
-| `npm run typecheck`    | Run `tsc --noEmit` on the site, then on the scripts and configs  |
-| `npm test`             | Run Vitest                                                       |
-| `npm run test:e2e`     | Build, then run Playwright (see Browser tests)                   |
-| `npm run cv:pdf`       | Render the CV to PDF, after a build                              |
-| `npm run codemap`      | Refresh `.claude/codemap.md` (the pre-commit hook does too)      |
-| `npm run knip`         | Find dead code                                                   |
-| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint)                             |
-| `npm run lint:fix`     | Lint and autofix                                                 |
-| `npm run media`        | Generate missing posters, card copies and social images (ffmpeg) |
-| `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg) |
-| `npm run media:video`  | Re-encode a video for the web (ffmpeg)                           |
-| `npm run audit`        | Fail on high or critical advisories (`npm audit`)                |
-| `npm run format`       | Format all files with Prettier                                   |
-| `npm run format:check` | Check formatting without writing                                 |
+| Script                 | Description                                                                                                 |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Start the Vite dev server                                                                                   |
+| `npm run build`        | Typecheck and build to `dist/`                                                                              |
+| `npm run preview`      | Serve the production build locally                                                                          |
+| `npm run check`        | The CI checks in one command: audit, format, lint, dead code, typecheck, workflows (actionlint), unit tests |
+| `npm run typecheck`    | Run `tsc --noEmit` on the site, then on the scripts and configs                                             |
+| `npm test`             | Run Vitest                                                                                                  |
+| `npm run test:e2e`     | Build, then run Playwright (see Browser tests)                                                              |
+| `npm run cv:pdf`       | Render the CV to PDF, after a build                                                                         |
+| `npm run codemap`      | Refresh `.claude/codemap.md` (the pre-commit hook does too)                                                 |
+| `npm run knip`         | Find dead code                                                                                              |
+| `npm run lint`         | Lint TS (Oxlint) and CSS (Stylelint)                                                                        |
+| `npm run lint:fix`     | Lint and autofix                                                                                            |
+| `npm run media`        | Generate missing posters, card copies and social images (ffmpeg)                                            |
+| `npm run media:brand`  | Redraw the home social image and the icons (Chromium, no ffmpeg)                                            |
+| `npm run media:video`  | Re-encode a video for the web (ffmpeg)                                                                      |
+| `npm run audit`        | Fail on high or critical advisories (`npm audit`)                                                           |
+| `npm run format`       | Format all tracked files with Prettier                                                                      |
+| `npm run format:check` | Check formatting without writing                                                                            |
 
 ## Project structure
 
@@ -170,7 +171,7 @@ Because of the CSP:
 ## Quality checks
 
 - **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, actionlint on staged workflows, then typecheck, tests and the code map. gitleaks, actionlint and shellcheck come from `mise.toml` (`mise install`).
-- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, workflows (actionlint), tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
+- **CI** (GitHub Actions, on PRs and `main`): `npm run check` (dependency audit, format check, lint, dead code, typecheck, workflows, tests), then the build; then browser tests, Lighthouse and the CV PDF on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: `npm audit` fails on high/critical advisories.
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
