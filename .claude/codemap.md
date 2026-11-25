@@ -171,6 +171,10 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - ← components/Charts/data, components/NeuralMap/graph, pages/project/render
 - tests: profile.test.ts, projects.test.ts, skills.test.ts
 
+## src
+- **vite-env.d.ts** (11) — Ambient types: Vite client, the IS_VERCEL_BUILD flag and CSS imports.
+- tests: docs.test.ts
+
 ## src/i18n
 - **en.ts** (230) — Interface text in English (keys mirror fr.ts).
   - exports: en
@@ -268,9 +272,6 @@ Per file: lines, purpose, exports, → local imports, ← used by. Paths drop `s
   - → data/projects, ui/motion
   - ← scripts/media, components/NeuralMap/NeuralMap, pages/home/blocks, pages/project/project, pages/project/render
 - tests: boot.test.ts, glide.test.ts, video.dom.test.ts, video.test.ts
-
-## src
-- **vite-env.d.ts** (11) — Ambient types: Vite client, the IS_VERCEL_BUILD flag and CSS imports.
 
 ## vite-plugins
 - **pages.ts** (261) — Vite plugin sitePages: renders every page in PAGES once per language at build time, and writes sitemap.xml.
