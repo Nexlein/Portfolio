@@ -1,0 +1,2 @@
+# LF everywhere, so Husky hooks and shell scripts still run when Git for Windows checks out with autocrlf
+* text=auto eol=lf

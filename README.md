@@ -174,7 +174,7 @@ Because of the CSP:
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: `npm audit` fails on high/critical advisories.
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.
-- **Dependabot**: weekly npm and GitHub Actions updates.
+- **Renovate** (`renovate.json`): one PR a week into `dev` for npm minor and patch updates, one for GitHub Actions, one that refreshes `package-lock.json` (transitive dependencies), majors on their own. A Node major moves `mise.toml`, `engines` and `@types/node` in one PR, and the runtime is only proposed once that release is LTS. npm releases wait 3 days before a PR.
 - **Deploy**: Vercel builds previews for PRs and production from `main`.
 - **Uptime** (`.github/workflows/uptime.yml`, every 6 hours): checks that production answers (home, French home, sitemap, a project page, both 404s, both CV links reach a PDF). A failure fails the run, and GitHub emails the owner. Weekly rebuild: `.github/workflows/rebuild.yml`. GitHub turns scheduled workflows off after 60 days without repository activity: after a quiet spell, check the Actions tab.
 
