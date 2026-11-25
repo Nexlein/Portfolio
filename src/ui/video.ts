@@ -30,7 +30,7 @@ export const still = (p: ProjectEntry): string => {
     return image ? thumbOf(image, 640) : videoPoster((p.media as { src: string }).src);
 };
 
-/** Narrowest a project's own image is (README, Media): offered to cards that can grow wider than the copies. */
+/** Narrowest a project's own image is (docs/content.md, Media): offered to cards that can grow wider than the copies. */
 const IMAGE_MIN_WIDTH = 1024;
 
 /**
