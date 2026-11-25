@@ -169,8 +169,8 @@ Because of the CSP:
 
 ## Quality checks
 
-- **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, then typecheck, tests and the code map.
-- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
+- **Pre-commit** (Husky + lint-staged): a secret scan, Oxlint/Stylelint autofix and Prettier on staged files, actionlint on staged workflows, then typecheck, tests and the code map. gitleaks, actionlint and shellcheck come from `mise.toml` (`mise install`).
+- **CI** (GitHub Actions, on PRs and `main`): dependency audit, format check, lint, dead code, typecheck, workflows (actionlint), tests, build; then browser tests, Lighthouse and the CV PDF on the built site.
 - **Linting**: [Oxlint](https://oxc.rs) for TypeScript, type-aware rules included (`.oxlintrc.json`; chosen over ESLint because typescript-eslint does not support TypeScript 7), [Stylelint](https://stylelint.io) for CSS (`.stylelintrc.json`).
 - **Audit**: `npm audit` fails on high/critical advisories.
 - **Lighthouse** (CI job after the build): audits the main pages and one project page, in both languages (list in `config/lighthouserc.json`). Accessibility, best practices and SEO must score at least 95, performance at least 85. Thresholds live in `lighthouserc.json`; reports are uploaded as a workflow artifact.

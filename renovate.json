@@ -34,9 +34,9 @@
             "groupName": "Node"
         },
         {
-            "description": "Read gitleaks = \"8\" in mise.toml as a range (any 8.x), not as the exact version 8.0.0",
+            "description": "Read partial versions in mise.toml (gitleaks = \"8\") as ranges (any 8.x), not as exact versions (8.0.0)",
             "matchManagers": ["mise"],
-            "matchDepNames": ["gitleaks"],
+            "matchDepNames": ["gitleaks", "actionlint", "shellcheck"],
             "versioning": "npm"
         }
     ]
