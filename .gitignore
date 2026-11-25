@@ -1,7 +1,5 @@
 # dependencies
 node_modules/
-/.pnp
-.pnp.js
 
 # testing
 /coverage
@@ -10,7 +8,6 @@ node_modules/
 /cv-pdf
 
 # production
-/build
 /dist
 
 # misc
@@ -24,9 +21,6 @@ node_modules/
 
 # npm logs
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
 
 # editor directories and files
 .idea
@@ -34,11 +28,8 @@ pnpm-debug.log*
 .vscode/*
 !.vscode/extensions.json
 !.vscode/launch.json
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.sw?
 
-# Claude Code: personal settings stay local (shared ones live in .claude/settings.json)
+# Claude Code: personal settings and worktrees stay local (shared settings live in .claude/settings.json)
 .claude/settings.local.json
+.claude/worktrees/

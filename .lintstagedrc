@@ -1,5 +1,5 @@
 {
-    "*.{ts,js,mjs}": ["oxlint --fix", "prettier --write"],
+    "*.{ts,js,mjs}": ["oxlint --type-aware --deny-warnings --fix", "prettier --write"],
     "*.css": ["stylelint --fix", "prettier --write"],
     "!(*.{ts,js,mjs,css})": "prettier --ignore-unknown --write"
 }

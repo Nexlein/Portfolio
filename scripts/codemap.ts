@@ -3,7 +3,10 @@
 // Usage: npm run codemap (Node runs this TypeScript file as it is; the pre-commit hook regenerates it).
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join, normalize, relative } from 'node:path';
+import { posix } from 'node:path';
+
+// Git paths use forward slashes on every OS: posix keeps them so on Windows too, or no import would match
+const { dirname, join, normalize, relative } = posix;
 
 const OUT = '.claude/codemap.md';
 const files = execFileSync('git', ['ls-files', '-co', '--exclude-standard'], { encoding: 'utf8' })
