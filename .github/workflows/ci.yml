@@ -24,7 +24,8 @@ jobs:
 
             # actionlint and shellcheck for the workflows check, at the versions in mise.toml
             - name: Check tools
-              run: mise install actionlint shellcheck
+              # The version calls fail the step if a tool is not on PATH (actionlint would skip shellcheck silently)
+              run: mise install actionlint shellcheck && actionlint --version && shellcheck --version
               env:
                   GITHUB_TOKEN: ${{ github.token }} # mise resolves the tools on GitHub: avoids the anonymous rate limit
 
