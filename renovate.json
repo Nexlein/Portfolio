@@ -9,11 +9,16 @@
     },
     "packageRules": [
         {
-            "description": "One PR for every npm minor and patch update, with package.json ranges raised to match",
+            "description": "One PR for every npm minor and patch update",
             "matchManagers": ["npm"],
             "matchDepTypes": ["devDependencies"],
             "matchUpdateTypes": ["minor", "patch"],
-            "groupName": "npm minor and patch",
+            "groupName": "npm minor and patch"
+        },
+        {
+            "description": "Raise package.json ranges to the new version, not only the lockfile (a rule of its own: rangeStrategy applies before the update type is known)",
+            "matchManagers": ["npm"],
+            "matchDepTypes": ["devDependencies"],
             "rangeStrategy": "bump"
         },
         {
