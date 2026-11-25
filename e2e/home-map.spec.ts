@@ -118,7 +118,7 @@ test.describe('project map', () => {
         const href = await card.getAttribute('href');
         const box = (await card.boundingBox())!;
         await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2); // sooner than the hover could unfold it
-        await expect(page).toHaveURL(new RegExp(`${href!.replace(/\./g, '\\.')}$`));
+        await expect(page).toHaveURL((url) => url.href.endsWith(href!));
     });
 
     test('a card unfolding upward still covers the whole closed card', async ({ page }) => {

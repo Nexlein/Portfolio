@@ -28,5 +28,7 @@ jobs:
                     echo "::error::VERCEL_DEPLOY_HOOK is not set, nothing was rebuilt (see the setup note at the top of this file)"
                     exit 1
                   fi
-                  curl --fail --silent --show-error -X POST "$HOOK" > /dev/null
+                  # Vercel answers with the queued job (id, state): logging it is the proof that a build was started
+                  curl --fail --silent --show-error -X POST "$HOOK"
+                  echo
                   echo "Rebuild requested"

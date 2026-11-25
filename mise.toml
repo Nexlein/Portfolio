@@ -3,3 +3,7 @@
 node = "26"
 # The pre-commit hook's secret scan (.husky/no-secrets.sh)
 gitleaks = "8"
+# Checks the GitHub workflows (pre-commit and CI): a broken one would only show when it runs
+actionlint = "1"
+# Used by actionlint on the workflows' run: scripts; the same version locally and in CI
+shellcheck = "0.11"
