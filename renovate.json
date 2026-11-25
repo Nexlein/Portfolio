@@ -3,6 +3,10 @@
     "extends": ["config:recommended", ":semanticCommits", "schedule:weekly", "security:minimumReleaseAgeNpm"],
     "baseBranchPatterns": ["dev"],
     "timezone": "Europe/Paris",
+    "lockFileMaintenance": {
+        "description": "Weekly fresh package-lock.json, so transitive dependencies move too",
+        "enabled": true
+    },
     "packageRules": [
         {
             "description": "One PR for every npm minor and patch update, with package.json ranges raised to match",
@@ -23,6 +27,12 @@
             "matchDepNames": ["node", "@types/node"],
             "matchUpdateTypes": ["major"],
             "groupName": "Node"
+        },
+        {
+            "description": "Read gitleaks = \"8\" in mise.toml as a range (any 8.x), not as the exact version 8.0.0",
+            "matchManagers": ["mise"],
+            "matchDepNames": ["gitleaks"],
+            "versioning": "npm"
         }
     ]
 }
