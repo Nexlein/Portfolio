@@ -22,6 +22,8 @@ securityHeaders['Content-Security-Policy'] = securityHeaders['Content-Security-P
 if (process.env.PREVIEW_WITHOUT_COOP) delete securityHeaders['Cross-Origin-Opener-Policy'];
 
 export default defineConfig({
+    // Like Vercel, answer a missing file with 404, not with the home page (Vite's SPA fallback would hide broken links)
+    appType: 'mpa',
     plugins: [sharedHead(), sitePages()],
     // Vercel sets VERCEL=1 during its builds: only those deployments serve the analytics script
     define: { IS_VERCEL_BUILD: JSON.stringify(process.env.VERCEL === '1') },
