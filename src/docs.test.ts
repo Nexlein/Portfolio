@@ -1,7 +1,7 @@
-// Keeps the docs true: relative links and #anchors resolve, repo paths named in `code` exist, every `npm run <script>`
-// is in package.json, and the indexes list every page. External links stay out: the pre-commit hook runs offline.
+// Keeps the docs true: relative links and #anchors resolve, files named in `code` exist, every `npm run <script>` is in
+// package.json, and the indexes list every page. External links stay out: the pre-commit hook runs offline.
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join, posix, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -9,15 +9,6 @@ const ROOT = resolve(import.meta.dirname, '..');
 const read = (file: string) => readFileSync(join(ROOT, file), 'utf8');
 
 const ADR_DIR = 'docs/adr';
-/** Every doc in the repo. Root notes that are not tracked stay out: only these root files are read. */
-const DOCS = [
-    'README.md',
-    'CLAUDE.md',
-    'SECURITY.md',
-    ...readdirSync(join(ROOT, 'docs'), { recursive: true, encoding: 'utf8' })
-        .filter((file) => file.endsWith('.md'))
-        .map((file) => join('docs', file).replaceAll('\\', '/'))
-];
 
 /** Built, installed or local-only paths: a doc may name them, they need not exist. */
 const UNTRACKED = [
@@ -43,6 +34,15 @@ const TRACKED = new Set([
     )
 ]);
 const isTracked = (path: string) => TRACKED.has(posix.normalize(path).replace(/\/$/, ''));
+const BASENAMES = new Set(FILES.map((file) => posix.basename(file)));
+/** Tracked Markdown at the root and in docs/ (untracked notes stay out); the code map is generated. */
+const DOCS = FILES.filter((file) => /^(?:[^/]+|docs\/.+)\.md$/.test(file));
+/** They look like file names but are generated (sitemap.xml), untracked on purpose (TODO.md, the owner's notes, and
+ * .env), gone (.nvmrc, in an ADR), an extension (.ts, .css) or a class (html.js). */
+const NOT_FILES = new Set(['sitemap.xml', 'TODO.md', '.env', '.nvmrc', '.ts', '.css', 'html.js']);
+/** A bare `name.ext` or `.dotfile` token in a `code` span names a tracked file somewhere in the repo. */
+const FILE_NAME =
+    /^(?:[\w-][\w.-]*\.(?:ts|js|mjs|json|jsonc|html|css|md|ya?ml|toml|sh|svg|png|jpe?g|webp|mp4|txt|xml)|\.[a-z][\w.-]*)$/;
 /** Top-level folders: a `code` span that starts with one of them is a repo path. */
 const TOP = new Set(FILES.filter((file) => file.includes('/')).map((file) => file.split('/')[0]));
 const SCRIPTS = new Set(Object.keys(JSON.parse(read('package.json')).scripts));
@@ -70,6 +70,7 @@ function anchors(text: string): Set<string> {
         const base = heading
             .trim()
             .toLowerCase()
+            .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // a link reads as its text
             .replace(/[^\p{L}\p{N}\s_-]/gu, '')
             .replace(/\s/g, '-');
         const count = seen.get(base) ?? 0;
@@ -86,15 +87,23 @@ const expand = (path: string): string[] => {
     return match[1].split(',').flatMap((part) => expand(path.replace(match[0], part)));
 };
 
-/** Tokens in `code` spans that name a repo path (placeholders such as <id> and globs are skipped). */
-function pathsIn(prose: string): string[] {
-    const tokens = [...prose.matchAll(/`([^`\n]+)`/g)].flatMap(([, span]) => span.split(/\s+/));
-    return tokens
+/** Tokens of `code` spans, placeholders (<id>), globs and elisions left out. */
+const tokensIn = (prose: string): string[] =>
+    [...prose.matchAll(/`([^`\n]+)`/g)]
+        .flatMap(([, span]) => span.split(/\s+/))
         .map((token) => token.replace(/[,;:)]+$/, ''))
-        .filter((token) => !/[<>*$]|\.\.\./.test(token) && TOP.has(token.split('/')[0]) && token.includes('/'))
-        .filter((token) => !UNTRACKED.some((dir) => token === dir || token.startsWith(`${dir}/`)))
+        .filter((token) => token && !/[<>*$]|\.\.\./.test(token))
         .flatMap(expand);
-}
+
+/** Tokens that name a repo path: they start with a tracked top-level folder. */
+const pathsIn = (prose: string): string[] =>
+    tokensIn(prose)
+        .filter((token) => token.includes('/') && TOP.has(token.split('/')[0]))
+        .filter((token) => !UNTRACKED.some((dir) => token === dir || token.startsWith(`${dir}/`)));
+
+/** Tokens that name a file without its folder: `vercel.json`, `headers.test.ts`, `.lintstagedrc`. */
+const fileNamesIn = (prose: string): string[] =>
+    tokensIn(prose).filter((token) => !token.includes('/') && FILE_NAME.test(token) && !NOT_FILES.has(token));
 
 /** Link targets that stay in the repo: [text](target), images included. */
 const localLinks = (prose: string): string[] =>
@@ -104,8 +113,8 @@ const localLinks = (prose: string): string[] =>
 
 describe('docs', () => {
     it('finds the docs', () => {
-        expect(DOCS.length).toBeGreaterThan(5);
-        for (const doc of DOCS) expect(existsSync(join(ROOT, doc)), doc).toBe(true);
+        expect(DOCS).toContain('README.md');
+        expect(DOCS.filter((doc) => doc.startsWith(`${ADR_DIR}/`)).length).toBeGreaterThan(5);
     });
 
     it('links only to files and #anchors that exist', () => {
@@ -131,10 +140,19 @@ describe('docs', () => {
         expect(missing).toEqual([]);
     });
 
+    it('names only file names that exist', () => {
+        const missing = DOCS.flatMap((doc) =>
+            fileNamesIn(split(read(doc)).prose)
+                .filter((name) => !BASENAMES.has(name))
+                .map((name) => `${doc}: ${name}`)
+        );
+        expect(missing).toEqual([]);
+    });
+
     it('names only npm scripts that exist', () => {
         const unknown = DOCS.flatMap((doc) =>
             [...read(doc).matchAll(/\bnpm run ([\w:.-]+)/g)]
-                .map(([, script]) => script)
+                .map(([, script]) => script.replace(/[.,]+$/, '')) // a sentence's last word
                 .filter((script) => !SCRIPTS.has(script))
                 .map((script) => `${doc}: npm run ${script}`)
         );
@@ -146,7 +164,7 @@ describe('docs', () => {
         const pages = DOCS.filter((doc) => doc.startsWith('docs/') && !doc.startsWith(`${ADR_DIR}/`));
         for (const page of pages) expect(readme, page).toContain(`](${page})`);
         const index = read(`${ADR_DIR}/README.md`);
-        const adrs = readdirSync(join(ROOT, ADR_DIR)).filter((file) => /^\d{4}-.+\.md$/.test(file));
+        const adrs = DOCS.map((doc) => posix.relative(ADR_DIR, doc)).filter((file) => /^\d{4}-[^/]+\.md$/.test(file));
         expect(adrs.length).toBeGreaterThan(0);
         for (const adr of adrs) expect(index, adr).toContain(`](${adr})`);
     });
