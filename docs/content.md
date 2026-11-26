@@ -56,7 +56,7 @@ Facts live once, in `src/data/`, with English and French side by side (`{ en, fr
 
 Its page, map node, list entry, counts, sitemap entry and JSON-LD follow. Then `npm test`:
 
-- `src/data/projects.test.ts` checks ids, exactly 3 `featured`, the school-year date, a real past month, media files and formats, description lengths, both languages, the GitHub link and the domain name.
+- `src/data/projects.test.ts` checks ids, exactly 3 `featured`, the school-year date, a real past month, media files and formats, description lengths, both languages, the GitHub link, and the domain's name and map button.
 - `src/components/NeuralMap/graph.test.ts` fails if the map cannot place the new card without overlap. A valid project can trigger it, depending on its category and period. That is a layout limit: adjust `ORBIT` (rings per period), `CARD` (spacing) or `MAP_MAX` (cards shown) in `src/components/NeuralMap/graph.ts`, then rerun the test.
 
 ### Add a job or a milestone

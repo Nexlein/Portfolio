@@ -27,12 +27,12 @@ Personal portfolio of Nielsen COMBE--BRACCIALE (alias Nexlein): https://nexlein.
 - Oxlint bans `Array#sort` (use `toSorted`), shadowed names, and inner functions that capture nothing.
 - Don't edit generated output: `dist/`, `cv-pdf/`, `test-results/`, `.claude/codemap.md`.
 - Prettier: 4 spaces, 120 cols, single quotes, no trailing commas. Format touched files only.
-- Docs: a change to a command, path, flow or setting updates its doc in the same commit. Name the source file instead of copying versions or counts. `src/docs.test.ts` checks links, paths and scripts.
+- Docs: a change to a command, path, flow or setting updates its doc in the same commit. Name the source file instead of copying versions or counts. `src/docs.test.ts` checks links, paths, file names and scripts.
 - Never run `husky` with arguments (it rewrites `core.hooksPath` and breaks every commit).
 
 ## Git flow
 
 - `main` = production (Vercel), `dev` = integration. Branch `feat/*`, `fix/*`, `chore/*` from `dev`, PR into `dev`; release `dev` → `main`, merge commits only (`docs/operations.md`).
-- `main` requires checks by job `name:`: renaming a CI job blocks PRs into `main`.
+- `main` requires checks by job `name:`: renaming a CI job blocks PRs into `main` ([docs/checks.md](docs/checks.md#ci)).
 - Conventional commits (`feat(home): ...`). Pre-commit runs a secret scan, lint-staged, typecheck, tests, codemap; never `--no-verify`.
-- Keep the `cv` release and its tag (`/cv.pdf` redirects there), `v1-classic` (old site) and `prototype-redesign` (design prototypes).
+- Never delete or move the protected tags, `cv` included (`/cv.pdf` redirects to its release): list in [docs/operations.md](docs/operations.md#branches-and-release).

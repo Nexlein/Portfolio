@@ -19,7 +19,7 @@ One heading per symptom: cause, then fix.
 - Cause: Git runs hooks outside your shell, so mise's tools are not on its `PATH`.
 - Fix: add `%LOCALAPPDATA%\mise\shims` to your user `Path` ([mise docs](https://mise.jdx.dev/shell-setup.html#windows)).
 - Without it, two cases (to confirm on the Windows PC):
-    - Node is installed outside mise: the hooks skip gitleaks and actionlint with a note, and the commit goes through.
+    - Node is installed outside mise: the secret scan falls back to a short regex list, actionlint is skipped with a note, and the commit goes through.
     - Node comes only from mise: `npx` and `npm` are missing too, and the commit fails.
 - CI runs the other checks, but the gitleaks scan and the commit-msg rule run only in the hooks. GitHub push protection still blocks known token formats.
 
