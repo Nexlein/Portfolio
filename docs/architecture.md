@@ -80,7 +80,7 @@ flowchart TD
 
 The same script applies the stored theme (else Daylight for a light system preference, else Midnight) and adds `html.js`.
 
-Runtime strings: scripts that write text at runtime (toasts, button labels) call `i18n.t('<key>')` (`src/core/i18n.ts`). The build embeds only the `home.*` keys (`clientStrings` in `src/core/translate.ts`), and only on pages with `strings: true` in `PAGES` (the home page today). `src/i18n/dictionaries.test.ts` checks that every key a script asks for exists in both dictionaries: write it as a literal, or add it to the test's list of built keys. It does not check that the page embeds it (`home.*`, `strings: true`); a missing string shows as its key.
+Runtime strings: scripts that write text at runtime (toasts, button labels) call `i18n.t('<key>')` (`src/core/i18n.ts`). The build embeds only the `home.*` keys (`clientStrings` in `src/core/translate.ts`), and only on pages whose `fixedPage(...)` entry in `PAGES` passes `true` as its fifth argument, `strings` (the home page today). `src/i18n/dictionaries.test.ts` checks that every key a script asks for exists in both dictionaries: write it as a literal, or add it to the test's list of built keys. It does not check that the page embeds it (`home.*`, `strings`); a missing string shows as its key.
 
 ## Head tags and SEO
 
@@ -129,7 +129,7 @@ Rules for HTML and scripts:
 - The one inline script is the head script, allowed by its sha256 hash.
 - Content stays readable without JavaScript: reveals hide only under `html.js`. Respect `prefers-reduced-motion`.
 
-| Header or rule              | Vercel (production)    | `npm run preview` (port 4173)       | WebKit e2e server (port 4174, CI)                     |
+| Header or rule              | Vercel (production)    | `npm run preview` (port 4173)       | WebKit browser-test server (port 4174, CI)            |
 | --------------------------- | ---------------------- | ----------------------------------- | ----------------------------------------------------- |
 | CSP and security headers    | `vercel.json`          | same                                | same                                                  |
 | `upgrade-insecure-requests` | yes                    | removed (breaks `http://localhost`) | removed                                               |

@@ -30,12 +30,18 @@ Release:
 1. Open a PR from `dev` into `main` ("Release: ...").
 2. Wait for every required check (see [GitHub settings](#github-settings)).
 3. Merge with a merge commit. Squash and rebase are off: a squash would make `dev` and `main` diverge.
-4. The push to `main` runs CI again: Vercel deploys production and `Publish CV` uploads the PDFs.
+4. Vercel's Git integration deploys production from `main`. The push also runs CI again, and its `Publish CV` job uploads the PDFs.
 5. Check production: run the uptime workflow by hand (Actions → Uptime check → Run workflow).
 
 `main` holds the release merge commits, which `dev` does not (`git log dev..main`). They carry no change of their own: no back-merge is needed.
 
-Hotfix: branch `fix/*` from `main`, PR into `main` (every required check runs, for admins too), then merge `main` into `dev`.
+Hotfix: branch `fix/*` from `main`, PR into `main`, then merge `main` into `dev`. Every required check runs, Lighthouse included, for admins too (`enforce_admins`).
+
+Rollback of a bad deploy:
+
+1. Vercel's [Instant Rollback](https://vercel.com/docs/instant-rollback) puts the previous production build back at once, with no check. On the Hobby plan it goes back one deployment only.
+2. Vercel then stops sending new pushes to the production domain. Fix the bug with a hotfix.
+3. Promote the fixed deployment (dashboard, or `vercel promote <deployment>`): production follows `main` again.
 
 Tags to keep (protected by a ruleset): `cv` (the CV release), `v1-classic` (the old site), `prototype-redesign` (design prototypes).
 
@@ -55,21 +61,22 @@ Required check names are job `name:` strings: see the warning in [checks.md](che
 
 ## Vercel
 
-| What               | How                                                                                                                                                        |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Production         | every push to `main`                                                                                                                                       |
-| Previews           | every PR; behind Vercel login                                                                                                                              |
-| Node version       | `engines.node` in `package.json`, which overrides the project setting ([Vercel docs](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions)) |
-| Headers, redirects | `vercel.json` ([architecture.md](architecture.md#security-headers-and-csp))                                                                                |
-| Analytics          | Vercel Web Analytics, turned on in the dashboard (Project → Analytics). Cookie-free, so no consent banner.                                                 |
-| Deploy Hook        | one for `main` (Project → Settings → Git → Deploy Hooks); its URL is the repo secret `VERCEL_DEPLOY_HOOK`                                                  |
+| What               | How                                                                                                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Production         | every push to `main`                                                                                                                                                                             |
+| Previews           | every PR; behind Vercel login                                                                                                                                                                    |
+| Project settings   | framework preset, build command and output directory (`dist/`) are dashboard values (Project → Settings → Build and Deployment), not in the repo: `vercel.json` holds only headers and redirects |
+| Node version       | `engines.node` in `package.json`, which overrides the project setting ([Vercel docs](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions))                                       |
+| Headers, redirects | `vercel.json` ([architecture.md](architecture.md#security-headers-and-csp))                                                                                                                      |
+| Analytics          | Vercel Web Analytics, turned on in the dashboard (Project → Analytics). Cookie-free, so no consent banner.                                                                                       |
+| Deploy Hook        | one for `main` (Project → Settings → Git → Deploy Hooks); its URL is the repo secret `VERCEL_DEPLOY_HOOK`                                                                                        |
 
 ## CV release
 
 `/cv.pdf` and `/fr/cv.pdf` redirect (`vercel.json`) to the files of the GitHub release `cv` ([ADR 0007](adr/0007-cv-pdf-release.md)).
 
 - `CV PDF` renders the PDFs on every PR and push; `Publish CV` uploads them on pushes to `main` only, with `--clobber`.
-- The redirects name the tag, not "latest": the release need not be GitHub's Latest (CI creates it with `--latest=false`). The tag never moves (ruleset).
+- GitHub lists it as the repository's Latest release. That is harmless: the redirects name the tag, not "latest". (`--latest=false` in `ci.yml` applies only if CI has to create the release again.) The tag never moves (ruleset).
 
 ## Scheduled jobs
 
@@ -86,15 +93,15 @@ Required check names are job `name:` strings: see the warning in [checks.md](che
 
 ## Dependency updates
 
-| Source                      | Opens                                                                                                                                                 | Into                                              |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| Renovate (`renovate.json`)  | weekly: npm minor and patch (one PR), GitHub Actions (one PR), lockfile refresh (one PR); npm majors one PR each, Actions majors in a PR of their own | `dev`                                             |
-| Dependabot security updates | a PR per advisory Renovate cannot fix (transitive)                                                                                                    | `main`: retarget with `gh pr edit <n> --base dev` |
+| Source                      | Opens                                                                                                                                                                                                                                                             | Into                                              |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Renovate (`renovate.json`)  | weekly: npm minor and patch (one PR), GitHub Actions (one PR), lockfile refresh (one PR); npm majors one PR each, Actions majors one grouped PR ([`separateMajorMinor`](https://docs.renovatebot.com/configuration-options/#separatemajorminor) wins over groups) | `dev`                                             |
+| Dependabot security updates | a PR per advisory Renovate cannot fix (transitive)                                                                                                                                                                                                                | `main`: retarget with `gh pr edit <n> --base dev` |
 
 Renovate ([ADR 0013](adr/0013-renovate-instead-of-dependabot.md)):
 
 - Reads `renovate.json` from `main` only. A change to it takes effect after the next release.
-- One invalid rule stops it entirely: the `Renovate config` job validates the file in every PR that changes it.
+- One invalid rule stops it entirely. The `Renovate config` job runs on every PR (so `main` can require it) and validates the file when the PR changes it.
 - npm releases wait 3 days before a PR (`security:minimumReleaseAgeNpm`).
 - A Node major moves `mise.toml`, `engines` and `@types/node` in one PR, once the release line is LTS.
 - Status and pending updates: the Dependency Dashboard issue ([#137](https://github.com/Nexlein/Portfolio/issues/137)).

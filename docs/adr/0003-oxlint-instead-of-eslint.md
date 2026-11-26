@@ -6,7 +6,7 @@
 
 ## Context
 
-The project is on TypeScript 7. [#6](https://github.com/Nexlein/Portfolio/pull/6): "typescript-eslint only supports TypeScript `<6.1` and this project is on TS 7." That range is still the one in [typescript-eslint's supported versions](https://typescript-eslint.io/users/dependency-versions/).
+In October 2026 the project was on TypeScript 7. [#6](https://github.com/Nexlein/Portfolio/pull/6): "typescript-eslint only supports TypeScript `<6.1` and this project is on TS 7." On 2026-11-25, that range was still the one in [typescript-eslint's supported versions](https://typescript-eslint.io/users/dependency-versions/).
 
 ## Decision
 

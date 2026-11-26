@@ -2,7 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-11-25
-- Links: this folder
+- Links: [#138](https://github.com/Nexlein/Portfolio/pull/138)
 
 ## Context
 

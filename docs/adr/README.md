@@ -16,6 +16,6 @@ Why things are the way they are. One file per decision; a new decision supersede
 | [0009](0009-dev-main-flow.md)                     | `dev` → `main` flow with required checks                             | 2026-10-08 | Accepted           |
 | [0010](0010-test-policy.md)                       | No retries, hard Lighthouse gates, Firefox and WebKit in CI          | 2026-10-14 | Accepted           |
 | [0011](0011-mise-for-tools.md)                    | mise for Node and the hook tools                                     | 2026-10-29 | Accepted           |
-| [0012](0012-no-open-source-licence.md)            | No open-source licence                                               | 2026-11-05 | Accepted           |
+| [0012](0012-no-open-source-license.md)            | No open-source license                                               | 2026-11-05 | Accepted           |
 | [0013](0013-renovate-instead-of-dependabot.md)    | Renovate instead of Dependabot                                       | 2026-11-25 | Accepted           |
 | [0014](0014-npm-run-check.md)                     | `npm run check` as the one list of checks                            | 2026-11-25 | Accepted           |

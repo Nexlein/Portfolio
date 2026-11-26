@@ -38,26 +38,26 @@ Facts live once, in `src/data/`, with English and French side by side (`{ en, fr
 1. Media in `public/projects/<id>/` (see [Media](#media)).
 2. A `ProjectEntry` in `PROJECTS`:
 
-    | Field         | Value                                                                                                                                                           |
-    | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | `id`, `title` | URL id, display name                                                                                                                                            |
-    | `description` | `{ en, fr }`; minimum length in `src/data/projects.test.ts`, page meta clamped by `clampWords`                                                                  |
-    | `tags`        | skills, one spelling each                                                                                                                                       |
-    | `category`    | one of `DOMAINS`                                                                                                                                                |
-    | `year`        | one of `PERIODS`                                                                                                                                                |
-    | `date`        | start month, `YYYY-MM` (path chart, "learned this year")                                                                                                        |
-    | `featured`    | `true` for the home page's "Selected work" (exactly 3)                                                                                                          |
-    | `team`        | `{ size, role }`, from the repository's history                                                                                                                 |
-    | `result`      | one concrete outcome the repository shows                                                                                                                       |
-    | `github`      | full URL, or `''` to hide the link                                                                                                                              |
-    | `media`       | `{ type: 'video', src }`, `{ type: 'image', src, alt }` or `{ type: 'gallery', images: [{ src, alt }] }`; `src` is relative to `public/`, `alt` is `{ en, fr }` |
+    | Field         | Value                                                                                                                                                                          |
+    | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+    | `id`, `title` | URL id, display name                                                                                                                                                           |
+    | `description` | `{ en, fr }`; minimum length in `src/data/projects.test.ts`, page meta clamped by `clampWords`                                                                                 |
+    | `tags`        | skills, one spelling each                                                                                                                                                      |
+    | `category`    | one of `DOMAINS`, with its name under `home.domains` in both dictionaries                                                                                                      |
+    | `year`        | one of `PERIODS`; a `Tek1`-`Tek3` project's `date` must fall in that school year, counted from the `epitech` checkpoint                                                        |
+    | `date`        | start month, `YYYY-MM`, real and past (path chart, "learned this year")                                                                                                        |
+    | `featured`    | `true` for the home page's "Selected work" (exactly 3)                                                                                                                         |
+    | `team`        | `{ size, role }`, from the repository's history                                                                                                                                |
+    | `result`      | one concrete outcome the repository shows                                                                                                                                      |
+    | `github`      | full GitHub URL, or `''` to hide the link                                                                                                                                      |
+    | `media`       | `{ type: 'video', src }`, `{ type: 'image', src, alt }` or `{ type: 'gallery', images: [{ src, alt }] }`; `src` is a URL path (`/projects/<id>/<file>`), `alt` is `{ en, fr }` |
 
-3. `npm run media`: poster, card copies and the 1200×630 social image `og.jpg`.
+3. `npm run media`: poster, card copies (small WebP copies of the still, see [Media](#media)) and the 1200×630 social image `og.jpg`.
 
 Its page, map node, list entry, counts, sitemap entry and JSON-LD follow. Then `npm test`:
 
-- `src/data/projects.test.ts` checks ids, media files and formats, description lengths, both languages, and exactly 3 `featured`.
-- `src/components/NeuralMap/graph.test.ts` fails if the map cannot place the new card without overlap: that is a layout limit (`src/components/NeuralMap/graph.ts`), not a data error.
+- `src/data/projects.test.ts` checks ids, exactly 3 `featured`, the school-year date, a real past month, media files and formats, description lengths, both languages, the GitHub link and the domain name.
+- `src/components/NeuralMap/graph.test.ts` fails if the map cannot place the new card without overlap. A valid project can trigger it, depending on its category and period. That is a layout limit: adjust `ORBIT` (rings per period), `CARD` (spacing) or `MAP_MAX` (cards shown) in `src/components/NeuralMap/graph.ts`, then rerun the test.
 
 ### Add a job or a milestone
 
@@ -111,7 +111,7 @@ ffmpeg -i in.png -vf "scale='min(1200,iw)':'min(1200,ih)':force_original_aspect_
 npm run media -- --force=posters,og
 ```
 
-- Bernstein and Survivor use hand-made card crops of their composite image. `--force=thumbs` would replace them with plain downscales.
+- Bernstein and Survivor use hand-made card crops of their composite image. `--force=thumbs` (`thumbs` = card copies) would replace them with plain downscales.
 - QR codes: the CV prints `public/qrcode.svg` (`https://nexlein.vercel.app/`) and `public/qrcode-fr.svg` (`https://nexlein.vercel.app/fr/`). To redo one:
     1. `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`
     2. Copy the `d` of its `<path>` into the black path of the existing file, in place of the old one. The file keeps its form: `shape-rendering="crispEdges"`, a white square, then one black path.

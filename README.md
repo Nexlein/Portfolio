@@ -75,4 +75,4 @@ Only for some tasks:
 
 ## License
 
-All rights reserved. The code is public to read ([ADR 0012](docs/adr/0012-no-open-source-licence.md)).
+All rights reserved. The code is public to read ([ADR 0012](docs/adr/0012-no-open-source-license.md)).
