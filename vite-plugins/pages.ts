@@ -1,3 +1,4 @@
+// Vite plugin sitePages: renders every page in PAGES once per language at build time, and writes sitemap.xml.
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { Window } from 'happy-dom';

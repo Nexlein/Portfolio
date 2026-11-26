@@ -17,7 +17,7 @@ export type Period = (typeof PERIODS)[number];
 
 interface ProjectMediaVideo {
     type: 'video';
-    src: string; // path relative to /public
+    src: string; // URL path, /projects/<id>/<file> (the file sits under public/)
 }
 
 interface ProjectMediaImage {

@@ -1,3 +1,4 @@
+/* Hero: full-height first screen, the simulation canvas behind the intro and its switch. */
 .hero {
     position: relative;
     display: grid;
