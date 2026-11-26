@@ -112,4 +112,6 @@ npm run media -- --force=posters,og
 ```
 
 - Bernstein and Survivor use hand-made card crops of their composite image. `--force=thumbs` would replace them with plain downscales.
-- QR codes: the CV prints `public/qrcode.svg` (home) and `public/qrcode-fr.svg` (French home). To redo one, run `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`, then keep the files' style: a white square under one black path.
+- QR codes: the CV prints `public/qrcode.svg` (`https://nexlein.vercel.app/`) and `public/qrcode-fr.svg` (`https://nexlein.vercel.app/fr/`). To redo one:
+    1. `uvx --from qrcode qr --factory=svg-path --error-correction=M <url>`
+    2. Copy the `d` of its `<path>` into the black path of the existing file, in place of the old one. The file keeps its form: `shape-rendering="crispEdges"`, a white square, then one black path.
