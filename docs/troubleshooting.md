@@ -45,6 +45,11 @@ One heading per symptom: cause, then fix.
 - Cause: those engines run in CI only ([ADR 0010](adr/0010-test-policy.md)).
 - Fix: read the trace in the `playwright-report` artifact of the failed run.
 
+### Browser tests cancelled with "The operation was canceled"
+
+- Cause: the Ubuntu mirror was slow, and installing the browsers' system packages ate the job's time (`Fetched 140 MB in 12min`, in the browsers step's log).
+- Fix: re-run the failed jobs. If it keeps happening, raise `timeout-minutes` of the `e2e` job in `ci.yml`.
+
 ## GitHub and Vercel
 
 ### A PR into `main` waits for a check that never comes
