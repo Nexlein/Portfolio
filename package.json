@@ -1,7 +1,7 @@
 {
     "name": "nexlein-portfolio",
     "version": "1.0.0",
-    "description": "Portfolio of Nielsen COMBE--BRACCIALE (Nexlein), AI & full-stack developer.",
+    "description": "Portfolio of Nielsen COMBE--BRACCIALE (Nexlein), AI & full-stack developer. Vanilla TypeScript and Vite, every page prerendered in English and French, with the map, charts and CV computed from the data.",
     "scripts": {
         "dev": "vite",
         "build": "tsc && vite build",

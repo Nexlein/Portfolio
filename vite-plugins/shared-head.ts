@@ -1,3 +1,4 @@
+// Vite plugin sharedHead: the tags every page needs in <head> (favicon, theme and language script).
 import type { HtmlTagDescriptor, Plugin } from 'vite';
 
 /**

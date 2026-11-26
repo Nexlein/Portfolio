@@ -3,7 +3,7 @@
 // social image (og.jpg, 1200x630, what LinkedIn and X expect): the still the cards show, fitted whole over a blurred,
 // darkened copy of itself.
 // Only missing files are made. To redo some: npm run media -- --force=posters,og
-// --force=thumbs also replaces the hand-made crops (README, Media).
+// --force=thumbs also replaces the hand-made crops (docs/content.md, Media).
 // Usage: npm run media [-- --force=posters,thumbs,og]   (requires ffmpeg; Node runs this TypeScript file as it is)
 import { execFileSync } from 'node:child_process';
 import { existsSync, statSync } from 'node:fs';
